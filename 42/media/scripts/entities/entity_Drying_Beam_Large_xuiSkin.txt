@@ -1,0 +1,12 @@
+module Base
+{
+    xuiSkin default
+    {
+        entity ES_DryingBeamLarge
+        {
+            LuaWindowClass = ISEntityWindow,
+            DisplayName = Fish Gantry,
+            Icon = Item_DryingBeamLarge,
+        }
+    }
+}

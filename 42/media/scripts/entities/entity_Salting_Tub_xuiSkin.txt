@@ -1,0 +1,12 @@
+module Base
+{
+    xuiSkin default
+    {
+        entity ES_SaltingTub
+        {
+            LuaWindowClass = ISEntityWindow,
+            DisplayName = Salting Tub,
+            Icon = Item_SaltingTub,
+        }
+    }
+}

@@ -1,0 +1,66 @@
+module TraditionalPreservationFish
+{
+    entity Salting_Tub
+    {
+        component UiConfig
+        {
+            xuiSkin = default,
+            entityStyle = ES_SaltingTub,
+            uiEnabled = true,
+        }
+        component Resources
+        {
+            group craft_inputs
+            {
+                Item@Input@35,
+            }
+            group craft_outputs
+            {
+                Item@Output@35@StackAny,
+            }
+        }
+        component CraftLogic
+        {
+            Recipes = SaltingTub,
+            StartMode = Manual,
+            inputGroup = craft_inputs,
+            outputGroup = craft_outputs,
+            actionAnim = Loot,
+        }
+        component SpriteConfig
+        {
+            isThumpable = false,
+            face S
+            {
+                layer
+                {
+                    row = traditionalpreservationfish_01_0,
+                }
+            }
+            face E
+            {
+                layer
+                {
+                    row = traditionalpreservationfish_01_1,
+                }
+            }
+        }
+        component CraftRecipe
+        {
+            timedAction = BuildWoodenStructureSmall,
+            time = 100,
+            SkillRequired = Woodwork:2;Fishing:2,
+            xpAward = Woodwork:10,
+            category = Furniture,
+            Tags = Carpentry;Furniture,
+            Tooltip = Tooltip_craft_saltingTubDesc,
+            inputs
+            {
+                item 1 tags[base:hammer] mode:keep flags[Prop1;MayDegradeVeryLight],
+                item 2 [Base.Plank],
+                item 6 [Base.Nails],
+                item 2 [Base.Twine],
+            }
+        }
+    }
+}

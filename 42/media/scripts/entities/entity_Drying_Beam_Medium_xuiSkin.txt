@@ -1,0 +1,12 @@
+module Base
+{
+    xuiSkin default
+    {
+        entity ES_DryingBeamMedium
+        {
+            LuaWindowClass = ISEntityWindow,
+            DisplayName = Fish Hanging Beam,
+            Icon = Item_DryingBeamMedium,
+        }
+    }
+}

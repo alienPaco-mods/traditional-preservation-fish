@@ -1,0 +1,68 @@
+module TraditionalPreservationFish
+{
+    entity Drying_Frame
+    {
+        component UiConfig
+        {
+            xuiSkin = default,
+            entityStyle = ES_DryingFrame,
+            uiEnabled = true,
+        }
+        component Resources
+        {
+            group craft_inputs
+            {
+                Item@Input@25,
+            }
+            group craft_outputs
+            {
+                Item@Output@200@StackAny,
+            }
+        }
+        /* DryingCraftLogic for its temperature, wetness and drying rate readouts. The recipe's
+           OnUpdate replaces its progress, because it stops when the area unloads. */
+        component DryingCraftLogic
+        {
+            Recipes = DryingFrame,
+            StartMode = Manual,
+            inputGroup = craft_inputs,
+            outputGroup = craft_outputs,
+            actionAnim = Untie_High,
+        }
+        component SpriteConfig
+        {
+            isThumpable = false,
+            face S
+            {
+                layer
+                {
+                    row = traditionalpreservationfish_01_6,
+                }
+            }
+            face E
+            {
+                layer
+                {
+                    row = traditionalpreservationfish_01_7,
+                }
+            }
+        }
+        component CraftRecipe
+        {
+            timedAction = BuildWoodenStructureMedium,
+            time = 150,
+            SkillRequired = Woodwork:2;Fishing:2,
+            xpAward = Woodwork:15,
+            category = Furniture,
+            Tags = Carpentry;Furniture,
+            Tooltip = Tooltip_craft_dryingFrameDesc,
+            inputs
+            {
+                item 1 tags[base:hammer] mode:keep flags[Prop1;MayDegradeVeryLight],
+                item 6 [Base.LongStick],
+                item 3 [Base.Nails],
+                item 2 [Base.Twine],
+            }
+        }
+    }
+}

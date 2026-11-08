@@ -1,0 +1,12 @@
+module Base
+{
+    xuiSkin default
+    {
+        entity ES_DryingFrame
+        {
+            LuaWindowClass = ISEntityWindow,
+            DisplayName = Fish Drying Frame,
+            Icon = Item_DryingFrame,
+        }
+    }
+}

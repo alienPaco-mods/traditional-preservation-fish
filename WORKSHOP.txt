@@ -1,0 +1,135 @@
+[h1]Traditional Preservation (Fish)[/h1]
+
+Preserve your catch the old way. Salt it, press it and hang it to dry, or gut it and hang it in the winter cold. Dried fish keeps for months or even years, with no fridge and no power.
+
+[b]Build 42 only (42.20 or newer). This is an early release, so back up your save before enabling it. Singleplayer only: multiplayer is not supported.[/b]
+
+[h2]Features[/h2]
+[list]
+[*]Two methods: salt drying all year, and cold drying in winter with no salt
+[*]A salting tub and three drying stations, with their own art and two facings
+[*]Each hanging stack has its own drying progress and look, so you can start and collect batches independently
+[*]Rain, cold, humidity and the seasons all matter, and drying carries on while you're away
+[*]Fish keep their species and size through every stage, with their own icons and ground models
+[*]Gutting and packing give Fish Guts for chum, and gutting a big fish gives a Fish Head for the pot
+[/list]
+
+[h2]Which method should I use?[/h2]
+[list]
+[*][b]Salt drying[/b] can be done in any season, though weather slows it. It costs salt and needs a tub, and the fish keeps for 4 to 6 months and goes straight into soups and stews.
+[*][b]Cold drying[/b] needs no salt or tub, and the fish keeps for 1 to 2 years. It only works in a cold season, and the fish must be rehydrated before use.
+[/list]
+
+[h2]Salt drying[/h2]
+
+[h3]1. Pack Fish in Salt[/h3]
+You need a raw fish or fillet, 2 salt and a sharp knife or meat cleaver (kept). A vanilla shaker covers about 5 fish. Rotten, frozen and cooked fish can't be packed. Salt Packed fish only keeps for days.
+
+[h3]2. Build a Salting Tub[/h3]
+Carpentry 2, Fishing 2. Takes 2 planks, 6 nails, 2 twine and a hammer (kept).
+
+[h3]3. Press[/h3]
+Load up to 50 weight of packed fish, 35 fish at most, and press Craft. It takes 12 in-game hours, and nothing else can go in until you've taken out the last pressed fish.
+
+[h3]4. Hang it to dry[/h3]
+Choose Hang Salt Pressed Fish to Dry on any drying station, load your pressed fish and press Craft. See Drying stations below.
+
+[h3]5. Eat, cook or rehydrate[/h3]
+Salt Dried fish is very salty, but can go straight into soup, stew, rice or pasta. Rehydrate Fish uses 1 L of water and gives a milder fish that cooks like fresh, but spoils in days.
+
+[h2]Cold drying[/h2]
+
+[h3]1. Gut Fish[/h3]
+You need a raw whole fish and a sharp knife or meat cleaver (kept). Fillets can't be gutted. A Gutted Fish keeps like fresh fish and can still be cooked. A fish over 1.0 weight also gives a Fish Head.
+
+[h3]2. Split Fish (if needed)[/h3]
+A Gutted Fish over 2.5 weight can be cut into two Fish Halves, each with half the weight and food, to fit smaller stacks.
+
+[h3]3. Hang it to dry[/h3]
+Choose Hang Gutted Fish to Cold Dry on any drying station, load your fish and press Craft. Frozen fish is fine. The station must be outdoors, not under a roof.
+
+[h3]4. Rehydrate[/h3]
+Cold Dried fish is light but too hard to cook with. Rehydrate Fish uses 1 L of water and gives a fish you can cook, which spoils in days.
+
+Changed your mind? A Gutted Fish or Fish Half can still be packed in salt.
+
+[h2]Drying stations[/h2]
+Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate and any spoilage. A stack can't mix salted and gutted fish. Weights are inventory weight, not kilograms.
+
+[h3]Fish Drying Frame[/h3]
+Carpentry 2, Fishing 2. Takes 6 long sticks, 3 nails, 2 twine and a hammer (kept). Holds 8 stacks of up to 2.5 weight each. The only station that can be built indoors.
+
+[h3]Fish Hanging Beam[/h3]
+Carpentry 4, Fishing 2. Takes 6 planks, 6 nails, 1 large hook and a hammer (kept). Holds 4 stacks of up to 15 weight each. Outdoors only.
+
+[h3]Fish Gantry[/h3]
+Carpentry 6, Fishing 2. Takes 2 logs, 2 planks, 8 nails, 2 large hooks and a hammer (kept). Holds 2 stacks of up to 50 weight each. Outdoors only.
+
+[h2]Weather and seasons[/h2]
+Drying usually takes 12 to 30 in-game days.
+
+[list]
+[*][b]Salt drying:[/b] 12 days at best, at 20 C or warmer. Cool weather slows it, but frost doesn't stop it, so a batch still finishes in about a month. Damp air slows it a little.
+[*][b]Cold drying:[/b] 20 days at best, between -10 C and 5 C. It's slower in deep frost and from 5 to 10 C, and pauses above that.
+[*][b]Rain:[/b] pauses open stations until the fish has dried off. You lose time, not progress. Snow pauses salt drying but not cold drying.
+[/list]
+
+[h3]Indoors and under a roof[/h3]
+[list]
+[*][b]Salt drying[/b] keeps going through rain at about two thirds of the speed, taking about 21 to 27 days.
+[*][b]Cold drying[/b] stops, as it needs moving air.
+[*][b]Heating a room doesn't help:[/b] it goes by the outdoor temperature.
+[/list]
+
+[h2]Spoilage[/h2]
+Spoilage follows the average weather of about the last 10 days, so one warm afternoon in January won't hurt.
+
+[list]
+[*][b]Gutted fish and halves[/b] spoil once that average goes above 10 C. A stack rots in about 2 days, faster the warmer it gets, and comes off rotten.
+[*][b]Salt fish[/b] only suffers when that average is above 22 C and the air is muggy: a few days in high summer, if any.
+[/list]
+
+[h3]Through the year[/h3]
+On default weather: cold dry from November to February (about 21 to 25 days). In March about 7% of cold batches rot, in October about 30%, and from April to September almost all. Salt drying takes about 15 to 24 days in summer and a month in winter.
+
+[h2]Weights and keeping times[/h2]
+Weights are shares of the original whole fish. Days are fresh, then rotten.
+[list]
+[*][b]Salt Packed:[/b] 90%, 3 and 6 days
+[*][b]Salt Pressed:[/b] 79 to 84%, 7 and 14 days
+[*][b]Salt Dried:[/b] about 37%, 120 and 180 days
+[*][b]Gutted Fish:[/b] 80% (90% for a fish too small to give a head), 3 and 6 days
+[*][b]Cold Dried:[/b] about 18%, 365 and 730 days
+[*][b]Rehydrated:[/b] about 53 to 66%, 2 and 4 days
+[/list]
+
+Rehydrating doesn't bring back calories lost to drying. Salt fish keeps about 90% and cold dried about 95%, less the 6% a Fish Head takes.
+
+[h2]Eating uncooked[/h2]
+[list]
+[*][b]Salt Packed:[/b] can't be eaten
+[*][b]Salt Pressed, Gutted Fish and Fish Halves:[/b] raw, so cook them first or risk getting sick
+[*][b]Salt Dried, Cold Dried and Rehydrated:[/b] can be eaten without cooking
+[/list]
+
+[h2]Fish Guts, heads and slicing[/h2]
+A whole fish over 0.6 weight gives one Fish Guts when gutted or packed, weighing 10% of the fish, and loses that weight. Small fish, fillets and salmon give none. A fish big enough to fillet can still be sliced at any salted, dried or rehydrated stage.
+
+Gut Fish also takes the head off. A fish over 1.0 weight gives a Fish Head: 10% of its weight and 6% of its food, for soups, stews or chum. Salted fish keep their heads.
+
+[b]Fish Head Stock:[/b] a pot holding 1.5 L of water and a Fish Head make a pot of stock that is already a stew, with the head taking no ingredient slot. Add up to 6 stew ingredients plus seasonings, and it starts out tastier than a plain stew. Divide it into 4 or 2 bowls at a table, as with any stew.
+
+[h2]A little history[/h2]
+Stockfish is unsalted cod hung on open racks through the cold northern Norwegian spring, traded across Europe since the Viking age. Salt cod (klippfisk, bacalhau) is salted, pressed and dried in mild air, and from the 1500s it fed sailors and Catholic fast days on both sides of the Atlantic. On the lower Volga around Astrakhan, large salted fish such as pike are hung from hooks to dry.
+
+[h2]Works well with[/h2]
+[b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt, with one batch packing about 12 fish. Traditional Preservation (Fish) needs no other mods.
+
+[h2]Sandbox options[/h2]
+Set salt drying time, the slowest it can take and spoilage strictness.
+
+[h2]Known issues[/h2]
+[list]
+[*]Early release, so please report bugs. Multiplayer is not supported.
+[*]Hanging fish are a mix of shapes for looks, so a stack may not look like the fish in it.
+[/list]

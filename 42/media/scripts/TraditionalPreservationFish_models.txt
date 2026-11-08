@@ -1,0 +1,3484 @@
+/* Written by tools/build_tileset.py. */
+module TraditionalPreservationFish
+{
+    model Packed_Fish_BassLargemouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Packed_Fish_BassLargemouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_BassLargemouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Pressed_Fish_BassLargemouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_BassLargemouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Dried_Fish_BassLargemouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_BassLargemouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Cold_Fish_BassLargemouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_BassLargemouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Soaked_Fish_BassLargemouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_BassLargemouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/SoakedCold_Fish_BassLargemouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_BassLargemouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Gutted_Fish_BassLargemouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_BassLargemouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/PackedGutted_Fish_BassLargemouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_BassLargemouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/PressedGutted_Fish_BassLargemouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_BassLargemouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/DriedGutted_Fish_BassLargemouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_BassLargemouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/SoakedGutted_Fish_BassLargemouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_BassLargemouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_BassLargemouth,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_BassLargemouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_BassLargemouth,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_BassLargemouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_BassLargemouth,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_BassLargemouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_BassLargemouth,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_BassLargemouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_BassLargemouth,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_BassLargemouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_BassLargemouth,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_BassLargemouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_BassLargemouth,
+        scale = 0.36,
+    }
+    model Packed_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Packed_Fish_BassSmallmouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Pressed_Fish_BassSmallmouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Dried_Fish_BassSmallmouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Cold_Fish_BassSmallmouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Soaked_Fish_BassSmallmouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/SoakedCold_Fish_BassSmallmouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/Gutted_Fish_BassSmallmouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/PackedGutted_Fish_BassSmallmouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/PressedGutted_Fish_BassSmallmouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/DriedGutted_Fish_BassSmallmouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = FishModels/SoakedGutted_Fish_BassSmallmouth,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_BassSmallmouth,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_BassSmallmouth,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_BassSmallmouth,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_BassSmallmouth,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_BassSmallmouth,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_BassSmallmouth,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_BassSmallmouth
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_BassSmallmouth,
+        scale = 0.36,
+    }
+    model Packed_Fish_BassSpotted
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Packed_Fish_BassSpotted,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_BassSpotted
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Pressed_Fish_BassSpotted,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_BassSpotted
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Dried_Fish_BassSpotted,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_BassSpotted
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Cold_Fish_BassSpotted,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_BassSpotted
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Soaked_Fish_BassSpotted,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_BassSpotted
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/SoakedCold_Fish_BassSpotted,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_BassSpotted
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Gutted_Fish_BassSpotted,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_BassSpotted
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/PackedGutted_Fish_BassSpotted,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_BassSpotted
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/PressedGutted_Fish_BassSpotted,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_BassSpotted
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/DriedGutted_Fish_BassSpotted,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_BassSpotted
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/SoakedGutted_Fish_BassSpotted,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_BassSpotted
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_BassSpotted,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_BassSpotted
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_BassSpotted,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_BassSpotted
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_BassSpotted,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_BassSpotted
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_BassSpotted,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_BassSpotted
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_BassSpotted,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_BassSpotted
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_BassSpotted,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_BassSpotted
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_BassSpotted,
+        scale = 0.36,
+    }
+    model Packed_Fish_BassStriped
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Packed_Fish_BassStriped,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_BassStriped
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Pressed_Fish_BassStriped,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_BassStriped
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Dried_Fish_BassStriped,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_BassStriped
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Cold_Fish_BassStriped,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_BassStriped
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Soaked_Fish_BassStriped,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_BassStriped
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/SoakedCold_Fish_BassStriped,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_BassStriped
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/Gutted_Fish_BassStriped,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_BassStriped
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/PackedGutted_Fish_BassStriped,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_BassStriped
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/PressedGutted_Fish_BassStriped,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_BassStriped
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/DriedGutted_Fish_BassStriped,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_BassStriped
+    {
+        mesh = WorldItems/Fish_Bass_Spotted_Stripped,
+        texture = FishModels/SoakedGutted_Fish_BassStriped,
+        scale = 0.15,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_BassStriped
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_BassStriped,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_BassStriped
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_BassStriped,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_BassStriped
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_BassStriped,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_BassStriped
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_BassStriped,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_BassStriped
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_BassStriped,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_BassStriped
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_BassStriped,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_BassStriped
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_BassStriped,
+        scale = 0.36,
+    }
+    model Packed_Fish_Walleye
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Packed_Fish_Walleye,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_Walleye
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Pressed_Fish_Walleye,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_Walleye
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Dried_Fish_Walleye,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_Walleye
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Cold_Fish_Walleye,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_Walleye
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Soaked_Fish_Walleye,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_Walleye
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/SoakedCold_Fish_Walleye,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_Walleye
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Gutted_Fish_Walleye,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_Walleye
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/PackedGutted_Fish_Walleye,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_Walleye
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/PressedGutted_Fish_Walleye,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_Walleye
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/DriedGutted_Fish_Walleye,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_Walleye
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/SoakedGutted_Fish_Walleye,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_Walleye
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_Walleye,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_Walleye
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_Walleye,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_Walleye
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_Walleye,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_Walleye
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_Walleye,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_Walleye
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_Walleye,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_Walleye
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_Walleye,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_Walleye
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_Walleye,
+        scale = 0.36,
+    }
+    model Packed_Fish_Sauger
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Packed_Fish_Sauger,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_Sauger
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Pressed_Fish_Sauger,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_Sauger
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Dried_Fish_Sauger,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_Sauger
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Cold_Fish_Sauger,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_Sauger
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Soaked_Fish_Sauger,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_Sauger
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/SoakedCold_Fish_Sauger,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_Sauger
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/Gutted_Fish_Sauger,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_Sauger
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/PackedGutted_Fish_Sauger,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_Sauger
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/PressedGutted_Fish_Sauger,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_Sauger
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/DriedGutted_Fish_Sauger,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_Sauger
+    {
+        mesh = WorldItems/Fish_Sauger_Walleye,
+        texture = FishModels/SoakedGutted_Fish_Sauger,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_Sauger
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_Sauger,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_Sauger
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_Sauger,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_Sauger
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_Sauger,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_Sauger
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_Sauger,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_Sauger
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_Sauger,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_Sauger
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_Sauger,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_Sauger
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_Sauger,
+        scale = 0.36,
+    }
+    model Packed_Fish_CrappieBlack
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Packed_Fish_CrappieBlack,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_CrappieBlack
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Pressed_Fish_CrappieBlack,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_CrappieBlack
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Dried_Fish_CrappieBlack,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_CrappieBlack
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Cold_Fish_CrappieBlack,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_CrappieBlack
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Soaked_Fish_CrappieBlack,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_CrappieBlack
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/SoakedCold_Fish_CrappieBlack,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_CrappieBlack
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Gutted_Fish_CrappieBlack,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_CrappieBlack
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/PackedGutted_Fish_CrappieBlack,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_CrappieBlack
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/PressedGutted_Fish_CrappieBlack,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_CrappieBlack
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/DriedGutted_Fish_CrappieBlack,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_CrappieBlack
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/SoakedGutted_Fish_CrappieBlack,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_CrappieBlack
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_CrappieBlack,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_CrappieBlack
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_CrappieBlack,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_CrappieBlack
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_CrappieBlack,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_CrappieBlack
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_CrappieBlack,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_CrappieBlack
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_CrappieBlack,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_CrappieBlack
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_CrappieBlack,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_CrappieBlack
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_CrappieBlack,
+        scale = 0.36,
+    }
+    model Packed_Fish_CrappieWhite
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Packed_Fish_CrappieWhite,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_CrappieWhite
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Pressed_Fish_CrappieWhite,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_CrappieWhite
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Dried_Fish_CrappieWhite,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_CrappieWhite
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Cold_Fish_CrappieWhite,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_CrappieWhite
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Soaked_Fish_CrappieWhite,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_CrappieWhite
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/SoakedCold_Fish_CrappieWhite,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_CrappieWhite
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/Gutted_Fish_CrappieWhite,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_CrappieWhite
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/PackedGutted_Fish_CrappieWhite,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_CrappieWhite
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/PressedGutted_Fish_CrappieWhite,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_CrappieWhite
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/DriedGutted_Fish_CrappieWhite,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_CrappieWhite
+    {
+        mesh = WorldItems/Fish_Crappie_Perch,
+        texture = FishModels/SoakedGutted_Fish_CrappieWhite,
+        scale = 0.23,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_CrappieWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_CrappieWhite,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_CrappieWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_CrappieWhite,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_CrappieWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_CrappieWhite,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_CrappieWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_CrappieWhite,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_CrappieWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_CrappieWhite,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_CrappieWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_CrappieWhite,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_CrappieWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_CrappieWhite,
+        scale = 0.36,
+    }
+    model Packed_Fish_Bluegill
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Packed_Fish_Bluegill,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_Bluegill
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Pressed_Fish_Bluegill,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_Bluegill
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Dried_Fish_Bluegill,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_Bluegill
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Cold_Fish_Bluegill,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_Bluegill
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Soaked_Fish_Bluegill,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_Bluegill
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/SoakedCold_Fish_Bluegill,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_Bluegill
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Gutted_Fish_Bluegill,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_Bluegill
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/PackedGutted_Fish_Bluegill,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_Bluegill
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/PressedGutted_Fish_Bluegill,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_Bluegill
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/DriedGutted_Fish_Bluegill,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_Bluegill
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/SoakedGutted_Fish_Bluegill,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_Bluegill
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_Bluegill,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_Bluegill
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_Bluegill,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_Bluegill
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_Bluegill,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_Bluegill
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_Bluegill,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_Bluegill
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_Bluegill,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_Bluegill
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_Bluegill,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_Bluegill
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_Bluegill,
+        scale = 0.36,
+    }
+    model Packed_Fish_SunfishRedear
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Packed_Fish_SunfishRedear,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_SunfishRedear
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Pressed_Fish_SunfishRedear,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_SunfishRedear
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Dried_Fish_SunfishRedear,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_SunfishRedear
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Cold_Fish_SunfishRedear,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_SunfishRedear
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Soaked_Fish_SunfishRedear,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_SunfishRedear
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/SoakedCold_Fish_SunfishRedear,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_SunfishRedear
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Gutted_Fish_SunfishRedear,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_SunfishRedear
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/PackedGutted_Fish_SunfishRedear,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_SunfishRedear
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/PressedGutted_Fish_SunfishRedear,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_SunfishRedear
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/DriedGutted_Fish_SunfishRedear,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_SunfishRedear
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/SoakedGutted_Fish_SunfishRedear,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_SunfishRedear
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_SunfishRedear,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_SunfishRedear
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_SunfishRedear,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_SunfishRedear
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_SunfishRedear,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_SunfishRedear
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_SunfishRedear,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_SunfishRedear
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_SunfishRedear,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_SunfishRedear
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_SunfishRedear,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_SunfishRedear
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_SunfishRedear,
+        scale = 0.36,
+    }
+    model Packed_Fish_SunfishGreen
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Packed_Fish_SunfishGreen,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_SunfishGreen
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Pressed_Fish_SunfishGreen,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_SunfishGreen
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Dried_Fish_SunfishGreen,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_SunfishGreen
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Cold_Fish_SunfishGreen,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_SunfishGreen
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Soaked_Fish_SunfishGreen,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_SunfishGreen
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/SoakedCold_Fish_SunfishGreen,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_SunfishGreen
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/Gutted_Fish_SunfishGreen,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_SunfishGreen
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/PackedGutted_Fish_SunfishGreen,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_SunfishGreen
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/PressedGutted_Fish_SunfishGreen,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_SunfishGreen
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/DriedGutted_Fish_SunfishGreen,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_SunfishGreen
+    {
+        mesh = WorldItems/Fish_Bluegill_Sunfish,
+        texture = FishModels/SoakedGutted_Fish_SunfishGreen,
+        scale = 0.195,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_SunfishGreen
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_SunfishGreen,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_SunfishGreen
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_SunfishGreen,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_SunfishGreen
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_SunfishGreen,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_SunfishGreen
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_SunfishGreen,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_SunfishGreen
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_SunfishGreen,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_SunfishGreen
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_SunfishGreen,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_SunfishGreen
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_SunfishGreen,
+        scale = 0.36,
+    }
+    model Packed_Fish_CatfishBlue
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Packed_Fish_CatfishBlue,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_CatfishBlue
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Pressed_Fish_CatfishBlue,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_CatfishBlue
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Dried_Fish_CatfishBlue,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_CatfishBlue
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Cold_Fish_CatfishBlue,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_CatfishBlue
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Soaked_Fish_CatfishBlue,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_CatfishBlue
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/SoakedCold_Fish_CatfishBlue,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_CatfishBlue
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Gutted_Fish_CatfishBlue,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_CatfishBlue
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/PackedGutted_Fish_CatfishBlue,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_CatfishBlue
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/PressedGutted_Fish_CatfishBlue,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_CatfishBlue
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/DriedGutted_Fish_CatfishBlue,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_CatfishBlue
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/SoakedGutted_Fish_CatfishBlue,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_CatfishBlue
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_CatfishBlue,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_CatfishBlue
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_CatfishBlue,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_CatfishBlue
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_CatfishBlue,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_CatfishBlue
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_CatfishBlue,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_CatfishBlue
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_CatfishBlue,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_CatfishBlue
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_CatfishBlue,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_CatfishBlue
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_CatfishBlue,
+        scale = 0.36,
+    }
+    model Packed_Fish_CatfishChannel
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Packed_Fish_CatfishChannel,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_CatfishChannel
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Pressed_Fish_CatfishChannel,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_CatfishChannel
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Dried_Fish_CatfishChannel,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_CatfishChannel
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Cold_Fish_CatfishChannel,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_CatfishChannel
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Soaked_Fish_CatfishChannel,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_CatfishChannel
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/SoakedCold_Fish_CatfishChannel,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_CatfishChannel
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Gutted_Fish_CatfishChannel,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_CatfishChannel
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/PackedGutted_Fish_CatfishChannel,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_CatfishChannel
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/PressedGutted_Fish_CatfishChannel,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_CatfishChannel
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/DriedGutted_Fish_CatfishChannel,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_CatfishChannel
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/SoakedGutted_Fish_CatfishChannel,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_CatfishChannel
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_CatfishChannel,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_CatfishChannel
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_CatfishChannel,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_CatfishChannel
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_CatfishChannel,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_CatfishChannel
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_CatfishChannel,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_CatfishChannel
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_CatfishChannel,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_CatfishChannel
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_CatfishChannel,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_CatfishChannel
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_CatfishChannel,
+        scale = 0.36,
+    }
+    model Packed_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Packed_Fish_CatfishFlathead,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Pressed_Fish_CatfishFlathead,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Dried_Fish_CatfishFlathead,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Cold_Fish_CatfishFlathead,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Soaked_Fish_CatfishFlathead,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/SoakedCold_Fish_CatfishFlathead,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/Gutted_Fish_CatfishFlathead,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/PackedGutted_Fish_CatfishFlathead,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/PressedGutted_Fish_CatfishFlathead,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/DriedGutted_Fish_CatfishFlathead,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/Fish_CatFish,
+        texture = FishModels/SoakedGutted_Fish_CatfishFlathead,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_CatfishFlathead,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_CatfishFlathead,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_CatfishFlathead,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_CatfishFlathead,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_CatfishFlathead,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_CatfishFlathead,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_CatfishFlathead
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_CatfishFlathead,
+        scale = 0.36,
+    }
+    model Packed_Fish_Muskellunge
+    {
+        mesh = WorldItems/Fish_Muskellunge_Pike,
+        texture = FishModels/Packed_Fish_Muskellunge,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_Muskellunge
+    {
+        mesh = WorldItems/Fish_Muskellunge_Pike,
+        texture = FishModels/Pressed_Fish_Muskellunge,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_Muskellunge
+    {
+        mesh = WorldItems/Fish_Muskellunge_Pike,
+        texture = FishModels/Dried_Fish_Muskellunge,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_Muskellunge
+    {
+        mesh = WorldItems/Fish_Muskellunge_Pike,
+        texture = FishModels/Cold_Fish_Muskellunge,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_Muskellunge
+    {
+        mesh = WorldItems/Fish_Muskellunge_Pike,
+        texture = FishModels/Soaked_Fish_Muskellunge,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_Muskellunge
+    {
+        mesh = WorldItems/Fish_Muskellunge_Pike,
+        texture = FishModels/SoakedCold_Fish_Muskellunge,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_Muskellunge
+    {
+        mesh = WorldItems/Fish_Muskellunge_Pike,
+        texture = FishModels/Gutted_Fish_Muskellunge,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_Muskellunge
+    {
+        mesh = WorldItems/Fish_Muskellunge_Pike,
+        texture = FishModels/PackedGutted_Fish_Muskellunge,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_Muskellunge
+    {
+        mesh = WorldItems/Fish_Muskellunge_Pike,
+        texture = FishModels/PressedGutted_Fish_Muskellunge,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_Muskellunge
+    {
+        mesh = WorldItems/Fish_Muskellunge_Pike,
+        texture = FishModels/DriedGutted_Fish_Muskellunge,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_Muskellunge
+    {
+        mesh = WorldItems/Fish_Muskellunge_Pike,
+        texture = FishModels/SoakedGutted_Fish_Muskellunge,
+        scale = 0.1,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_Muskellunge
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_Muskellunge,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_Muskellunge
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_Muskellunge,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_Muskellunge
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_Muskellunge,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_Muskellunge
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_Muskellunge,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_Muskellunge
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_Muskellunge,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_Muskellunge
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_Muskellunge,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_Muskellunge
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_Muskellunge,
+        scale = 0.36,
+    }
+    model Packed_Fish_BassWhite
+    {
+        mesh = WorldItems/Fish_Bass_White,
+        texture = FishModels/Packed_Fish_BassWhite,
+        scale = 0.175,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_BassWhite
+    {
+        mesh = WorldItems/Fish_Bass_White,
+        texture = FishModels/Pressed_Fish_BassWhite,
+        scale = 0.175,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_BassWhite
+    {
+        mesh = WorldItems/Fish_Bass_White,
+        texture = FishModels/Dried_Fish_BassWhite,
+        scale = 0.175,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_BassWhite
+    {
+        mesh = WorldItems/Fish_Bass_White,
+        texture = FishModels/Cold_Fish_BassWhite,
+        scale = 0.175,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_BassWhite
+    {
+        mesh = WorldItems/Fish_Bass_White,
+        texture = FishModels/Soaked_Fish_BassWhite,
+        scale = 0.175,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_BassWhite
+    {
+        mesh = WorldItems/Fish_Bass_White,
+        texture = FishModels/SoakedCold_Fish_BassWhite,
+        scale = 0.175,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_BassWhite
+    {
+        mesh = WorldItems/Fish_Bass_White,
+        texture = FishModels/Gutted_Fish_BassWhite,
+        scale = 0.175,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_BassWhite
+    {
+        mesh = WorldItems/Fish_Bass_White,
+        texture = FishModels/PackedGutted_Fish_BassWhite,
+        scale = 0.175,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_BassWhite
+    {
+        mesh = WorldItems/Fish_Bass_White,
+        texture = FishModels/PressedGutted_Fish_BassWhite,
+        scale = 0.175,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_BassWhite
+    {
+        mesh = WorldItems/Fish_Bass_White,
+        texture = FishModels/DriedGutted_Fish_BassWhite,
+        scale = 0.175,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_BassWhite
+    {
+        mesh = WorldItems/Fish_Bass_White,
+        texture = FishModels/SoakedGutted_Fish_BassWhite,
+        scale = 0.175,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_BassWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_BassWhite,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_BassWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_BassWhite,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_BassWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_BassWhite,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_BassWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_BassWhite,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_BassWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_BassWhite,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_BassWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_BassWhite,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_BassWhite
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_BassWhite,
+        scale = 0.36,
+    }
+    model Packed_Fish_PerchYellow
+    {
+        mesh = WorldItems/Fish_Perch_Yellow,
+        texture = FishModels/Packed_Fish_PerchYellow,
+        scale = 0.135,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_PerchYellow
+    {
+        mesh = WorldItems/Fish_Perch_Yellow,
+        texture = FishModels/Pressed_Fish_PerchYellow,
+        scale = 0.135,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_PerchYellow
+    {
+        mesh = WorldItems/Fish_Perch_Yellow,
+        texture = FishModels/Dried_Fish_PerchYellow,
+        scale = 0.135,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_PerchYellow
+    {
+        mesh = WorldItems/Fish_Perch_Yellow,
+        texture = FishModels/Cold_Fish_PerchYellow,
+        scale = 0.135,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_PerchYellow
+    {
+        mesh = WorldItems/Fish_Perch_Yellow,
+        texture = FishModels/Soaked_Fish_PerchYellow,
+        scale = 0.135,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_PerchYellow
+    {
+        mesh = WorldItems/Fish_Perch_Yellow,
+        texture = FishModels/SoakedCold_Fish_PerchYellow,
+        scale = 0.135,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_PerchYellow
+    {
+        mesh = WorldItems/Fish_Perch_Yellow,
+        texture = FishModels/Gutted_Fish_PerchYellow,
+        scale = 0.135,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_PerchYellow
+    {
+        mesh = WorldItems/Fish_Perch_Yellow,
+        texture = FishModels/PackedGutted_Fish_PerchYellow,
+        scale = 0.135,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_PerchYellow
+    {
+        mesh = WorldItems/Fish_Perch_Yellow,
+        texture = FishModels/PressedGutted_Fish_PerchYellow,
+        scale = 0.135,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_PerchYellow
+    {
+        mesh = WorldItems/Fish_Perch_Yellow,
+        texture = FishModels/DriedGutted_Fish_PerchYellow,
+        scale = 0.135,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_PerchYellow
+    {
+        mesh = WorldItems/Fish_Perch_Yellow,
+        texture = FishModels/SoakedGutted_Fish_PerchYellow,
+        scale = 0.135,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_PerchYellow
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_PerchYellow,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_PerchYellow
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_PerchYellow,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_PerchYellow
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_PerchYellow,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_PerchYellow
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_PerchYellow,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_PerchYellow
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_PerchYellow,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_PerchYellow
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_PerchYellow,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_PerchYellow
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_PerchYellow,
+        scale = 0.36,
+    }
+    model Packed_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/Fish_FreshWaterDrum,
+        texture = FishModels/Packed_Fish_DrumFreshwater,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/Fish_FreshWaterDrum,
+        texture = FishModels/Pressed_Fish_DrumFreshwater,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/Fish_FreshWaterDrum,
+        texture = FishModels/Dried_Fish_DrumFreshwater,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/Fish_FreshWaterDrum,
+        texture = FishModels/Cold_Fish_DrumFreshwater,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/Fish_FreshWaterDrum,
+        texture = FishModels/Soaked_Fish_DrumFreshwater,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/Fish_FreshWaterDrum,
+        texture = FishModels/SoakedCold_Fish_DrumFreshwater,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/Fish_FreshWaterDrum,
+        texture = FishModels/Gutted_Fish_DrumFreshwater,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/Fish_FreshWaterDrum,
+        texture = FishModels/PackedGutted_Fish_DrumFreshwater,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/Fish_FreshWaterDrum,
+        texture = FishModels/PressedGutted_Fish_DrumFreshwater,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/Fish_FreshWaterDrum,
+        texture = FishModels/DriedGutted_Fish_DrumFreshwater,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/Fish_FreshWaterDrum,
+        texture = FishModels/SoakedGutted_Fish_DrumFreshwater,
+        scale = 0.11,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_DrumFreshwater,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_DrumFreshwater,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_DrumFreshwater,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_DrumFreshwater,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_DrumFreshwater,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_DrumFreshwater,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_DrumFreshwater
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_DrumFreshwater,
+        scale = 0.36,
+    }
+    model Packed_Fish_GarAlligator
+    {
+        mesh = WorldItems/Fish_AlligatorGar,
+        texture = FishModels/Packed_Fish_GarAlligator,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_GarAlligator
+    {
+        mesh = WorldItems/Fish_AlligatorGar,
+        texture = FishModels/Pressed_Fish_GarAlligator,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_GarAlligator
+    {
+        mesh = WorldItems/Fish_AlligatorGar,
+        texture = FishModels/Dried_Fish_GarAlligator,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_GarAlligator
+    {
+        mesh = WorldItems/Fish_AlligatorGar,
+        texture = FishModels/Cold_Fish_GarAlligator,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_GarAlligator
+    {
+        mesh = WorldItems/Fish_AlligatorGar,
+        texture = FishModels/Soaked_Fish_GarAlligator,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_GarAlligator
+    {
+        mesh = WorldItems/Fish_AlligatorGar,
+        texture = FishModels/SoakedCold_Fish_GarAlligator,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_GarAlligator
+    {
+        mesh = WorldItems/Fish_AlligatorGar,
+        texture = FishModels/Gutted_Fish_GarAlligator,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_GarAlligator
+    {
+        mesh = WorldItems/Fish_AlligatorGar,
+        texture = FishModels/PackedGutted_Fish_GarAlligator,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_GarAlligator
+    {
+        mesh = WorldItems/Fish_AlligatorGar,
+        texture = FishModels/PressedGutted_Fish_GarAlligator,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_GarAlligator
+    {
+        mesh = WorldItems/Fish_AlligatorGar,
+        texture = FishModels/DriedGutted_Fish_GarAlligator,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_GarAlligator
+    {
+        mesh = WorldItems/Fish_AlligatorGar,
+        texture = FishModels/SoakedGutted_Fish_GarAlligator,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_GarAlligator
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_GarAlligator,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_GarAlligator
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_GarAlligator,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_GarAlligator
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_GarAlligator,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_GarAlligator
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_GarAlligator,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_GarAlligator
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_GarAlligator,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_GarAlligator
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_GarAlligator,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_GarAlligator
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_GarAlligator,
+        scale = 0.36,
+    }
+    model Packed_Fish_Paddlefish
+    {
+        mesh = WorldItems/Fish_PaddleFish,
+        texture = FishModels/Packed_Fish_Paddlefish,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Pressed_Fish_Paddlefish
+    {
+        mesh = WorldItems/Fish_PaddleFish,
+        texture = FishModels/Pressed_Fish_Paddlefish,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Dried_Fish_Paddlefish
+    {
+        mesh = WorldItems/Fish_PaddleFish,
+        texture = FishModels/Dried_Fish_Paddlefish,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Cold_Fish_Paddlefish
+    {
+        mesh = WorldItems/Fish_PaddleFish,
+        texture = FishModels/Cold_Fish_Paddlefish,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Soaked_Fish_Paddlefish
+    {
+        mesh = WorldItems/Fish_PaddleFish,
+        texture = FishModels/Soaked_Fish_Paddlefish,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedCold_Fish_Paddlefish
+    {
+        mesh = WorldItems/Fish_PaddleFish,
+        texture = FishModels/SoakedCold_Fish_Paddlefish,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Gutted_Fish_Paddlefish
+    {
+        mesh = WorldItems/Fish_PaddleFish,
+        texture = FishModels/Gutted_Fish_Paddlefish,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PackedGutted_Fish_Paddlefish
+    {
+        mesh = WorldItems/Fish_PaddleFish,
+        texture = FishModels/PackedGutted_Fish_Paddlefish,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model PressedGutted_Fish_Paddlefish
+    {
+        mesh = WorldItems/Fish_PaddleFish,
+        texture = FishModels/PressedGutted_Fish_Paddlefish,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model DriedGutted_Fish_Paddlefish
+    {
+        mesh = WorldItems/Fish_PaddleFish,
+        texture = FishModels/DriedGutted_Fish_Paddlefish,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model SoakedGutted_Fish_Paddlefish
+    {
+        mesh = WorldItems/Fish_PaddleFish,
+        texture = FishModels/SoakedGutted_Fish_Paddlefish,
+        scale = 0.07,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0302 0.0671 0.0232,
+            rotate = 46.6017 -51.107 -143.5337,
+            scale = 0.5358,
+        }
+    }
+    model Half_Fish_Paddlefish
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/Half_Fish_Paddlefish,
+        scale = 0.36,
+    }
+    model PackedHalf_Fish_Paddlefish
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PackedHalf_Fish_Paddlefish,
+        scale = 0.36,
+    }
+    model PressedHalf_Fish_Paddlefish
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/PressedHalf_Fish_Paddlefish,
+        scale = 0.36,
+    }
+    model DriedHalf_Fish_Paddlefish
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/DriedHalf_Fish_Paddlefish,
+        scale = 0.36,
+    }
+    model ColdHalf_Fish_Paddlefish
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/ColdHalf_Fish_Paddlefish,
+        scale = 0.36,
+    }
+    model SoakedHalf_Fish_Paddlefish
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedHalf_Fish_Paddlefish,
+        scale = 0.36,
+    }
+    model SoakedColdHalf_Fish_Paddlefish
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishModels/SoakedColdHalf_Fish_Paddlefish,
+        scale = 0.36,
+    }
+}

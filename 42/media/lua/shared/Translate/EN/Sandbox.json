@@ -1,0 +1,13 @@
+{
+  "Sandbox_TraditionalPreservationFish": "Traditional Preservation (Fish)",
+  "Sandbox_TraditionalPreservationFish_DryDays": "Salt drying time (days)",
+  "Sandbox_TraditionalPreservationFish_DryDays_tooltip": "Days to salt dry in the best weather. Cold drying takes 5/3 of this.",
+  "Sandbox_TraditionalPreservationFish_MaxDryDays": "Slowest salt drying (days)",
+  "Sandbox_TraditionalPreservationFish_MaxDryDays_tooltip": "The longest cold or damp weather can stretch salt drying, not counting rain.",
+  "Sandbox_TraditionalPreservationFish_Spoilage": "Spoilage strictness",
+  "Sandbox_TraditionalPreservationFish_Spoilage_tooltip": "How quickly the wrong season spoils fish on a drying station.",
+  "Sandbox_TraditionalPreservationFish_Spoilage_option1": "Off",
+  "Sandbox_TraditionalPreservationFish_Spoilage_option2": "Forgiving",
+  "Sandbox_TraditionalPreservationFish_Spoilage_option3": "Normal",
+  "Sandbox_TraditionalPreservationFish_Spoilage_option4": "Harsh"
+}

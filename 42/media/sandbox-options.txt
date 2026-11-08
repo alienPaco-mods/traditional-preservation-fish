@@ -1,0 +1,28 @@
+VERSION = 1,
+
+option TraditionalPreservationFish.DryDays {
+    type = double,
+    min = 3.0,
+    max = 60.0,
+    default = 12.0,
+    page = TraditionalPreservationFish,
+    translation = TraditionalPreservationFish_DryDays,
+}
+
+option TraditionalPreservationFish.MaxDryDays {
+    type = double,
+    min = 3.0,
+    max = 120.0,
+    default = 27.0,
+    page = TraditionalPreservationFish,
+    translation = TraditionalPreservationFish_MaxDryDays,
+}
+
+option TraditionalPreservationFish.Spoilage {
+    type = enum,
+    numValues = 4,
+    default = 3,
+    page = TraditionalPreservationFish,
+    translation = TraditionalPreservationFish_Spoilage,
+    valueTranslation = TraditionalPreservationFish_Spoilage,
+}
