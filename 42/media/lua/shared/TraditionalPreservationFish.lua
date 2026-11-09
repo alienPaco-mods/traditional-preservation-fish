@@ -625,13 +625,7 @@ function TraditionalPreservationFish.applySandbox()
 end
 
 local function applyRecipeTime(name, hours)
-    local recipe = ScriptManager.instance:getCraftRecipe(name)
-    if not recipe then
-        print("[TraditionalPreservationFish] Could not find " .. name)
-        return
-    end
-    local seconds = math.floor(hours * SECONDS_PER_HOUR)
-    recipe:Load(name, "{ time = " .. tostring(seconds) .. ", }")
+    Weather.setRecipeHours(name, hours, "TraditionalPreservationFish")
 end
 
 function TraditionalPreservationFish.applyRecipeTimes()
