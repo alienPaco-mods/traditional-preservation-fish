@@ -234,19 +234,14 @@ function TraditionalPreservationFish.getLedger()
     return data
 end
 
--- The engine pools recipe data without clearing its ModData, so every run must set this.
 function TraditionalPreservationFish.onPressStart(craftRecipeData)
-    craftRecipeData:getModData().pressStartHour = getGameTime():getWorldAgeHours()
+    Weather.startClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours())
 end
 
 -- Craft timers tick at a fixed speed whatever Day Length says and stop when the area unloads,
 -- so this replaces their count with the game clock.
 function TraditionalPreservationFish.onPressUpdate(craftRecipeData)
-    local startHour = craftRecipeData:getModData().pressStartHour
-    if not startHour then return end
-
-    local elapsed = (getGameTime():getWorldAgeHours() - startHour) * SECONDS_PER_HOUR
-    craftRecipeData:setElapsedTime(math.min(elapsed, craftRecipeData:getRecipe():getTime()))
+    Weather.showClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours())
 end
 
 function TraditionalPreservationFish.hasRoom(capacity, storedWeight, weight)
