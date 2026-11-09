@@ -1,4 +1,5 @@
 -- Checks the station slots outside the game. Run from the mod folder: luajit tests/test_ui.lua
+local H = dofile((os.getenv("TPCORE") or "../_tpcore") .. "/tests/harness.lua")
 ModData = { getOrCreate = function() return {} end }
 Events = { OnInitGlobalModData = { Add = function() end } }
 function require() end
@@ -30,14 +31,9 @@ function ISMoveableSpriteProps:canPlaceMoveable() return true end
 dofile("42/media/lua/client/TraditionalPreservationFishUI.lua")
 
 
-local function check(name, condition)
-    print((condition and "ok   " or "FAIL ") .. name)
-    if not condition then os.exit(1) end
-end
+local check = H.check
 
-local function list(items)
-    return { size = function() return #items end, get = function(_, i) return items[i + 1] end }
-end
+local list = H.list
 
 local function fish(fullType, weight)
     return {
@@ -226,4 +222,4 @@ check("a beam can't be put down indoors", not placing("traditionalpreservationfi
 check("but can outdoors", placing("traditionalpreservationfish_02_2", true))
 check("and the frame can go anywhere", placing("traditionalpreservationfish_01_0", false))
 
-print("all passed")
+H.done()

@@ -1,4 +1,5 @@
 -- Checks the curing rules outside the game. Run from the mod folder: luajit tests/test_curing.lua
+local H = dofile((os.getenv("TPCORE") or "../_tpcore") .. "/tests/harness.lua")
 local hours = 100
 ModData = { tables = {} }
 function ModData.getOrCreate(key)
@@ -42,16 +43,11 @@ end
 dofile("42/media/lua/shared/TraditionalPreservationFish.lua")
 local T = TraditionalPreservationFish
 
-local function check(name, condition)
-    print((condition and "ok   " or "FAIL ") .. name)
-    if not condition then os.exit(1) end
-end
+local check = H.check
 
 local function near(a, b) return math.abs(a - b) < 0.0001 end
 
-local function list(items)
-    return { size = function() return #items end, get = function(_, i) return items[i + 1] end }
-end
+local list = H.list
 
 local function newRecipeData(time, fish, created)
     local data = { modData = {}, elapsed = 0 }
@@ -608,7 +604,12 @@ local extras = { size = function() return #listed end, get = function(_, i) retu
 T.useStandins({ getExtraItems = function() return extras end })
 check("fish stages in a dish become stand-ins", listed[3] == "TraditionalPreservationFish.GuttedFishIngredient" and listed[4] == "TraditionalPreservationFish.SoakedColdFishIngredient")
 check("everything else stays", listed[1] == "TraditionalPreservationFish.FishHead" and listed[2] == "Base.Carrots")
-for fullType, standin in pairs(T.INGREDIENT_STANDINS) do
+-- In a fixed order, so the output is the same on every run.
+local standinTypes = {}
+for fullType in pairs(T.INGREDIENT_STANDINS) do table.insert(standinTypes, fullType) end
+table.sort(standinTypes)
+for _, fullType in ipairs(standinTypes) do
+    local standin = T.INGREDIENT_STANDINS[fullType]
     local stage, name = fullType:match("%.(.+)$"), standin:match("%.(.+)$")
     local body = script:match("item " .. stage .. "\n    {(.-)\n    }")
     local standinBody = script:match("item " .. name .. "\n    {(.-)\n    }")
@@ -713,4 +714,4 @@ check("as it does when cold dried", driedHalf.modelIndex == halfOne.modelIndex +
 local saltedGutted = through(through(heavy, "SaltPackedFish"), "SaltPressedFish")
 check("a gutted fish stays headless through the salt route", saltedGutted.modelIndex == heavy.modelIndex + #T.FISH_ICONS)
 
-print("all passed")
+H.done()
