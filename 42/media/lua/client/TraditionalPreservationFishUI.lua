@@ -5,8 +5,9 @@
 require "Entity/ISUI/Components/Crafting/ISCraftLogicPanel"
 require "Entity/ISUI/Controls/ISItemSlot"
 local UI = require "TraditionalPreservationFish/Core/UI"
+local Tiles = require "TraditionalPreservationFish/Tiles"
 
-local FIRST_FRAME_SPRITE = 6  -- keep in step with tools/build_tileset.py
+local FIRST_FRAME_SPRITE = Tiles.FRAME
 
 local vanillaItemSlotAddItems = ISCraftLogicPanel.ItemSlotAddItems
 local vanillaVerifyItem = ISItemSlot.defaultVerifyItem
@@ -191,4 +192,4 @@ UI.onProgressSlot(function(slot, name)
 end)
 
 -- The Fish Hanging Beam and Gantry each stands in the open.
-UI.outdoorOnly({ ["traditionalpreservationfish_02_0"] = true, ["traditionalpreservationfish_02_1"] = true, ["traditionalpreservationfish_02_2"] = true, ["traditionalpreservationfish_02_3"] = true })
+UI.outdoorOnly(Tiles.OUTDOOR)

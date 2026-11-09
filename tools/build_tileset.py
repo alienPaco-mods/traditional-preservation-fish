@@ -14,6 +14,7 @@ Needs Pillow. Rerun after editing the colours or sizes below.
 """
 import io
 import math
+import os
 import random
 import re
 import struct
@@ -22,10 +23,13 @@ from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
+sys.path.insert(0, str(Path(os.environ.get("TPCORE", Path(__file__).resolve().parents[2] / "_tpcore")) / "tools"))
+import pzart  # noqa: E402
+
 GAME = Path.home() / ".local/share/Steam/steamapps/common/ProjectZomboid/projectzomboid"
 NAME = "traditionalpreservationfish"
 # A tileset can't hold more than 512 tiles, or the game drops the whole file and every station with
-# it. Tiles are numbered straight through both. FIRST_SHEET_SIZE in TraditionalPreservationFish.lua must match.
+# it. Tiles are numbered straight through both. The Lua reads these numbers from the generated Tiles.lua.
 TILESETS = [NAME + "_01", NAME + "_02"]
 MAX_SHEET_TILES = 512
 COLUMNS = 8
@@ -48,7 +52,7 @@ FOOT = (64, 226)  # the middle of the floor diamond
 DIAMOND_HALF_W, DIAMOND_HALF_H = 62, 31
 
 TUB, TUB_FILLED, TUB_WEIGHTED, FRAME, FISH = 0, 2, 4, 6, 8
-# The beams come after the frame's fish. HANGERS in TraditionalPreservationFish.lua must match.
+# The beams come after the frame's fish.
 MEDIUM_BEAM, LARGE_BEAM, MEDIUM_FISH, LARGE_FISH = 408, 410, 412, 612
 MEDIUM_HOOKS, LARGE_HOOKS = 4, 2
 FACES = ["S", "E"]
@@ -119,11 +123,11 @@ MEDIUM_HALF_LENGTH, MEDIUM_BEAM_Z, MEDIUM_HOOK_SIZE, MEDIUM_FISH_SCALE = 0.46, 1
 LARGE_HALF_LENGTH, LARGE_BEAM_Z, LARGE_HOOK_SIZE, LARGE_FISH_SCALE = 0.46, 160, 17.5, 1.9
 
 # A hanging fish fades from the first of these to the last as it dries, and salt blooms on it.
-# DRYING_STAGES in TraditionalPreservationFish.lua must match.
 FISH_STAGES = 5
 # Each look a hanging fish can have gets a full set of tiles: whole, then gutted and half for cold drying,
-# then gutted and half for salt drying. STYLE_ in TraditionalPreservationFish.lua must match.
-FISH_STYLES = 5
+# then gutted and half for salt drying, named for the Lua's STYLE_ values.
+STYLE_NAMES = ["SALT", "GUTTED", "HALF", "SALT_GUTTED", "SALT_HALF"]
+FISH_STYLES = len(STYLE_NAMES)
 GUTTED_STYLES, HALF_STYLES, COLD_STYLES = (1, 3), (2, 4), (1, 2)
 FRESH_FISH = dict(colour=(226, 224, 212), strength=0.42, grains=5)
 DONE_FISH = dict(colour=(120, 76, 40), strength=0.62, grains=3)
@@ -224,7 +228,7 @@ def station_props(custom, group, facing, weight):
 
 
 def fish_index(face_index, slot, stage, first=FISH, slots=len(SLOTS)):
-    """Keep in step with refreshFrame in TraditionalPreservationFishWorld.lua."""
+    """refreshFrame in TraditionalPreservationFishWorld.lua numbers them the same way, from the generated Tiles.lua."""
     return first + (stage * slots + slot) * len(FACES) + face_index
 
 
@@ -1212,9 +1216,34 @@ def build_tiles(game=GAME):
     return tiles
 
 
+def lua_tiles():
+    stations = [tile_name(base + face) for base in (TUB, FRAME, MEDIUM_BEAM, LARGE_BEAM) for face in range(len(FACES))]
+    beams = [tile_name(base + face) for base in (MEDIUM_BEAM, LARGE_BEAM) for face in range(len(FACES))]
+    return {
+        "SHEETS": [{"prefix": tileset + "_", "tiles": COLUMNS * rows} for tileset, rows in zip(TILESETS, SHEET_ROWS)],
+        "FIRST_SHEET_SIZE": FIRST_SHEET_SIZE,
+        "FACE_COUNT": len(FACES),
+        "STATIONS": stations,
+        "OUTDOOR": {name: True for name in beams},
+        "TUB": TUB,
+        "TUB_FILLED": TUB_FILLED,
+        "TUB_WEIGHTED": TUB_WEIGHTED,
+        "FRAME": FRAME,
+        # Every station that hangs fish: its first sprite, its first hanging fish sprite and its stacks.
+        "HANGERS": {
+            "frame": {"base": FRAME, "fishSprite": FISH, "stacks": len(SLOTS)},
+            "medium": {"base": MEDIUM_BEAM, "fishSprite": MEDIUM_FISH, "stacks": MEDIUM_HOOKS},
+            "large": {"base": LARGE_BEAM, "fishSprite": LARGE_FISH, "stacks": LARGE_HOOKS},
+        },
+        "DRYING_STAGES": FISH_STAGES,
+        "STYLES": {name: style for style, name in enumerate(STYLE_NAMES)},
+    }
+
+
 def main():
     game = Path(sys.argv[1]) if len(sys.argv) > 1 else GAME
     media = Path(__file__).resolve().parent.parent / "42" / "media"
+    pzart.write_lua_tiles(media, "TraditionalPreservationFish", lua_tiles(), "tools/build_tileset.py")
     (media / "texturepacks").mkdir(parents=True, exist_ok=True)
     (media / "textures").mkdir(parents=True, exist_ok=True)
 

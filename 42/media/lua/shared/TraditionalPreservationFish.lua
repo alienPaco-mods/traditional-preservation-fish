@@ -3,6 +3,7 @@
 -- how much drying it has had, including while its chunk was unloaded.
 TraditionalPreservationFish = TraditionalPreservationFish or {}
 local Weather = require "TraditionalPreservationFish/Core/Weather"
+local Tiles = require "TraditionalPreservationFish/Tiles"
 
 TraditionalPreservationFish.MOD_DATA_KEY = "TraditionalPreservationFish"
 
@@ -16,17 +17,17 @@ TraditionalPreservationFish.TUB_CAPACITY = 50
 -- Fish too, so a tub can't be filled with fillets. A tub built with more slots still stops here.
 TraditionalPreservationFish.TUB_MAX_ITEMS = 35
 -- Each press of Craft hangs one stack, with one sprite and one timer, and every stack is limited
--- by weight alone. A full frame holds 20. MAX_STACKS must match the frame spots in
--- tools/build_tileset.py.
+-- by weight alone. A full frame holds 20. MAX_STACKS is the frame's spots, from the Tiles.lua that
+-- tools/build_tileset.py writes.
 TraditionalPreservationFish.STACK_WEIGHT = 2.5
-TraditionalPreservationFish.MAX_STACKS = 8
--- Every station that hangs fish, by its first sprite: the first hanging fish sprite, its stacks and
--- the weight of each. Must match tools/build_tileset.py.
-TraditionalPreservationFish.HANGERS = {
-    [6] = { fishSprite = 8, stacks = TraditionalPreservationFish.MAX_STACKS, stackWeight = TraditionalPreservationFish.STACK_WEIGHT },
-    [408] = { fishSprite = 412, stacks = 4, stackWeight = 15 },
-    [410] = { fishSprite = 612, stacks = 2, stackWeight = 50 },
-}
+TraditionalPreservationFish.MAX_STACKS = Tiles.HANGERS.frame.stacks
+-- Every station that hangs fish, by its first sprite: the first hanging fish sprite and its stacks
+-- (from Tiles.lua), and the weight of each stack.
+local STACK_WEIGHTS = { frame = TraditionalPreservationFish.STACK_WEIGHT, medium = 15, large = 50 }
+TraditionalPreservationFish.HANGERS = {}
+for name, hanger in pairs(Tiles.HANGERS) do
+    TraditionalPreservationFish.HANGERS[hanger.base] = { fishSprite = hanger.fishSprite, stacks = hanger.stacks, stackWeight = STACK_WEIGHTS[name] }
+end
 
 -- Vanilla's rules for cutting a fish: over this weight, into two fillets of this share of its
 -- weight, each with half its food.
@@ -48,14 +49,13 @@ TraditionalPreservationFish.PACK_GUTTING_XP = 5
 TraditionalPreservationFish.COLD_FISH = { ["TraditionalPreservationFish.GuttedFish"] = true, ["TraditionalPreservationFish.FishHalf"] = true }
 
 -- How many looks a hanging fish has, from fresh to done, and its styles. A stack picks a style at
--- random when it starts, whatever is in it, so a frame doesn't look all alike. Must match
--- tools/build_tileset.py.
-TraditionalPreservationFish.DRYING_STAGES = 5
-TraditionalPreservationFish.STYLE_SALT = 0
-TraditionalPreservationFish.STYLE_GUTTED = 1
-TraditionalPreservationFish.STYLE_HALF = 2
-TraditionalPreservationFish.STYLE_SALT_GUTTED = 3
-TraditionalPreservationFish.STYLE_SALT_HALF = 4
+-- random when it starts, whatever is in it, so a frame doesn't look all alike. Both come from Tiles.lua.
+TraditionalPreservationFish.DRYING_STAGES = Tiles.DRYING_STAGES
+TraditionalPreservationFish.STYLE_SALT = Tiles.STYLES.SALT
+TraditionalPreservationFish.STYLE_GUTTED = Tiles.STYLES.GUTTED
+TraditionalPreservationFish.STYLE_HALF = Tiles.STYLES.HALF
+TraditionalPreservationFish.STYLE_SALT_GUTTED = Tiles.STYLES.SALT_GUTTED
+TraditionalPreservationFish.STYLE_SALT_HALF = Tiles.STYLES.SALT_HALF
 TraditionalPreservationFish.SALT_STYLES = { 0, 0, 3, 4 }
 TraditionalPreservationFish.COLD_STYLES = { 1, 1, 2 }
 
@@ -258,12 +258,12 @@ function TraditionalPreservationFish.fishRefusal(isTub, fullType)
 end
 
 -- A tileset can't hold more than 512 tiles, so everything from FIRST_SHEET_SIZE on is in a second
--- one. Sprites are numbered straight through both. Must match tools/build_tileset.py.
-TraditionalPreservationFish.FIRST_SHEET_SIZE = 408
+-- one. Sprites are numbered straight through both.
+TraditionalPreservationFish.FIRST_SHEET_SIZE = Tiles.FIRST_SHEET_SIZE
 
 function TraditionalPreservationFish.spriteName(index)
-    if index < TraditionalPreservationFish.FIRST_SHEET_SIZE then return "traditionalpreservationfish_01_" .. index end
-    return "traditionalpreservationfish_02_" .. (index - TraditionalPreservationFish.FIRST_SHEET_SIZE)
+    if index < TraditionalPreservationFish.FIRST_SHEET_SIZE then return Tiles.SHEETS[1].prefix .. index end
+    return Tiles.SHEETS[2].prefix .. (index - TraditionalPreservationFish.FIRST_SHEET_SIZE)
 end
 
 -- The number of one of this mod's sprites, or nil for any other.

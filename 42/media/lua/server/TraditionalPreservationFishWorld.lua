@@ -6,12 +6,12 @@ if isClient() then return end
 TraditionalPreservationFishWorld = TraditionalPreservationFishWorld or {}
 local Station = require "TraditionalPreservationFish/Core/Station"
 local Weather = require "TraditionalPreservationFish/Core/Weather"
+local Tiles = require "TraditionalPreservationFish/Tiles"
 
-local FACE_COUNT = 2
+local FACE_COUNT = Tiles.FACE_COUNT
 
--- Keep in step with the tile numbers in tools/build_tileset.py.
-local TUB_SPRITE, TUB_FILLED_SPRITE, TUB_WEIGHTED_SPRITE = 0, 2, 4
-local FRAME_SPRITE = 6
+local TUB_FILLED_SPRITE, TUB_WEIGHTED_SPRITE = Tiles.TUB_FILLED, Tiles.TUB_WEIGHTED
+local FRAME_SPRITE = Tiles.FRAME
 local STAGE_FRESH = 0
 
 -- How many fish, how many stacks, and each stack's style.
@@ -77,7 +77,7 @@ local function refreshTub(tub, entry, faceIndex, waiting, _, batches, finishedSt
     showSprites(tub, entry, tostring(sprite), sprite and { sprite + faceIndex } or {})
 end
 
--- Keep in step with fish_index in tools/build_tileset.py.
+-- The same numbering as fish_index in tools/build_tileset.py.
 local function refreshFrame(frame, entry, faceIndex, _, waitingStyle, batches, finishedStyles)
     local states = TraditionalPreservationFishWorld.fishStates(waitingStyle, batches, finishedStyles)
     local sprites = {}
@@ -116,15 +116,7 @@ local function newEntry(station)
     }
 end
 
-local spriteNames = {}
-local stations = { TUB_SPRITE }
-for base in pairs(TraditionalPreservationFish.HANGERS) do table.insert(stations, base) end
-for _, base in ipairs(stations) do
-    for faceIndex = 0, FACE_COUNT - 1 do
-        table.insert(spriteNames, TraditionalPreservationFish.spriteName(base + faceIndex))
-    end
-end
-local tracker = Station.tracker({ sprites = spriteNames, entry = newEntry, refresh = refresh })
+local tracker = Station.tracker({ sprites = Tiles.STATIONS, entry = newEntry, refresh = refresh })
 
 TraditionalPreservationFishWorld.track = tracker.track
 
