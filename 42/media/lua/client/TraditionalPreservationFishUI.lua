@@ -9,9 +9,6 @@ local Tiles = require "TraditionalPreservationFish/Tiles"
 
 local FIRST_FRAME_SPRITE = Tiles.FRAME
 
-local vanillaItemSlotAddItems = ISCraftLogicPanel.ItemSlotAddItems
-local vanillaVerifyItem = ISItemSlot.defaultVerifyItem
-local vanillaMouseUp = ISItemSlot.onMouseUp
 
 local SALT_BADGE_SIZE = 14
 local SALT_BADGE_MARGIN = 3
@@ -30,18 +27,20 @@ local function waitingWeight(resource)
     return weight
 end
 
--- queuedWeight and queuedCount are fish on their way in that the slot doesn't hold yet.
-local function refusal(entity, component, resource, isTub, item, queuedWeight, queuedCount)
+-- queued lists the fish on their way in that the slot doesn't hold yet. slot.extra says it's a tub.
+local function refusal(slot, item, queued)
+    local entity, component, resource, isTub = slot.entity, slot.component, slot.resource, slot.extra
     local wrongFish = TraditionalPreservationFish.fishRefusal(isTub, item:getFullType())
     if wrongFish then return wrongFish end
 
     local weight = item:getActualWeight()
-    local waiting = waitingWeight(resource) + queuedWeight
+    local waiting = waitingWeight(resource)
+    for _, fish in ipairs(queued) do waiting = waiting + fish:getActualWeight() end
     if isTub then
         if component:isRunning() then return "IGUI_TraditionalPreservationFish_TubInUse" end
         -- This asks what is in the tub, because a tub keeps the slot counts it was built with.
         if TraditionalPreservationFishWorld.busyStacks(entity) > 0 then return "IGUI_TraditionalPreservationFish_TubNotEmpty" end
-        if resource:getStoredItems():size() + queuedCount >= TraditionalPreservationFish.TUB_MAX_ITEMS
+        if resource:getStoredItems():size() + #queued >= TraditionalPreservationFish.TUB_MAX_ITEMS
                 or not TraditionalPreservationFish.hasRoom(TraditionalPreservationFish.TUB_CAPACITY, waiting, weight) then
             return "IGUI_TraditionalPreservationFish_Full"
         end
@@ -56,89 +55,24 @@ local function refusal(entity, component, resource, isTub, item, queuedWeight, q
     return TraditionalPreservationFish.frameRefusal(hanger, TraditionalPreservationFishWorld.busyStacks(entity), waiting, weight)
 end
 
-local function canAdd(action)
-    return not refusal(action.entity, action.component, action.resource, action.isTub, action.item, 0, 0)
-end
-
--- Vanilla's ItemSlotAddItems with canAdd in place of its limit, because each queued action
--- has to re-check it when it runs. Compare this with vanilla after a game update.
-local function addFish(player, entity, itemSlot, itemList, component, isTub)
-    if #itemList == 0 then return end
-    TraditionalPreservationFishWorld.refresh(entity)
-
-    local queuedWeight = 0
-    for index, item in ipairs(itemList) do
-        local reason = refusal(entity, component, itemSlot.resource, isTub, item, queuedWeight, index - 1)
-        if reason then
-            HaloTextHelper.addBadText(player, getText(reason))
-            return
-        end
-        if index == 1 and not ISEntityUI.WalkToEntity(player, entity) then return end
-
-        local action = ISItemSlotAddAction:new(player, entity, item, itemSlot.resource, itemSlot)
-        action.component = component
-        action.isTub = isTub
-        action.canAddItem = canAdd
-        ISTimedActionQueue.add(action)
-        queuedWeight = queuedWeight + item:getActualWeight()
-    end
-end
-
-function ISCraftLogicPanel.ItemSlotAddItems(player, entity, itemSlot, itemList, component)
+-- A tub or a drying station, with whether it's a tub. Asking about one starts tracking it.
+local function station(entity)
     local index = spriteIndex(entity)
-    if not index or not TraditionalPreservationFishWorld then
-        return vanillaItemSlotAddItems(player, entity, itemSlot, itemList, component)
-    end
-
-    TraditionalPreservationFishWorld.track(entity)
-    addFish(player, entity, itemSlot, itemList, component, index < FIRST_FRAME_SPRITE)
-end
-
--- The station an input slot belongs to, or nil for any other slot.
-local function slotStation(itemSlot)
-    local resource = itemSlot and itemSlot.resource
-    if not TraditionalPreservationFishWorld or not resource or resource:getIO() ~= ResourceIO.Input then return nil end
-
-    local entity = resource:getGameEntity()
-    local index = spriteIndex(entity)
-    if not index then return nil end
+    if not index or not TraditionalPreservationFishWorld then return nil end
 
     local isTub = index < FIRST_FRAME_SPRITE
     local component = entity:getComponent(isTub and ComponentType.CraftLogic or ComponentType.DryingCraftLogic)
     if not component then return nil end
     TraditionalPreservationFishWorld.track(entity)
-    return entity, component, isTub
+    return component, isTub
 end
 
-function ISItemSlot:defaultVerifyItem(itemSlot, item)
-    if not vanillaVerifyItem(self, itemSlot, item) then return false end
-
-    local entity, component, isTub = slotStation(itemSlot)
-    if not entity then return true end
-    return not refusal(entity, component, itemSlot.resource, isTub, item, 0, 0)
-end
-
--- The reason to show when nothing being dragged can go in this slot.
-local function dropRefusal(itemSlot)
-    if not ISMouseDrag.dragging or ISMouseDrag.draggingFocus == itemSlot then return nil end
-    local entity, component, isTub = slotStation(itemSlot)
-    if not entity then return nil end
-
-    local reason
-    for _, item in ipairs(ISInventoryPane.getActualItems(ISMouseDrag.dragging)) do
-        local itemReason = refusal(entity, component, itemSlot.resource, isTub, item, 0, 0)
-        if not itemReason then return nil end
-        reason = reason or itemReason
-    end
-    return reason
-end
-
--- A refused drop does nothing in vanilla, so this says why.
-function ISItemSlot:onMouseUp(x, y)
-    local reason = dropRefusal(self)
-    if reason then HaloTextHelper.addBadText(getPlayer(), getText(reason)) end
-    return vanillaMouseUp(self, x, y)
-end
+UI.slotRules{
+    station = station,
+    refusal = refusal,
+    -- What hangs there now, so the count of busy stacks is current.
+    added = function(entity) TraditionalPreservationFishWorld.refresh(entity) end,
+}
 
 local function timeText(hours)
     if not hours then return getText("IGUI_TraditionalPreservationFish_Paused") end

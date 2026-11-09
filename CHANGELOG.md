@@ -1,5 +1,9 @@
 # Changelog: Traditional Preservation (Fish)
 
+## 0.2.5
+- Internal: the tub's and frames' slot rules (adding, green border, refused-drop message) run on the shared core's
+  `UI.slotRules`. Same rules, same messages.
+
 ## 0.2.4
 - Internal: recipe times are set through the shared core (`Weather.setRecipeHours`). No change in play.
 

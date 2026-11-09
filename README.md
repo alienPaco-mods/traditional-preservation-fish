@@ -1,4 +1,4 @@
-# Traditional Preservation (Fish) — Build 42 prototype (v0.2.4)
+# Traditional Preservation (Fish) — Build 42 prototype (v0.2.5)
 
 **Status: experimental.** The stations build, open and hang fish in the game, but a full year hasn't been played. Back up your save before enabling.
 
@@ -123,7 +123,7 @@ In debug mode, `TPF.help()` in the Lua console lists commands for testing this m
 - The tub holds 35 items at most and a frame stack 25, so fillets under 0.1 weight fill a stack by count before weight.
 - A stack's hanging look is picked at random, so it may not match the fish in it. The beams only hang walleye and sauger shapes, as wide fish look wrong at that size.
 - On the ground most stages are the vanilla model of that species with a repainted texture, using `WorldStaticModelsByIndex`. Both sides of a fish share one texture, so a gutted fish keeps its head, flecked red, with a pink belly. A half uses the fillet mesh instead, redder, with that species' skin around its edge. Cooked and rotten fish keep their uncooked ground model. Fillets, salmon and fish from other mods use a tinted fillet.
-- The tub's add limit is copied from vanilla's `ISCraftLogicPanel.ItemSlotAddItems`, so compare the two after a game update.
+- The tub's and frames' add limits go through the core's `UI.slotRules`, whose add loop is copied from vanilla's `ISCraftLogicPanel.ItemSlotAddItems`, so compare the two after a game update.
 - The tiledef number 5129 must be unique among your active mods. A tileset holds 512 tiles at most, and going over drops the whole tile file and every placed station, so the beams are in a second tileset.
 - Multiplayer is not supported. This mod is singleplayer only for now.
 
