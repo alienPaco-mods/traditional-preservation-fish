@@ -124,6 +124,8 @@ function F.temperatureRate(celsius)
     return rate * rate
 end
 
+-- Cold drying (unsalted fish in frost and wind): full speed up to COLD_BEST, slowing to COLD_MIN_RATE
+-- at COLD_LIMIT, nothing above it. Deep frost slows it to COLD_MIN_RATE too.
 function F.coldRate(celsius)
     if celsius > F.COLD_LIMIT then return 0 end
     if celsius < F.DEEP_FROST then return F.COLD_MIN_RATE end
@@ -132,6 +134,7 @@ function F.coldRate(celsius)
     return 1 - warmth * (1 - F.COLD_MIN_RATE)
 end
 
+-- Damp air slows open drying: full speed up to DRY_AIR_HUMIDITY, down to DAMP_AIR_RATE in saturated air.
 function F.airRate(humidity)
     local dryAir = F.DRY_AIR_HUMIDITY
     if humidity <= dryAir then return 1 end
@@ -139,6 +142,8 @@ function F.airRate(humidity)
     return 1 - dampness * (1 - F.DAMP_AIR_RATE)
 end
 
+-- The weather totals: hours of drying done open, sheltered and cold, hours of spoiling raw and salted,
+-- and the wetness rain left on open frames.
 function F.newLedger(now)
     return { lastHour = now, wetness = 0, open = 0, sheltered = 0, cold = 0, rawSpoil = 0, saltSpoil = 0 }
 end
@@ -212,6 +217,7 @@ function F.stackStatus(isCold, modData, ledger)
     }
 end
 
+-- The popup's word for the temperature, a translation key: good, cool, mild, too warm or frost.
 function F.temperatureWord(isCold, celsius)
     if isCold then
         if celsius > F.COLD_LIMIT then return "IGUI_TraditionalPreservationFish_TempTooWarm" end
@@ -223,6 +229,7 @@ function F.temperatureWord(isCold, celsius)
     return "IGUI_TraditionalPreservationFish_TempFrost"
 end
 
+-- The ledger is the mod's global ModData table itself, so its keys are the ones in every save.
 function F.getLedger()
     local data = ModData.getOrCreate(F.MOD_DATA_KEY)
     -- cold came after the first release, so a save can have the rest without it.
@@ -235,6 +242,7 @@ function F.getLedger()
     return data
 end
 
+-- The press runs on the plain game clock (no weather), timed from here.
 function F.onPressStart(craftRecipeData)
     Weather.startClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours())
 end
@@ -295,6 +303,7 @@ function F.frameRefusal(hanger, busyStacks, waitingWeight, weight)
     return nil
 end
 
+-- A random hanging look for a new stack, kept in its modData so it doesn't change.
 function F.pickStyle(styles)
     return styles[ZombRand(#styles) + 1]
 end
@@ -336,6 +345,7 @@ local function showProgress(craftRecipeData, modData, hours)
     craftRecipeData:setElapsedTime(progress * time)
 end
 
+-- OnStart for salted fish on a frame: marks the ledger and picks a look.
 function F.onDryStart(craftRecipeData)
     startStack(craftRecipeData)
     craftRecipeData:getModData().style = F.pickStyle(F.SALT_STYLES)
@@ -361,6 +371,7 @@ function F.onDryUpdate(craftRecipeData)
     showProgress(craftRecipeData, modData, F.DRY_HOURS)
 end
 
+-- OnStart for unsalted fish on a cold frame.
 function F.onColdDryStart(craftRecipeData)
     startStack(craftRecipeData)
     craftRecipeData:getModData().style = F.pickStyle(F.COLD_STYLES)
@@ -417,6 +428,7 @@ local function copyFood(from, to, share, hungerShare)
     to:setHungChange(from:getHungChange() * hungerShare)
 end
 
+-- Gives the next stage of a fish its share of the last stage's food, less the head if this stage takes it off.
 function F.carry(source, target)
     local stage = F.STAGES[target:getFullType()]
     local headless = stage.headless and F.hasHead(source)
@@ -604,6 +616,7 @@ local SPOILAGE_SCALES = { math.huge, 2, 1, 0.5 }
 local RAW_SPOIL_HOURS, SALT_SPOIL_HOURS = F.RAW_SPOIL_HOURS, F.SALT_SPOIL_HOURS
 local BASE_DRY_HOURS, BASE_COLD_DRY_HOURS = F.DRY_HOURS, F.COLD_DRY_HOURS
 
+-- Reads the sandbox options into the drying times and spoilage limits.
 function F.applySandbox()
     local options = SandboxVars and SandboxVars.TraditionalPreservationFish
     if not options then return end
@@ -622,6 +635,7 @@ local function applyRecipeTime(name, hours)
     Weather.setRecipeHours(name, hours, "TraditionalPreservationFish")
 end
 
+-- Sets each slow recipe's script time to the sandbox's, so the crafting window shows the right length.
 function F.applyRecipeTimes()
     F.applySandbox()
     applyRecipeTime("TraditionalPreservationFish.PressSaltedFish", F.PRESS_HOURS)

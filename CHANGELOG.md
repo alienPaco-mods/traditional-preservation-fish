@@ -1,5 +1,9 @@
 # Changelog: Traditional Preservation (Fish)
 
+## 0.2.7
+- Internal: comments on the public functions that lacked one and on the evolved-recipe wraps, and an updated copy
+  of the shared core (comments only). No change in play.
+
 ## 0.2.6
 - Fixed: a Spoilage sandbox value outside the four choices stopped the mod's settings loading; it now counts as Normal.
 - Internal: the fish-to-item food copying (cured stages, head, halves, fillets) is one local `copyFood`; the code uses

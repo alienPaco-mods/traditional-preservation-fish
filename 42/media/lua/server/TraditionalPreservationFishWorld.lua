@@ -121,6 +121,7 @@ local tracker = Station.tracker({ sprites = Tiles.STATIONS, entry = newEntry, re
 
 TraditionalPreservationFishWorld.track = tracker.track
 
+-- Redraws a tracked station now, without waiting for the next tick, e.g. after a player adds fish.
 function TraditionalPreservationFishWorld.refresh(station)
     local entry = tracker.entry(station)
     if entry then refresh(station, entry) end

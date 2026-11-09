@@ -25,6 +25,7 @@ function F.useStandins(dish)
     end
 end
 
+-- Once vanilla has added an ingredient, its list entry is swapped for the stand-in (see the top).
 local vanillaComplete = ISAddItemInRecipe.complete
 
 function ISAddItemInRecipe:complete()
@@ -85,6 +86,8 @@ local function joined(names)
     return text
 end
 
+-- "Fish Head Stock with carrot and onion": the dish plus what went in, spices only if there's room.
+-- Nil to keep vanilla's name. Too many kinds to name gives the plain dish.
 function F.stockName(stock, recipe)
     local dish = getText("ContextMenu_EvolvedRecipe_" .. recipe:getUntranslatedName())
     local names = stock:getExtraItems() and namedKinds(stock:getExtraItems(), true, true) or {}
@@ -99,6 +102,8 @@ function F.stockName(stock, recipe)
     return getText("IGUI_TraditionalPreservationFish_StockWith", dish, joined(names))
 end
 
+-- A stock pot is named by stockName instead of vanilla's rule; other dishes pass through.
+-- Wraps ISAddItemInRecipe.checkName: compare with vanilla after a game update.
 local vanillaCheckName = ISAddItemInRecipe.checkName
 
 ISAddItemInRecipe.checkName = function(baseItem, recipe)
