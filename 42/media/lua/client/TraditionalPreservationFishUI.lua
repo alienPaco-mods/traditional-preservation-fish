@@ -6,6 +6,7 @@ require "Entity/ISUI/Components/Crafting/ISCraftLogicPanel"
 require "Entity/ISUI/Controls/ISItemSlot"
 local UI = require "TraditionalPreservationFish/Core/UI"
 local Tiles = require "TraditionalPreservationFish/Tiles"
+local F = TraditionalPreservationFish
 
 local FIRST_FRAME_SPRITE = Tiles.FRAME
 
@@ -15,7 +16,7 @@ local SALT_BADGE_MARGIN = 3
 
 local function spriteIndex(entity)
     local sprite = entity and entity:getSprite()
-    return sprite and TraditionalPreservationFish.spriteIndex(sprite:getName())
+    return sprite and F.spriteIndex(sprite:getName())
 end
 
 local function waitingWeight(resource)
@@ -30,7 +31,7 @@ end
 -- queued lists the fish on their way in that the slot doesn't hold yet. slot.extra says it's a tub.
 local function refusal(slot, item, queued)
     local entity, component, resource, isTub = slot.entity, slot.component, slot.resource, slot.extra
-    local wrongFish = TraditionalPreservationFish.fishRefusal(isTub, item:getFullType())
+    local wrongFish = F.fishRefusal(isTub, item:getFullType())
     if wrongFish then return wrongFish end
 
     local weight = item:getActualWeight()
@@ -40,19 +41,19 @@ local function refusal(slot, item, queued)
         if component:isRunning() then return "IGUI_TraditionalPreservationFish_TubInUse" end
         -- This asks what is in the tub, because a tub keeps the slot counts it was built with.
         if TraditionalPreservationFishWorld.busyStacks(entity) > 0 then return "IGUI_TraditionalPreservationFish_TubNotEmpty" end
-        if resource:getStoredItems():size() + #queued >= TraditionalPreservationFish.TUB_MAX_ITEMS
-                or not TraditionalPreservationFish.hasRoom(TraditionalPreservationFish.TUB_CAPACITY, waiting, weight) then
+        if resource:getStoredItems():size() + #queued >= F.TUB_MAX_ITEMS
+                or not F.hasRoom(F.TUB_CAPACITY, waiting, weight) then
             return "IGUI_TraditionalPreservationFish_Full"
         end
         return nil
     end
     local stored = resource:getStoredItems()
-    local isCold = TraditionalPreservationFish.COLD_FISH[item:getFullType()]
-    if stored:size() > 0 and TraditionalPreservationFish.COLD_FISH[stored:get(0):getFullType()] ~= isCold then
+    local isCold = F.COLD_FISH[item:getFullType()]
+    if stored:size() > 0 and F.COLD_FISH[stored:get(0):getFullType()] ~= isCold then
         return "IGUI_TraditionalPreservationFish_MixedStack"
     end
-    local hanger = TraditionalPreservationFish.hangerFor(spriteIndex(entity))
-    return TraditionalPreservationFish.frameRefusal(hanger, TraditionalPreservationFishWorld.busyStacks(entity), waiting, weight)
+    local hanger = F.hangerFor(spriteIndex(entity))
+    return F.frameRefusal(hanger, TraditionalPreservationFishWorld.busyStacks(entity), waiting, weight)
 end
 
 -- A tub or a drying station, with whether it's a tub. Asking about one starts tracking it.
@@ -82,13 +83,13 @@ end
 -- Vanilla's popup goes by its own temperature curve and the recipe's time, so hanging stacks get
 -- this instead.
 local function drawStackTooltip(slot, tooltip, isCold)
-    local ledger = TraditionalPreservationFish.getLedger()
-    local status = TraditionalPreservationFish.stackStatus(isCold, slot.craftRecipeData:getModData(), ledger)
+    local ledger = F.getLedger()
+    local status = F.stackStatus(isCold, slot.craftRecipeData:getModData(), ledger)
     UI.drawTooltip(tooltip, function(layout)
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_Method", getText(isCold and "IGUI_TraditionalPreservationFish_MethodCold" or "IGUI_TraditionalPreservationFish_MethodSalt"))
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_Progress", UI.percent(status.progress))
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_TimeLeft", timeText(status.hoursLeft))
-        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Temperature", getText(TraditionalPreservationFish.temperatureWord(isCold, ledger.temperature or 0)))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Temperature", getText(F.temperatureWord(isCold, ledger.temperature or 0)))
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_Wetness", UI.percent(ledger.wetness))
         if status.reason then
             UI.addLine(layout, "IGUI_TraditionalPreservationFish_Rate", getText("IGUI_TraditionalPreservationFish_Stopped" .. status.reason), UI.SLOW_COLOUR)

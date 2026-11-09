@@ -1,4 +1,4 @@
-# Traditional Preservation (Fish) — Build 42 prototype (v0.2.5)
+# Traditional Preservation (Fish) — Build 42 prototype (v0.2.6)
 
 **Status: experimental.** The stations build, open and hang fish in the game, but a full year hasn't been played. Back up your save before enabling.
 

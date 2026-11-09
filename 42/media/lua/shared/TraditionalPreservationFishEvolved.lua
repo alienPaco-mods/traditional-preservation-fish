@@ -5,8 +5,9 @@
 require "TimedActions/ISAddItemInRecipe"
 
 TraditionalPreservationFish = TraditionalPreservationFish or {}
+local F = TraditionalPreservationFish
 
-TraditionalPreservationFish.INGREDIENT_STANDINS = {
+F.INGREDIENT_STANDINS = {
     ["TraditionalPreservationFish.SaltDriedFish"] = "TraditionalPreservationFish.SaltDriedFishIngredient",
     ["TraditionalPreservationFish.SoakedSaltFish"] = "TraditionalPreservationFish.SoakedSaltFishIngredient",
     ["TraditionalPreservationFish.GuttedFish"] = "TraditionalPreservationFish.GuttedFishIngredient",
@@ -15,11 +16,11 @@ TraditionalPreservationFish.INGREDIENT_STANDINS = {
 }
 
 -- Swaps every fish stage in a dish's list for its stand-in.
-function TraditionalPreservationFish.useStandins(dish)
+function F.useStandins(dish)
     local extras = dish and dish:getExtraItems()
     if not extras then return end
     for i = 0, extras:size() - 1 do
-        local standin = TraditionalPreservationFish.INGREDIENT_STANDINS[extras:get(i)]
+        local standin = F.INGREDIENT_STANDINS[extras:get(i)]
         if standin then extras:set(i, standin) end
     end
 end
@@ -28,7 +29,7 @@ local vanillaComplete = ISAddItemInRecipe.complete
 
 function ISAddItemInRecipe:complete()
     local result = vanillaComplete(self)
-    TraditionalPreservationFish.useStandins(self.baseItem)
+    F.useStandins(self.baseItem)
     return result
 end
 
@@ -36,7 +37,7 @@ end
 -- Head Stock". The rules are vanilla's: each food type is named by its first ingredient, or by the type
 -- once two different ones share it; more than MAX_NAMED kinds of food give just "Fish Head Stock", and
 -- seasonings are named only while the total stays within it. The head the stock started with isn't named.
-TraditionalPreservationFish.STOCK_POTS = {
+F.STOCK_POTS = {
     ["TraditionalPreservationFish.PotOfFishHeadStock"] = true,
     ["TraditionalPreservationFish.PotForgedFishHeadStock"] = true,
 }
@@ -84,7 +85,7 @@ local function joined(names)
     return text
 end
 
-function TraditionalPreservationFish.stockName(stock, recipe)
+function F.stockName(stock, recipe)
     local dish = getText("ContextMenu_EvolvedRecipe_" .. recipe:getUntranslatedName())
     local names = stock:getExtraItems() and namedKinds(stock:getExtraItems(), true, true) or {}
     if #names > MAX_NAMED then return dish end
@@ -101,10 +102,10 @@ end
 local vanillaCheckName = ISAddItemInRecipe.checkName
 
 ISAddItemInRecipe.checkName = function(baseItem, recipe)
-    if not (baseItem and TraditionalPreservationFish.STOCK_POTS[baseItem:getFullType()]) or baseItem:isCustomName() then
+    if not (baseItem and F.STOCK_POTS[baseItem:getFullType()]) or baseItem:isCustomName() then
         return vanillaCheckName(baseItem, recipe)
     end
-    local name = TraditionalPreservationFish.stockName(baseItem, recipe)
+    local name = F.stockName(baseItem, recipe)
     if name then baseItem:setName(name) end
     if not isServer() then ISInventoryPage.dirtyUI() end
 end

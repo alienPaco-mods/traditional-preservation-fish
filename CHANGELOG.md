@@ -1,5 +1,10 @@
 # Changelog: Traditional Preservation (Fish)
 
+## 0.2.6
+- Fixed: a Spoilage sandbox value outside the four choices stopped the mod's settings loading; it now counts as Normal.
+- Internal: the fish-to-item food copying (cured stages, head, halves, fillets) is one local `copyFood`; the code uses
+  a `local F` alias for `TraditionalPreservationFish`. Public names unchanged, no change in play.
+
 ## 0.2.5
 - Internal: the tub's and frames' slot rules (adding, green border, refused-drop message) run on the shared core's
   `UI.slotRules`. Same rules, same messages.

@@ -238,6 +238,8 @@ SandboxVars.TraditionalPreservationFish = { DryDays = 30, MaxDryDays = 10, Spoil
 T.applySandbox()
 check("the slowest can't beat the fastest", T.MIN_DRY_RATE == 1)
 check("spoilage can be turned off", T.RAW_SPOIL_HOURS == math.huge and T.SALT_SPOIL_HOURS == math.huge)
+SandboxVars.TraditionalPreservationFish = { DryDays = 30, MaxDryDays = 10, Spoilage = 9 }
+check("a spoilage value out of range loads as normal", pcall(T.applySandbox) and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
 SandboxVars.TraditionalPreservationFish = { DryDays = 12, MaxDryDays = 27, Spoilage = 3 }
 T.applySandbox()
 check("the defaults put it all back", T.DRY_HOURS == 288 and T.COLD_DRY_HOURS == 480 and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
@@ -565,6 +567,7 @@ walleye.displayName, walleye.age = "Medium Walleye ", 1.5
 local gutted = gut(walleye, "GuttedFish")
 check("gutting gives guts, then a head", #gutsMade == 2 and gutsMade[1].fullType == "Base.FishGuts" and gutsMade[2].fullType == "TraditionalPreservationFish.FishHead")
 check("the guts are a tenth of the fish, by weight and hunger", near(gutsMade[1].values.ActualWeight, 0.4) and near(gutsMade[1].weight, 0.4) and near(gutsMade[1].values.HungChange, -0.05))
+check("and keep their own nutrition", gutsMade[1].values.Calories == nil and gutsMade[1].values.Proteins == nil)
 local head = gutsMade[2]
 check("the head is a tenth of the weight", near(head.values.ActualWeight, 0.4) and near(head.weight, 0.4) and head.customWeight)
 check("and 6 percent of the food", near(head.values.Calories, 24) and near(head.values.Proteins, 4.8) and near(head.values.HungChange, -0.03) and near(head.values.BaseHunger, -0.03))

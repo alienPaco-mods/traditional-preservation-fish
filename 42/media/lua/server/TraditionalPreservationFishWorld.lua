@@ -7,6 +7,7 @@ TraditionalPreservationFishWorld = TraditionalPreservationFishWorld or {}
 local Station = require "TraditionalPreservationFish/Core/Station"
 local Weather = require "TraditionalPreservationFish/Core/Weather"
 local Tiles = require "TraditionalPreservationFish/Tiles"
+local F = TraditionalPreservationFish
 
 local FACE_COUNT = Tiles.FACE_COUNT
 
@@ -27,7 +28,7 @@ local function countItems(resources, group, io)
             if not seen[stackId] then
                 seen[stackId] = true
                 stacks = stacks + 1
-                table.insert(styles, TraditionalPreservationFish.fishStyle(stored:get(j)))
+                table.insert(styles, F.fishStyle(stored:get(j)))
             end
         end
     end
@@ -37,13 +38,13 @@ end
 -- One sprite per stack. Driest first: finished stacks, then running ones by progress, then the
 -- stack waiting to start. Each style has its own run of stages.
 function TraditionalPreservationFishWorld.fishStates(waitingStyle, batches, finishedStyles)
-    local stages = TraditionalPreservationFish.DRYING_STAGES
+    local stages = F.DRYING_STAGES
     local states = {}
     for _, style in ipairs(finishedStyles) do table.insert(states, style * stages + stages - 1) end
 
     table.sort(batches, function(a, b) return a.progress > b.progress end)
     for _, batch in ipairs(batches) do
-        table.insert(states, batch.style * stages + TraditionalPreservationFish.dryingStage(batch.progress))
+        table.insert(states, batch.style * stages + F.dryingStage(batch.progress))
     end
 
     if waitingStyle then table.insert(states, waitingStyle * stages + STAGE_FRESH) end
@@ -61,14 +62,14 @@ local function readBatches(logic, uiLogic, sheltered)
     local batches = {}
     for craftData, _ in pairs(uiLogic:getItemsInProgress()) do
         craftData:getModData().sheltered = sheltered
-        table.insert(batches, { progress = logic:getProgress(craftData), style = craftData:getModData().style or TraditionalPreservationFish.STYLE_SALT })
+        table.insert(batches, { progress = logic:getProgress(craftData), style = craftData:getModData().style or F.STYLE_SALT })
     end
     return batches
 end
 
 local function showSprites(station, entry, signature, sprites)
     local names = {}
-    for slot, index in ipairs(sprites) do names[slot] = TraditionalPreservationFish.spriteName(index) end
+    for slot, index in ipairs(sprites) do names[slot] = F.spriteName(index) end
     Station.showSprites(station, entry, signature, names)
 end
 
@@ -104,12 +105,12 @@ end
 
 local function newEntry(station)
     local sprite = station:getSprite()
-    local index = sprite and TraditionalPreservationFish.spriteIndex(sprite:getName())
+    local index = sprite and F.spriteIndex(sprite:getName())
     if not index then return nil end
 
     local isFrame = index >= FRAME_SPRITE
     return {
-        hanger = TraditionalPreservationFish.hangerFor(index),
+        hanger = F.hangerFor(index),
         faceIndex = index % FACE_COUNT,
         logicType = isFrame and ComponentType.DryingCraftLogic or ComponentType.CraftLogic,
         show = isFrame and refreshFrame or refreshTub,
@@ -132,7 +133,7 @@ function TraditionalPreservationFishWorld.busyStacks(station)
 end
 
 Weather.record(function(now, climate)
-    TraditionalPreservationFish.advance(TraditionalPreservationFish.getLedger(), now, {
+    F.advance(F.getLedger(), now, {
         temperature = climate:getTemperature(),
         humidity = climate:getHumidity(),
         precipitation = climate:getPrecipitationIntensity(),
