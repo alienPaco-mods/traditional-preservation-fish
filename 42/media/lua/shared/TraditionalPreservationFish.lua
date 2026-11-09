@@ -2,6 +2,7 @@
 -- Weather is the same everywhere, so one running total in global ModData tells every frame
 -- how much drying it has had, including while its chunk was unloaded.
 TraditionalPreservationFish = TraditionalPreservationFish or {}
+local Weather = require "TraditionalPreservationFish/Core/Weather"
 
 TraditionalPreservationFish.MOD_DATA_KEY = "TraditionalPreservationFish"
 
@@ -75,9 +76,8 @@ TraditionalPreservationFish.COLD_LIMIT = 10
 TraditionalPreservationFish.DEEP_FROST = -10
 TraditionalPreservationFish.COLD_MIN_RATE = 0.67
 
--- Spoilage follows the season, not the day: it reads a running average of the weather over this
--- many hours, so a warm afternoon in January does nothing.
-TraditionalPreservationFish.SEASON_HOURS = 240
+-- Spoilage follows the season, not the day: it reads a running average of the weather over the
+-- core's Weather.SEASON_HOURS, so a warm afternoon in January does nothing.
 -- Unsalted fish spoils once the season is above RAW_SPOIL_ABOVE, and rots on the frame after
 -- RAW_SPOIL_HOURS of that. Each 10 degrees more counts double.
 TraditionalPreservationFish.RAW_SPOIL_ABOVE = 10
@@ -168,9 +168,8 @@ function TraditionalPreservationFish.advance(ledger, now, weather)
     ledger.sheltered = ledger.sheltered + ledger.shelteredRate * hours
     ledger.cold = ledger.cold + ledger.coldRate * hours
 
-    local share = math.min(hours / TraditionalPreservationFish.SEASON_HOURS, 1)
-    ledger.seasonTemperature = (ledger.seasonTemperature or weather.temperature) * (1 - share) + weather.temperature * share
-    ledger.seasonHumidity = (ledger.seasonHumidity or weather.humidity) * (1 - share) + weather.humidity * share
+    Weather.seasonMean(ledger, "seasonTemperature", weather.temperature, hours)
+    Weather.seasonMean(ledger, "seasonHumidity", weather.humidity, hours)
     local warmth = ledger.seasonTemperature - TraditionalPreservationFish.RAW_SPOIL_ABOVE
     ledger.rawSpoiling = warmth > 0
     if ledger.rawSpoiling then

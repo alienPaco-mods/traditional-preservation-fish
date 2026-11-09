@@ -1,8 +1,13 @@
 -- Checks the station slots outside the game. Run from the mod folder: luajit tests/test_ui.lua
 local H = dofile((os.getenv("TPCORE") or "../_tpcore") .. "/tests/harness.lua")
+H.useModPaths()
 ModData = { getOrCreate = function() return {} end }
 Events = { OnInitGlobalModData = { Add = function() end } }
-function require() end
+-- The mod's own modules load for real, vanilla's are left out.
+local realRequire = require
+require = function(name)
+    if name:find("^TraditionalPreservationFish/") then return realRequire(name) end
+end
 dofile("42/media/lua/shared/TraditionalPreservationFish.lua")
 
 local halos, vanillaVerdict, vanillaUps, addCalls = {}, true, 0, 0

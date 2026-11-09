@@ -1,4 +1,4 @@
-# Traditional Preservation (Fish) — Build 42 prototype (v0.2.0)
+# Traditional Preservation (Fish) — Build 42 prototype (v0.2.1)
 
 **Status: experimental.** The stations build, open and hang fish in the game, but a full year hasn't been played. Back up your save before enabling.
 
@@ -100,7 +100,9 @@ Under Traditional Preservation (Fish) in the sandbox options: **Salt drying time
 
 Times, capacity, stage values, weather rates and spoilage limits are at the top of `42/media/lua/shared/TraditionalPreservationFish.lua`. `PRESS_HOURS`, `DRY_HOURS` and `COLD_DRY_HOURS` set the recipe times when the game starts, so they are the only times to edit. Restart the game after changing them. Slot counts are set in the entity scripts and recipes. A station keeps the counts it was built with, even when picked up and placed again.
 
-`tools/build_tileset.py` repaints the stations, hanging fish, icons, the mod list icon and model textures, tints the vanilla fish icons, and writes `42/media/scripts/TraditionalPreservationFish_models.txt` (needs Pillow and the game files). `luajit tests/test_curing.lua` checks the curing rules and `luajit tests/test_ui.lua` the station slots. The season table above is for the default settings. `luajit tools/season_report.lua` runs the rules against `tools/climate_year.csv`, about a year and a half of forecasts read from the game, so run it after changing any rates.
+`tools/build_tileset.py` repaints the stations, hanging fish, icons, the mod list icon and model textures, tints the vanilla fish icons, and writes `42/media/scripts/TraditionalPreservationFish_models.txt` (needs Pillow and the game files). `luajit tests/test_curing.lua` checks the curing rules `luajit tests/test_ui.lua` the station slots and popup, and `luajit tests/test_world.lua` the station sprites and the weather record. The season table above is for the default settings. `luajit tools/season_report.lua` runs the rules against `tools/climate_year.csv`, about a year and a half of forecasts read from the game, so run it after changing any rates.
+
+The `TraditionalPreservationFish/Core/` folders under `42/media/lua/shared` and `42/media/lua/client` are the shared Traditional Preservation core (season averages, station tracking, popups), copied in from `~/MODS/_tpcore` by `tp sync`. Edit them there, not here. The drying and spoilage rates, wetness and the frame's stacks stay in this mod's own files.
 
 ## Debug commands
 

@@ -1,6 +1,7 @@
 -- Shows how the frame behaves through the year, from forecasts read from the real game.
 -- Run from the mod folder: luajit tools/season_report.lua [path/to/climate.csv]
 -- Each line of the file: world month offset tempMin tempMean tempMax humMin humMean humMax rainy snowy
+dofile((os.getenv("TPCORE") or "../_tpcore") .. "/tests/harness.lua").useModPaths()
 ModData = { getOrCreate = function() return {} end }
 Events = { OnInitGlobalModData = { Add = function() end } }
 dofile("42/media/lua/shared/TraditionalPreservationFish.lua")

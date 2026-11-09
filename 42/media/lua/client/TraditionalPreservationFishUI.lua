@@ -4,19 +4,14 @@
 -- same rules decide the slot's green border, so it never promises what adding then refuses.
 require "Entity/ISUI/Components/Crafting/ISCraftLogicPanel"
 require "Entity/ISUI/Controls/ISItemSlot"
-require "Entity/ISUI/Components/Crafting/ISWidgetCraftLogicOutputProgress"
-require "Moveables/ISMoveableSpriteProps"
+local UI = require "TraditionalPreservationFish/Core/UI"
 
 local FIRST_FRAME_SPRITE = 6  -- keep in step with tools/build_tileset.py
 
 local vanillaItemSlotAddItems = ISCraftLogicPanel.ItemSlotAddItems
 local vanillaVerifyItem = ISItemSlot.defaultVerifyItem
 local vanillaMouseUp = ISItemSlot.onMouseUp
-local vanillaProgressItems = ISWidgetCraftLogicOutputProgress.updateProgressItems
 
-local HANG_RECIPES = { HangFishToDry = "salt", HangFishToColdDry = "cold" }
-local TOOLTIP_PADDING = 5
-local TOOLTIP_MIN_WIDTH = 150
 local SALT_BADGE_SIZE = 14
 local SALT_BADGE_MARGIN = 3
 
@@ -144,46 +139,38 @@ function ISItemSlot:onMouseUp(x, y)
     return vanillaMouseUp(self, x, y)
 end
 
-local function addLine(layout, label, value, r, g, b)
-    local item = layout:addItem()
-    item:setLabel(getText(label) .. ":", 1, 1, 0.8, 1)
-    item:setValue(value, r or 1, g or 1, b or 1, 1)
-end
-
 local function timeText(hours)
     if not hours then return getText("IGUI_TraditionalPreservationFish_Paused") end
-    return getText("IGUI_TraditionalPreservationFish_Time", string.format("%.0f", math.floor(hours / 24)), string.format("%.0f", math.floor(hours % 24)))
+    return UI.timeText(hours, "IGUI_TraditionalPreservationFish_Time")
 end
 
 -- Vanilla's popup goes by its own temperature curve and the recipe's time, so hanging stacks get
--- this instead. It runs twice, once to measure and once to draw.
+-- this instead.
 local function drawStackTooltip(slot, tooltip, isCold)
     local ledger = TraditionalPreservationFish.getLedger()
     local status = TraditionalPreservationFish.stackStatus(isCold, slot.craftRecipeData:getModData(), ledger)
-    local title = getText("EC_CraftLogic_Progress")
-    tooltip:DrawText(tooltip:getFont(), title, TOOLTIP_PADDING, TOOLTIP_PADDING, 1, 1, 0.8, 1)
-    tooltip:adjustWidth(TOOLTIP_PADDING, title)
-
-    local layout = tooltip:beginLayout()
-    addLine(layout, "IGUI_TraditionalPreservationFish_Method", getText(isCold and "IGUI_TraditionalPreservationFish_MethodCold" or "IGUI_TraditionalPreservationFish_MethodSalt"))
-    addLine(layout, "IGUI_TraditionalPreservationFish_Progress", string.format("%.0f%%", status.progress * 100))
-    addLine(layout, "IGUI_TraditionalPreservationFish_TimeLeft", timeText(status.hoursLeft))
-    addLine(layout, "IGUI_TraditionalPreservationFish_Temperature", getText(TraditionalPreservationFish.temperatureWord(isCold, ledger.temperature or 0)))
-    addLine(layout, "IGUI_TraditionalPreservationFish_Wetness", string.format("%.0f%%", ledger.wetness * 100))
-    if status.reason then
-        addLine(layout, "IGUI_TraditionalPreservationFish_Rate", getText("IGUI_TraditionalPreservationFish_Stopped" .. status.reason), 1, 0.7, 0.4)
-    else
-        addLine(layout, "IGUI_TraditionalPreservationFish_Rate", string.format("%.0f%%", status.rate * 100))
-    end
-    if status.spoiling or status.spoiled > 0 then
-        local warning = status.spoiling and (isCold and "IGUI_TraditionalPreservationFish_SpoilingWarm" or "IGUI_TraditionalPreservationFish_SpoilingMuggy") or "IGUI_TraditionalPreservationFish_Spoiled"
-        addLine(layout, "IGUI_TraditionalPreservationFish_Spoilage", getText(warning, string.format("%.0f%%", status.spoiled * 100)), 1, 0.35, 0.3)
-    end
-    local bottom = layout:render(TOOLTIP_PADDING, TOOLTIP_PADDING + tooltip:getLineSpacing(), tooltip)
-    tooltip:endLayout(layout)
-    tooltip:setHeight(bottom + TOOLTIP_PADDING)
-    tooltip:setWidth(math.max(tooltip:getWidth(), TOOLTIP_MIN_WIDTH))
+    UI.drawTooltip(tooltip, function(layout)
+        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Method", getText(isCold and "IGUI_TraditionalPreservationFish_MethodCold" or "IGUI_TraditionalPreservationFish_MethodSalt"))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Progress", UI.percent(status.progress))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFish_TimeLeft", timeText(status.hoursLeft))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Temperature", getText(TraditionalPreservationFish.temperatureWord(isCold, ledger.temperature or 0)))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Wetness", UI.percent(ledger.wetness))
+        if status.reason then
+            UI.addLine(layout, "IGUI_TraditionalPreservationFish_Rate", getText("IGUI_TraditionalPreservationFish_Stopped" .. status.reason), UI.SLOW_COLOUR)
+        else
+            UI.addLine(layout, "IGUI_TraditionalPreservationFish_Rate", UI.percent(status.rate))
+        end
+        if status.spoiling or status.spoiled > 0 then
+            local warning = status.spoiling and (isCold and "IGUI_TraditionalPreservationFish_SpoilingWarm" or "IGUI_TraditionalPreservationFish_SpoilingMuggy") or "IGUI_TraditionalPreservationFish_Spoiled"
+            UI.addLine(layout, "IGUI_TraditionalPreservationFish_Spoilage", UI.say(warning, UI.percent(status.spoiled)), UI.WARNING_COLOUR)
+        end
+    end)
 end
+
+UI.progressTooltips({
+    HangFishToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, false) end,
+    HangFishToColdDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, true) end,
+})
 
 -- A little salt in the bottom left corner tells salt stacks from cold ones at a glance.
 local saltIcon
@@ -194,31 +181,14 @@ local function renderWithSaltBadge(slot)
         SALT_BADGE_SIZE, SALT_BADGE_SIZE, 1, 1, 1, 1)
 end
 
-function ISWidgetCraftLogicOutputProgress:updateProgressItems()
-    vanillaProgressItems(self)
-    for _, slot in ipairs(self.progressItems:getItemSlots()) do
-        -- This runs for every station's slots, and a batch that has just finished hands its data back to
-        -- the engine's pool with no recipe, so both can be missing.
-        local recipe = slot.craftRecipeData and slot.craftRecipeData:getRecipe()
-        local method = recipe and HANG_RECIPES[string.gsub(recipe:getName(), "^.*%.", "")]
-        if method then
-            slot.drawTooltip = function(itemSlot, tooltip) drawStackTooltip(itemSlot, tooltip, method == "cold") end
-        end
-        -- Slots are reused for other batches, so the badge comes off again.
-        if method == "salt" then
-            slot.render = renderWithSaltBadge
-        elseif slot.render == renderWithSaltBadge then
-            slot.render = nil
-        end
+-- Slots are reused for other batches, so the badge comes off again.
+UI.onProgressSlot(function(slot, name)
+    if name == "HangFishToDry" then
+        slot.render = renderWithSaltBadge
+    elseif slot.render == renderWithSaltBadge then
+        slot.render = nil
     end
-end
+end)
 
--- The Fish Hanging Beam and Gantry each stands in the open. Its build recipe refuses an indoor square, and this stops one being picked
--- up and carried in, as placing a moveable doesn't run that check.
-local OUTDOOR_SPRITES = { ["traditionalpreservationfish_02_0"] = true, ["traditionalpreservationfish_02_1"] = true, ["traditionalpreservationfish_02_2"] = true, ["traditionalpreservationfish_02_3"] = true }
-local vanillaCanPlace = ISMoveableSpriteProps.canPlaceMoveable
-
-function ISMoveableSpriteProps:canPlaceMoveable(character, square, item)
-    if OUTDOOR_SPRITES[self.spriteName] and square and not square:isOutside() then return false end
-    return vanillaCanPlace(self, character, square, item)
-end
+-- The Fish Hanging Beam and Gantry each stands in the open.
+UI.outdoorOnly({ ["traditionalpreservationfish_02_0"] = true, ["traditionalpreservationfish_02_1"] = true, ["traditionalpreservationfish_02_2"] = true, ["traditionalpreservationfish_02_3"] = true })

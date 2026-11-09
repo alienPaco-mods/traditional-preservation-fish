@@ -4,28 +4,21 @@
 if isClient() then return end
 
 TraditionalPreservationFishWorld = TraditionalPreservationFishWorld or {}
+local Station = require "TraditionalPreservationFish/Core/Station"
+local Weather = require "TraditionalPreservationFish/Core/Weather"
 
 local FACE_COUNT = 2
-local TICKS_PER_REFRESH = 30
-local MAP_PRIORITY = 5
 
 -- Keep in step with the tile numbers in tools/build_tileset.py.
 local TUB_SPRITE, TUB_FILLED_SPRITE, TUB_WEIGHTED_SPRITE = 0, 2, 4
 local FRAME_SPRITE = 6
 local STAGE_FRESH = 0
 
-local tracked = {}
-local ticksSinceRefresh = 0
-
-local function getItems(resources, group, io)
-    return resources:getResourcesFromGroup(group, ArrayList.new(), io, ResourceType.Item)
-end
-
 -- How many fish, how many stacks, and each stack's style.
 local function countItems(resources, group, io)
     local count, stacks = 0, 0
     local seen, styles = {}, {}
-    local items = getItems(resources, group, io)
+    local items = Station.itemSlots(resources, group, io)
     for i = 0, items:size() - 1 do
         local stored = items:get(i):getStoredItems()
         count = count + stored:size()
@@ -74,13 +67,9 @@ local function readBatches(logic, uiLogic, sheltered)
 end
 
 local function showSprites(station, entry, signature, sprites)
-    if signature == entry.signature then return end
-    entry.signature = signature
-
-    station:clearAttachedAnimSprite()
-    for _, index in ipairs(sprites) do
-        station:addAttachedAnimSpriteByName(TraditionalPreservationFish.spriteName(index))
-    end
+    local names = {}
+    for slot, index in ipairs(sprites) do names[slot] = TraditionalPreservationFish.spriteName(index) end
+    Station.showSprites(station, entry, signature, names)
 end
 
 local function refreshTub(tub, entry, faceIndex, waiting, _, batches, finishedStyles)
@@ -98,41 +87,28 @@ local function refreshFrame(frame, entry, faceIndex, _, waitingStyle, batches, f
     showSprites(frame, entry, table.concat(states, ","), sprites)
 end
 
-function TraditionalPreservationFishWorld.refresh(station)
-    local entry = tracked[station]
+local function refresh(station, entry)
     local resources = station:getComponent(ComponentType.Resources)
     local logic = station:getComponent(entry.logicType)
     local sprite = station:getSprite()
     if not resources or not logic or not sprite then return end
-
-    if not entry.uiLogic or entry.uiLogic:getCraftLogic() ~= logic then
-        -- Its constructor reads the player's mod data, so it needs a real player.
-        local player = getPlayer()
-        if not player then return end
-        entry.uiLogic = CraftLogicUILogic.new(player, station, logic)
-    end
+    local uiLogic = Station.uiLogic(station, entry, logic)
+    if not uiLogic then return end
 
     local waiting, _, waitingStyles = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
     local _, finishedStacks, finishedStyles = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output)
-    local batches = readBatches(logic, entry.uiLogic, not station:isOutside())
+    local batches = readBatches(logic, uiLogic, Weather.placeOf(station) ~= "Open")
     entry.busyStacks = finishedStacks + #batches
     entry.show(station, entry, entry.faceIndex, waiting, waitingStyles[1], batches, finishedStyles)
 end
 
--- The stacks on a station that are past its input slots: running, or finished and not yet taken.
-function TraditionalPreservationFishWorld.busyStacks(station)
-    local entry = tracked[station]
-    return entry and entry.busyStacks or 0
-end
-
-function TraditionalPreservationFishWorld.track(station)
-    if tracked[station] then return end
+local function newEntry(station)
     local sprite = station:getSprite()
     local index = sprite and TraditionalPreservationFish.spriteIndex(sprite:getName())
-    if not index then return end
+    if not index then return nil end
 
     local isFrame = index >= FRAME_SPRITE
-    tracked[station] = {
+    return {
         hanger = TraditionalPreservationFish.hangerFor(index),
         faceIndex = index % FACE_COUNT,
         logicType = isFrame and ComponentType.DryingCraftLogic or ComponentType.CraftLogic,
@@ -140,37 +116,36 @@ function TraditionalPreservationFishWorld.track(station)
     }
 end
 
-local function onTick()
-    ticksSinceRefresh = ticksSinceRefresh + 1
-    if ticksSinceRefresh < TICKS_PER_REFRESH then return end
-    ticksSinceRefresh = 0
-
-    for station in pairs(tracked) do
-        if station:getSquare() and station:getObjectIndex() >= 0 then
-            TraditionalPreservationFishWorld.refresh(station)
-        else
-            tracked[station] = nil
-        end
+local spriteNames = {}
+local stations = { TUB_SPRITE }
+for base in pairs(TraditionalPreservationFish.HANGERS) do table.insert(stations, base) end
+for _, base in ipairs(stations) do
+    for faceIndex = 0, FACE_COUNT - 1 do
+        table.insert(spriteNames, TraditionalPreservationFish.spriteName(base + faceIndex))
     end
 end
+local tracker = Station.tracker({ sprites = spriteNames, entry = newEntry, refresh = refresh })
 
-local function recordWeather()
-    local climate = getClimateManager()
-    TraditionalPreservationFish.advance(TraditionalPreservationFish.getLedger(), getGameTime():getWorldAgeHours(), {
+TraditionalPreservationFishWorld.track = tracker.track
+
+function TraditionalPreservationFishWorld.refresh(station)
+    local entry = tracker.entry(station)
+    if entry then refresh(station, entry) end
+end
+
+-- The stacks on a station that are past its input slots: running, or finished and not yet taken.
+function TraditionalPreservationFishWorld.busyStacks(station)
+    local entry = tracker.entry(station)
+    return entry and entry.busyStacks or 0
+end
+
+Weather.record(function(now, climate)
+    TraditionalPreservationFish.advance(TraditionalPreservationFish.getLedger(), now, {
         temperature = climate:getTemperature(),
         humidity = climate:getHumidity(),
         precipitation = climate:getPrecipitationIntensity(),
         isSnow = climate:getPrecipitationIsSnow(),
     })
-end
+end)
 
-Events.OnTick.Add(onTick)
-Events.EveryTenMinutes.Add(recordWeather)
-
-local stations = { TUB_SPRITE }
-for base in pairs(TraditionalPreservationFish.HANGERS) do table.insert(stations, base) end
-for _, base in ipairs(stations) do
-    for faceIndex = 0, FACE_COUNT - 1 do
-        MapObjects.OnLoadWithSprite(TraditionalPreservationFish.spriteName(base + faceIndex), TraditionalPreservationFishWorld.track, MAP_PRIORITY)
-    end
-end
+tracker.start()
