@@ -1,6 +1,8 @@
 # Changelog: Traditional Preservation (Fish)
 
 ## 0.2.8
+- Internal: new `tests/test_console.lua` loads the debug console (TPF) and calls every command, so one can't
+  break unseen.
 - Changed: the season's mean temperature and humidity (raw and salt spoilage) are the series' own, kept once by TP
   Core, so Fish added to a running save agrees with the other mods from its first day. Save keys unchanged.
 - Internal: a station is told by a table lookup on its sprite's name (`F.stationIndex`), not a pattern match.
