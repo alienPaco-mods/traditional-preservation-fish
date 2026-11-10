@@ -96,8 +96,8 @@ Pick **Hang Salt Pressed Fish to Dry**, load pressed fish, press **Craft**. Each
 
 | Station | Skill | Materials (hammer kept) | Holds | Where |
 |---|---|---|---|---|
-| **Salting Tub** | Carpentry 2, Fishing 2 | 2 planks, 6 nails, 2 twine | 50 weight / 35 items | Anywhere |
-| **Fish Drying Frame** | Carpentry 2, Fishing 2 | 6 long sticks, 3 nails, 2 twine | 8 stacks × 2.5 weight | Indoors or out |
+| **Salting Tub** | Carpentry 2, Fishing 2 | 4 planks, 6 nails, 2 twine; saw kept | 50 weight / 35 items | Anywhere |
+| **Fish Drying Frame** | Carpentry 2, Fishing 2 | 6 long sticks, 3 nails, 4 twine | 8 stacks × 2.5 weight | Indoors or out |
 | **Fish Hanging Beam** | Carpentry 4, Fishing 2 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight | **Outdoors only** |
 | **Fish Gantry** | Carpentry 6, Fishing 2 | 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks × 50 weight | **Outdoors only** |
 
@@ -154,7 +154,7 @@ Drying runs on real weather, recorded every 10 minutes, **even while you're away
 - 🎨 **Icons change with the cure.** Pale with salt when pressed, browned when salt dried, grey when cold dried, darker again when rehydrated. Gutted fish are drawn **without their heads**, as stockfish were. Halves show red flesh and a backbone.
 - 🪝 **Fish Guts are free chum.** Packing or gutting a whole fish over 0.6 weight gives Fish Guts weighing 10% of the fish, the same size limit vanilla uses for filleting. Smaller fish, fillets and salmon give none.
 - 🐟 **Fish Heads.** Gutting a fish over 1.0 weight takes its head off, as stockfish makers did: 10% of the weight and 6% of the food go with it. Salted fish keep their heads. A head spoils like fresh fish, makes you sick raw, is a little grim even cooked, and can't be dried. Put it in a soup, a stew or chum, or better, make stock.
-- 🍲 **Fish Head Stock.** **Create Fish Head Stock** (Craft menu of the head or the pot, anywhere): a Cooking or Forged Pot with 1.5 L of water + a Fish Head. It's a stew from the start, and the head takes no slot, so you still get **6 stew ingredients** plus seasonings. It starts with a bigger mood boost than a plain stew (-30 unhappiness against -20), and is named for what you add: *Fish Head Stock with Fish and Carrots*, or plain *Fish Head Stock* past 3 kinds, as vanilla stew falls back to *Stew*. Cook it, then **Divide Food into 4 Bowls** or **2 Bowls** at a table or counter, as with any stew.
+- 🍲 **Fish Head Stock.** **Create Fish Head Stock** (Craft menu of the head or the pot, anywhere): a Cooking or Forged Pot with 1.5 L of water + a Fish Head. It's a stew from the start, and the head takes no slot, so you still get **6 stew ingredients** plus seasonings. It starts with the same mood boost as a plain stew (-20 unhappiness), and is named for what you add: *Fish Head Stock with Fish and Carrots*, or plain *Fish Head Stock* past 3 kinds, as vanilla stew falls back to *Stew*. Cook it, then **Divide Food into 4 Bowls** or **2 Bowls** at a table or counter, as with any stew.
 - 🔪 **Fillet at any stage.** A whole fish over 0.6 weight can still be cut into 2 fillets after it's been salted, dried or rehydrated, just like a fresh one. The fillets stay at the same stage.
 - 🧂 **Changed your mind?** A Gutted Fish or Fish Half can still be packed in salt. It won't give a second lot of guts.
 - 🌫 **Damp air matters a little.** Air more humid than 50% slows salt drying, though the game's air is rarely that damp.

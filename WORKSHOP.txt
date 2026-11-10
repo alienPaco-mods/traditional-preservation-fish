@@ -28,7 +28,7 @@ Preserve your catch the old way. Salt it, press it and hang it to dry, or gut it
 You need a raw fish or fillet, 2 salt and a sharp knife or meat cleaver (kept). A vanilla shaker covers about 5 fish. Rotten, frozen and cooked fish can't be packed. Salt Packed fish only keeps for days.
 
 [h3]2. Build a Salting Tub[/h3]
-Carpentry 2, Fishing 2. Takes 2 planks, 6 nails, 2 twine and a hammer (kept).
+Carpentry 2, Fishing 2. Takes 4 planks, 6 nails, 2 twine, a hammer and a saw (both kept).
 
 [h3]3. Press[/h3]
 Load up to 50 weight of packed fish, 35 fish at most, and press Craft. It takes 12 in-game hours, and nothing else can go in until you've taken out the last pressed fish.
@@ -59,7 +59,7 @@ Changed your mind? A Gutted Fish or Fish Half can still be packed in salt.
 Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate and any spoilage. A stack can't mix salted and gutted fish. Weights are inventory weight, not kilograms.
 
 [h3]Fish Drying Frame[/h3]
-Carpentry 2, Fishing 2. Takes 6 long sticks, 3 nails, 2 twine and a hammer (kept). Holds 8 stacks of up to 2.5 weight each. The only station that can be built indoors.
+Carpentry 2, Fishing 2. Takes 6 long sticks, 3 nails, 4 twine and a hammer (kept). Holds 8 stacks of up to 2.5 weight each. The only station that can be built indoors.
 
 [h3]Fish Hanging Beam[/h3]
 Carpentry 4, Fishing 2. Takes 6 planks, 6 nails, 1 large hook and a hammer (kept). Holds 4 stacks of up to 15 weight each. Outdoors only.

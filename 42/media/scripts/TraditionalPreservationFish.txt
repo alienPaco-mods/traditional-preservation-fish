@@ -335,7 +335,7 @@ module TraditionalPreservationFish
         DaysTotallyRotten = 5,
         HungerChange = -5.0,
         ThirstChange = -30.0,
-        UnhappyChange = -30,
+        UnhappyChange = -20,
         Calories = 60.0,
         Carbohydrates = 0.0,
         Lipids = 4.0,
@@ -367,7 +367,7 @@ module TraditionalPreservationFish
         DaysTotallyRotten = 5,
         HungerChange = -5.0,
         ThirstChange = -30.0,
-        UnhappyChange = -30,
+        UnhappyChange = -20,
         Calories = 60.0,
         Carbohydrates = 0.0,
         Lipids = 4.0,
@@ -554,7 +554,7 @@ module TraditionalPreservationFish
         time = 100,
         Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
         category = Cooking,
-        xpAward = Cooking:10,
+        xpAward = Cooking:3,
         OnCreate = TraditionalPreservationFish.onCreatePacked,
         inputs
         {
@@ -575,7 +575,7 @@ module TraditionalPreservationFish
         time = 100,
         Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
         category = Cooking,
-        xpAward = Cooking:10,
+        xpAward = Cooking:3,
         OnCreate = TraditionalPreservationFish.onCreateCured,
         inputs
         {
@@ -596,7 +596,7 @@ module TraditionalPreservationFish
         time = 100,
         Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
         category = Cooking,
-        xpAward = Butchering:15,
+        xpAward = Butchering:10,
         OnCreate = TraditionalPreservationFish.onCreateGutted,
         inputs
         {

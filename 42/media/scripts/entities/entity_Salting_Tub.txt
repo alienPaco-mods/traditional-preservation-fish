@@ -57,7 +57,8 @@ module TraditionalPreservationFish
             inputs
             {
                 item 1 tags[base:hammer] mode:keep flags[Prop1;MayDegradeVeryLight],
-                item 2 [Base.Plank],
+                item 1 tags[base:saw;base:smallsaw;base:crudesaw] mode:keep flags[MayDegradeLight],
+                item 4 [Base.Plank],
                 item 6 [Base.Nails],
                 item 2 [Base.Twine],
             }

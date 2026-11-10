@@ -61,7 +61,7 @@ module TraditionalPreservationFish
                 item 1 tags[base:hammer] mode:keep flags[Prop1;MayDegradeVeryLight],
                 item 6 [Base.LongStick],
                 item 3 [Base.Nails],
-                item 2 [Base.Twine],
+                item 4 [Base.Twine],
             }
         }
     }

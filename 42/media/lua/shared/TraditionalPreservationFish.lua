@@ -106,16 +106,16 @@ F.FISH_ICONS = {
 }
 
 -- What each stage keeps of the item it was made from. With a maxWeight, each fish keeps a
--- random share between weight and maxWeight.
+-- random share between weight and maxWeight. Soaking gives back the bulk drying took (hunger 0.7).
 F.STAGES = {
     ["TraditionalPreservationFish.SaltPackedFish"] = { name = "IGUI_TraditionalPreservationFish_Packed", weight = 1, nutrition = 1, hunger = 1, gutted = true },
     ["TraditionalPreservationFish.SaltPressedFish"] = { name = "IGUI_TraditionalPreservationFish_Pressed", weight = 0.88, maxWeight = 0.93, nutrition = 1, hunger = 1 },
     ["TraditionalPreservationFish.SaltDriedFish"] = { name = "IGUI_TraditionalPreservationFish_Dried", weight = 0.45, nutrition = 0.9, hunger = 0.7 },
-    ["TraditionalPreservationFish.SoakedSaltFish"] = { name = "IGUI_TraditionalPreservationFish_SoakedSalt", weight = 1.8, nutrition = 1, hunger = 1 },
+    ["TraditionalPreservationFish.SoakedSaltFish"] = { name = "IGUI_TraditionalPreservationFish_SoakedSalt", weight = 1.8, nutrition = 1, hunger = 1 / 0.7 },
     ["TraditionalPreservationFish.GuttedFish"] = { name = "IGUI_TraditionalPreservationFish_Gutted", weight = 1, nutrition = 1, hunger = 1, gutted = true, headless = true },
     ["TraditionalPreservationFish.FishHalf"] = { name = "IGUI_TraditionalPreservationFish_Half", weight = 1, nutrition = 1, hunger = 1 },
     ["TraditionalPreservationFish.ColdDriedFish"] = { name = "IGUI_TraditionalPreservationFish_ColdDried", weight = 0.22, nutrition = 0.95, hunger = 0.7 },
-    ["TraditionalPreservationFish.SoakedColdFish"] = { name = "IGUI_TraditionalPreservationFish_SoakedCold", weight = 3, nutrition = 1, hunger = 1 },
+    ["TraditionalPreservationFish.SoakedColdFish"] = { name = "IGUI_TraditionalPreservationFish_SoakedCold", weight = 3, nutrition = 1, hunger = 1 / 0.7 },
 }
 
 -- The low end of DryingCraftLogic's curve: nothing at freezing, 1 at 20 C. It stops there, so

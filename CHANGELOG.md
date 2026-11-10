@@ -1,6 +1,10 @@
 # Changelog: Traditional Preservation (Fish)
 
 ## 0.2.8
+- Balance (series pass, F1): Salting Tub takes 4 planks (was 2) and a saw, kept; Drying Frame takes 4 twine
+  (was 2). Packing fish in salt gives Cooking 3 (was 10), gutting Butchering 10 (was 15), vanilla's figures.
+  Fish Head Stock starts at vanilla stew's -20 unhappiness (was -30). Rehydrated fish fill as the fresh fish did
+  (soaking gives back the 30% of hunger drying took); calories unchanged.
 - Internal: new `tests/test_console.lua` loads the debug console (TPF) and calls every command, so one can't
   break unseen.
 - Changed: the season's mean temperature and humidity (raw and salt spoilage) are the series' own, kept once by TP

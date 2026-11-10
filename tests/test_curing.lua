@@ -523,7 +523,7 @@ for _, name in ipairs({ "FishHeadStock", "FishHeadStockForged" }) do
     local pot = evolved:match("BaseItem = ([%w%.]+),")
     check(name .. " is already a stew", evolved:find("ResultItem = " .. pot .. ",", 1, true) ~= nil)
     local body = script:match("item " .. pot:gsub("^.-%.", "") .. "\n    {(.-)\n    }")
-    check(name .. " starts tastier than vanilla stew's -20", tonumber(body:match("UnhappyChange = (%-?%d+)")) < -20)
+    check(name .. " starts as tasty as vanilla stew's -20", tonumber(body:match("UnhappyChange = (%-?%d+)")) == -20)
 end
 for _, name in ipairs({ "SaltPackedFish", "SaltPressedFish", "GuttedFish", "FishHalf", "FishHead" }) do
     local body = script:match("item " .. name .. "\n    {(.-)\n    }")
@@ -545,6 +545,7 @@ coldFish = through(coldFish, "ColdDriedFish")
 check("cold drying leaves about a fifth of the weight", near(coldFish.values.ActualWeight, 1.76) and coldFish.name == "Cold Dried Medium Walleye")
 coldFish = through(coldFish, "SoakedColdFish")
 check("soaking gives back about 60%", near(coldFish.values.ActualWeight, 5.28) and near(coldFish.values.Calories, 714.4))
+check("and the bulk drying took", near(coldFish.values.BaseHunger, -0.564))
 check("and says it was cold dried", coldFish.name == "Rehydrated Cold Dried Medium Walleye")
 local spawned = newFood("TraditionalPreservationFish.SaltDriedFish", { ActualWeight = 1 })
 spawned.displayName = "Salt Dried Fish"
