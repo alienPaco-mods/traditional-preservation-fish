@@ -20,6 +20,7 @@ function getPlayer() return "player" end
 function getText(key) return key end
 ISCraftLogicPanel = { ItemSlotAddItems = function() addCalls = addCalls + 1 end }
 ISItemSlot = {}
+instanceof = function() return true end
 local progressSlots = {}
 ISWidgetCraftLogicOutputProgress = { updateProgressItems = function() end }
 function ISItemSlot:defaultVerifyItem() return vanillaVerdict end

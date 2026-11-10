@@ -1,4 +1,4 @@
-# Traditional Preservation (Fish) — Build 42 prototype (v0.2.7)
+# Traditional Preservation (Fish) — Build 42 prototype (v0.2.8)
 
 **Status: experimental.** The stations build, open and hang fish in the game, but a full year hasn't been played. Back up your save before enabling.
 
@@ -8,7 +8,7 @@ The mod's two routes are the two great preserved fish of the North Atlantic. Sto
 
 ## Install
 
-Copy this folder to `~/Zomboid/mods/TraditionalPreservationFish`, as a real copy rather than a symlink. It needs no other mods.
+Copy this folder to `~/Zomboid/mods/TraditionalPreservationFish`, as a real copy rather than a symlink. It needs the **TP Core** mod (`TraditionalPreservationCore`, the series' shared mod) installed and enabled the same way, and no other mods.
 
 ## How it works
 

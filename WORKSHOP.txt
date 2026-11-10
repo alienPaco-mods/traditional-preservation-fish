@@ -125,7 +125,7 @@ Gut Fish also takes the head off. A fish over 1.0 weight gives a Fish Head: 10% 
 Stockfish is unsalted cod hung on open racks through the cold northern Norwegian spring, traded across Europe since the Viking age. Salt cod (klippfisk, bacalhau) is salted, pressed and dried in mild air, and from the 1500s it fed sailors and Catholic fast days on both sides of the Atlantic. On the lower Volga around Astrakhan, large salted fish such as pike are hung from hooks to dry.
 
 [h2]Works well with[/h2]
-[b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt, with one batch packing about 12 fish. Traditional Preservation (Fish) needs no other mods.
+[b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt, with one batch packing about 12 fish. Traditional Preservation (Fish) needs no other mods besides Traditional Preservation (Core).
 
 [h2]Sandbox options[/h2]
 Set salt drying time, the slowest it can take and spoilage strictness.

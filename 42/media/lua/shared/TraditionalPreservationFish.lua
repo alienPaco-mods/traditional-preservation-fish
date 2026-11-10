@@ -80,7 +80,8 @@ F.COLD_MIN_RATE = 0.67
 -- Spoilage follows the season, not the day: it reads a running average of the weather over the
 -- core's Weather.SEASON_HOURS, so a warm afternoon in January does nothing.
 -- Unsalted fish spoils once the season is above RAW_SPOIL_ABOVE, and rots on the frame after
--- RAW_SPOIL_HOURS of that. Each 10 degrees more counts double.
+-- RAW_SPOIL_HOURS of that. Each 10 degrees more adds as much again
+-- (twice as fast at +10, three times at +20).
 F.RAW_SPOIL_ABOVE = 10
 F.RAW_SPOIL_HOURS = 48
 -- Salt fish only suffers in a hot, muggy season. SALT_SPOIL_HOURS of that is a rotten stack, and
@@ -174,8 +175,8 @@ function F.advance(ledger, now, weather)
     ledger.sheltered = ledger.sheltered + ledger.shelteredRate * hours
     ledger.cold = ledger.cold + ledger.coldRate * hours
 
-    Weather.seasonMean(ledger, "seasonTemperature", weather.temperature, hours)
-    Weather.seasonMean(ledger, "seasonHumidity", weather.humidity, hours)
+    Weather.season(ledger, "seasonTemperature", weather.temperature, hours)
+    Weather.season(ledger, "seasonHumidity", weather.humidity, hours)
     local warmth = ledger.seasonTemperature - F.RAW_SPOIL_ABOVE
     ledger.rawSpoiling = warmth > 0
     if ledger.rawSpoiling then
@@ -280,6 +281,17 @@ function F.spriteIndex(name)
     local sheet, index = string.match(name or "", "^traditionalpreservationfish_0([12])_(%d+)$")
     if not sheet then return nil end
     return tonumber(index) + (sheet == "2" and F.FIRST_SHEET_SIZE or 0)
+end
+
+-- The number of a station's own sprite, or nil for anything that isn't one of this mod's stations. A table
+-- lookup: the slot rules ask this of every crafting station's slot.
+local STATION_INDEX = {}
+for _, name in ipairs(Tiles.STATIONS) do STATION_INDEX[name] = F.spriteIndex(name) end
+
+function F.stationIndex(object)
+    local sprite = object and object:getSprite()
+    local name = sprite and sprite:getName()
+    return name and STATION_INDEX[name]
 end
 
 -- The big beams stand in the open, unlike the frame.

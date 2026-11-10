@@ -1,6 +1,12 @@
 # Changelog: Traditional Preservation (Fish)
 
 ## 0.2.8
+- Changed: the season's mean temperature and humidity (raw and salt spoilage) are the series' own, kept once by TP
+  Core, so Fish added to a running save agrees with the other mods from its first day. Save keys unchanged.
+- Internal: a station is told by a table lookup on its sprite's name (`F.stationIndex`), not a pattern match.
+- Docs: README and Workshop text say the mod needs TP Core (they said "no other mods"); the comment on raw
+  spoilage says what the code does (twice as fast at +10 C, three times at +20, not doubling each time).
+- Internal: `test_ui.lua` stubs `instanceof`, which the core's slot rules now call.
 - Now requires the **TP Core** mod (`TraditionalPreservationCore`), which loads first. The mod's own copy of the
   shared core (`TraditionalPreservationFish/Core/`: Weather, Station, UI) is gone; the code loads
   `TraditionalPreservationCore/...` instead. Same rules, same timers, same save keys, items and entities: existing

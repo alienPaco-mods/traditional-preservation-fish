@@ -31,6 +31,8 @@ You catch more fish than you can eat. This mod turns that surplus into food that
 
 ## 2. Quick Start
 
+> **Requires TP Core** (Traditional Preservation Core), the series' shared mod. Enable it alongside this one; it loads first.
+
 **Summer catch?** Pack it in salt → press it in a **Salting Tub** → hang it on a **Fish Drying Frame**.
 **Winter catch?** Gut it → hang it on the frame. No salt needed.
 

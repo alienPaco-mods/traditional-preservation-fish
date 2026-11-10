@@ -104,8 +104,7 @@ local function refresh(station, entry)
 end
 
 local function newEntry(station)
-    local sprite = station:getSprite()
-    local index = sprite and F.spriteIndex(sprite:getName())
+    local index = F.stationIndex(station)
     if not index then return nil end
 
     local isFrame = index >= FRAME_SPRITE

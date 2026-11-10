@@ -14,10 +14,7 @@ local FIRST_FRAME_SPRITE = Tiles.FRAME
 local SALT_BADGE_SIZE = 14
 local SALT_BADGE_MARGIN = 3
 
-local function spriteIndex(entity)
-    local sprite = entity and entity:getSprite()
-    return sprite and F.spriteIndex(sprite:getName())
-end
+local spriteIndex = F.stationIndex
 
 local function waitingWeight(resource)
     local weight = 0
