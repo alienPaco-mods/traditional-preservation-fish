@@ -39,7 +39,7 @@ You catch more fish than you can eat. This mod turns that surplus into food that
 | You need | For |
 |---|---|
 | Sharp knife or meat cleaver (kept) | Packing, gutting, splitting, slicing |
-| 2 salt per fish | Salt route only |
+| 2 salt per half weight of fish | Salt route only |
 | Carpentry 2, Fishing 2 | Tub and frame |
 | 1 L water per fish | Rehydrating to cook |
 
@@ -50,7 +50,7 @@ You catch more fish than you can eat. This mod turns that surplus into food that
 | | **Salt route** | **Cold route** |
 |---|---|---|
 | Season | Any (best in summer) | **Winter only** (about -10 to 5 C) |
-| Salt | 2 per fish | None |
+| Salt | 2 per half weight of fish | None |
 | Keeps | About 4–6 months | About 1–2 years |
 | Eating | Straight into soup, stew, rice or pasta (salty) | Must be rehydrated first |
 | Weight | About 37% of the fresh fish | About 18%, the lightest food you can carry |
@@ -62,9 +62,20 @@ You catch more fish than you can eat. This mod turns that surplus into food that
 ## 4. Walkthrough: The Salt Route
 
 **Step 1. Pack Fish in Salt** (crafting menu)
-Raw fish or fillet + 2 salt + knife (kept) → **Salt Packed** fish.
+Raw fish or fillet + salt by its size + knife (kept) → **Salt Packed** fish.
 - Fresh, stale, even **part-eaten** fish works. Rotten, frozen or cooked doesn't.
-- Any salt works, from a vanilla shaker (enough for **5 fish**) to the Salt mod's Evaporated Salt (enough for **2½**).
+- **Salt goes by weight:** 2 for each started half weight of the packed fish, at least 2. Carry it: only the first 2 can come from a container nearby.
+
+| Fish | Packed weight | Salt |
+|---|---|---|
+| Bluegill, 0.5 | 0.5 | 2 |
+| Walleye, 4.0 | 3.6 | 16 |
+| Catfish, 10.0 | 9.0 | 36 |
+| Vanilla fillet of that catfish, 0.5 | 4.5 | 18 |
+
+- Any salt works: a vanilla shaker holds **10**, the Salt mod's Evaporated Salt **5** and a Bag of Salt **50**. Part-used salt goes first.
+
+> ✏ *Margin note:* real salters reckoned a fifth to a third of the fish's weight in salt. A catfish costs you most of a bag, which is why the Salt mod's lick is worth the walk.
 - A whole fish over 0.6 weight also gives **Fish Guts** (see Secrets).
 - Packed fish keeps only days. Get it in the tub.
 
@@ -204,7 +215,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 ## 10. Tips from the Docks
 
-- **Fillets stack deep.** A fillet weighs 5% of its fish, so 25 of them fit in one stack.
+- **Fillets don't cheat the salt.** A vanilla fillet weighs 5% of its fish but holds half its food, so salted it pays and weighs as half the gutted fish. Fillets cut from a cured fish weigh half of it.
 - **Big catch?** A fish heavier than a stack's limit won't fit. Split it in two, or hang it on the Beam or Gantry.
 - **Keep a roofed frame for rainy spells.** It's slower, but rain never stops it.
 - **Winter is stockfish season.** Gut everything you catch in December and January. The lightest, longest-keeping food in the game. Turn the heads into stock the same day, as they spoil like fresh fish.

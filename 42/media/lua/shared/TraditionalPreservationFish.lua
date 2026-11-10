@@ -31,13 +31,21 @@ for name, hanger in pairs(Tiles.HANGERS) do
 end
 
 -- Vanilla's rules for cutting a fish: over this weight, into two fillets of this share of its
--- weight, each with half its food.
+-- weight (more in spawning season, when part goes to roe), each with half its food.
 F.MIN_SLICE_WEIGHT = 0.6
 F.FILLET_WEIGHT = 0.05
 -- These are already cut, so vanilla doesn't slice them.
 F.UNSLICEABLE = { ["Base.FishFillet"] = true, ["Base.Salmon"] = true }
 -- Vanilla's guts: only a fish it could cut has them, and they are this share of its weight.
 F.GUTS_WEIGHT = 0.1
+-- A fillet vanilla cut weighs a twentieth of its fish and holds half its food. Salted, it counts as what it
+-- holds, half the gutted fish: it pays that much salt and comes out of the salt that heavy.
+F.FILLET_FOOD_WEIGHT = (1 - F.GUTS_WEIGHT) * 0.5 / F.FILLET_WEIGHT
+-- Packing takes SALT_PER_STEP salt for each started SALT_STEP of the packed fish's weight, and never less
+-- than the SALT_MIN the recipe itself asks for.
+F.SALT_STEP = 0.5
+F.SALT_PER_STEP = 2
+F.SALT_MIN = 2
 -- Gut Fish takes the head off too, as stockfish did, and a fish over HEAD_MIN_WEIGHT gives a Fish
 -- Head for the pot: this share of its weight and of its food. The limit is above the guts' so small
 -- fish can't be farmed for heads. Salted fish keep their heads.
@@ -428,6 +436,73 @@ function F.hasHead(fish)
     return F.hasGuts(fish) and fish:getActualWeight() > F.HEAD_MIN_WEIGHT
 end
 
+-- A fillet vanilla cut counts as the food it holds; anything else, a loot fillet included, as what it weighs.
+function F.foodWeight(fish)
+    if fish:getFullType() == "Base.FishFillet" and fish:isCustomWeight() then
+        return fish:getActualWeight() * F.FILLET_FOOD_WEIGHT
+    end
+    return fish:getActualWeight()
+end
+
+-- What a fish weighs once packed: gutted if it has guts, and a fillet by its food.
+function F.packedWeight(fish)
+    if F.hasGuts(fish) then return fish:getActualWeight() * (1 - F.GUTS_WEIGHT) end
+    return F.foodWeight(fish)
+end
+
+-- The salt packing this fish takes in all, the recipe's own SALT_MIN included.
+function F.saltFor(fish)
+    local steps = math.ceil(F.packedWeight(fish) / F.SALT_STEP - 1e-6)
+    return math.max(F.SALT_MIN, F.SALT_PER_STEP * steps)
+end
+
+-- The salt the character carries, bags included, with uses left.
+local function saltCarried(character)
+    local found = character:getInventory():getAllTagRecurse(ItemTag.SALT, ArrayList.new())
+    local salt = {}
+    for i = 0, found:size() - 1 do
+        local item = found:get(i)
+        if item:getCurrentUses() > 0 then table.insert(salt, item) end
+    end
+    return salt
+end
+
+function F.saltCarried(character)
+    local uses = 0
+    for _, item in ipairs(saltCarried(character)) do uses = uses + item:getCurrentUses() end
+    return uses
+end
+
+-- OnTest sees every input, so the knife and the salt pass here too. The recipe finds its first SALT_MIN
+-- anywhere in reach; the rest must be on you.
+function F.canPack(item, character)
+    if not character or item:hasTag(ItemTag.SALT) or not instanceof(item, "Food") then return true end
+    return F.saltCarried(character) >= F.saltFor(item)
+end
+
+-- Uses up the salt this fish takes past the recipe's own, part-used salt first. The Salt mod gives an empty
+-- shaker or paper bag for what this empties, as it does for what the recipe empties.
+function F.chargeSalt(fish, character)
+    local owed = F.saltFor(fish) - F.SALT_MIN
+    if owed <= 0 or not character then return end
+    local salt = saltCarried(character)
+    table.sort(salt, function(a, b) return a:getCurrentUses() < b:getCurrentUses() end)
+    local emptied = ArrayList.new()
+    for _, item in ipairs(salt) do
+        if owed <= 0 then break end
+        local uses = item:getCurrentUses()
+        local taken = math.min(uses, owed)
+        owed = owed - taken
+        item:setCurrentUses(uses - taken)
+        if taken == uses then
+            item:getContainer():DoRemoveItem(item)
+            emptied:add(item)
+        end
+    end
+    local Salt = TraditionalPreservationSalt
+    if Salt and Salt.returnEmpties and emptied:size() > 0 then Salt.returnEmpties(character, emptied) end
+end
+
 -- Hands a share of a fish's food to another item; hungerShare defaults to share.
 -- Eating lowers HungChange and leaves BaseHunger, so a part-eaten fish stays part-eaten.
 local function copyFood(from, to, share, hungerShare)
@@ -452,7 +527,7 @@ function F.carry(source, target)
     if stage.gutted and F.hasGuts(source) then cut = F.GUTS_WEIGHT end
     if headless then cut = cut + F.HEAD_WEIGHT end
     keptWeight = keptWeight * (1 - cut)
-    target:setActualWeight(source:getActualWeight() * keptWeight)
+    target:setActualWeight(F.foodWeight(source) * keptWeight)
     target:setCustomWeight(true)
 
     -- The display name has the fish's size, as in Small Black Crappie, and a trailing space from vanilla.
@@ -547,12 +622,14 @@ function F.onCreateGutted(craftRecipeData, character)
 end
 
 -- Packing a whole fish guts it, but a fillet only takes the salt. One recipe packs both, so its
--- xpAward can't tell them apart.
+-- xpAward can't tell them apart. Both pack recipes end here, and take the rest of the fish's salt.
 function F.onCreatePacked(craftRecipeData, character)
+    character = character or craftRecipeData:getCharacter()
     local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount"):get(0)
     local gutting = F.hasGuts(fish)
     F.onCreateGutted(craftRecipeData, character)
-    if gutting then addXp(character or craftRecipeData:getCharacter(), Perks.Butchering, F.PACK_GUTTING_XP) end
+    F.chargeSalt(fish, character)
+    if gutting then addXp(character, Perks.Butchering, F.PACK_GUTTING_XP) end
 end
 
 -- OnTest sees every input, so the knife passes here too.
@@ -587,7 +664,8 @@ function F.canSlice(item, character)
     return item:getModData().sliceable == true
 end
 
--- Slicing keeps the stage, so a Salt Packed fish gives Salt Packed fillets.
+-- Slicing keeps the stage, so a Salt Packed fish gives Salt Packed fillets. A cured fish has no guts left
+-- to lose, so each fillet keeps half its weight with half its food, not vanilla's raw share.
 function F.onCreateSliced(craftRecipeData)
     local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount"):get(0)
     local created = craftRecipeData:getAllCreatedItems()
@@ -596,7 +674,7 @@ function F.onCreateSliced(craftRecipeData)
         local fillet = created:get(i)
         local stage = F.STAGES[fillet:getFullType()]
         copyFood(fish, fillet, 0.5)
-        fillet:setActualWeight(fish:getActualWeight() * F.FILLET_WEIGHT)
+        fillet:setActualWeight(fish:getActualWeight() / 2)
         fillet:setCustomWeight(true)
 
         local modData = fillet:getModData()

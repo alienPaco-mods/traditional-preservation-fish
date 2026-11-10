@@ -1,6 +1,11 @@
 # Changelog: Traditional Preservation (Fish)
 
 ## 0.2.8
+- Balance (series pass, F3): Pack Fish in Salt takes salt by the fish's size, 2 for each started half weight of the
+  packed fish (at least 2; past the first 2 it must be carried), part-used salt first; the Salt mod's empties come
+  back for what it uses up. A fillet vanilla cut counts as the food it holds (half its gutted fish) for salt and
+  for its salted weight; fillets sliced from a cured fish weigh half of it, not 5%. Rehydrating carries the dried
+  fish's freshness over as a share instead of starting fresh. The recipe's tooltip gives the rule.
 - Balance (series pass, F1): Salting Tub takes 4 planks (was 2) and a saw, kept; Drying Frame takes 4 twine
   (was 2). Packing fish in salt gives Cooking 3 (was 10), gutting Butchering 10 (was 15), vanilla's figures.
   Fish Head Stock starts at vanilla stew's -20 unhappiness (was -30). Rehydrated fish fill as the fresh fish did

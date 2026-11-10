@@ -545,7 +545,9 @@ module TraditionalPreservationFish
         EvolvedRecipeName = Fish,
     }
 
-    /* 2 salt is a fifth of a vanilla shaker or two fifths of an Evaporated Salt. The fish is the input with ItemCount,
+    /* Salt goes by the packed fish's weight: 2 for each started half weight, so a bluegill takes 2 and a 10 weight
+       catfish 36. The recipe asks for the first 2; canPack checks the rest is on you and onCreatePacked takes it.
+       A shaker holds 10, an Evaporated Salt 5, a Bag of Salt 50. The fish is the input with ItemCount,
        which is how onCreateCured finds it. Don't use IsWholeFoodItem: it needs the script's exact
        hunger, and fishing and these stages all change that. */
     craftRecipe PackFishInSalt
@@ -555,7 +557,9 @@ module TraditionalPreservationFish
         Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
         category = Cooking,
         xpAward = Cooking:3,
+        OnTest = TraditionalPreservationFish.canPack,
         OnCreate = TraditionalPreservationFish.onCreatePacked,
+        Tooltip = Tooltip_TraditionalPreservationFish_PackSalt,
         inputs
         {
             item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
@@ -576,7 +580,9 @@ module TraditionalPreservationFish
         Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
         category = Cooking,
         xpAward = Cooking:3,
-        OnCreate = TraditionalPreservationFish.onCreateCured,
+        OnTest = TraditionalPreservationFish.canPack,
+        OnCreate = TraditionalPreservationFish.onCreatePacked,
+        Tooltip = Tooltip_TraditionalPreservationFish_PackSalt,
         inputs
         {
             item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
@@ -722,6 +728,8 @@ module TraditionalPreservationFish
         }
     }
 
+    /* InheritFoodAge carries freshness as a share of each item's fresh days (Food.copyAgeFrom), so a stale dried
+       fish soaks into a stale one. */
     craftRecipe SoakSaltFish
     {
         timedAction = Making,
@@ -731,7 +739,7 @@ module TraditionalPreservationFish
         OnCreate = TraditionalPreservationFish.onCreateCured,
         inputs
         {
-            item 1 [TraditionalPreservationFish.SaltDriedFish] flags[ItemCount] mode:destroy,
+            item 1 [TraditionalPreservationFish.SaltDriedFish] flags[InheritFoodAge;ItemCount] mode:destroy,
             item 1 [*],
             -fluid 1.0 [Water],
         }
@@ -750,7 +758,7 @@ module TraditionalPreservationFish
         OnCreate = TraditionalPreservationFish.onCreateCured,
         inputs
         {
-            item 1 [TraditionalPreservationFish.ColdDriedFish] flags[ItemCount] mode:destroy,
+            item 1 [TraditionalPreservationFish.ColdDriedFish] flags[InheritFoodAge;ItemCount] mode:destroy,
             item 1 [*],
             -fluid 1.0 [Water],
         }

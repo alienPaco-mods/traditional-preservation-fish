@@ -26,7 +26,7 @@ function ZombRandFloat(low, high)
     keptShare = low + (high - low) * 0.5
     return keptShare
 end
-ItemTag = { UNCUT_FISH = "uncut" }
+ItemTag = { UNCUT_FISH = "uncut", SALT = "salt" }
 local nextRoll = 0
 function ZombRand(limit) return nextRoll % limit end
 function getText(key, ...)
@@ -72,12 +72,16 @@ local function newFood(fullType, values)
     function food:getFullType() return self.fullType end
     function food:getDisplayName() return self.displayName or "Fish" end
     function food:setCustomWeight(value) self.customWeight = value end
+    function food:isCustomWeight() return self.customWeight == true end
     function food:getModData() self.modData = self.modData or {}; return self.modData end
     function food:setName(value) self.name = value end
     function food:setCustomName(value) self.customName = value end
     function food:getModelIndex() return self.modelIndex or -1 end
     function food:setModelIndex(value) self.modelIndex = value end
-    function food:hasTag(tag) return tag == ItemTag.UNCUT_FISH and self.fullType:sub(1, 5) == "Base." and self.fullType ~= "Base.FishFillet" end
+    function food:hasTag(tag)
+        if tag == ItemTag.SALT then return self.salt == true end
+        return tag == ItemTag.UNCUT_FISH and self.fullType:sub(1, 5) == "Base." and self.fullType ~= "Base.FishFillet"
+    end
     function food:setWeight(value) self.weight = value end
     function food:getOffAge() return 120 end
     function food:getOffAgeMax() return 180 end
@@ -439,7 +443,7 @@ check("the knife passes", T.canSlice(newFood("Base.HuntingKnife", {})))
 
 local one, two = slice(pressedBass, "SaltPressedFish")
 check("each fillet gets half the food", near(one.values.Calories, 400) and near(two.values.Proteins, 20) and near(one.values.HungChange, -0.3))
-check("and vanilla's share of the weight", near(one.values.ActualWeight, pressedBass.values.ActualWeight * 0.05))
+check("and half the weight, as a cured fish has no guts to lose", near(one.values.ActualWeight, pressedBass.values.ActualWeight / 2))
 check("it stays at its stage", one.name == "Salt Pressed Fish Fillet" and one.customName)
 check("it shows the fillet icon", one.modelIndex == 0)
 check("it can't be cut again", not T.canSlice(one))
@@ -555,6 +559,13 @@ check("a spawned dried fish keeps the plain item name", spawned.name == nil and 
 -- Guts
 local gutsMade = {}
 local inventory = { AddItem = function(_, item) table.insert(gutsMade, item) end }
+function inventory:getAllTagRecurse(tag, found) return found end
+ArrayList = { new = function()
+    local items = {}
+    local found = list(items)
+    function found:add(item) table.insert(items, item) end
+    return found
+end }
 local gutter = { getInventory = function() return inventory end }
 function instanceItem(fullType) return newFood(fullType, {}) end
 local function gut(fish, stage)
@@ -672,6 +683,67 @@ pack(newFood("Base.FishFillet", { ActualWeight = 4 }))
 check("a fillet only takes the salt, so gives none", #gutsMade == 0 and #xpGiven == 0)
 pack(newFood("Base.Bluegill", { ActualWeight = 0.5 }))
 check("nor does a fish too small to gut", #xpGiven == 0)
+
+-- Salt by the packed fish's weight (C11)
+local cutFillet = newFood("Base.FishFillet", { ActualWeight = 0.5 })
+cutFillet.customWeight = true
+check("a fish too small to gut takes the recipe's 2", T.saltFor(newFood("Base.Bluegill", { ActualWeight = 0.5 })) == 2)
+check("a whole fish pays for what is left once gutted", T.saltFor(newFood("Base.Walleye", { ActualWeight = 4 })) == 16)
+check("a whole half weight pays no extra step", T.saltFor(newFood("TraditionalPreservationFish.GuttedFish", { ActualWeight = 1 })) == 4)
+check("a gutted fish or a half by its weight", T.saltFor(gutted) == 14)
+check("a fillet vanilla cut pays for its food, half the gutted fish", T.saltFor(cutFillet) == 18)
+check("a loot fillet, by its own weight", T.saltFor(newFood("Base.FishFillet", { ActualWeight = 0.2 })) == 2)
+local packedCut = through(cutFillet, "SaltPackedFish")
+check("and comes out of the salt that heavy (C26)", near(packedCut.values.ActualWeight, 4.5))
+
+local function saltItem(fullType, uses)
+    local item = newFood(fullType, {})
+    item.salt, item.uses = true, uses
+    function item:getCurrentUses() return self.uses end
+    function item:setCurrentUses(value) self.uses = value end
+    return item
+end
+instanceof = function(item, name) return name == "Food" and item.fullType ~= "Base.HuntingKnife" end
+local carried = {}
+local salter = { getInventory = function() return {
+    getAllTagRecurse = function(_, tag, found)
+        for _, item in ipairs(carried) do if item:hasTag(tag) then found:add(item) end end
+        return found
+    end,
+    AddItem = function() end,
+} end }
+local removed = {}
+local container = { DoRemoveItem = function(_, item) table.insert(removed, item) end }
+local function carry(...)
+    carried, removed = { ... }, {}
+    for _, item in ipairs(carried) do function item:getContainer() return container end end
+end
+local walleye4 = newFood("Base.Walleye", { ActualWeight = 4 })
+carry(saltItem("Base.Salt", 10), saltItem("TraditionalPreservationSalt.LooseSalt", 5))
+check("15 salt carried can't pack a fish that takes 16", not T.canPack(walleye4, salter))
+check("the knife, the salt and a test without a character pass", T.canPack(newFood("Base.HuntingKnife", {}), salter) and T.canPack(carried[1], salter) and T.canPack(walleye4, nil))
+local shaker, loose, bag, spent = saltItem("Base.Salt", 10), saltItem("TraditionalPreservationSalt.LooseSalt", 5), saltItem("TraditionalPreservationSalt.BagOfSalt", 3), saltItem("Base.Salt", 0)
+carry(shaker, loose, bag, spent)
+check("18 can, and a used-up shaker doesn't count", T.canPack(walleye4, salter) and T.saltCarried(salter) == 18)
+local returned
+TraditionalPreservationSalt = { returnEmpties = function(character, emptied) returned = { character = character, emptied = emptied } end }
+T.chargeSalt(walleye4, salter)
+check("packing takes the other 14, part-used salt first", bag.uses == 0 and loose.uses == 0 and shaker.uses == 4 and spent.uses == 0)
+check("what it empties leaves the inventory", #removed == 2 and removed[1] == bag and removed[2] == loose)
+check("and the Salt mod gives its empties back", returned and returned.character == salter and returned.emptied:size() == 2)
+TraditionalPreservationSalt, returned = nil, nil
+carry(saltItem("Base.Salt", 10))
+T.chargeSalt(newFood("Base.Bluegill", { ActualWeight = 0.5 }), salter)
+check("a small fish takes nothing past the recipe's 2", carried[1].uses == 10 and #removed == 0)
+T.chargeSalt(walleye4, salter)
+check("without the Salt mod, an emptied shaker just goes", carried[1].uses == 0 and #removed == 1 and returned == nil)
+local packer = { getInventory = salter.getInventory }
+carry(saltItem("Base.Salt", 10))
+local packData = newRecipeData(0, { newFood("Base.Walleye", { ActualWeight = 2 }) }, { newFood("TraditionalPreservationFish.SaltPackedFish", {}) })
+function packData:getCharacter() return packer end
+T.onCreatePacked(packData)
+check("both pack recipes charge in onCreatePacked, finding the packer", carried[1].uses == 4)
+instanceof = nil
 
 -- How a stack looks on the frame
 check("salted fish hangs as salted", T.fishStyle(newFood("TraditionalPreservationFish.SaltPressedFish", {})) == T.STYLE_SALT)
