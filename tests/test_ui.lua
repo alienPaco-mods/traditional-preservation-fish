@@ -6,7 +6,7 @@ Events = { OnInitGlobalModData = { Add = function() end } }
 -- The mod's own modules load for real, vanilla's are left out.
 local realRequire = require
 require = function(name)
-    if name:find("^TraditionalPreservationFish/") then return realRequire(name) end
+    if name:find("^TraditionalPreservationFish/") or name:find("^TraditionalPreservationCore/") then return realRequire(name) end
 end
 dofile("42/media/lua/shared/TraditionalPreservationFish.lua")
 

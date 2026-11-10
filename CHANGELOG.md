@@ -1,6 +1,10 @@
 # Changelog: Traditional Preservation (Fish)
 
-## Unreleased
+## 0.2.8
+- Now requires the **TP Core** mod (`TraditionalPreservationCore`), which loads first. The mod's own copy of the
+  shared core (`TraditionalPreservationFish/Core/`: Weather, Station, UI) is gone; the code loads
+  `TraditionalPreservationCore/...` instead. Same rules, same timers, same save keys, items and entities: existing
+  saves carry on unchanged.
 - Internal: the synced core copies name the core's new source path (TP Core is now a mod). Comment line only.
 - Internal: the shared core's folder is now `TraditionalPreservationCore` (was `_tpcore`): comments and test
   paths only. No change in play.

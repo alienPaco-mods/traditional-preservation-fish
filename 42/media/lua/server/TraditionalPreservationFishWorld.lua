@@ -4,8 +4,8 @@
 if isClient() then return end
 
 TraditionalPreservationFishWorld = TraditionalPreservationFishWorld or {}
-local Station = require "TraditionalPreservationFish/Core/Station"
-local Weather = require "TraditionalPreservationFish/Core/Weather"
+local Station = require "TraditionalPreservationCore/Station"
+local Weather = require "TraditionalPreservationCore/Weather"
 local Tiles = require "TraditionalPreservationFish/Tiles"
 local F = TraditionalPreservationFish
 

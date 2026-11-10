@@ -4,7 +4,7 @@
 -- same rules decide the slot's green border, so it never promises what adding then refuses.
 require "Entity/ISUI/Components/Crafting/ISCraftLogicPanel"
 require "Entity/ISUI/Controls/ISItemSlot"
-local UI = require "TraditionalPreservationFish/Core/UI"
+local UI = require "TraditionalPreservationCore/UI"
 local Tiles = require "TraditionalPreservationFish/Tiles"
 local F = TraditionalPreservationFish
 

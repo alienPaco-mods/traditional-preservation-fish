@@ -3,7 +3,7 @@
 -- how much drying it has had, including while its chunk was unloaded.
 TraditionalPreservationFish = TraditionalPreservationFish or {}
 local F = TraditionalPreservationFish
-local Weather = require "TraditionalPreservationFish/Core/Weather"
+local Weather = require "TraditionalPreservationCore/Weather"
 local Tiles = require "TraditionalPreservationFish/Tiles"
 
 F.MOD_DATA_KEY = "TraditionalPreservationFish"
