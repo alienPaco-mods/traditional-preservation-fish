@@ -4,6 +4,8 @@ Preserve your catch the old way. Salt it, press it and hang it to dry, or gut it
 
 [b]Build 42 only (42.20 or newer). This is an early release, so back up your save before enabling it. Singleplayer only: multiplayer is not supported.[/b]
 
+[b]Requires Traditional Preservation (Core)[/b]: subscribe to it too, and enable it in the Mods menu (it loads first).
+
 [h2]Features[/h2]
 [list]
 [*]Two methods: salt drying all year, and cold drying in winter with no salt
