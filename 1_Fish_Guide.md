@@ -140,7 +140,7 @@ Drying runs on real weather, recorded every 10 minutes, **even while you're away
 - **Salt drying**: 12 days at 20 C or warmer in dry air. Cold slows it down, even frost, but never stops it.
 - **Cold drying**: 20 days between -10 and 5 C. Slower from 5 to 10 C, and it stops above 10 C.
 - **Rain** pauses open stations until the fish dries off. Progress is **paused, never lost**. Snow pauses salt fish but not cold fish.
-- **Under a roof**: rain can't reach it, but salt drying runs at about two thirds of the speed. Cold drying **stops** under a roof, as it needs moving air.
+- **Under a roof**: rain can't reach it, but salt drying runs at about two thirds of the speed. Cold drying **stops** under a roof, as it needs moving air. Any roof overhead counts, walls or not: a porch roof or a floor laid on the level above is enough. Walls with no roof are still the open air.
 
 | Month | Salt, outdoors | Salt, roofed | Cold drying | Cold batches that rotted |
 |---|---|---|---|---|
