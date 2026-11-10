@@ -102,7 +102,7 @@ Times, capacity, stage values, weather rates and spoilage limits are at the top 
 
 `tools/build_tileset.py` repaints the stations, hanging fish, icons, the mod list icon and model textures, tints the vanilla fish icons, and writes `42/media/scripts/TraditionalPreservationFish_models.txt` (needs Pillow and the game files). It also writes the generated `42/media/lua/shared/TraditionalPreservationFish/Tiles.lua`, the tile numbers the Lua reads (don't edit it by hand), and `luajit tests/test_tiles.lua` checks the entity scripts against it. `luajit tests/test_curing.lua` checks the curing rules `luajit tests/test_ui.lua` the station slots and popup, and `luajit tests/test_world.lua` the station sprites and the weather record. The season table above is for the default settings. `luajit tools/season_report.lua` runs the rules against `tools/climate_year.csv`, about a year and a half of forecasts read from the game, so run it after changing any rates.
 
-The `TraditionalPreservationFish/Core/` folders under `42/media/lua/shared` and `42/media/lua/client` are the shared Traditional Preservation core (season averages, station tracking, popups), copied in from `~/MODS/_tpcore` by `tp sync`. Edit them there, not here. The drying and spoilage rates, wetness and the frame's stacks stay in this mod's own files.
+The `TraditionalPreservationFish/Core/` folders under `42/media/lua/shared` and `42/media/lua/client` are the shared Traditional Preservation core (season averages, station tracking, popups), copied in from `~/MODS/TraditionalPreservationCore` by `tp sync`. Edit them there, not here. The drying and spoilage rates, wetness and the frame's stacks stay in this mod's own files.
 
 ## Debug commands
 

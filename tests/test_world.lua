@@ -1,6 +1,6 @@
 -- Checks the tubs' and frames' sprites and the weather record with stand-ins for the engine. Run from the mod
 -- folder: luajit tests/test_world.lua
-local H = dofile((os.getenv("TPCORE") or "../_tpcore") .. "/tests/harness.lua")
+local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
 local check, near, list = H.check, H.near, H.list
 H.useModPaths()
 H.installClock(100)

@@ -1,5 +1,5 @@
 -- Checks the curing rules outside the game. Run from the mod folder: luajit tests/test_curing.lua
-local H = dofile((os.getenv("TPCORE") or "../_tpcore") .. "/tests/harness.lua")
+local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
 H.useModPaths()
 local hours = 100
 ModData = { tables = {} }
