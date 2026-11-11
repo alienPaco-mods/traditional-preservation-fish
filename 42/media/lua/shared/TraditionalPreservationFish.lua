@@ -11,7 +11,7 @@ F.MOD_DATA_KEY = "TraditionalPreservationFish"
 -- Hours in the tub, and hours on the frame at a drying rate of 1. These set the recipes' times.
 F.PRESS_HOURS = 12
 F.DRY_HOURS = 288
-F.COLD_DRY_HOURS = 480
+F.COLD_DRY_HOURS = 768
 
 -- The most weight of fish a tub takes, with room for a few bigger fish.
 F.TUB_CAPACITY = 50
@@ -80,12 +80,30 @@ F.MIN_DRY_RATE = F.DRY_HOURS / (F.MAX_DRY_DAYS * 24)
 -- windows open, so it's slower but a fair choice.
 F.SHELTERED_RATE = 0.65
 
--- Cold drying runs at full rate up to COLD_BEST, slows to COLD_MIN_RATE at COLD_LIMIT and stops
--- above that. Deep frost also gives COLD_MIN_RATE.
+-- Cold drying runs at full rate from 0 C to COLD_BEST, slows to COLD_MIN_RATE at COLD_LIMIT and stops
+-- above that. Below freezing the water has to leave as vapour from ice, which is slower: down to
+-- FROST_RATE at HARD_FROST, and HARD_FROST_RATE below it.
 F.COLD_BEST = 5
 F.COLD_LIMIT = 10
-F.DEEP_FROST = -10
 F.COLD_MIN_RATE = 0.67
+F.HARD_FROST = -5
+F.FROST_RATE = 0.8
+F.HARD_FROST_RATE = 0.6
+-- Stockfish dries in the wind: half speed in still air, up to WINDY_RATE in a breeze of WIND_GOOD
+-- (ClimateManager's wind intensity, 0 to 1). Live wind averages about 0.11 on dry days.
+F.WIND_GOOD = 0.25
+F.CALM_RATE = 0.5
+F.WINDY_RATE = 1.2
+-- Fresh fish suffers most. Until it is FRESH_UNTIL dried and has formed a dry skin, hard frost breaks
+-- the flesh and lying wet above freezing starts it going off. Each adds a little to its spoilage,
+-- scaled by how wet the fish still is: FREEZE_DAMAGE_HOURS of hard frost on a fresh stack add
+-- FREEZE_DAMAGE, WET_DAMAGE_HOURS wet add WET_DAMAGE. Together they never take it past DAMAGE_CAP.
+F.FRESH_UNTIL = 0.3
+F.FREEZE_DAMAGE_HOURS = 72
+F.FREEZE_DAMAGE = 0.1
+F.WET_DAMAGE_HOURS = 48
+F.WET_DAMAGE = 0.05
+F.DAMAGE_CAP = 0.25
 
 -- Spoilage follows the season, not the day: it reads a running average of the weather over the
 -- core's Weather.SEASON_HOURS, so a warm afternoon in January does nothing.
@@ -135,14 +153,24 @@ function F.temperatureRate(celsius)
     return rate * rate
 end
 
--- Cold drying (unsalted fish in frost and wind): full speed up to COLD_BEST, slowing to COLD_MIN_RATE
--- at COLD_LIMIT, nothing above it. Deep frost slows it to COLD_MIN_RATE too.
+-- Cold drying (unsalted fish in frost and wind) by temperature: full speed from 0 C to COLD_BEST,
+-- slowing to COLD_MIN_RATE at COLD_LIMIT, nothing above it. Frost slows it to FROST_RATE at HARD_FROST,
+-- and harder frost to HARD_FROST_RATE.
 function F.coldRate(celsius)
     if celsius > F.COLD_LIMIT then return 0 end
-    if celsius < F.DEEP_FROST then return F.COLD_MIN_RATE end
+    if celsius < F.HARD_FROST then return F.HARD_FROST_RATE end
+    if celsius < 0 then return 1 - celsius / F.HARD_FROST * (1 - F.FROST_RATE) end
     if celsius <= F.COLD_BEST then return 1 end
     local warmth = (celsius - F.COLD_BEST) / (F.COLD_LIMIT - F.COLD_BEST)
     return 1 - warmth * (1 - F.COLD_MIN_RATE)
+end
+
+-- What the wind does to cold drying: CALM_RATE in still air, rising to WINDY_RATE at WIND_GOOD.
+-- A reading without wind leaves the rate as it is.
+function F.windRate(wind)
+    if not wind then return 1 end
+    local breeze = math.min(math.max(wind, 0) / F.WIND_GOOD, 1)
+    return F.CALM_RATE + breeze * (F.WINDY_RATE - F.CALM_RATE)
 end
 
 -- Damp air slows open drying: full speed up to DRY_AIR_HUMIDITY, down to DAMP_AIR_RATE in saturated air.
@@ -154,9 +182,11 @@ function F.airRate(humidity)
 end
 
 -- The weather totals: hours of drying done open, sheltered and cold, hours of spoiling raw and salted,
--- and the wetness rain left on open frames.
+-- hours of hard frost and of cold fish lying wet above freezing, and the wetness rain left on open
+-- frames and on cold ones.
 function F.newLedger(now)
-    return { lastHour = now, wetness = 0, open = 0, sheltered = 0, cold = 0, rawSpoil = 0, saltSpoil = 0 }
+    return { lastHour = now, wetness = 0, coldWetness = 0, open = 0, sheltered = 0, cold = 0, rawSpoil = 0, saltSpoil = 0,
+        hardFrost = 0, coldWet = 0 }
 end
 
 -- Adds one stretch of weather to the totals. Open frames dry nothing until the rain has gone
@@ -169,21 +199,31 @@ function F.advance(ledger, now, weather)
     local minRate = F.MIN_DRY_RATE
     local temperatureRate = F.temperatureRate(weather.temperature)
     local seconds = hours * SECONDS_PER_HOUR
+    local dryingOff = WET_DRYING_OFF * math.max(temperatureRate, minRate) * seconds
     if weather.precipitation > 0 then
         local wetting = RAIN_WETTING * weather.precipitation * (weather.isSnow and SNOW_WETTING or 1)
         ledger.wetness = math.min(ledger.wetness + wetting * seconds, 1)
     else
-        ledger.wetness = math.max(ledger.wetness - WET_DRYING_OFF * math.max(temperatureRate, minRate) * seconds, 0)
+        ledger.wetness = math.max(ledger.wetness - dryingOff, 0)
+    end
+    local raining = weather.precipitation > 0 and not weather.isSnow
+    if raining then
+        ledger.coldWetness = math.min(ledger.coldWetness + RAIN_WETTING * weather.precipitation * seconds, 1)
+    else
+        ledger.coldWetness = math.max(ledger.coldWetness - dryingOff, 0)
     end
 
     local rate = temperatureRate * F.airRate(weather.humidity)
     ledger.openRate = ledger.wetness <= 0 and math.max(rate, minRate) or 0
     ledger.shelteredRate = math.max(rate * F.SHELTERED_RATE, minRate)
-    ledger.coldRate = (weather.isSnow or weather.precipitation <= 0) and F.coldRate(weather.temperature) or 0
+    ledger.coldRate = ledger.coldWetness <= 0 and F.coldRate(weather.temperature) * F.windRate(weather.wind) or 0
     ledger.temperature = weather.temperature
+    ledger.wind = weather.wind
     ledger.open = ledger.open + ledger.openRate * hours
     ledger.sheltered = ledger.sheltered + ledger.shelteredRate * hours
     ledger.cold = ledger.cold + ledger.coldRate * hours
+    if weather.temperature < F.HARD_FROST then ledger.hardFrost = ledger.hardFrost + hours end
+    if ledger.coldWetness > 0 and weather.temperature > 0 then ledger.coldWet = ledger.coldWet + hours end
 
     Weather.season(ledger, "seasonTemperature", weather.temperature, hours)
     Weather.season(ledger, "seasonHumidity", weather.humidity, hours)
@@ -228,23 +268,33 @@ function F.stackStatus(isCold, modData, ledger)
     }
 end
 
--- The popup's word for the temperature, a translation key: good, cool, mild, too warm or frost.
+-- The popup's word for the temperature, a translation key: good, cool, mild, too warm, frost or hard frost.
 function F.temperatureWord(isCold, celsius)
     if isCold then
         if celsius > F.COLD_LIMIT then return "IGUI_TraditionalPreservationFish_TempTooWarm" end
         if celsius > F.COLD_BEST then return "IGUI_TraditionalPreservationFish_TempMild" end
-        return "IGUI_TraditionalPreservationFish_TempGoodCold"
+        if celsius >= 0 then return "IGUI_TraditionalPreservationFish_TempGoodCold" end
+        if celsius >= F.HARD_FROST then return "IGUI_TraditionalPreservationFish_TempFrost" end
+        return "IGUI_TraditionalPreservationFish_TempHardFrost"
     end
     if celsius >= 20 then return "IGUI_TraditionalPreservationFish_TempGoodWarm" end
     if celsius > 0 then return "IGUI_TraditionalPreservationFish_TempCool" end
     return "IGUI_TraditionalPreservationFish_TempFrost"
 end
 
+-- The popup's word for the wind on a cold frame: calm, a light breeze or a good drying wind.
+function F.windWord(wind)
+    wind = wind or 0
+    if wind >= F.WIND_GOOD then return "IGUI_TraditionalPreservationFish_WindGood" end
+    if wind >= F.WIND_GOOD / 3 then return "IGUI_TraditionalPreservationFish_WindLight" end
+    return "IGUI_TraditionalPreservationFish_WindCalm"
+end
+
 -- The ledger is the mod's global ModData table itself, so its keys are the ones in every save.
 function F.getLedger()
     local data = ModData.getOrCreate(F.MOD_DATA_KEY)
-    -- cold came after the first release, so a save can have the rest without it.
-    if not data.cold then
+    -- cold and hardFrost came after the first release, so a save can have the rest without them.
+    if not data.hardFrost then
         local ledger = F.newLedger(getGameTime():getWorldAgeHours())
         for key, value in pairs(ledger) do
             if data[key] == nil then data[key] = value end
@@ -357,6 +407,8 @@ local function startStack(craftRecipeData)
     modData.lastCold = ledger.cold
     modData.lastRawSpoil = ledger.rawSpoil
     modData.lastSaltSpoil = ledger.saltSpoil
+    modData.lastHardFrost = ledger.hardFrost
+    modData.lastColdWet = ledger.coldWet
     modData.sheltered = nil
 end
 
@@ -399,18 +451,36 @@ function F.onColdDryStart(craftRecipeData)
     craftRecipeData:getModData().style = F.pickStyle(F.COLD_STYLES)
 end
 
--- A roof keeps the wind off, so unsalted fish under one doesn't dry. It can still spoil.
-function F.onColdDryUpdate(craftRecipeData)
-    local ledger = F.getLedger()
-    local modData = craftRecipeData:getModData()
-    if not modData.dried then return end
-
+-- Adds what the weather has done to a cold stack since it was last looked at. A roof keeps the wind
+-- off, so unsalted fish under one doesn't dry; it can still spoil. Rot, early hard frost and wet weigh
+-- by how wet the fish still is, taken at this update (a stack catching up after its chunk was
+-- unloaded uses its progress from then).
+function F.coldStep(modData, ledger)
+    local vulnerability = 1 - math.min(modData.dried / F.COLD_DRY_HOURS, 1)
+    -- A stack from before the frost and wet totals has no starting point, so it counts from now.
+    local frost = ledger.hardFrost - (modData.lastHardFrost or ledger.hardFrost)
+    local wet = ledger.coldWet - (modData.lastColdWet or ledger.coldWet)
+    local damage = 0
+    if vulnerability > 1 - F.FRESH_UNTIL then
+        damage = frost / F.FREEZE_DAMAGE_HOURS * F.FREEZE_DAMAGE
+        if not modData.sheltered then damage = damage + wet / F.WET_DAMAGE_HOURS * F.WET_DAMAGE end
+    end
     if not modData.sheltered then
         modData.dried = modData.dried + ledger.cold - modData.lastCold
     end
-    modData.spoiled = modData.spoiled + (ledger.rawSpoil - modData.lastRawSpoil) / F.RAW_SPOIL_HOURS
+    local spoiled = modData.spoiled + (ledger.rawSpoil - modData.lastRawSpoil) / F.RAW_SPOIL_HOURS * vulnerability
+    if spoiled < F.DAMAGE_CAP then spoiled = math.min(spoiled + damage * vulnerability, F.DAMAGE_CAP) end
+    modData.spoiled = spoiled
     modData.lastCold = ledger.cold
     modData.lastRawSpoil = ledger.rawSpoil
+    modData.lastHardFrost = ledger.hardFrost
+    modData.lastColdWet = ledger.coldWet
+end
+
+function F.onColdDryUpdate(craftRecipeData)
+    local modData = craftRecipeData:getModData()
+    if not modData.dried then return end
+    F.coldStep(modData, F.getLedger())
     showProgress(craftRecipeData, modData, F.COLD_DRY_HOURS)
 end
 
@@ -715,6 +785,7 @@ end
 -- What the sandbox's spoilage setting does to the limits: off, forgiving, normal and harsh.
 local SPOILAGE_SCALES = { math.huge, 2, 1, 0.5 }
 local RAW_SPOIL_HOURS, SALT_SPOIL_HOURS = F.RAW_SPOIL_HOURS, F.SALT_SPOIL_HOURS
+local FREEZE_DAMAGE_HOURS, WET_DAMAGE_HOURS = F.FREEZE_DAMAGE_HOURS, F.WET_DAMAGE_HOURS
 local BASE_DRY_HOURS, BASE_COLD_DRY_HOURS = F.DRY_HOURS, F.COLD_DRY_HOURS
 
 -- Reads the sandbox options into the drying times and spoilage limits.
@@ -730,6 +801,8 @@ function F.applySandbox()
     local scale = SPOILAGE_SCALES[options.Spoilage] or 1
     F.RAW_SPOIL_HOURS = RAW_SPOIL_HOURS * scale
     F.SALT_SPOIL_HOURS = SALT_SPOIL_HOURS * scale
+    F.FREEZE_DAMAGE_HOURS = FREEZE_DAMAGE_HOURS * scale
+    F.WET_DAMAGE_HOURS = WET_DAMAGE_HOURS * scale
 end
 
 local function applyRecipeTime(name, hours)

@@ -235,25 +235,25 @@ check("dried fish remembers its stack", stacked:getAllCreatedItems():get(0):getM
 -- Sandbox options
 SandboxVars = { TraditionalPreservationFish = { DryDays = 24, MaxDryDays = 48, Spoilage = 4 } }
 T.applySandbox()
-check("drying days set both methods' hours", T.DRY_HOURS == 576 and T.COLD_DRY_HOURS == 960)
+check("drying days set both methods' hours", T.DRY_HOURS == 576 and T.COLD_DRY_HOURS == 1536)
 check("the slowest days set the lowest rate", near(T.MIN_DRY_RATE, 0.5))
 check("harsh spoilage halves the limits", T.RAW_SPOIL_HOURS == 24 and T.SALT_SPOIL_HOURS == 240)
 SandboxVars.TraditionalPreservationFish = { DryDays = 30, MaxDryDays = 10, Spoilage = 1 }
 T.applySandbox()
 check("the slowest can't beat the fastest", T.MIN_DRY_RATE == 1)
-check("spoilage can be turned off", T.RAW_SPOIL_HOURS == math.huge and T.SALT_SPOIL_HOURS == math.huge)
+check("spoilage can be turned off", T.RAW_SPOIL_HOURS == math.huge and T.SALT_SPOIL_HOURS == math.huge and T.FREEZE_DAMAGE_HOURS == math.huge and T.WET_DAMAGE_HOURS == math.huge)
 SandboxVars.TraditionalPreservationFish = { DryDays = 30, MaxDryDays = 10, Spoilage = 9 }
 check("a spoilage value out of range loads as normal", pcall(T.applySandbox) and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
 SandboxVars.TraditionalPreservationFish = { DryDays = 12, MaxDryDays = 27, Spoilage = 3 }
 T.applySandbox()
-check("the defaults put it all back", T.DRY_HOURS == 288 and T.COLD_DRY_HOURS == 480 and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
+check("the defaults put it all back", T.DRY_HOURS == 288 and T.COLD_DRY_HOURS == 768 and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
 SandboxVars = nil
 
 -- What a stack's popup reports
 local readings = T.newLedger(0)
 T.advance(readings, 1, { temperature = 0, humidity = 0.2, precipitation = 0 })
-local coldNow = T.stackStatus(true, { dried = 120 }, readings)
-check("cold fish dries at full rate in the cold", coldNow.rate == 1 and near(coldNow.hoursLeft, 360) and near(coldNow.progress, 0.25))
+local coldNow = T.stackStatus(true, { dried = 192 }, readings)
+check("cold fish dries at full rate in the cold", coldNow.rate == 1 and near(coldNow.hoursLeft, 576) and near(coldNow.progress, 0.25))
 local saltNow = T.stackStatus(false, { dried = 144 }, readings)
 check("salt fish goes by its own rate", near(saltNow.rate, T.MIN_DRY_RATE) and near(saltNow.hoursLeft, 144 / T.MIN_DRY_RATE))
 check("a roof stops cold drying but not salt", T.stackStatus(true, { sheltered = true }, readings).reason == "Roof" and T.stackStatus(false, { sheltered = true }, readings).reason == nil)
@@ -266,6 +266,7 @@ T.advance(hot, 1, { temperature = 25, humidity = 0.6, precipitation = 0 })
 check("a warm season stops cold drying and warns", T.stackStatus(true, {}, hot).reason == "TooWarm" and T.stackStatus(true, {}, hot).spoiling)
 check("a muggy one warns for salt fish", T.stackStatus(false, {}, hot).spoiling)
 check("a fresh ledger is safe to read", T.stackStatus(false, {}, T.newLedger(0)).rate == 0)
+check("frost words for cold fish", T.temperatureWord(true, -2) == "IGUI_TraditionalPreservationFish_TempFrost" and T.temperatureWord(true, -8) == "IGUI_TraditionalPreservationFish_TempHardFrost")
 check("the words fit the method", T.temperatureWord(true, 2) == "IGUI_TraditionalPreservationFish_TempGoodCold" and T.temperatureWord(false, 25) == "IGUI_TraditionalPreservationFish_TempGoodWarm" and T.temperatureWord(true, 25) == "IGUI_TraditionalPreservationFish_TempTooWarm")
 
 -- Limits on how long drying takes
@@ -279,15 +280,34 @@ T.advance(frosted, 1000, { temperature = -5, humidity = 0.3, precipitation = 0 }
 check("a frame still dries off in a hard frost", frosted.wetness == 0)
 
 -- Cold drying
-check("full rate around freezing", T.coldRate(-5) == 1 and T.coldRate(5) == 1)
-check("slower in deep frost and near the limit", T.coldRate(-15) == T.COLD_MIN_RATE and near(T.coldRate(10), T.COLD_MIN_RATE))
+check("full rate from freezing to 5 C", T.coldRate(0) == 1 and T.coldRate(5) == 1)
+check("slower in frost, slowest in hard frost", near(T.coldRate(-2.5), 0.9) and near(T.coldRate(-5), T.FROST_RATE) and T.coldRate(-15) == T.HARD_FROST_RATE)
+check("slower near the limit", near(T.coldRate(10), T.COLD_MIN_RATE))
 check("stops above the limit", T.coldRate(11) == 0)
 local snowfall = T.newLedger(0)
 T.advance(snowfall, 1, { temperature = -2, humidity = 0.3, precipitation = 1, isSnow = true })
-check("snow doesn't stop it", near(snowfall.cold, 1) and snowfall.open == 0)
+check("snow doesn't stop it", near(snowfall.cold, T.coldRate(-2)) and snowfall.open == 0 and snowfall.coldWetness == 0)
 local rainfall = T.newLedger(0)
 T.advance(rainfall, 1, { temperature = 3, humidity = 0.3, precipitation = 1 })
-check("rain does", rainfall.cold == 0)
+check("rain does", rainfall.cold == 0 and rainfall.coldWetness > 0)
+T.advance(rainfall, 2, { temperature = 3, humidity = 0.3, precipitation = 0 })
+check("and the fish has to dry off first", rainfall.cold == 0 and rainfall.coldWet == 2)
+T.advance(rainfall, 100, { temperature = 3, humidity = 0.3, precipitation = 0 })
+check("then it dries again", rainfall.coldWetness == 0 and rainfall.cold > 0)
+
+-- Wind
+check("still air halves it", T.windRate(0) == T.CALM_RATE)
+check("a good breeze beats full speed", near(T.windRate(T.WIND_GOOD), T.WINDY_RATE) and near(T.windRate(1), T.WINDY_RATE))
+check("in between it rises", near(T.windRate(T.WIND_GOOD / 2), (T.CALM_RATE + T.WINDY_RATE) / 2))
+check("no reading leaves it alone", T.windRate(nil) == 1)
+local windy = T.newLedger(0)
+T.advance(windy, 10, { temperature = 2, humidity = 0.3, precipitation = 0, wind = 0 })
+check("wind sets the cold rate", near(windy.cold, 10 * T.CALM_RATE) and windy.wind == 0)
+check("the words for the wind", T.windWord(0.05) == "IGUI_TraditionalPreservationFish_WindCalm"
+    and T.windWord(0.2) == "IGUI_TraditionalPreservationFish_WindLight" and T.windWord(0.5) == "IGUI_TraditionalPreservationFish_WindGood")
+local frosty = T.newLedger(0)
+T.advance(frosty, 5, { temperature = -8, humidity = 0.3, precipitation = 0 })
+check("hard frost is counted", frosty.hardFrost == 5 and frosty.coldWet == 0)
 
 local function coldStack()
     ModData.tables = {}
@@ -329,6 +349,30 @@ T.advance(roofed, hours, WINTER)
 T.onColdDryUpdate(roofedStack)
 check("a roof stops cold drying", roofedStack.modData.dried == 0)
 
+-- Early frost and wet add to the spoilage, the more the wetter the fish
+local function coldStep(dried, totals, sheltered)
+    local ledger = T.newLedger(0)
+    local modData = { dried = dried, spoiled = 0, lastCold = 0, lastRawSpoil = 0, lastHardFrost = 0, lastColdWet = 0, sheltered = sheltered }
+    for key, value in pairs(totals) do ledger[key] = value end
+    T.coldStep(modData, ledger)
+    return modData
+end
+check("hard frost on a fresh stack", near(coldStep(0, { hardFrost = 36 }).spoiled, T.FREEZE_DAMAGE / 2))
+check("less once it has dried a little", near(coldStep(T.COLD_DRY_HOURS * 0.2, { hardFrost = 36 }).spoiled, T.FREEZE_DAMAGE / 2 * 0.8))
+check("none once it is under way", coldStep(T.COLD_DRY_HOURS * 0.3, { hardFrost = 36 }).spoiled == 0)
+check("frost alone never rots it", coldStep(0, { hardFrost = 1000 }).spoiled == T.DAMAGE_CAP)
+check("lying wet early harms it", near(coldStep(0, { coldWet = 48 }).spoiled, T.WET_DAMAGE))
+check("but not once it has a dry skin", coldStep(T.COLD_DRY_HOURS * 0.3, { coldWet = 48 }).spoiled == 0)
+check("a roof keeps the rain off", coldStep(0, { coldWet = 48 }, true).spoiled == 0)
+check("frost and wet together stop at the cap", coldStep(0, { hardFrost = 150, coldWet = 150 }).spoiled == T.DAMAGE_CAP)
+check("rot weighs by how wet it still is", near(coldStep(T.COLD_DRY_HOURS * 0.9, { rawSpoil = T.RAW_SPOIL_HOURS }).spoiled, 0.1))
+check("and still rots a fresh stack", near(coldStep(0, { rawSpoil = T.RAW_SPOIL_HOURS }).spoiled, 1))
+local older = { dried = 0, spoiled = 0, lastCold = 0, lastRawSpoil = 0 }
+local olderLedger = T.newLedger(0)
+olderLedger.hardFrost, olderLedger.coldWet = 500, 500
+T.coldStep(older, olderLedger)
+check("a cold stack from an older version starts counting frost and wet now", older.spoiled == 0 and older.lastHardFrost == 500)
+
 -- Salt fish in summer
 local function saltStack(season, humidity)
     ModData.tables = {}
@@ -353,7 +397,8 @@ check("a stack from an older version carries on", oldSave.modData.spoiled == 0)
 
 ModData.tables = { [T.MOD_DATA_KEY] = { lastHour = 5, wetness = 0, open = 3, sheltered = 2 } }
 local upgraded = T.getLedger()
-check("an older ledger gains the new totals", upgraded.open == 3 and upgraded.cold == 0 and upgraded.rawSpoil == 0)
+check("an older ledger gains the new totals", upgraded.open == 3 and upgraded.cold == 0 and upgraded.rawSpoil == 0
+    and upgraded.hardFrost == 0 and upgraded.coldWet == 0 and upgraded.coldWetness == 0)
 ModData.tables = {}
 
 -- What the season took shows on the finished fish

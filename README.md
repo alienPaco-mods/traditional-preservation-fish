@@ -59,11 +59,12 @@ Percentages are of the whole fresh fish. They assume the fish was big enough to 
 
 ## Seasons
 
-You don't need to watch the forecast. Drying usually takes 12 to 30 days, and the time of year decides how a batch goes.
+You don't need to watch the forecast. Drying usually takes 12 to 55 days, and the time of year decides how a batch goes.
 
 - **Salt drying** takes 12 days at full speed, which is 20 C or above in dry air. Cold slows it (at 10 C it runs at a quarter speed) and so does air above 50% humidity, but it never drops below about 44% speed, so frost slows it without stopping it.
-- **Cold drying** takes 20 days at full speed, which is anything from -10 to 5 C. It runs at two thirds speed in deep frost (below -10 C) and as it warms toward 10 C, and stops above 10 C.
-- **Rain**: open stations stop until it ends and the wet has dried off. Progress is paused, not lost. Snow counts as rain for salt fish but doesn't bother cold drying.
+- **Cold drying** takes 32 days at full speed: 0 to 5 C in a good breeze. Frost slows it (80% at -5 C, 60% below: ice leaves as vapour), so does warmth toward 10 C (67%), and it stops above 10 C. Wind sets the rest: 50% in still air, up to 120% at a wind intensity of 0.25 (`WIND_GOOD`). Live wind in a dry spell averages about 0.11, so a batch hung November to January takes about 50 to 55 days (a gameplay compromise: real stockfish hangs about three months).
+- **Fresh fish is fragile**: until a cold stack is 30% dried (`FRESH_UNTIL`), hard frost below -5 C (a tenth of its keeping per 72 hours) and lying wet above 0 C (0.05 per 48 hours) add to its spoilage, scaled by how wet it still is, together never past a quarter (`DAMAGE_CAP`). Rot from a warm season is scaled the same way, so a nearly dry stack caught by an April warm spell loses little and a fresh one rots.
+- **Rain**: open stations stop until it ends and the wet has dried off. Progress is paused, not lost. Snow counts as rain for salt fish but doesn't bother cold drying. Rain wets cold fish too, and it waits to dry off (its own wetness, `coldWetness`).
 - **Under a roof**: rain can't reach it, but it runs at 65% speed. Fish was traditionally dried indoors with the windows open, so salt fish takes about 21 to 27 days. Cold drying needs moving air, so it stops under a roof.
 
 Spoilage goes by the season, not the day: it follows the average temperature of the last 10 days or so, so a warm afternoon in January does nothing.
@@ -75,20 +76,20 @@ Weather is recorded every 10 in-game minutes for the whole world, so frames keep
 
 This is how a batch hung in each month went, on the game's own forecasts for default weather. Rain timing is estimated, so treat the days as approximate. `tools/season_report.lua` prints this table.
 
-| Month | Mean C | Mean humidity | Salt, open frame | Salt, under a roof | Cold drying | Cold batches rotted |
-|---|---|---|---|---|---|---|
-| Jan | -4 | 0.24 | 28–33 days | 27 days | 21–23 days | 0% |
-| Feb | -1 | 0.22 | 29–33 days | 27 days | 21–25 days | 0% |
-| Mar | 3 | 0.25 | 29–33 days | 27 days | 24–36 days | 7% |
-| Apr | 8 | 0.30 | 22–30 days | 24–27 days | 33 days | 97% |
-| May | 15 | 0.34 | 16–25 days | 22–25 days | | 100% |
-| Jun | 19 | 0.35 | 16–20 days | 21–23 days | | 100% |
-| Jul | 21 | 0.45 | 15–18 days | 21–23 days | | 100% |
-| Aug | 18 | 0.35 | 17–24 days | 22–25 days | | 100% |
-| Sep | 15 | 0.33 | 17–34 days | 23–27 days | | 100% |
-| Oct | 8 | 0.27 | 30–34 days | 27 days | 23–30 days | 30% |
-| Nov | 0 | 0.24 | 29–30 days | 27 days | 21–23 days | 0% |
-| Dec | -4 | 0.19 | | 27 days | 22 days | 0% |
+| Month | Mean C | Mean humidity | Salt, open frame | Salt, under a roof | Cold drying | Cold batches rotted | Cold keeping lost |
+|---|---|---|---|---|---|---|---|
+| Jan | -4 | 0.24 | 28–33 days | 27 days | 51–55 days | 0% | 20% |
+| Feb | -1 | 0.22 | 29–33 days | 27 days | 52–93 days | 3% | 16% |
+| Mar | 3 | 0.25 | 29–33 days | 27 days | 74 days | 97% | 18% |
+| Apr | 8 | 0.30 | 22–30 days | 24–27 days |  | 100% |  |
+| May | 15 | 0.34 | 16–25 days | 22–25 days |  | 100% |  |
+| Jun | 19 | 0.35 | 16–20 days | 21–23 days |  | 100% |  |
+| Jul | 21 | 0.45 | 15–18 days | 21–23 days |  | 100% |  |
+| Aug | 18 | 0.35 | 17–24 days | 22–25 days |  | 100% |  |
+| Sep | 15 | 0.33 | 17–34 days | 23–27 days |  | 100% |  |
+| Oct | 8 | 0.27 | 30–34 days | 27 days | 52–57 days | 30% | 15% |
+| Nov | 0 | 0.24 | 29–30 days | 27 days | 50–52 days | 0% | 10% |
+| Dec | -4 | 0.19 |  | 27 days |  |  |  |
 
 Humidity stays low in the game all year, mostly 20 to 45%, so it barely changes drying. That is why it only matters for salt fish in high summer. Salt fish lost about 1% of its keeping time at worst here. Blanks mean no batch hung that month finished inside the forecast data.
 

@@ -138,6 +138,7 @@ Weather.record(function(now, climate)
         humidity = climate:getHumidity(),
         precipitation = climate:getPrecipitationIntensity(),
         isSnow = climate:getPrecipitationIsSnow(),
+        wind = climate:getWindIntensity(),
     })
 end)
 

@@ -19,7 +19,8 @@ function TPF.help()
     say("TPF.wind()                start a log of live wind every 10 minutes; again to print it beside the forecast")
     say("TPF.age(hours)            give every hanging stack this many hours of perfect drying weather")
     say("TPF.spoil(hours)          add this many hours of spoiling weather, to test rotting stacks")
-    say("TPF.dry()                 clear the wetness, so open frames start drying again at once")
+    say("TPF.frost(hours)          add this many hours of hard frost, to test early frost on fresh cold stacks")
+    say("TPF.dry()                 clear the wetness, so open and cold frames start drying again at once")
     say("TPF.fish(name, weight, n) spawn n whole fish, e.g. TPF.fish(\"Walleye\", 4, 2). TPF.fish() lists the names")
     say("TPF.heads(n)              spawn n Fish Heads")
     say("TPF.stock()               spawn a Pot of Fish Head Stock")
@@ -31,11 +32,13 @@ function TPF.weather()
     local ledger = F.getLedger()
     local function n(value) return value and string.format("%.2f", value) or "-" end
     say("Temperature now " .. n(ledger.temperature) .. " C, season (10-day average) " .. n(ledger.seasonTemperature)
-        .. " C, humidity " .. n(ledger.seasonHumidity) .. ", wetness " .. n(ledger.wetness))
+        .. " C, humidity " .. n(ledger.seasonHumidity) .. ", wetness " .. n(ledger.wetness) .. " (cold frames " .. n(ledger.coldWetness) .. ")"
+        .. ", wind " .. n(ledger.wind))
     say("Drying speed now: open " .. n(ledger.openRate) .. ", under a roof " .. n(ledger.shelteredRate) .. ", cold " .. n(ledger.coldRate))
     say("Spoiling now: unsalted " .. tostring(ledger.rawSpoiling == true) .. ", salted " .. tostring(ledger.saltSpoiling == true))
     say("Totals (hours at full speed): open " .. n(ledger.open) .. ", roof " .. n(ledger.sheltered) .. ", cold " .. n(ledger.cold)
-        .. ", raw spoil " .. n(ledger.rawSpoil) .. ", salt spoil " .. n(ledger.saltSpoil))
+        .. ", raw spoil " .. n(ledger.rawSpoil) .. ", salt spoil " .. n(ledger.saltSpoil)
+        .. ", hard frost " .. n(ledger.hardFrost) .. ", cold fish wet " .. n(ledger.coldWet))
     say(string.format("A stack needs %d hours to salt dry and %d to cold dry.", F.DRY_HOURS, F.COLD_DRY_HOURS))
 end
 
@@ -81,11 +84,20 @@ function TPF.spoil(hours)
     hours = hours or 24
     local ledger = F.getLedger()
     ledger.rawSpoil, ledger.saltSpoil = ledger.rawSpoil + hours, ledger.saltSpoil + hours
-    say(string.format("Added %.0f hours of spoiling weather. A cold stack rots after %d.", hours, F.RAW_SPOIL_HOURS))
+    say(string.format("Added %.0f hours of spoiling weather. A fresh cold stack rots after %d.", hours, F.RAW_SPOIL_HOURS))
+end
+
+function TPF.frost(hours)
+    hours = hours or 24
+    local ledger = F.getLedger()
+    ledger.hardFrost = ledger.hardFrost + hours
+    say(string.format("Added %.0f hours of hard frost. A fresh cold stack loses %.0f%% of its keeping per %d hours, at most %.0f%%.",
+        hours, F.FREEZE_DAMAGE * 100, F.FREEZE_DAMAGE_HOURS, F.DAMAGE_CAP * 100))
 end
 
 function TPF.dry()
-    F.getLedger().wetness = 0
+    local ledger = F.getLedger()
+    ledger.wetness, ledger.coldWetness = 0, 0
     say("Wetness cleared.")
 end
 

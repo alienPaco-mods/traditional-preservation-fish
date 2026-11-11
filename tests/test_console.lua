@@ -14,6 +14,7 @@ function getClimateManager()
         getPrecipitationIntensity = function() return 0 end,
         getPrecipitationIsSnow = function() return false end,
         getWindIntensity = function() return 0.3 end,
+        getWindIntensity = function() return 0.3 end,
         getClimateForecaster = function()
             return { getForecast = function() return { getWindPower = function() return { getTotalMean = function() return 0.25 end } end } end }
         end,

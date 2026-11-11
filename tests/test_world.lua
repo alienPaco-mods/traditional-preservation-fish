@@ -26,6 +26,7 @@ function getClimateManager()
         getHumidity = function() return 0.4 end,
         getPrecipitationIntensity = function() return 0 end,
         getPrecipitationIsSnow = function() return false end,
+        getWindIntensity = function() return 0.3 end,
     }
 end
 local loaders = {}
@@ -137,6 +138,6 @@ local ledger = T.getLedger()
 local open = ledger.open
 H.setHours(101)
 H.fire("EveryTenMinutes")
-check("the world file records the weather", ledger.temperature == 20 and ledger.lastHour == 101 and near(ledger.open - open, 1))
+check("the world file records the weather", ledger.temperature == 20 and ledger.wind == 0.3 and ledger.lastHour == 101 and near(ledger.open - open, 1))
 
 H.done()

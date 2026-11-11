@@ -203,7 +203,7 @@ local function stackLines(recipeName, modData, ledger)
 end
 
 local winter = { wetness = 0, temperature = 0, coldRate = 1, openRate = 0.44, shelteredRate = 0.44 }
-local coldLines = stackLines("TraditionalPreservationFish.HangFishToColdDry", { dried = 240 }, winter)
+local coldLines = stackLines("TraditionalPreservationFish.HangFishToColdDry", { dried = 384 }, winter)
 check("a cold stack says so", coldLines["IGUI_TraditionalPreservationFish_Method:"] == "IGUI_TraditionalPreservationFish_MethodCold")
 check("and shows its real rate and progress", coldLines["IGUI_TraditionalPreservationFish_Rate:"] == "100%" and coldLines["IGUI_TraditionalPreservationFish_Progress:"] == "50%")
 check("with no warning in a cold season", coldLines["IGUI_TraditionalPreservationFish_Spoilage:"] == nil)

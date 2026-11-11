@@ -101,7 +101,7 @@ Pick **Hang Salt Pressed Fish to Dry**, load pressed fish, press **Craft**. Each
 3. **Hang**: pick **Hang Gutted Fish to Cold Dry** on the frame. Frozen fish is fine.
 4. **Rehydrate**: Cold Dried fish must be soaked (1 L water) before it can go into recipes.
 
-> ⚠ Cold drying **rots** if the season warms up. Hang only from November to March. See the Almanac.
+> ⚠ Cold drying **rots** if the season warms up. Hang from November to mid-February. See the Almanac.
 
 ---
 
@@ -140,24 +140,27 @@ The Hanging Beam and Gantry work exactly like the frame, with bigger stacks. Use
 Drying runs on real weather, recorded every 10 minutes, **even while you're away**.
 
 - **Salt drying**: 12 days at 20 C or warmer in dry air. Cold slows it down, even frost, but never stops it.
-- **Cold drying**: 20 days between -10 and 5 C. Slower from 5 to 10 C, and it stops above 10 C.
-- **Rain** pauses open stations until the fish dries off. Progress is **paused, never lost**. Snow pauses salt fish but not cold fish.
+- **Cold drying**: 32 days at full speed, between 0 and 5 C with a good wind. Slower in frost (four fifths at -5 C, three fifths below), slower from 5 to 10 C, and it stops above 10 C. **Wind** matters as much: still air halves the speed, a good breeze (the popup's *Good drying wind*) adds a fifth. A Kentucky winter's wind is mostly light, so a batch hung November to January takes about 50 to 55 days. Hang by mid-February at the latest.
+- **Fresh fish is fragile.** Until a cold stack is about 30% dried it has no dry skin: hard frost (below -5 C) and lying wet above freezing each take a little off how long the finished fish keeps, a quarter at most. Rot from a warm season also hits a fresh stack hardest and a nearly dry one hardly at all.
+- **Rain** pauses open stations until the fish dries off. Progress is **paused, never lost**. Snow pauses salt fish but not cold fish, and cold fish has to dry off after rain too.
 - **Under a roof**: rain can't reach it, but salt drying runs at about two thirds of the speed. Cold drying **stops** under a roof, as it needs moving air. Any roof overhead counts, walls or not: a porch roof or a floor laid on the level above is enough. Walls with no roof are still the open air.
 
-| Month | Salt, outdoors | Salt, roofed | Cold drying | Cold batches that rotted |
-|---|---|---|---|---|
-| Jan | 28–33 d | 27 d | 21–23 d | 0% |
-| Feb | 29–33 d | 27 d | 21–25 d | 0% |
-| Mar | 29–33 d | 27 d | 24–36 d | 7% |
-| Apr | 22–30 d | 24–27 d | 33 d | 97% |
-| May | 16–25 d | 22–25 d | — | 100% |
-| Jun | 16–20 d | 21–23 d | — | 100% |
-| Jul | 15–18 d | 21–23 d | — | 100% |
-| Aug | 17–24 d | 22–25 d | — | 100% |
-| Sep | 17–34 d | 23–27 d | — | 100% |
-| Oct | 30–34 d | 27 d | 23–30 d | 30% |
-| Nov | 29–30 d | 27 d | 21–23 d | 0% |
-| Dec | — | 27 d | 22 d | 0% |
+| Month | Salt, outdoors | Salt, roofed | Cold drying | Cold batches that rotted | Cold keeping lost |
+|---|---|---|---|---|---|
+| Jan | 28–33 d | 27 d | 51–55 d | 0% | 20% |
+| Feb | 29–33 d | 27 d | 52–93 d | 3% | 16% |
+| Mar | 29–33 d | 27 d | 74 d | 97% | 18% |
+| Apr | 22–30 d | 24–27 d | — | 100% | — |
+| May | 16–25 d | 22–25 d | — | 100% | — |
+| Jun | 16–20 d | 21–23 d | — | 100% | — |
+| Jul | 15–18 d | 21–23 d | — | 100% | — |
+| Aug | 17–24 d | 22–25 d | — | 100% | — |
+| Sep | 17–34 d | 23–27 d | — | 100% | — |
+| Oct | 30–34 d | 27 d | 52–57 d | 30% | 15% |
+| Nov | 29–30 d | 27 d | 50–52 d | 0% | 10% |
+| Dec | — | 27 d | — | — | — |
+
+December batches run past the end of the recorded forecasts, so they have no figure; expect about what January gives. *Keeping lost* is how much of a finished cold batch's keeping time early frost, early wet and a warm spell took, on average.
 
 ---
 
@@ -233,7 +236,8 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Tub won't accept more | It's full (50 weight or 35 items), pressing, or still has pressed fish in it |
 | Frame refuses a fish | It takes only Salt Pressed fish, or Gutted Fish and halves. Raw, frozen salted, rotten and cooked fish are refused, and a frame stack holds 2.5 weight at most |
 | Cold stack came out rotten | It was hung in a warm season: the last 10 days averaged above 10 C |
-| Not drying | Rain on an open frame; or cold drying under a roof |
+| Cold dried fish keeps less than a year | Hard frost or rain caught it in its first days on the frame |
+| Not drying | Rain on an open frame (cold fish too, until it dries off); or cold drying under a roof |
 | Time Remaining looks wrong in the window | The window shows the time in the best weather. Hover the stack for the real time left |
 | Pack Fish in Salt won't take a fish | A whole or gutted fish over 4.5 weight must be split first; or you don't carry enough salt for its size |
 | No Fish Head from gutting | The fish was 1.0 weight or less, or it was packed in salt (salted fish keep their heads) |
@@ -246,7 +250,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 | Option | Default | Effect |
 |---|---|---|
-| Salt drying time (days) | 12 | Salt drying in the best weather. Cold drying takes 5/3 as long (20 days by default) |
+| Salt drying time (days) | 12 | Salt drying in the best weather. Cold drying takes 8/3 as long (32 days by default) |
 | Slowest salt drying (days) | 27 | The longest cold or damp weather can stretch salt drying to. Rain pauses come on top |
 | Spoilage strictness | Normal | Off / Forgiving / Normal / Harsh |
 
@@ -260,10 +264,11 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 | Command | What it does |
 |---|---|
-| `TPF.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness, the drying speed open, under a roof and cold, whether unsalted and salted fish are spoiling, and the running totals. |
-| `TPF.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPF.age(288)` finishes a salt stack, `TPF.age(480)` a cold one. |
-| `TPF.spoil(hours)` | Adds spoiling weather, to test rotting. A cold stack rots after 48. |
-| `TPF.dry()` | Clears the wetness, so open frames start drying again at once after rain. |
+| `TPF.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness, the wind, the drying speed open, under a roof and cold, whether unsalted and salted fish are spoiling, and the running totals. |
+| `TPF.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPF.age(288)` finishes a salt stack, `TPF.age(768)` a cold one. |
+| `TPF.spoil(hours)` | Adds spoiling weather, to test rotting. A fresh cold stack rots after 48. |
+| `TPF.frost(hours)` | Adds hours of hard frost, to test early frost on a fresh cold stack (72 hours take a tenth of its keeping). |
+| `TPF.dry()` | Clears the wetness, so open and cold frames start drying again at once after rain. |
 | `TPF.fish(name, weight, n)` | Spawns `n` whole fish at that weight, with food scaled to match, e.g. `TPF.fish("Walleye", 4, 2)`. `TPF.fish()` lists the names. |
 | `TPF.heads(n)` | Spawns Fish Heads (default food values). |
 | `TPF.stock()` | Spawns a Pot of Fish Head Stock (default values, no head listed). |

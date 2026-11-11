@@ -87,7 +87,8 @@ local function drawStackTooltip(slot, tooltip, isCold)
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_Progress", UI.percent(status.progress))
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_TimeLeft", timeText(status.hoursLeft))
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_Temperature", getText(F.temperatureWord(isCold, ledger.temperature or 0)))
-        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Wetness", UI.percent(ledger.wetness))
+        if isCold then UI.addLine(layout, "IGUI_TraditionalPreservationFish_Wind", getText(F.windWord(ledger.wind))) end
+        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Wetness", UI.percent(isCold and ledger.coldWetness or ledger.wetness))
         if status.reason then
             UI.addLine(layout, "IGUI_TraditionalPreservationFish_Rate", getText("IGUI_TraditionalPreservationFish_Stopped" .. status.reason), UI.SLOW_COLOUR)
         else

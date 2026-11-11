@@ -68,11 +68,12 @@ Carpentry 4, Fishing 2. Takes 6 planks, 6 nails, 1 large hook and a hammer (kept
 Carpentry 6, Fishing 2. Takes 2 logs, 2 planks, 8 nails, 2 large hooks and a hammer (kept). Holds 2 stacks of up to 50 weight each. Outdoors only.
 
 [h2]Weather and seasons[/h2]
-Drying usually takes 12 to 30 in-game days.
+Drying usually takes 12 to 55 in-game days.
 
 [list]
 [*][b]Salt drying:[/b] 12 days at best, at 20 C or warmer. Cool weather slows it, but frost doesn't stop it, so a batch still finishes in about a month. Damp air slows it a little.
-[*][b]Cold drying:[/b] 20 days at best, between -10 C and 5 C. It's slower in deep frost and from 5 to 10 C, and pauses above that.
+[*][b]Cold drying:[/b] 32 days at best, between 0 C and 5 C in a good breeze. Frost, still air and mild weather slow it, and it pauses above 10 C. A batch hung November to January takes about 50 to 55 days.
+[*][b]Fresh fish is fragile:[/b] hard frost or rain in a cold stack's first days takes a little off how long it keeps.
 [*][b]Rain:[/b] pauses open stations until the fish has dried off. You lose time, not progress. Snow pauses salt drying but not cold drying.
 [/list]
 
@@ -92,7 +93,7 @@ Spoilage follows the average weather of about the last 10 days, so one warm afte
 [/list]
 
 [h3]Through the year[/h3]
-On default weather: cold dry from November to February (about 21 to 25 days). In March about 7% of cold batches rot, in October about 30%, and from April to September almost all. Salt drying takes about 15 to 24 days in summer and a month in winter.
+On default weather: cold dry from November to mid-February (about 50 to 55 days). Late in February a batch can run into the spring; in October about 30% of cold batches rot, in March almost all, and from April to September all of them. Salt drying takes about 15 to 24 days in summer and a month in winter.
 
 [h2]Weights and keeping times[/h2]
 Weights are shares of the original whole fish. Days are fresh, then rotten.
