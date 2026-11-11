@@ -16,6 +16,7 @@ end
 
 function TPF.help()
     say("TPF.weather()             the drying weather now: temperature, season, wetness, rates, spoilage and totals")
+    say("TPF.wind()                start a log of live wind every 10 minutes; again to print it beside the forecast")
     say("TPF.age(hours)            give every hanging stack this many hours of perfect drying weather")
     say("TPF.spoil(hours)          add this many hours of spoiling weather, to test rotting stacks")
     say("TPF.dry()                 clear the wetness, so open frames start drying again at once")
@@ -36,6 +37,37 @@ function TPF.weather()
     say("Totals (hours at full speed): open " .. n(ledger.open) .. ", roof " .. n(ledger.sheltered) .. ", cold " .. n(ledger.cold)
         .. ", raw spoil " .. n(ledger.rawSpoil) .. ", salt spoil " .. n(ledger.saltSpoil))
     say(string.format("A stack needs %d hours to salt dry and %d to cold dry.", F.DRY_HOURS, F.COLD_DRY_HOURS))
+end
+
+-- Wind probe for the cold-drying wind curve: live wind every 10 minutes against the day's forecast.
+local windLog
+local function sampleWind()
+    local climate = getClimateManager()
+    local forecast = climate:getClimateForecaster():getForecast()
+    local wet = climate:getPrecipitationIntensity() > 0
+    local s = windLog[wet and "wet" or "dry"]
+    local wind = climate:getWindIntensity()
+    s.n, s.sum, s.min, s.max = s.n + 1, s.sum + wind, math.min(s.min, wind), math.max(s.max, wind)
+    windLog.forecast = windLog.forecast + (forecast and forecast:getWindPower():getTotalMean() or 0)
+end
+
+function TPF.wind()
+    local function line(name, s)
+        if s.n == 0 then return say(name .. ": no samples") end
+        say(string.format("%s: %d samples, mean %.3f, min %.3f, max %.3f", name, s.n, s.sum / s.n, s.min, s.max))
+    end
+    if not windLog then
+        local function empty() return { n = 0, sum = 0, min = 1, max = 0 } end
+        windLog = { dry = empty(), wet = empty(), forecast = 0 }
+        Events.EveryTenMinutes.Add(sampleWind)
+        return say("Wind log started: live wind every 10 minutes. TPF.wind() again prints it and stops.")
+    end
+    Events.EveryTenMinutes.Remove(sampleWind)
+    line("Live wind, dry", windLog.dry)
+    line("Live wind, rain or snow", windLog.wet)
+    local n = windLog.dry.n + windLog.wet.n
+    if n > 0 then say(string.format("Forecast wind for the same days: mean %.3f", windLog.forecast / n)) end
+    windLog = nil
 end
 
 function TPF.age(hours)

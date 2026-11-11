@@ -1,5 +1,13 @@
 # Changelog: Traditional Preservation (Fish)
 
+## 0.2.9
+- Realism (ROADMAP §6, Volga salting): Pack Fish in Salt refuses a whole or gutted fish over 4.5 weight (about 2 kg,
+  `SALT_WHOLE_MAX`): gut and split it, then pack the halves. Smaller fish still go in whole with their heads, and
+  gutting is unchanged. The tooltip, guide and README say so.
+- Debug: `TPF.wind()` logs the live wind every 10 minutes, then prints it on dry and wet spells beside the
+  forecast's wind, for setting the cold-drying wind curve. `tools/climate_wind.csv` holds a year of the game's
+  forecast wind (one headless world per start month) for the season report.
+
 ## 0.2.8
 - Docs (2026-11-11 pass against the code): the season tables in the README and guide match `tools/season_report.lua`
   again (a day's difference in seven months; April's 3% of cold batches finish in 33 days); Fish Head Stock's

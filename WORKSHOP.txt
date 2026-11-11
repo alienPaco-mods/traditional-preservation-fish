@@ -25,7 +25,7 @@ Preserve your catch the old way. Salt it, press it and hang it to dry, or gut it
 [h2]Salt drying[/h2]
 
 [h3]1. Pack Fish in Salt[/h3]
-You need a raw fish or fillet, salt and a sharp knife or meat cleaver (kept). Salt goes by size: 2 for each started half weight of the packed fish, at least 2, so a bluegill takes 2 and a big catfish 36. A vanilla shaker holds 10. Rotten, frozen and cooked fish can't be packed. Salt Packed fish only keeps for days.
+You need a raw fish or fillet, salt and a sharp knife or meat cleaver (kept). Salt goes by size: 2 for each started half weight of the packed fish, at least 2, so a bluegill takes 2 and a 4.5 weight walleye 18. A vanilla shaker holds 10. A fish over 4.5 weight (about 2 kg) is too thick to salt whole: gut and split it, then pack the halves. Rotten, frozen and cooked fish can't be packed. Salt Packed fish only keeps for days.
 
 [h3]2. Build a Salting Tub[/h3]
 Carpentry 2, Fishing 2. Takes 4 planks, 6 nails, 2 twine, a hammer and a saw (both kept).

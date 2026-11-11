@@ -64,13 +64,15 @@ You catch more fish than you can eat. This mod turns that surplus into food that
 **Step 1. Pack Fish in Salt** (crafting menu)
 Raw fish or fillet + salt by its size + knife (kept) → **Salt Packed** fish.
 - Fresh, stale, even **part-eaten** fish works. Rotten, frozen or cooked doesn't.
+- **Big fish get split first:** a whole or gutted fish over **4.5 weight** (about 2 kg) is too thick to salt whole. **Gut Fish**, then **Split Fish**, and pack the halves. Bream-sized fish and smaller go in whole, heads on.
 - **Salt goes by weight:** 2 for each started half weight of the packed fish, at least 2. Carry it: only the first 2 can come from a container nearby.
 
 | Fish | Packed weight | Salt |
 |---|---|---|
 | Bluegill, 0.5 | 0.5 | 2 |
 | Walleye, 4.0 | 3.6 | 16 |
-| Catfish, 10.0 | 9.0 | 36 |
+| Walleye, 4.5 (the most salted whole) | 4.05 | 18 |
+| Catfish, 10.0: too big, gut and split | each half 4.0 | 16 a half |
 | Vanilla fillet of that catfish, 0.5 | 4.5 | 18 |
 
 - Any salt works: a vanilla shaker holds **10**, the Salt mod's Evaporated Salt **5** and a Bag of Salt **50**. Part-used salt goes first.
@@ -233,6 +235,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Cold stack came out rotten | It was hung in a warm season: the last 10 days averaged above 10 C |
 | Not drying | Rain on an open frame; or cold drying under a roof |
 | Time Remaining looks wrong in the window | The window shows the time in the best weather. Hover the stack for the real time left |
+| Pack Fish in Salt won't take a fish | A whole or gutted fish over 4.5 weight must be split first; or you don't carry enough salt for its size |
 | No Fish Head from gutting | The fish was 1.0 weight or less, or it was packed in salt (salted fish keep their heads) |
 | Create Fish Head Stock missing | The pot needs the full 1.5 L of water |
 | Can't divide the stock into bowls | Like vanilla stew, it needs a table or counter nearby, and enough bowls |

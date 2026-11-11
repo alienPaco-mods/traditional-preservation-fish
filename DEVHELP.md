@@ -7,6 +7,7 @@ These console commands load only when the game runs in **debug mode** (launch op
 | Command | What it does |
 |---|---|
 | `TPF.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness, the drying speed open, under a roof and cold, whether unsalted and salted fish are spoiling, and the running totals. |
+| `TPF.wind()` | Starts a log of the live wind (0-1) every 10 game minutes; run it again to print the mean, min and max on dry and on rainy or snowy spells, beside the forecast's mean wind for the same days, and stop. For setting the cold-drying wind curve. |
 | `TPF.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPF.age(288)` finishes a salt stack, `TPF.age(480)` a cold one. |
 | `TPF.spoil(hours)` | Adds spoiling weather, to test rotting. A cold stack rots after 48. |
 | `TPF.dry()` | Clears the wetness, so open frames start drying again at once after rain. |

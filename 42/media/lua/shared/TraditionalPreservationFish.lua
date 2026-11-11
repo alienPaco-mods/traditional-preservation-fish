@@ -46,6 +46,8 @@ F.FILLET_FOOD_WEIGHT = (1 - F.GUTS_WEIGHT) * 0.5 / F.FILLET_WEIGHT
 F.SALT_STEP = 0.5
 F.SALT_PER_STEP = 2
 F.SALT_MIN = 2
+-- A fish over this weight is too thick to salt whole, as on the Volga: gut and split it first. Halves always pack.
+F.SALT_WHOLE_MAX = 4.5
 -- Gut Fish takes the head off too, as stockfish did, and a fish over HEAD_MIN_WEIGHT gives a Fish
 -- Head for the pot: this share of its weight and of its food. The limit is above the guts' so small
 -- fish can't be farmed for heads. Salted fish keep their heads.
@@ -456,6 +458,13 @@ function F.saltFor(fish)
     return math.max(F.SALT_MIN, F.SALT_PER_STEP * steps)
 end
 
+-- A whole or gutted fish over SALT_WHOLE_MAX, which has to be split before it goes in the salt.
+function F.tooBigToSaltWhole(fish)
+    local whole = fish:hasTag(ItemTag.UNCUT_FISH) and not F.UNSLICEABLE[fish:getFullType()]
+    local gutted = fish:getFullType() == "TraditionalPreservationFish.GuttedFish"
+    return (whole or gutted) and fish:getActualWeight() > F.SALT_WHOLE_MAX
+end
+
 -- The salt the character carries, bags included, with uses left.
 local function saltCarried(character)
     local found = character:getInventory():getAllTagRecurse(ItemTag.SALT, ArrayList.new())
@@ -476,7 +485,9 @@ end
 -- OnTest sees every input, so the knife and the salt pass here too. The recipe finds its first SALT_MIN
 -- anywhere in reach; the rest must be on you.
 function F.canPack(item, character)
-    if not character or item:hasTag(ItemTag.SALT) or not instanceof(item, "Food") then return true end
+    if item:hasTag(ItemTag.SALT) or not instanceof(item, "Food") then return true end
+    if F.tooBigToSaltWhole(item) then return false end
+    if not character then return true end
     return F.saltCarried(character) >= F.saltFor(item)
 end
 

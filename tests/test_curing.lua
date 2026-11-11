@@ -725,6 +725,13 @@ check("the knife, the salt and a test without a character pass", T.canPack(newFo
 local shaker, loose, bag, spent = saltItem("Base.Salt", 10), saltItem("TraditionalPreservationSalt.LooseSalt", 5), saltItem("TraditionalPreservationSalt.BagOfSalt", 3), saltItem("Base.Salt", 0)
 carry(shaker, loose, bag, spent)
 check("18 can, and a used-up shaker doesn't count", T.canPack(walleye4, salter) and T.saltCarried(salter) == 18)
+check("a whole fish over 4.5 weight is too thick to salt whole",
+    not T.canPack(newFood("Base.Walleye", { ActualWeight = 4.6 }), salter)
+    and not T.canPack(newFood("Base.Walleye", { ActualWeight = 4.6 }), nil)
+    and T.canPack(newFood("Base.Walleye", { ActualWeight = 4.5 }), nil))
+check("so is a gutted one; a half of any size packs",
+    not T.canPack(newFood("TraditionalPreservationFish.GuttedFish", { ActualWeight = 9 }), nil)
+    and T.canPack(newFood("TraditionalPreservationFish.FishHalf", { ActualWeight = 9 }), nil))
 local returned
 TraditionalPreservationSalt = { returnEmpties = function(character, emptied) returned = { character = character, emptied = emptied } end }
 T.chargeSalt(walleye4, salter)

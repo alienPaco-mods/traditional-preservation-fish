@@ -13,6 +13,10 @@ function getClimateManager()
         getHumidity = function() return 0.4 end,
         getPrecipitationIntensity = function() return 0 end,
         getPrecipitationIsSnow = function() return false end,
+        getWindIntensity = function() return 0.3 end,
+        getClimateForecaster = function()
+            return { getForecast = function() return { getWindPower = function() return { getTotalMean = function() return 0.25 end } end } end }
+        end,
     }
 end
 local player = H.player()
@@ -23,6 +27,12 @@ local F = TraditionalPreservationFish
 local TPF, run = H.checkConsole("42/media/lua/client/TraditionalPreservationFishDev.lua", "TPF")
 
 check("weather prints the rates and the totals", run("weather"):find("Totals", 1, true) ~= nil)
+
+check("wind starts a log", run("wind"):find("started", 1, true) ~= nil)
+H.fire("EveryTenMinutes")
+local wind = run("wind")
+check("wind prints live and forecast wind", wind:find("dry: 1 samples, mean 0.300", 1, true) ~= nil
+    and wind:find("Forecast wind for the same days: mean 0.250", 1, true) ~= nil)
 
 local ledger = F.getLedger()
 local open, rawSpoil = ledger.open, ledger.rawSpoil
