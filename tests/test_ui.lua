@@ -312,4 +312,25 @@ check("holding the recipe as it was, then Rinse at Sink", moved.name == "Slice" 
 sink.isTaintedWater = function() return true end
 check("a sink of tainted water doesn't count", #rinseMenu({ stack }).options == 0)
 
+-- The pallet's right-click line
+local Tiles = require "TraditionalPreservationFish/Tiles"
+local function palletAt(z, place)
+    package.loaded["TraditionalPreservationCore/Weather"].placeOf = function() return place end
+    return { getSprite = function() return { getName = function() return Tiles.PALLET end } end,
+        getSquare = function() return { getZ = function() return z end } end }
+end
+local realPlaceOf = package.loaded["TraditionalPreservationCore/Weather"].placeOf
+local function palletLine(z, place)
+    local context = H.menu()
+    handlers.OnFillWorldObjectContextMenu(0, context, { palletAt(z, place) })
+    return context.options[1]
+end
+check("a loft pallet says x2", palletLine(1, "Sheltered").name == "ContextMenu_TraditionalPreservationFish_PalletSpeed")
+check("a covered one says it's no faster", palletLine(0, "Covered").name == "ContextMenu_TraditionalPreservationFish_PalletNoSpeed")
+check("the line explains the places on hover", palletLine(0, "Sheltered").toolTip.description == "Tooltip_craft_stockfishPalletDesc")
+local none = H.menu()
+handlers.OnFillWorldObjectContextMenu(0, none, { { getSprite = function() return nil end } })
+check("nothing for other objects", #none.options == 0)
+package.loaded["TraditionalPreservationCore/Weather"].placeOf = realPlaceOf
+
 H.done()

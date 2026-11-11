@@ -155,6 +155,15 @@ F.RINSED_KEEPING = 0.9
 F.RINSE_REACH = 3
 F.RINSE_TICKS = 60
 
+-- The Stockfish Pallet: stockfish on it ripens faster where the warehouses kept it, dry and airy. A loft (a room
+-- upstairs) PALLET_LOFT times the food clock, a ground-floor room PALLET_GROUND; covered, outdoors or a basement
+-- ("too damp") no faster than a shelf. Its stack shows a third, two thirds or full by the weight on it.
+F.PALLET_LOFT = 2
+F.PALLET_GROUND = 1.5
+F.PALLET_CAPACITY = 20
+F.PALLET_LEVELS = 3
+F.BALE_TYPE = "TraditionalPreservationFish.StockfishBale"
+
 -- From DryingCraftLogic, so the frame's wetness readout tells the truth.
 local RAIN_WETTING = 0.001  -- per game second, at full intensity
 local SNOW_WETTING = 0.5
@@ -813,6 +822,62 @@ function F.onCreateRinsed(craftRecipeData)
         F.rinse(target)
         target:setAge(source:getAge())
     end
+end
+
+-- How much faster a pallet ripens stockfish than a shelf: place is Weather.placeOf's (with Covered), z the floor.
+function F.palletSpeed(place, z)
+    if place ~= "Sheltered" then return 1 end
+    if z >= 1 then return F.PALLET_LOFT end
+    return F.PALLET_GROUND
+end
+
+function F.isStockfish(item)
+    local stage = F.STAGES[item:getFullType()]
+    return stage ~= nil and stage.matures == true
+end
+
+-- Calls fn on each stockfish in the container, and in the bales in it.
+function F.eachStockfish(container, fn)
+    local items = container:getItems()
+    for i = 0, items:size() - 1 do
+        local item = items:get(i)
+        if F.isStockfish(item) then
+            fn(item)
+        elseif item:getFullType() == F.BALE_TYPE and item:getInventory() then
+            F.eachStockfish(item:getInventory(), fn)
+        end
+    end
+end
+
+-- The stack to show, 1 to PALLET_LEVELS by the share of the pallet filled, or nil when it is empty or holds
+-- anything but stockfish and bales of it.
+function F.palletLevel(container)
+    local items = container:getItems()
+    if items:size() == 0 then return nil end
+    for i = 0, items:size() - 1 do
+        local item = items:get(i)
+        if not F.isStockfish(item) then
+            if item:getFullType() ~= F.BALE_TYPE then return nil end
+            local inside = item:getInventory():getItems()
+            for j = 0, inside:size() - 1 do
+                if not F.isStockfish(inside:get(j)) then return nil end
+            end
+        end
+    end
+    local share = container:getContentsWeight() / F.PALLET_CAPACITY
+    return math.max(1, math.min(F.PALLET_LEVELS, math.ceil(share * F.PALLET_LEVELS - 0.0001)))
+end
+
+-- Ripens the stockfish on a pallet by extra days of its food clock, by moving its stamp back. A ripe fish stays ripe.
+function F.ripenOnPallet(container, extraDays)
+    if extraDays <= 0 then return end
+    F.eachStockfish(container, function(fish)
+        local modData = fish:getModData()
+        if modData.matureAge and F.ripeness(fish) < 1 then
+            modData.matureAge = modData.matureAge - extraDays
+            F.rename(fish)
+        end
+    end)
 end
 
 -- The nearest sink, bathtub, barrel or well of clean water within RINSE_REACH on the character's floor with at least litres.

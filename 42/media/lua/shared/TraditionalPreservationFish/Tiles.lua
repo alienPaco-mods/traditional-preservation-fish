@@ -8,7 +8,7 @@ return {
         },
         {
             prefix = "traditionalpreservationfish_02_",
-            tiles = 304,
+            tiles = 312,
         },
     },
     FIRST_SHEET_SIZE = 408,
@@ -41,6 +41,8 @@ return {
             stacks = 2,
         },
     },
+    PALLET = "traditionalpreservationfish_02_304",
+    PALLET_STACKS = { "traditionalpreservationfish_02_305", "traditionalpreservationfish_02_306", "traditionalpreservationfish_02_307" },
     DRYING_STAGES = 5,
     STYLES = {
         SALT = 0,

@@ -31,7 +31,7 @@ NAME = "traditionalpreservationfish"
 # station with it. Tiles are numbered straight through both. The Lua reads these numbers from the generated Tiles.lua.
 TILESETS = [NAME + "_01", NAME + "_02"]
 COLUMNS = 8
-SHEET_ROWS = [51, 38]
+SHEET_ROWS = [51, 39]
 FIRST_SHEET_SIZE = COLUMNS * SHEET_ROWS[0]
 NAME_TITLE = "TraditionalPreservationFish"
 PAGE_SIZE = 2048
@@ -45,6 +45,18 @@ TUB, TUB_FILLED, TUB_WEIGHTED, FRAME, FISH = 0, 2, 4, 6, 8
 MEDIUM_BEAM, LARGE_BEAM, MEDIUM_FISH, LARGE_FISH = 408, 410, 412, 612
 MEDIUM_HOOKS, LARGE_HOOKS = 4, 2
 FACES = ["S", "E"]
+# The Stockfish Pallet (one face, like vanilla's crates) and its stack of stockfish at a third, two thirds and full.
+PALLET, PALLET_STACK = 712, 713
+PALLET_LEVELS = [3, 6, 10]  # layers of fish
+PALLET_SPRITE = "construction_01_5"  # vanilla's Empty Pallet, in Tiles2x.pack
+PALLET_TOP_Z = 16  # its boards, in pixels above the floor
+STACK_LAYER_Z = 5
+STACK_HALF = 0.4  # how far the necks reach from the middle, in tiles
+STACK_FISH_LENGTH = 0.44
+STACK_ROW = [-0.3, -0.15, 0.0, 0.15, 0.3]  # where the fish of a row lie across it
+STACK_FISH = ["Fish_Walleye", "Fish_Sauger", "Fish_PerchYellow"]
+STACK_SHADE = 0.55  # the underside of each layer
+STACK_BOTTOM_LIGHT = 0.8  # the lowest layer; the top one is 1
 
 # The tub: a wide coopered bucket of tilted staves with two iron hoops. Radii and heights in pixels.
 TUB_BASE_RX, TUB_RIM_RX, TUB_HEIGHT = 27.0, 33.0, 44.0
@@ -222,6 +234,11 @@ def fish_index(face_index, slot, stage, first=FISH, slots=len(SLOTS)):
 
 
 TILE_PROPS = {}
+TILE_PROPS[PALLET] = [("BlocksPlacement", ""), ("CanScrap", ""), ("container", "stockfishpallet"), ("ContainerCapacity", "20"),
+                      ("CustomName", "Pallet"), ("GroupName", "Stockfish"), ("IsLow", ""), ("IsMoveAble", ""),
+                      ("Material", "Wood"), ("Material2", "Nails"), ("PickUpWeight", "50"), ("ScrapSize", "Small")]
+for level in range(len(PALLET_LEVELS)):
+    TILE_PROPS[PALLET_STACK + level] = []
 for face_index, face in enumerate(FACES):
     TILE_PROPS[TUB + face_index] = station_props("Tub", "Salting", face, "100")
     TILE_PROPS[FRAME + face_index] = station_props("Frame", "Drying", face, "100")
@@ -972,6 +989,67 @@ def tile_name(index):
     return f"{TILESETS[1]}_{index - FIRST_SHEET_SIZE}"
 
 
+def stack_fish(icons, name, seed):
+    """A gutted stockfish lying flat, neck down the image, sized for the floor canvas of stack_layer."""
+    icon = headless_icon(icons[f"Item_{name}"], name)
+    big = icon.resize((icon.width * 8, icon.height * 8), Image.NEAREST)
+    upright = big.rotate(long_axis(icon) + 90, resample=Image.BICUBIC, expand=True)
+    upright = upright.crop(upright.getbbox())
+    colour, strength, grains = fish_stage(FISH_STAGES - 1, FRESH_COLD_FISH, DONE_COLD_FISH)
+    return stage_icon(upright, colour, strength, grains, seed)
+
+
+def stack_layer(icons, layer, canvas):
+    """One layer of the stack on a flat canvas of the floor (canvas pixels a tile): two rows of fish, necks out and
+    tails overlapping in the middle, turned a quarter each layer as real stacks are laid."""
+    floor = Image.new("RGBA", (canvas, canvas), (0, 0, 0, 0))
+    rng = random.Random(f"stack{layer}")
+    for side in (-1, 1):
+        for across in STACK_ROW:
+            fish = stack_fish(icons, rng.choice(STACK_FISH), layer * 11 + int(across * 100) + side)
+            scale = STACK_FISH_LENGTH * canvas / fish.height
+            fish = fish.resize((max(1, round(fish.width * scale)), max(1, round(fish.height * scale))), Image.LANCZOS)
+            # Upright the neck points down the image (+y); turn it to point out along +x or -x, or +y or -y.
+            along_x = layer % 2 == 0
+            angle = (90 if side > 0 else -90) if along_x else (0 if side > 0 else 180)
+            fish = fish.rotate(angle + rng.uniform(-6, 6), resample=Image.BICUBIC, expand=True)
+            out = side * (STACK_HALF - STACK_FISH_LENGTH / 2) + rng.uniform(-0.02, 0.02)
+            spread = across + rng.uniform(-0.03, 0.03)
+            x, y = (out, spread) if along_x else (spread, out)
+            floor.alpha_composite(fish, (round((x + 0.5) * canvas - fish.width / 2), round((y + 0.5) * canvas - fish.height / 2)))
+    return floor
+
+
+def to_tile(floor, z):
+    """Lays a floor canvas (x and y from -0.5 to 0.5 tile) onto the supersampled tile, z pixels up."""
+    canvas = floor.width
+    f0, f1 = FOOT[0] * SS, (FOOT[1] - z) * SS
+    hw, hh = pzart.DIAMOND_HALF_W * SS, pzart.DIAMOND_HALF_H * SS
+    # u = (x + 0.5) canvas, with x - y = (X - f0) / hw and x + y = (Y - f1) / hh.
+    a, b = canvas / (2 * hw), canvas / (2 * hh)
+    coefficients = (a, b, canvas / 2 - a * f0 - b * f1, -a, b, canvas / 2 + a * f0 - b * f1)
+    return floor.transform((TILE_W * SS, TILE_H * SS), Image.AFFINE, coefficients, resample=Image.BICUBIC)
+
+
+def shaded(layer, amount):
+    rgb = layer.convert("RGB").point(lambda v: int(v * amount))
+    result = rgb.convert("RGBA")
+    result.putalpha(layer.getchannel("A"))
+    return result
+
+
+def paint_pallet_stack(icons, layers):
+    tile = new_layer()
+    for layer in range(layers):
+        floor = to_tile(stack_layer(icons, layer, 512), PALLET_TOP_Z + layer * STACK_LAYER_Z)
+        light = STACK_BOTTOM_LIGHT + (1 - STACK_BOTTOM_LIGHT) * layer / max(1, PALLET_LEVELS[-1] - 1)
+        # The layer's edge, a little below it, then the layer itself.
+        edge = floor.transform(floor.size, Image.AFFINE, (1, 0, 0, 0, 1, -STACK_LAYER_Z * SS * 0.6))
+        tile.alpha_composite(shaded(edge, STACK_SHADE * light))
+        tile.alpha_composite(shaded(floor, light))
+    return pzart.hard_edges(shrink(tile))
+
+
 def build_tiles(game=GAME):
     icons = read_icons(game)
     tiles = {}
@@ -991,6 +1069,9 @@ def build_tiles(game=GAME):
             for slot, point in enumerate(hooks):
                 for stage in range(FISH_STAGES * FISH_STYLES):
                     tiles[fish_index(index, slot, stage, first, len(hooks))] = paint_hook_fish_tile(icons, face, slot, stage, point, size, scale, mask)
+    tiles[PALLET] = pzart.extract_sprites(game / "media/texturepacks/Tiles2x.pack", {PALLET_SPRITE})[PALLET_SPRITE]
+    for level, layers in enumerate(PALLET_LEVELS):
+        tiles[PALLET_STACK + level] = paint_pallet_stack(icons, layers)
     return tiles
 
 
@@ -1013,6 +1094,8 @@ def lua_tiles():
             "medium": {"base": MEDIUM_BEAM, "fishSprite": MEDIUM_FISH, "stacks": MEDIUM_HOOKS},
             "large": {"base": LARGE_BEAM, "fishSprite": LARGE_FISH, "stacks": LARGE_HOOKS},
         },
+        "PALLET": tile_name(PALLET),
+        "PALLET_STACKS": [tile_name(PALLET_STACK + level) for level in range(len(PALLET_LEVELS))],
         "DRYING_STAGES": FISH_STAGES,
         "STYLES": {name: style for style, name in enumerate(STYLE_NAMES)},
     }
@@ -1043,6 +1126,9 @@ def main():
         for slot in range(hooks):
             icon.alpha_composite(tiles[fish_index(0, slot, FISH_STAGES - 1, first, hooks)])
         pzart.write_build_icon(icon, media / "textures" / f"Item_DryingBeam{name}.png")
+    pallet = tiles[PALLET].copy()
+    pallet.alpha_composite(tiles[PALLET_STACK + len(PALLET_LEVELS) - 1])
+    pzart.write_build_icon(pallet, media / "textures" / "Item_StockfishPallet.png")
     # The mod list shows the large beam, which is `icon` in mod.info.
     # Its posts run off the bottom, so the fish stay big enough to read.
     pzart.write_mod_icon(icon, media.parent / "icon.png", keep=MOD_ICON_KEEP)

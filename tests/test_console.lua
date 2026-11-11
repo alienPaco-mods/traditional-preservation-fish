@@ -60,4 +60,26 @@ check("heads, stock and salt land in the inventory", #player.given == 6
     and player.given[3] == "TraditionalPreservationFish.FishHead"
     and player.given[5] == "TraditionalPreservationFish.PotOfFishHeadStock" and player.given[6] == "Base.Salt")
 
+local stamped = {}
+player:getInventory().AddItem = function(_, fullType)
+    table.insert(player.given, fullType)
+    local modData, fish = {}, { fullType = fullType }
+    function fish:getModData() return modData end
+    function fish:getFullType() return self.fullType end
+    function fish:getAge() return 3 end
+    function fish:getModelIndex() return 0 end
+    function fish:getDisplayName() return self.name or "" end
+    function fish:setName(name) self.name = name end
+    function fish:setCustomName() end
+    function fish:setTooltip(tooltip) self.tooltip = tooltip end
+    table.insert(stamped, fish)
+    return fish
+end
+H.installGetText()
+run("stockfish", 2)
+check("stockfish gives unripe Cold Dried fish", #stamped == 2 and stamped[1].fullType == "TraditionalPreservationFish.ColdDriedFish"
+    and stamped[1]:getModData().matureAge == 3 and stamped[1].name == "Walleye (Cold Dried, Unripe)")
+function getCell() return { getGridSquare = function() return nil end } end
+check("pallet says when there is none near", run("pallet"):find("No Stockfish Pallet", 1, true) ~= nil)
+
 H.done()

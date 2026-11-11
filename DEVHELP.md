@@ -14,6 +14,9 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPF.heat(hours)` | Adds hours of hot sun (above 25 C). An open salt stack under half dried loses 5% of its keeping per 24 hours, times how wet it still is, at most a quarter. |
 | `TPF.warmCure(hours)` | Adds hours of a warm cure at 25 C (1.5 x hours to `warmCure`). A batch in the tub loses about 0.8% of its keeping per hour. |
 | `TPF.dry()` | Clears the wetness, so open and cold frames start drying again at once after rain. |
+| `TPF.mature(days)` | Ages the Cold Dried fish you carry by this many days. Ripe after 60. |
+| `TPF.stockfish(n)` | Spawns n unripe Cold Dried fish, as if fresh off the frame, for the pallet. |
+| `TPF.pallet()` | Reports the Stockfish Pallet within 3 tiles: its place, how much faster it ripens, its stack (1-3 or none), its stockfish and the ripest one. |
 | `TPF.fish(name, weight, n)` | Spawns `n` whole fish at that weight, with food scaled to match, e.g. `TPF.fish("Walleye", 4, 2)`. `TPF.fish()` lists the names. |
 | `TPF.heads(n)` | Spawns Fish Heads (default food values). |
 | `TPF.stock()` | Spawns a Pot of Fish Head Stock (default values, no head listed). |

@@ -106,6 +106,8 @@ Pick **Hang Salt Pressed Fish to Dry**, load pressed fish, press **Craft**. Each
 2. **Split Fish** (optional): a gutted fish over 2.5 weight can be split into two **Fish Halves**.
 3. **Hang**: pick **Hang Gutted Fish to Cold Dry** on the frame. Frozen fish is fine.
 4. **Let it mature**: stockfish ripens in storage over **60 days**, in any container (a fridge slows it, a freezer stops it). The name reads *(Cold Dried, Unripe)* until it's *(Cold Dried, Ripe)*, and the tooltip shows the percentage.
+   **Stockfish Pallet** (build menu: hammer, saw, 3 planks, 6 nails, Carpentry 2): stack your stockfish on it the way the warehouses did. In a **loft** (a room upstairs) it ripens **twice as fast** (30 days); in a **ground-floor room**, half as fast again (40 days). Covered, outdoors or down in a damp basement it does no better than a shelf. It holds 20 weight, and the stack on it grows from a third to full as you load it, as long as nothing but stockfish is on it.
+
 5. **Rehydrate**: Cold Dried fish must be soaked (1 L water) before it can go into recipes. Ripe stockfish cheers you up (unhappiness -10), and so does the stew it goes into. Unripe, it's dull (+10). Halfway, it's neither.
 
 > ⚠ Cold drying **rots** if the season warms up. Hang from November to mid-February. See the Almanac.

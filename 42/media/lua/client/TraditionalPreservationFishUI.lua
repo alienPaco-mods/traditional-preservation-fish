@@ -5,6 +5,7 @@
 require "Entity/ISUI/Components/Crafting/ISCraftLogicPanel"
 require "Entity/ISUI/Controls/ISItemSlot"
 local UI = require "TraditionalPreservationCore/UI"
+local Weather = require "TraditionalPreservationCore/Weather"
 local Tiles = require "TraditionalPreservationFish/Tiles"
 local F = TraditionalPreservationFish
 
@@ -235,3 +236,28 @@ local function onFillRinseMenu(playerNum, context, items)
 end
 
 Events.OnFillInventoryObjectContextMenu.Add(onFillRinseMenu)
+
+-- The Stockfish Pallet has no window: its right-click menu says what it does where it stands.
+local PALLET_PLACES = { [F.PALLET_LOFT] = "IGUI_TraditionalPreservationFish_PalletLoft", [F.PALLET_GROUND] = "IGUI_TraditionalPreservationFish_PalletGround" }
+
+local function onFillPalletMenu(playerNum, context, worldobjects, test)
+    for _, object in ipairs(worldobjects) do
+        local sprite = object:getSprite()
+        if sprite and sprite:getName() == Tiles.PALLET then
+            if test then return end
+            local square = object:getSquare()
+            local speed = F.palletSpeed(Weather.placeOf(object, true), square and square:getZ() or 0)
+            local text = PALLET_PLACES[speed]
+                and getText("ContextMenu_TraditionalPreservationFish_PalletSpeed", tostring(speed), getText(PALLET_PLACES[speed]))
+                or getText("ContextMenu_TraditionalPreservationFish_PalletNoSpeed")
+            local option = context:addOption(text)
+            option.iconTexture = getTexture("Item_StockfishPallet")
+            local tooltip = ISWorldObjectContextMenu.addToolTip()
+            tooltip.description = getText("Tooltip_craft_stockfishPalletDesc")
+            option.toolTip = tooltip
+            return
+        end
+    end
+end
+
+Events.OnFillWorldObjectContextMenu.Add(onFillPalletMenu)

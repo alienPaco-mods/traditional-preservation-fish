@@ -24,6 +24,8 @@ function TPF.help()
     say("TPF.warmCure(hours)       add this many hours of a warm cure at 25 C, to test souring in a running tub")
     say("TPF.dry()                 clear the wetness, so open and cold frames start drying again at once")
     say("TPF.mature(days)          age the Cold Dried fish you carry by this many days, to test ripening")
+    say("TPF.stockfish(n)          spawn n unripe Cold Dried fish (fresh off the frame), for the pallet")
+    say("TPF.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
     say("TPF.fish(name, weight, n) spawn n whole fish, e.g. TPF.fish(\"Walleye\", 4, 2). TPF.fish() lists the names")
     say("TPF.heads(n)              spawn n Fish Heads")
     say("TPF.stock()               spawn a Pot of Fish Head Stock")
@@ -176,6 +178,44 @@ end
 function TPF.salt(count)
     give("Base.Salt", count)
     say("Gave " .. (count or 1) .. " Salt shaker(s).")
+end
+
+function TPF.stockfish(count)
+    for _, fish in ipairs(give("TraditionalPreservationFish.ColdDriedFish", count)) do
+        fish:getModData().fishName = "Walleye"
+        fish:getModData().matureAge = fish:getAge()
+        F.rename(fish)
+    end
+    say(string.format("Gave %d unripe Cold Dried fish. Ripe after %d days on a shelf.", count or 1, F.MATURE_DAYS))
+end
+
+function TPF.pallet()
+    local Weather = require "TraditionalPreservationCore/Weather"
+    local Tiles = require "TraditionalPreservationFish/Tiles"
+    local player = getPlayer()
+    local px, py, z = math.floor(player:getX()), math.floor(player:getY()), math.floor(player:getZ())
+    for x = px - 3, px + 3 do
+        for y = py - 3, py + 3 do
+            local square = getCell():getGridSquare(x, y, z)
+            local objects = square and square:getObjects()
+            for i = 0, objects and objects:size() - 1 or -1 do
+                local object = objects:get(i)
+                if object:getSprite() and object:getSprite():getName() == Tiles.PALLET and object:getContainer() then
+                    local place = Weather.placeOf(object, true)
+                    local count, ripest = 0, 0
+                    F.eachStockfish(object:getContainer(), function(fish)
+                        count = count + 1
+                        ripest = math.max(ripest, F.ripeness(fish))
+                    end)
+                    say(string.format("Pallet at %d,%d floor %d: %s, ripens x%.1f (%d days to ripe). Stack: %s. %d stockfish, ripest %.0f%%.",
+                        x, y, z, place, F.palletSpeed(place, z), F.MATURE_DAYS / F.palletSpeed(place, z),
+                        tostring(F.palletLevel(object:getContainer()) or "none"), count, ripest * 100))
+                    return
+                end
+            end
+        end
+    end
+    say("No Stockfish Pallet within 3 tiles on this floor.")
 end
 
 say("Debug commands loaded. Type TPF.help() in the Lua console.")

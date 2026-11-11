@@ -60,5 +60,8 @@
   "IGUI_TraditionalPreservationFish_FrameFull": "The frame has no spots left",
   "IGUI_TraditionalPreservationFish_Head": "%1 Head",
   "IGUI_TraditionalPreservationFish_StockWith": "%1 with %2",
-  "IGUI_TraditionalPreservationFish_Rinsed": "Rinsed"
+  "IGUI_TraditionalPreservationFish_Rinsed": "Rinsed",
+  "IGUI_ContainerTitle_stockfishpallet": "Stockfish Pallet",
+  "IGUI_TraditionalPreservationFish_PalletLoft": "loft",
+  "IGUI_TraditionalPreservationFish_PalletGround": "ground-floor room"
 }

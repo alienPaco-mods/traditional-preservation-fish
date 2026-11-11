@@ -1,0 +1,12 @@
+module Base
+{
+    xuiSkin default
+    {
+        entity ES_StockfishPallet
+        {
+            LuaWindowClass = ISEntityWindow,
+            DisplayName = Stockfish Pallet,
+            Icon = Item_StockfishPallet,
+        }
+    }
+}
