@@ -1,5 +1,21 @@
 # Changelog: Traditional Preservation (Fish)
 
+## 0.3.6
+- **Stockfish Bale** (ROADMAP §6, pallet pitch C; user picks 2026-11-11: capacity 10, weight reduction 30, new icon
+  and new world model, tie and untie from the right-click menu). A container item (`StockfishBale`, the pallet's
+  `F.BALE_TYPE`) that takes only stockfish (`AcceptItemFunction = TraditionalPreservationFish.acceptBale`, any
+  Cold Dried fish, gutted or half). Fish in it keep their own clocks and ripen on a pallet as loose ones do.
+- **Tie a Bale** in the fish's submenu on selected stockfish: up to 10 weight of them (`F.baleLoad`, the rest stay
+  out) with one use of Twine, or a Rope if there's no Twine (`F.findCord`); greyed out with "Needs Twine or a Rope"
+  otherwise. **Untie Bale** on a bale: its fish and the cord come back (a Twine of one use, or the Rope). The bale
+  records the cord (`cord` in its modData; a bale without one gives back Twine) and weighs it (0.1 or 0.8, saved
+  as a custom weight). Timed actions `TPFishTieBale` (120 ticks) and `TPFishUntieBale` (60).
+- Art: `tools/build_model.py` (new) writes the bale's ground model `Models_X/StockfishBale.glb` (seven stockfish in
+  three layers, heads and tails alternating, two twine bands; FuelBarrel's glb writer), its texture and its icon
+  (three Cold Dried fish icons stacked under a band). In-game size: `scale` of `StockfishBaleGround`.
+- Tests: bale rules and cords in `test_pallet.lua`, the menus in `test_ui.lua` (its event stand-in now chains
+  handlers as the game does).
+
 ## 0.3.5
 - **Stockfish Pallet** (ROADMAP §6, user 2026-11-11, from a photo of stockfish maturing stacked on pallets): built from
   the build menu (hammer and saw kept, 3 planks, 6 nails, Carpentry 2). A 20 weight container from its tile

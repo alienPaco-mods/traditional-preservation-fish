@@ -3,5 +3,7 @@
   "ContextMenu_EvolvedRecipe_FishHeadStockForged": "Fish Head Stock",
   "ContextMenu_TraditionalPreservationFish_RinseAtSink": "Rinse at Sink",
   "ContextMenu_TraditionalPreservationFish_PalletSpeed": "Stockfish Pallet: ripens stockfish x%1 (%2)",
-  "ContextMenu_TraditionalPreservationFish_PalletNoSpeed": "Stockfish Pallet: no faster than a shelf here"
+  "ContextMenu_TraditionalPreservationFish_PalletNoSpeed": "Stockfish Pallet: no faster than a shelf here",
+  "ContextMenu_TraditionalPreservationFish_TieBale": "Tie a Bale",
+  "ContextMenu_TraditionalPreservationFish_UntieBale": "Untie Bale"
 }

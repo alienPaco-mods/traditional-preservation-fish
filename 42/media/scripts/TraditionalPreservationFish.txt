@@ -26,6 +26,14 @@ module TraditionalPreservationFish
         scale = 0.3,
     }
 
+    /* A bale of stockfish tied with a band, from tools/build_model.py. */
+    model StockfishBaleGround
+    {
+        mesh = StockfishBale,
+        texture = StockfishBaleModel,
+        scale = 0.54,
+    }
+
     /* Gutted fish still looks like a fish, and a half is a fillet with its skin on. */
     model GuttedFishGround
     {
@@ -159,6 +167,21 @@ module TraditionalPreservationFish
         WorldStaticModel = TraditionalPreservationFish.ColdDriedFishGround,
         WorldStaticModelsByIndex = TraditionalPreservationFish.ColdDriedFishGround;TraditionalPreservationFish.ColdDriedFishGround;TraditionalPreservationFish.Cold_Fish_BassLargemouth;TraditionalPreservationFish.Cold_Fish_BassSmallmouth;TraditionalPreservationFish.Cold_Fish_BassSpotted;TraditionalPreservationFish.Cold_Fish_BassStriped;TraditionalPreservationFish.Cold_Fish_Walleye;TraditionalPreservationFish.Cold_Fish_Sauger;TraditionalPreservationFish.Cold_Fish_CrappieBlack;TraditionalPreservationFish.Cold_Fish_CrappieWhite;TraditionalPreservationFish.Cold_Fish_Bluegill;TraditionalPreservationFish.Cold_Fish_SunfishRedear;TraditionalPreservationFish.Cold_Fish_SunfishGreen;TraditionalPreservationFish.Cold_Fish_CatfishBlue;TraditionalPreservationFish.Cold_Fish_CatfishChannel;TraditionalPreservationFish.Cold_Fish_CatfishFlathead;TraditionalPreservationFish.Cold_Fish_Muskellunge;TraditionalPreservationFish.Cold_Fish_BassWhite;TraditionalPreservationFish.Cold_Fish_PerchYellow;TraditionalPreservationFish.Cold_Fish_DrumFreshwater;TraditionalPreservationFish.Cold_Fish_GarAlligator;TraditionalPreservationFish.Cold_Fish_Paddlefish;TraditionalPreservationFish.ColdDriedFishGround;TraditionalPreservationFish.ColdDriedFishGround;TraditionalPreservationFish.Cold_Fish_BassLargemouth;TraditionalPreservationFish.Cold_Fish_BassSmallmouth;TraditionalPreservationFish.Cold_Fish_BassSpotted;TraditionalPreservationFish.Cold_Fish_BassStriped;TraditionalPreservationFish.Cold_Fish_Walleye;TraditionalPreservationFish.Cold_Fish_Sauger;TraditionalPreservationFish.Cold_Fish_CrappieBlack;TraditionalPreservationFish.Cold_Fish_CrappieWhite;TraditionalPreservationFish.Cold_Fish_Bluegill;TraditionalPreservationFish.Cold_Fish_SunfishRedear;TraditionalPreservationFish.Cold_Fish_SunfishGreen;TraditionalPreservationFish.Cold_Fish_CatfishBlue;TraditionalPreservationFish.Cold_Fish_CatfishChannel;TraditionalPreservationFish.Cold_Fish_CatfishFlathead;TraditionalPreservationFish.Cold_Fish_Muskellunge;TraditionalPreservationFish.Cold_Fish_BassWhite;TraditionalPreservationFish.Cold_Fish_PerchYellow;TraditionalPreservationFish.Cold_Fish_DrumFreshwater;TraditionalPreservationFish.Cold_Fish_GarAlligator;TraditionalPreservationFish.Cold_Fish_Paddlefish;TraditionalPreservationFish.ColdDriedFishGround;TraditionalPreservationFish.ColdDriedFishGround;TraditionalPreservationFish.ColdHalf_Fish_BassLargemouth;TraditionalPreservationFish.ColdHalf_Fish_BassSmallmouth;TraditionalPreservationFish.ColdHalf_Fish_BassSpotted;TraditionalPreservationFish.ColdHalf_Fish_BassStriped;TraditionalPreservationFish.ColdHalf_Fish_Walleye;TraditionalPreservationFish.ColdHalf_Fish_Sauger;TraditionalPreservationFish.ColdHalf_Fish_CrappieBlack;TraditionalPreservationFish.ColdHalf_Fish_CrappieWhite;TraditionalPreservationFish.ColdHalf_Fish_Bluegill;TraditionalPreservationFish.ColdHalf_Fish_SunfishRedear;TraditionalPreservationFish.ColdHalf_Fish_SunfishGreen;TraditionalPreservationFish.ColdHalf_Fish_CatfishBlue;TraditionalPreservationFish.ColdHalf_Fish_CatfishChannel;TraditionalPreservationFish.ColdHalf_Fish_CatfishFlathead;TraditionalPreservationFish.ColdHalf_Fish_Muskellunge;TraditionalPreservationFish.ColdHalf_Fish_BassWhite;TraditionalPreservationFish.ColdHalf_Fish_PerchYellow;TraditionalPreservationFish.ColdHalf_Fish_DrumFreshwater;TraditionalPreservationFish.ColdHalf_Fish_GarAlligator;TraditionalPreservationFish.ColdHalf_Fish_Paddlefish,
         Tooltip = Tooltip_TraditionalPreservationFish_ColdDried,
+    }
+
+    /* Stockfish tied up for carrying and storing. Tied and untied from the right-click menu; the bale weighs
+       what tied it (TraditionalPreservationFish.tieBale), and only stockfish goes in. */
+    item StockfishBale
+    {
+        DisplayCategory = Container,
+        ItemType = base:container,
+        Weight = 0.1,
+        Icon = StockfishBale,
+        Capacity = 10,
+        WeightReduction = 30,
+        AcceptItemFunction = TraditionalPreservationFish.acceptBale,
+        WorldStaticModel = TraditionalPreservationFish.StockfishBaleGround,
+        Tooltip = Tooltip_TraditionalPreservationFish_StockfishBale,
     }
 
     /* Water back in, so it spoils like fresh fish again. */

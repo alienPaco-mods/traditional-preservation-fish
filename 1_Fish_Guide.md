@@ -107,6 +107,7 @@ Pick **Hang Salt Pressed Fish to Dry**, load pressed fish, press **Craft**. Each
 3. **Hang**: pick **Hang Gutted Fish to Cold Dry** on the frame. Frozen fish is fine.
 4. **Let it mature**: stockfish ripens in storage over **60 days**, in any container (a fridge slows it, a freezer stops it). The name reads *(Cold Dried, Unripe)* until it's *(Cold Dried, Ripe)*, and the tooltip shows the percentage.
    **Stockfish Pallet** (build menu: hammer, saw, 3 planks, 6 nails, Carpentry 2): stack your stockfish on it the way the warehouses did. In a **loft** (a room upstairs) it ripens **twice as fast** (30 days); in a **ground-floor room**, half as fast again (40 days). Covered, outdoors or down in a damp basement it does no better than a shelf. It holds 20 weight, and the stack on it grows from a third to full as you load it, as long as nothing but stockfish is on it.
+   **Stockfish Bale**: select stockfish, right-click, **Tie a Bale**. It takes one use of Twine (or a Rope) and ties up to 10 weight of fish, which then carry 30% lighter. A bale holds nothing but stockfish, and the fish inside keep ripening, on a pallet too. **Untie Bale** gives you the fish and your cord back.
 
 5. **Rehydrate**: Cold Dried fish must be soaked (1 L water) before it can go into recipes. Ripe stockfish cheers you up (unhappiness -10), and so does the stew it goes into. Unripe, it's dull (+10). Halfway, it's neither.
 
@@ -227,6 +228,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 - **Stockfish** comes from the Lofoten islands of northern Norway, hung on wooden racks called *hjell* from February to May. It was traded across Europe from the Viking age on, and keeps for years.
 - **Stockfish was never eaten off the rack.** After about three months on the *hjell*, it was stacked on pallets in dry, airy warehouses for two or three more months to mature, then sorted by hand into a dozen or more grades for Italy, Nigeria and the rest of the trade.
+- **Stockfish still travels in bales.** It is pressed and tied into bales of 25 or 50 kg, wrapped in jute, for the trip south.
 - **The heads weren't wasted.** Norway still dries its stockfish heads separately, and ships them to West Africa, where they're prized for soups and stews.
 - **Bacalhau** (Portuguese) and **klippfisk** (Norwegian) are salt cod, salted, pressed and dried on rocks in the sun. Portugal is said to have a different bacalhau recipe for every day of the year.
 - **On the lower Volga** around Astrakhan, large salted fish such as pike are hung from hooks to dry, and smaller ones dried whole with their heads on.

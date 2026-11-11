@@ -172,15 +172,15 @@ end)
 
 -- Rinse at Sink: the Rinse recipe takes carried water, and this takes it from the nearest sink, bathtub, barrel or
 -- well of clean water, walking there. It goes in the fish's own submenu, beside the recipe, for every selected fish.
-local function selectedFish(items)
+local function selectedFish(items, wanted)
     local fish = {}
     for _, entry in ipairs(items) do
         if instanceof(entry, "InventoryItem") then
-            if F.canRinse(entry) then table.insert(fish, entry) end
+            if wanted(entry) then table.insert(fish, entry) end
         else
             -- A collapsed stack lists its first item twice.
             for i = 2, #entry.items do
-                if F.canRinse(entry.items[i]) then table.insert(fish, entry.items[i]) end
+                if wanted(entry.items[i]) then table.insert(fish, entry.items[i]) end
             end
         end
     end
@@ -223,7 +223,7 @@ local function fishSubMenu(context, fish)
 end
 
 local function onFillRinseMenu(playerNum, context, items)
-    local fish = selectedFish(items)
+    local fish = selectedFish(items, F.canRinse)
     if #fish == 0 then return end
     local playerObj = getSpecificPlayer(playerNum)
     local source = F.findWaterSource(playerObj, F.RINSE_LITRES)
@@ -236,6 +236,56 @@ local function onFillRinseMenu(playerNum, context, items)
 end
 
 Events.OnFillInventoryObjectContextMenu.Add(onFillRinseMenu)
+
+-- Tie a Bale on selected stockfish, in the fish's submenu, and Untie Bale on a bale. The fish, the cord and the
+-- bale come into the main inventory first.
+local function onTieBale(playerObj, fish, cordItem, cord)
+    for _, item in ipairs(fish) do ISInventoryPaneContextMenu.transferIfNeeded(playerObj, item) end
+    ISInventoryPaneContextMenu.transferIfNeeded(playerObj, cordItem)
+    ISTimedActionQueue.add(TPFishTieBale:new(playerObj, fish, cordItem, cord))
+end
+
+local function onUntieBale(playerObj, bales)
+    for _, bale in ipairs(bales) do
+        ISInventoryPaneContextMenu.transferIfNeeded(playerObj, bale)
+        ISTimedActionQueue.add(TPFishUntieBale:new(playerObj, bale))
+    end
+end
+
+local function isBale(item)
+    return item:getFullType() == F.BALE_TYPE
+end
+
+local function onFillBaleMenu(playerNum, context, items)
+    local playerObj = getSpecificPlayer(playerNum)
+    local fish = F.baleLoad(selectedFish(items, F.isStockfish))
+    if #fish > 0 then
+        local cordItem, cord = F.findCord(playerObj:getInventory())
+        local option = fishSubMenu(context, fish[1]):addOption(getText("ContextMenu_TraditionalPreservationFish_TieBale"), playerObj, onTieBale, fish, cordItem, cord)
+        option.iconTexture = getTexture("Item_StockfishBale")
+        local tooltip = ISWorldObjectContextMenu.addToolTip()
+        if cord then
+            local weight = 0
+            for _, item in ipairs(fish) do weight = weight + item:getActualWeight() end
+            tooltip.description = getText("Tooltip_TraditionalPreservationFish_TieBale", tostring(#fish), string.format("%.1f", weight), cordItem:getDisplayName())
+        else
+            tooltip.description = getText("Tooltip_TraditionalPreservationFish_TieBaleNoCord")
+            option.notAvailable = true
+        end
+        option.toolTip = tooltip
+    end
+    local bales = selectedFish(items, isBale)
+    if #bales > 0 then
+        local option = context:addOption(getText("ContextMenu_TraditionalPreservationFish_UntieBale"), playerObj, onUntieBale, bales)
+        option.iconTexture = getTexture("Item_StockfishBale")
+        local cord = F.cordByKey(bales[1]:getModData().cord) or F.BALE_CORDS[1]
+        local tooltip = ISWorldObjectContextMenu.addToolTip()
+        tooltip.description = getText("Tooltip_TraditionalPreservationFish_UntieBale", getItemNameFromFullType(cord.type))
+        option.toolTip = tooltip
+    end
+end
+
+Events.OnFillInventoryObjectContextMenu.Add(onFillBaleMenu)
 
 -- The Stockfish Pallet has no window: its right-click menu says what it does where it stands.
 local PALLET_PLACES = { [F.PALLET_LOFT] = "IGUI_TraditionalPreservationFish_PalletLoft", [F.PALLET_GROUND] = "IGUI_TraditionalPreservationFish_PalletGround" }

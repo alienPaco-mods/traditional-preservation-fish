@@ -162,7 +162,17 @@ F.PALLET_LOFT = 2
 F.PALLET_GROUND = 1.5
 F.PALLET_CAPACITY = 20
 F.PALLET_LEVELS = 3
+-- A Stockfish Bale: stockfish tied up for carrying and storing, as it was shipped from the Lofoten. It holds
+-- BALE_CAPACITY weight of stockfish (the script's Capacity) and nothing else; the fish keep their own clocks.
+-- It is tied with one use of Twine or a Rope, and untying gives the cord back; the bale weighs what tied it.
 F.BALE_TYPE = "TraditionalPreservationFish.StockfishBale"
+F.BALE_CAPACITY = 10
+F.BALE_CORDS = {
+    { type = "Base.Twine", key = "twine", uses = 1, weight = 0.1 },
+    { type = "Base.Rope", key = "rope", weight = 0.8 },
+}
+F.BALE_TIE_TICKS = 120
+F.BALE_UNTIE_TICKS = 60
 
 -- From DryingCraftLogic, so the frame's wetness readout tells the truth.
 local RAIN_WETTING = 0.001  -- per game second, at full intensity
@@ -878,6 +888,76 @@ function F.ripenOnPallet(container, extraDays)
             F.rename(fish)
         end
     end)
+end
+
+-- The bale's AcceptItemFunction: only stockfish goes in.
+function F.acceptBale(container, item)
+    return F.isStockfish(item)
+end
+
+-- The cord a bale is tied with: Twine with a use left first, as it is the lighter, then a Rope.
+-- Returns the item and its BALE_CORDS entry, or nil.
+function F.findCord(inventory)
+    for _, cord in ipairs(F.BALE_CORDS) do
+        local found = inventory:getFirstEvalRecurse(function(item)
+            return item:getFullType() == cord.type and (not cord.uses or item:getCurrentUses() >= cord.uses)
+        end)
+        if found then return found, cord end
+    end
+    return nil
+end
+
+function F.cordByKey(key)
+    for _, cord in ipairs(F.BALE_CORDS) do
+        if cord.key == key then return cord end
+    end
+    return nil
+end
+
+-- The stockfish that fit in one bale, in the order given, up to BALE_CAPACITY weight; the rest stay out.
+function F.baleLoad(fish)
+    local load, weight = {}, 0
+    for _, item in ipairs(fish) do
+        if F.isStockfish(item) and weight + item:getActualWeight() <= F.BALE_CAPACITY + 0.0001 then
+            table.insert(load, item)
+            weight = weight + item:getActualWeight()
+        end
+    end
+    return load
+end
+
+-- Ties the fish (all in the inventory) into a new bale with the cord, which is used up. Returns the bale.
+function F.tieBale(inventory, fish, cordItem, cord)
+    local bale = inventory:AddItem(F.BALE_TYPE)
+    bale:getModData().cord = cord.key
+    bale:setCustomWeight(true)
+    bale:setActualWeight(cord.weight)
+    local inside = bale:getInventory()
+    for _, item in ipairs(fish) do
+        inventory:Remove(item)
+        inside:AddItem(item)
+    end
+    if cord.uses then
+        for _ = 1, cord.uses do cordItem:UseAndSync() end
+    else
+        cordItem:getContainer():Remove(cordItem)
+    end
+    return bale
+end
+
+-- Unties a bale in the inventory: its fish and the cord that tied it go into the inventory, the bale is gone.
+-- A bale from before the cord was recorded gives back Twine.
+function F.untieBale(inventory, bale)
+    local items = bale:getInventory():getItems()
+    for i = items:size() - 1, 0, -1 do
+        local item = items:get(i)
+        bale:getInventory():Remove(item)
+        inventory:AddItem(item)
+    end
+    local cord = F.cordByKey(bale:getModData().cord) or F.BALE_CORDS[1]
+    local given = inventory:AddItem(cord.type)
+    if cord.uses then given:setCurrentUses(cord.uses) end
+    bale:getContainer():Remove(bale)
 end
 
 -- The nearest sink, bathtub, barrel or well of clean water within RINSE_REACH on the character's floor with at least litres.

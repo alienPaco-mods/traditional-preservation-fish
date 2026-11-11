@@ -73,6 +73,91 @@ check("extra days move the stamp back", fresh:getModData().matureAge == -5 and n
 check("fish in a bale on it ripen too", inBale:getModData().matureAge == -5)
 check("a ripe fish and one made before maturing are left alone", ripe:getModData().matureAge == 10 and old:getModData().matureAge == nil)
 
+-- The bale
+check("a bale takes stockfish", F.acceptBale(nil, stockfish(0)))
+check("and nothing else", not F.acceptBale(nil, other("TraditionalPreservationFish.SaltDriedFish"))
+    and not F.acceptBale(nil, other("Base.Plank")))
+local many = {}
+for i = 1, 60 do many[i] = stockfish(0, 0.2) end
+table.insert(many, 1, other("Base.Plank", 0.1))
+local load = F.baleLoad(many)
+check("a bale is loaded up to 10 weight", #load == 50 and load[1] == many[2])
+
+-- An inventory that holds items and makes what it is asked for.
+local function inventory(items)
+    local inv = { items = items }
+    local function owned(item)
+        item.getContainer = function() return inv end
+        return item
+    end
+    for _, item in ipairs(items) do owned(item) end
+    function inv:getItems() return H.list(self.items) end
+    function inv:contains(item)
+        for _, held in ipairs(self.items) do if held == item then return true end end
+        return false
+    end
+    function inv:Remove(item)
+        for i, held in ipairs(self.items) do
+            if held == item then table.remove(self.items, i) return end
+        end
+    end
+    function inv:AddItem(item)
+        if type(item) == "string" then
+            local made = other(item, 0)
+            local modData, weight, uses = {}, nil, 5
+            made.getModData = function() return modData end
+            made.setCustomWeight = function() end
+            made.setActualWeight = function(_, w) weight = w end
+            made.getActualWeight = function() return weight end
+            made.getCurrentUses = function() return uses end
+            made.setCurrentUses = function(_, n) uses = n end
+            if item == F.BALE_TYPE then
+                local inside = inventory({})
+                made.getInventory = function() return inside end
+            end
+            item = made
+        end
+        table.insert(self.items, owned(item))
+        return item
+    end
+    function inv:getFirstEvalRecurse(fn)
+        for _, item in ipairs(self.items) do if fn(item) then return item end end
+        return nil
+    end
+    return inv
+end
+local function twine(uses)
+    local item = other("Base.Twine", 0.5)
+    item.uses = uses
+    function item:getCurrentUses() return self.uses end
+    function item:UseAndSync()
+        self.uses = self.uses - 1
+        if self.uses == 0 then self:getContainer():Remove(self) end
+    end
+    return item
+end
+local rope = other("Base.Rope", 0.8)
+local a, b, string1 = stockfish(0), stockfish(0), twine(1)
+local inv = inventory({ a, b, rope, string1 })
+local cordItem, cord = F.findCord(inv)
+check("twine is the cord when there is some", cordItem == string1 and cord.key == "twine")
+local tied = F.tieBale(inv, { a, b }, cordItem, cord)
+check("tying moves the fish into the bale", tied:getInventory():contains(a) and tied:getInventory():contains(b)
+    and not inv:contains(a) and not inv:contains(b))
+check("and uses the twine's last use up", not inv:contains(string1))
+check("the bale records its cord and weighs it", tied:getModData().cord == "twine" and near(tied:getActualWeight(), 0.1))
+check("with no twine left the rope is the cord", F.findCord(inv) == rope)
+check("a twine with no use left is no cord", F.findCord(inventory({ twine(0) })) == nil)
+F.untieBale(inv, tied)
+local given
+for _, item in ipairs(inv.items) do if item:getFullType() == "Base.Twine" then given = item end end
+check("untying gives the fish back", inv:contains(a) and inv:contains(b) and not inv:contains(tied))
+check("and a twine of one use", given ~= nil and given:getCurrentUses() == 1)
+local roped = F.tieBale(inv, { a }, rope, F.cordByKey("rope"))
+check("a rope is taken whole", not inv:contains(rope) and near(roped:getActualWeight(), 0.8))
+F.untieBale(inv, roped)
+check("and given back whole", inv:getFirstEvalRecurse(function(item) return item:getFullType() == "Base.Rope" end) ~= nil)
+
 -- In the world
 Events = Events or {}
 function isClient() return false end

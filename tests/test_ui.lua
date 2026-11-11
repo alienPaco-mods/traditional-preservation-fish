@@ -3,7 +3,11 @@ local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/
 H.useModPaths()
 ModData = { getOrCreate = function() return {} end }
 local handlers = {}
-Events = setmetatable({}, { __index = function(_, name) return { Add = function(handler) handlers[name] = handler end } end })
+-- Each event calls its handlers in the order they were added, as the game does.
+Events = setmetatable({}, { __index = function(_, name) return { Add = function(handler)
+    local before = handlers[name]
+    handlers[name] = before and function(...) before(...) return handler(...) end or handler
+end } end })
 -- The mod's own modules load for real, vanilla's are left out.
 local realRequire = require
 require = function(name)
@@ -311,6 +315,43 @@ check("holding the recipe as it was, then Rinse at Sink", moved.name == "Slice" 
 
 sink.isTaintedWater = function() return true end
 check("a sink of tainted water doesn't count", #rinseMenu({ stack }).options == 0)
+
+-- Tie a Bale and Untie Bale
+dofile("42/media/lua/shared/TimedActions/TPFishTieBale.lua")
+dofile("42/media/lua/shared/TimedActions/TPFishUntieBale.lua")
+function getItemNameFromFullType(fullType) return fullType == "Base.Rope" and "Rope" or "Twine" end
+local cordItem
+local carried = { getFirstEvalRecurse = function(_, fn) return cordItem and fn(cordItem) and cordItem or nil end }
+person.getInventory = function() return carried end
+local function stockfishItem(weight)
+    return { class = "InventoryItem", getFullType = function() return "TraditionalPreservationFish.ColdDriedFish" end,
+        getActualWeight = function() return weight end, getDisplayName = function() return "Gutted Walleye (Cold Dried)" end,
+        getTexture = function() return "fish icon" end, getModData = function() return {} end }
+end
+local function tieOption(context)
+    local sub = context.options[1] and context.options[1].subOption
+    return sub and sub:getOptionFromName("ContextMenu_TraditionalPreservationFish_TieBale")
+end
+local dried = {}
+for i = 1, 60 do dried[i] = stockfishItem(0.2) end
+local noCord = rinseMenu({ { items = { dried[1], unpack(dried) } } })
+check("no cord, the Tie option says what it needs", tieOption(noCord) ~= nil and tieOption(noCord).notAvailable == true)
+cordItem = { getFullType = function() return "Base.Twine" end, getCurrentUses = function() return 3 end,
+    getDisplayName = function() return "Twine" end }
+local withCord = rinseMenu({ { items = { dried[1], unpack(dried) } } })
+local tie = tieOption(withCord)
+check("with twine it goes in the fish's submenu", tie ~= nil and not tie.notAvailable)
+tie.onSelect(tie.target, unpack(tie.args))
+check("and ties the first 10 weight with the twine", #ui.queued == 1 and #ui.queued[1].fish == 50
+    and ui.queued[1].cordItem == cordItem and ui.queued[1].cord.key == "twine")
+check("no Tie option on salt fish", tieOption(rinseMenu({ rinsable("TraditionalPreservationFish.SaltDriedFish") })) == nil)
+local baleData = { cord = "rope" }
+local bale = { class = "InventoryItem", getFullType = function() return F.BALE_TYPE end, getModData = function() return baleData end }
+local untieMenu = rinseMenu({ bale })
+local untie = untieMenu:getOptionFromName("ContextMenu_TraditionalPreservationFish_UntieBale")
+check("a bale has Untie Bale", untie ~= nil and untie.toolTip ~= nil)
+untie.onSelect(untie.target, unpack(untie.args))
+check("which unties it", #ui.queued == 1 and ui.queued[1].bale == bale)
 
 -- The pallet's right-click line
 local Tiles = require "TraditionalPreservationFish/Tiles"
