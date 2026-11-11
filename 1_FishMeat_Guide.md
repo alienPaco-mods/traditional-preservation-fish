@@ -470,6 +470,7 @@ A pantry, kitchen or shed is unheated: it follows the average of the last ten da
 | `TPFM.cured(n)` | Spawns `n` each of those cuts already Salt Cured, ready to hang. |
 | `TPFM.fatPot(state)` | Spawns a Pot of Pork Fat, cooked (the default), `"burnt"` or `"raw"`: Pour Off Lard gives the melted fat Potted Meat can use. |
 | `TPFM.potted()` | Spawns what Potted Meat takes: a Pot, Lard, Salt, a Steak, Beef, Pork Chop and Pork, and a Clay Jar, Glazed Clay Jar and Clay Pot. |
+| `TPFM.crock(n)` | Spawns full Crocks of Potted Meat: four Steaks in Lard each, in a Glazed Clay Jar. |
 | `TPFM.crocks()` | Each Crock of Potted Meat on you or within 4 tiles: where it is, how fast it keeps there, days until stale and rotten. |
 | `TPFM.keep(days)` | Ages those crocks by this many days at their place. |
 
