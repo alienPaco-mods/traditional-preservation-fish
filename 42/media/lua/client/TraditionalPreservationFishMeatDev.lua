@@ -57,7 +57,9 @@ function TPFM.weather()
         .. ", wind " .. n(ledger.wind))
     say("Drying speed now: open " .. n(ledger.openRate) .. ", covered " .. n(ledger.coveredRate) .. ", indoors " .. n(ledger.shelteredRate)
         .. ", cold " .. n(ledger.coldRate) .. ", cold covered " .. n(ledger.coldCoveredRate)
-        .. ", charque " .. n(ledger.charqueRate) .. ", charque covered " .. n(ledger.charqueCoveredRate) .. ", charque indoors " .. n(ledger.charqueShelteredRate))
+        .. ", charque " .. n(ledger.charqueRate) .. ", charque covered " .. n(ledger.charqueCoveredRate) .. ", charque indoors " .. n(ledger.charqueShelteredRate)
+        .. "; Smokehouse banked " .. n(ledger.bankedRate) .. ", stoked " .. n(ledger.stokedRate)
+        .. ", charque banked " .. n(ledger.charqueBankedRate) .. ", charque stoked " .. n(ledger.charqueStokedRate))
     say("Spoiling now: unsalted " .. tostring(ledger.rawSpoiling == true) .. ", salted " .. tostring(ledger.saltSpoiling == true)
         .. ", warm cure " .. tostring(ledger.warmCuring == true) .. ", hot sun " .. tostring((ledger.temperature or 0) > F.HEAT_ABOVE))
     say("Totals (hours at full speed): open " .. n(ledger.open) .. ", covered " .. n(ledger.covered) .. ", indoors " .. n(ledger.sheltered)
@@ -65,7 +67,9 @@ function TPFM.weather()
         .. ", raw spoil " .. n(ledger.rawSpoil) .. ", salt spoil " .. n(ledger.saltSpoil)
         .. ", hard frost " .. n(ledger.hardFrost) .. ", cold fish wet " .. n(ledger.coldWet) .. ", warm cure " .. n(ledger.warmCure)
         .. ", hot sun " .. n(ledger.heat) .. ", charque " .. n(ledger.charque) .. ", charque covered " .. n(ledger.charqueCovered)
-        .. ", charque indoors " .. n(ledger.charqueSheltered) .. ", rain " .. n(ledger.charqueRain))
+        .. ", charque indoors " .. n(ledger.charqueSheltered) .. ", rain " .. n(ledger.charqueRain)
+        .. ", Smokehouse banked " .. n(ledger.smokeBanked) .. ", stoked " .. n(ledger.smokeStoked)
+        .. ", charque banked " .. n(ledger.charqueBanked) .. ", charque stoked " .. n(ledger.charqueStoked))
     say(string.format("A stack needs %d hours to salt dry, %d to cold dry and %d to dry as charque.", F.DRY_HOURS, F.COLD_DRY_HOURS, F.CHARQUE_HOURS))
 end
 
@@ -106,6 +110,8 @@ function TPFM.age(hours)
     ledger.open, ledger.sheltered, ledger.cold = ledger.open + hours, ledger.sheltered + hours, ledger.cold + hours
     ledger.covered, ledger.coldCovered = ledger.covered + hours, ledger.coldCovered + hours
     ledger.charque, ledger.charqueCovered, ledger.charqueSheltered = ledger.charque + hours, ledger.charqueCovered + hours, ledger.charqueSheltered + hours
+    ledger.smokeBanked, ledger.smokeStoked = ledger.smokeBanked + hours, ledger.smokeStoked + hours
+    ledger.charqueBanked, ledger.charqueStoked = ledger.charqueBanked + hours, ledger.charqueStoked + hours
     say(string.format("Added %.0f hours of perfect drying weather. Stacks update within a few seconds.", hours))
 end
 

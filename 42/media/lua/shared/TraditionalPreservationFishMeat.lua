@@ -6,6 +6,7 @@ local F = TraditionalPreservationFishMeat
 local Weather = require "TraditionalPreservationCore/Weather"
 local Tiles = require "TraditionalPreservationFishMeat/Tiles"
 local Doors = require "TraditionalPreservationCore/Doors"
+local Hearth = require "TraditionalPreservationCore/Hearth"
 
 F.MOD_DATA_KEY = "TraditionalPreservationFishMeat"
 
@@ -192,6 +193,11 @@ F.BALE_UNTIE_TICKS = 60
 -- COLD_SMOKE_MAX (the smoulder lifts the meat 10-15 C; over 30 C at the meat it cooks rather than smokes). Stacks in
 -- a Smokehouse, by stackId, as the World last saw them (not saved); a finished one waits at SHED_WAIT until seen.
 F.COLD_SMOKE_MAX = 20
+-- The smoulder's warmth: while the Firebox burns, a Smokehouse stack dries as if the shed were this much warmer than
+-- outdoors, banked or stoked, and the warmed air holds the same water, so its humidity halves every 10 C (F.liftedRates).
+-- A stack's modData.burning holds the fire's mode, Core's Hearth.STOKED or BANKED.
+F.BANKED_LIFT = 15
+F.STOKED_LIFT = 20
 F.smokeStations = {}
 F.SHED_WAIT = 0.999
 
@@ -296,6 +302,16 @@ function F.charqueWarmRate(celsius)
 end
 
 -- What the wind does to charque: CHARQUE_CALM_RATE in still air, rising to CHARQUE_WINDY_RATE at WIND_GOOD.
+-- Salt fish's and charque's drying rates in air warmed by lift C (the Smokehouse with the fire burning): the
+-- temperature lifted, the humidity halved for every 10 C of it, the wind as outdoors.
+function F.liftedRates(weather, lift)
+    local humidity = weather.humidity * 0.5 ^ (lift / 10)
+    local air = F.airRate(humidity)
+    local celsius = weather.temperature + lift
+    return math.max(F.temperatureRate(celsius) * air, F.MIN_DRY_RATE),
+        F.charqueWarmRate(celsius) * air * F.charqueWindRate(weather.wind)
+end
+
 function F.charqueWindRate(wind)
     if not wind then return 1 end
     local breeze = math.min(math.max(wind, 0) / F.WIND_GOOD, 1)
@@ -305,11 +321,12 @@ end
 -- The weather totals: hours of drying done open, sheltered (indoors), covered (a roof, no room), cold and cold
 -- covered, charque open, covered and sheltered, hours of spoiling raw and salted,
 -- hours of hard frost and of cold fish lying wet above freezing, of a warm cure, of heat and of rain, the
--- wetness rain left on open frames and on cold ones, and for cold smoke (5d) all hours and the cool ones.
+-- wetness rain left on open frames and on cold ones, for cold smoke (5d) all hours and the cool ones, and salt fish's
+-- and charque's drying in a Smokehouse warmed by a banked or a stoked fire.
 function F.newLedger(now)
     return { lastHour = now, wetness = 0, coldWetness = 0, open = 0, sheltered = 0, covered = 0, cold = 0, coldCovered = 0, rawSpoil = 0, saltSpoil = 0,
         hardFrost = 0, coldWet = 0, warmCure = 0, heat = 0, charque = 0, charqueCovered = 0, charqueSheltered = 0, charqueRain = 0,
-        clock = 0, smokeCool = 0 }
+        clock = 0, smokeCool = 0, smokeBanked = 0, smokeStoked = 0, charqueBanked = 0, charqueStoked = 0 }
 end
 
 -- Adds one stretch of weather to the totals. Open frames dry nothing until the rain has gone
@@ -353,6 +370,12 @@ function F.advance(ledger, now, weather)
     if raining then ledger.charqueRain = ledger.charqueRain + hours end
     ledger.clock = ledger.clock + hours
     if weather.temperature <= F.COLD_SMOKE_MAX then ledger.smokeCool = ledger.smokeCool + hours end
+    ledger.bankedRate, ledger.charqueBankedRate = F.liftedRates(weather, F.BANKED_LIFT)
+    ledger.stokedRate, ledger.charqueStokedRate = F.liftedRates(weather, F.STOKED_LIFT)
+    ledger.smokeBanked = ledger.smokeBanked + ledger.bankedRate * hours
+    ledger.smokeStoked = ledger.smokeStoked + ledger.stokedRate * hours
+    ledger.charqueBanked = ledger.charqueBanked + ledger.charqueBankedRate * hours
+    ledger.charqueStoked = ledger.charqueStoked + ledger.charqueStokedRate * hours
     ledger.temperature = weather.temperature
     ledger.wind = weather.wind
     ledger.open = ledger.open + ledger.openRate * hours
@@ -404,9 +427,11 @@ function F.stackStatus(isCold, modData, ledger)
         rate = ledger.coldRate or 0
         if rate <= 0 then reason = "Rain" end
     elseif modData.sheltered then
-        -- A burning Firebox's draught dries a Smokehouse stack at the Covered rate (F.smokeStep).
+        -- A burning Firebox warms a Smokehouse stack's air (F.smokeStep).
         rate = ledger.shelteredRate or 0
-        if modData.burning then rate = math.max(rate, ledger.coveredRate or 0) end
+        if modData.burning then
+            rate = math.max(rate, (modData.burning == Hearth.STOKED and ledger.stokedRate or ledger.bankedRate) or 0)
+        end
     elseif modData.covered then
         rate = ledger.coveredRate or 0
     else
@@ -446,7 +471,9 @@ function F.charqueStatus(modData, ledger)
     local rate, reason
     if modData.sheltered then
         rate = ledger.charqueShelteredRate or 0
-        if modData.burning then rate = math.max(rate, ledger.charqueCoveredRate or 0) end
+        if modData.burning then
+            rate = math.max(rate, (modData.burning == Hearth.STOKED and ledger.charqueStokedRate or ledger.charqueBankedRate) or 0)
+        end
     elseif modData.covered then
         rate = ledger.charqueCoveredRate or 0
     else
@@ -485,9 +512,9 @@ end
 -- The ledger is the mod's global ModData table itself, so its keys are the ones in every save.
 function F.getLedger()
     local data = ModData.getOrCreate(F.MOD_DATA_KEY)
-    -- cold, hardFrost, covered, warmCure, heat, the charque and the smoke totals came after the first release, so a
-    -- save can have the rest without them.
-    if not data.smokeCool then
+    -- cold, hardFrost, covered, warmCure, heat, the charque, the smoke and the smoulder's totals came after the first
+    -- release, so a save can have the rest without them.
+    if not data.smokeStoked then
         local ledger = F.newLedger(getGameTime():getWorldAgeHours())
         for key, value in pairs(ledger) do
             if data[key] == nil then data[key] = value end
@@ -693,6 +720,7 @@ local function startStack(craftRecipeData)
     -- Recipe data is pooled with its ModData (ENGINE_NOTES): a stack mustn't inherit an old one's shed or smoke.
     modData.inShed, modData.burning, modData.hotNeed, modData.heaviest = nil, nil, nil, nil
     modData.lastClock, modData.lastSmokeCool, modData.lastDraughtCovered, modData.lastDraughtSheltered = nil, nil, nil, nil
+    modData.lastDraughtBanked, modData.lastDraughtStoked = nil, nil
 end
 
 -- Shows a stack's progress, and ends it early if it has rotted or its hot smoking is done (the Smokehouse). A stack

@@ -128,8 +128,9 @@ local frame = {}
 F.smokeStep(frame, fire)
 check("a stack from before 5c has no need and never counts", frame.hot == nil and not F.hotDone(frame))
 -- Cold smoke (5d): banked hours count on cool days only, by the ledger's share of cool hours since the last look;
--- every hour of fire dries at the Covered rate; a third of the clock hours in smoke makes it Cold Smoked.
-local ledger = { clock = 0, smokeCool = 0, covered = 0, sheltered = 0, charqueCovered = 0, charqueSheltered = 0, temperature = 10 }
+-- every hour of fire dries in the fire's warmed air; a third of the clock hours in smoke makes it Cold Smoked.
+local ledger = { clock = 0, smokeCool = 0, smokeBanked = 0, smokeStoked = 0, sheltered = 0, charqueBanked = 0, charqueStoked = 0,
+    charqueSheltered = 0, temperature = 10 }
 local cool = {}
 F.startSmoke(cool, pieces(1.1), false)
 cool.dried, cool.stackId = 0, 0
@@ -139,11 +140,11 @@ F.smokeStep(cool, bankFire, ledger)
 check("joining with the ledger takes its totals as they stand", cool.lastClock == 0 and cool.dried == 0)
 Hearth.logFire(bankFire, 301, Hearth.BANKED, 400)
 Hearth.logFire(bankFire, 311, Hearth.BANKED, 400)
-ledger.clock, ledger.smokeCool, ledger.covered, ledger.sheltered = 10, 5, 10, 6.5
+ledger.clock, ledger.smokeCool, ledger.smokeBanked, ledger.smokeStoked, ledger.sheltered = 10, 5, 10, 20, 6.5
 F.smokeStep(cool, bankFire, ledger)
 check("half the hours were cool: half the banked hours are smoke", near(cool.cold, 5))
-check("hours of fire dry at the Covered rate", near(cool.dried, 10 * 0.35))
-ledger.clock, ledger.smokeCool, ledger.covered, ledger.sheltered = 20, 5, 20, 13.5
+check("banked hours dry at the banked fire's rate", near(cool.dried, 10 * 0.35))
+ledger.clock, ledger.smokeCool, ledger.smokeBanked, ledger.smokeStoked, ledger.sheltered = 20, 5, 20, 30, 13.5
 Hearth.logFire(bankFire, 321, Hearth.BANKED, 400)
 F.smokeStep(cool, bankFire, ledger)
 check("a hot spell counts none", near(cool.cold, 5) and near(cool.dried, 3.5 + 10 * 0.3))
@@ -164,19 +165,46 @@ Hearth.logFire(burstFire, 330, nil, nil)
 F.smokeStep(burst, burstFire, ledger)
 Hearth.logFire(burstFire, 331, Hearth.STOKED, 333)
 Hearth.logFire(burstFire, 333, Hearth.STOKED, 333)
-ledger.clock, ledger.covered, ledger.sheltered = 22, 22, 15
+ledger.clock, ledger.smokeBanked, ledger.smokeStoked, ledger.sheltered = 22, 22, 34, 15
 F.smokeStep(burst, burstFire, ledger)
 Hearth.logFire(burstFire, 340, nil, nil)
-ledger.clock, ledger.covered, ledger.sheltered = 29, 29, 22
+ledger.clock, ledger.smokeBanked, ledger.smokeStoked, ledger.sheltered = 29, 29, 46, 22
 F.smokeStep(burst, burstFire, ledger)
 check("a stoked burst on a hot day is no cold smoke when it breaks off", burst.hot == 0 and burst.cold == 0)
-check("but its hours still dry the stack faster", burst.dried > 0)
+check("but its hours dry the stack at the stoked fire's rate", near(burst.dried, 2 * ((34 - 30) - (15 - 13.5)) / 2))
+local old = { hotNeed = 4, hot = 0, cold = 0, dried = 0, smokeFrom = bankFire.fireId, lastStoked = bankFire.stokedHours or 0,
+    lastBanked = bankFire.bankedHours or 0, lastClock = 29, lastSmokeCool = 5, lastDraughtCovered = 29, lastDraughtSheltered = 22 }
+Hearth.logFire(bankFire, 330, Hearth.BANKED, 400)
+ledger.clock, ledger.smokeBanked, ledger.smokeStoked, ledger.sheltered = 38, 38, 55, 28
+F.smokeStep(old, bankFire, ledger)
+check("a stack from before the smoulder's warmth starts its warm totals now, gaining nothing yet", old.dried == 0
+    and old.lastDraughtBanked == 38 and old.lastDraughtStoked == 55)
 
-check("a stack by a burning fire knows it", cool.burning == true)
-local rates = { shelteredRate = 0.4, coveredRate = 0.6, charqueShelteredRate = 0.3, charqueCoveredRate = 0.5 }
-check("its Drying Rate is the Covered rate", near(F.stackStatus(false, { sheltered = true, burning = true, dried = 0 }, rates).rate, 0.6)
-    and near(F.charqueStatus({ sheltered = true, burning = true, dried = 0 }, rates).rate, 0.5))
+check("a stack by a burning fire knows how it burns", cool.burning == Hearth.BANKED)
+local rates = { shelteredRate = 0.4, bankedRate = 0.6, stokedRate = 0.9, charqueShelteredRate = 0.3, charqueBankedRate = 0.5,
+    charqueStokedRate = 0.8 }
+check("banked, its Drying Rate is the banked fire's", near(F.stackStatus(false, { sheltered = true, burning = Hearth.BANKED, dried = 0 }, rates).rate, 0.6)
+    and near(F.charqueStatus({ sheltered = true, burning = Hearth.BANKED, dried = 0 }, rates).rate, 0.5))
+check("stoked, the stoked fire's", near(F.stackStatus(false, { sheltered = true, burning = Hearth.STOKED, dried = 0 }, rates).rate, 0.9)
+    and near(F.charqueStatus({ sheltered = true, burning = Hearth.STOKED, dried = 0 }, rates).rate, 0.8))
+check("a stack saved burning before reads banked", near(F.stackStatus(false, { sheltered = true, burning = true, dried = 0 }, rates).rate, 0.6))
 check("with the fire out, Sheltered's", near(F.stackStatus(false, { sheltered = true, dried = 0 }, rates).rate, 0.4))
+
+-- The smoulder's warmth: the shed reads BANKED_LIFT (15) / STOKED_LIFT (20) warmer, its humidity halved per 10 C, outdoor wind.
+local damp = { temperature = 5, humidity = 0.8, wind = F.WIND_GOOD, precipitation = 0 }
+local fish, meat = F.liftedRates(damp, F.BANKED_LIFT)
+check("banked at 5 C: 20 C in air of 28%", near(fish, 1) and near(meat, F.charqueWarmRate(20) * F.CHARQUE_WINDY_RATE))
+fish = F.liftedRates({ temperature = 2.3, humidity = 0.8 }, F.BANKED_LIFT)
+check("banked at 2.3 C beats the Sheltered floor", near(fish, F.temperatureRate(17.3)) and fish > F.MIN_DRY_RATE)
+fish, meat = F.liftedRates(damp, F.STOKED_LIFT)
+check("stoked at 5 C: salt fish at full speed", near(fish, 1) and near(meat, F.charqueWarmRate(25) * F.CHARQUE_WINDY_RATE))
+fish = F.liftedRates({ temperature = -10, humidity = 0.8 }, F.BANKED_LIFT)
+check("never under the floor", near(fish, F.MIN_DRY_RATE))
+local warmLedger = F.newLedger(0)
+F.advance(warmLedger, 10, damp)
+check("the ledger keeps the warmed totals", near(warmLedger.smokeBanked, 10)
+    and near(warmLedger.smokeStoked, 10) and warmLedger.smokeBanked > warmLedger.sheltered
+    and warmLedger.charqueBanked < warmLedger.charqueStoked)
 
 -- Dry-Cured meat is named by the animal its cut came from.
 local function meatItem(index)

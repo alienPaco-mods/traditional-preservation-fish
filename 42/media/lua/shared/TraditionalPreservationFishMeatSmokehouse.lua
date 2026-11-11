@@ -229,7 +229,7 @@ F.HOT_MEAT = "TraditionalPreservationFishMeat.HotSmokedMeat"
 
 -- Cold smoke (5d): a stack whose cold counter reaches COLD_SMOKE_SHARE of its clock hours in the shed comes out Cold
 -- Smoked when it has dried (smoked-dried fish, balyk, suho meso: a few hours of smoke a day over the drying). Hours
--- with the fire burning dry it at the Covered rate, not Sheltered's: the warm draught through the shed.
+-- with the fire burning dry it in air warmed by the fire (F.BANKED_LIFT, F.STOKED_LIFT), not at Sheltered's rate.
 F.COLD_SMOKE_SHARE = 1 / 3
 F.COLD_FISH_OUT = "TraditionalPreservationFishMeat.ColdSmokedFish"
 F.DRY_CURED = "TraditionalPreservationFishMeat.DryCuredMeat"
@@ -253,29 +253,31 @@ function F.startSmoke(modData, items, isMeat)
     modData.smokeFrom, modData.smokeSession, modData.lastStoked, modData.lastBanked = nil, nil, nil, nil
 end
 
--- The ledger totals a stack's draught reads: salt fish's or charque's Covered and Sheltered drying.
-local function draughtTotals(modData, ledger)
-    if modData.smokeMeat then return ledger.charqueCovered or 0, ledger.charqueSheltered or 0 end
-    return ledger.covered or 0, ledger.sheltered or 0
+-- The ledger totals a stack's warmth reads: salt fish's or charque's drying Sheltered, by a banked and by a stoked fire.
+local function warmthTotals(modData, ledger)
+    if modData.smokeMeat then return ledger.charqueSheltered or 0, ledger.charqueBanked or 0, ledger.charqueStoked or 0 end
+    return ledger.sheltered or 0, ledger.smokeBanked or 0, ledger.smokeStoked or 0
 end
 
--- Since the stack's last look: the share of the hours that were cool enough for cold smoke, and how much more a
--- Covered stack dried than a Sheltered one per hour, from the ledger's totals (a week away reads the week's weather).
--- With no hours between, the weather now.
+-- Since the stack's last look: the share of the hours that were cool enough for cold smoke, and how much more a stack
+-- by a banked and by a stoked fire dried than a Sheltered one per hour, from the ledger's totals (a week away reads
+-- the week's weather). With no hours between, the weather now and no gain. A stack from before the smoulder's
+-- warmth starts its warm totals at this look.
 local function sinceLast(modData, ledger)
-    local covered, sheltered = draughtTotals(modData, ledger)
+    local sheltered, banked, stoked = warmthTotals(modData, ledger)
     local hours = (ledger.clock or 0) - (modData.lastClock or ledger.clock or 0)
-    local coolShare, draught
+    local coolShare, bankedGain, stokedGain = nil, 0, 0
     if hours > 0 then
         coolShare = ((ledger.smokeCool or 0) - (modData.lastSmokeCool or 0)) / hours
-        draught = ((covered - (modData.lastDraughtCovered or covered)) - (sheltered - (modData.lastDraughtSheltered or sheltered))) / hours
+        local base = sheltered - (modData.lastDraughtSheltered or sheltered)
+        bankedGain = (banked - (modData.lastDraughtBanked or banked) - base) / hours
+        stokedGain = (stoked - (modData.lastDraughtStoked or stoked) - base) / hours
     else
         coolShare = (ledger.temperature or 0) <= F.COLD_SMOKE_MAX and 1 or 0
-        draught = 0
     end
     modData.lastClock, modData.lastSmokeCool = ledger.clock or 0, ledger.smokeCool or 0
-    modData.lastDraughtCovered, modData.lastDraughtSheltered = covered, sheltered
-    return math.max(0, math.min(coolShare, 1)), math.max(draught, 0)
+    modData.lastDraughtSheltered, modData.lastDraughtBanked, modData.lastDraughtStoked = sheltered, banked, stoked
+    return math.max(0, math.min(coolShare, 1)), math.max(bankedGain, 0), math.max(stokedGain, 0)
 end
 
 -- Brings a stack's counters up to the fire's record (a Firebox's Hearth state), or none (not joined). A new or
@@ -283,7 +285,7 @@ end
 -- it counted in ends. Of the stoked hours since the last look, those in a session that has since begun are hot.
 -- With the ledger (the World's look; tests may leave it out): fire hours count as cold only on cool days, stoked
 -- or banked (user: no Cold Smoked in summer from short stoked bursts), so hot keeps its cool part (hotCool) for
--- when its session breaks off; and every hour of fire adds the Covered rate's extra drying.
+-- when its session breaks off; and every hour of fire adds the warmed air's extra drying, banked or stoked.
 local function hotToCold(modData)
     modData.cold = (modData.cold or 0) + (modData.hotCool or modData.hot or 0)
     modData.hot, modData.hotCool = 0, 0
@@ -291,9 +293,9 @@ end
 
 function F.smokeStep(modData, fire, ledger)
     if not modData.hotNeed then return end
-    modData.burning = fire ~= nil and fire.fireMode ~= nil
-    local coolShare, draught = 1, 0
-    if ledger then coolShare, draught = sinceLast(modData, ledger) end
+    modData.burning = fire and fire.fireMode or nil
+    local coolShare, bankedGain, stokedGain = 1, 0, 0
+    if ledger then coolShare, bankedGain, stokedGain = sinceLast(modData, ledger) end
     if not fire or fire.fireId ~= modData.smokeFrom or (fire.stokedHours or 0) < (modData.lastStoked or 0) then
         hotToCold(modData)
         if fire and fire.fireId then
@@ -320,7 +322,7 @@ function F.smokeStep(modData, fire, ledger)
     end
     banked = math.max(banked, 0)
     modData.cold = modData.cold + banked * coolShare
-    if modData.dried then modData.dried = modData.dried + (math.max(stoked, 0) + banked) * draught end
+    if modData.dried then modData.dried = modData.dried + math.max(stoked, 0) * stokedGain + banked * bankedGain end
     modData.lastStoked, modData.lastBanked = fire.stokedHours or 0, fire.bankedHours or 0
 end
 

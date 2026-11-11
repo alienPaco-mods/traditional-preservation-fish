@@ -1,5 +1,17 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.11
+- **The smoulder's warmth** (ROADMAP §7): with the Firebox burning, a Smokehouse stack dries as if the shed were
+  **15 C warmer banked, 20 C warmer stoked** than outdoors, and the warmed air drier (its humidity halved per 10 C);
+  charque keeps the outdoor wind. Before, a fire dried at the Covered rate, which gave nothing under about 13 C, so
+  cold smoke's season barely gained. Salt fish at 2.3 C outdoors: 27 days Sheltered, about 16 banked, 12 stoked (if the
+  fire burned every hour); banked helps from about -2 C, stoked from about -7 C (banked was +10 first, which gave
+  nothing under about 3 C: step 80, user picked +15). Cold smoke's "cool day" test still reads the outdoor temperature.
+- Ledger totals `smokeBanked`, `smokeStoked`, `charqueBanked`, `charqueStoked` (`F.liftedRates`, `F.BANKED_LIFT`,
+  `F.STOKED_LIFT`); a save without them gets them at load. A stack's `burning` holds the fire's mode (Core's
+  `Hearth.STOKED` / `BANKED`), and its popup rate follows it; a stack saved before starts its warm totals at its
+  next look. `TPFM.weather()` and `TPFM.age()` show and feed the new totals.
+
 ## 0.4.10
 - **Cold smoke** (ROADMAP §7, phase 5d): a salt stack in a Smokehouse joined to a Firebox comes out **Cold Smoked**
   when it has dried, if its smoke counter reached **a third of its clock hours** in the shed (smoked-dried fish,
