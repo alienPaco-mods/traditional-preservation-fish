@@ -344,7 +344,16 @@ Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank 
 
 - **Smoke** = the hours the Firebox smouldered, plus any stoked run that broke off before it cooked the stack. Only hours on a day of **20 C or less** count, whichever way the fire burned: on a warmer day the smoulder heats the meat past 30 C, which cooks it rather than cures it.
 - **When the stack is dry**, it looks at its smoke. If smoke covered **a third of the hours it hung** in the shed or more, it comes out **Cold Smoked**; less, and it's plain Salt Dried fish or Charque, as before. A few hours of smoulder a day is plenty, and so is a fire banked the whole time.
-- **A fire dries faster, on mild days.** Any hour with the Firebox burning, banked or stoked, dries the shed at an **open roof's speed** instead of a closed room's: the draught through the shed. For salt fish that's up to half as fast again, but only on days over about 13 C. Below that both sit at the slowest rate (27 days), so in the cold months the fire adds little or nothing to drying. Charque gains only when there's wind. The popup's **Drying Rate** shows the rate while the fire burns.
+- **A fire warms the shed, and warm air dries.** Any hour with the Firebox burning, the stacks dry as if the shed were **15 C warmer** than outdoors when banked, **20 C warmer** when stoked, and the warmed air is drier too. So the smoulder speeds drying even in the cold months, from a little under freezing upward. Charque gains as much and keeps the outdoor wind. The popup's **Drying Rate** shows the rate while the fire burns.
+
+| Salt fish, damp day | Fire out | Banked | Stoked |
+|---|---|---|---|
+| -5 C | 27 days | 27 days | 21 days |
+| 0 C | 27 days | 21 days | 12 days |
+| 2 C | 27 days | 17 days | 12 days |
+| 5 C and up | 27 days | 12 days | 12 days |
+
+> 📏 *Days as if the fire burned every hour; a third of the time in smoke, the rest at the fire-out speed, lands in between.*
 - The popup's **Smoke** line reads *x h, y h needed so far (a third of the hours hung)*. Over 20 C it says **Too warm to count**.
 - **Meat smoked this way is no longer charque.** Charque is the sun's and the wind's. Smoked, it comes out **Dry-Cured**, named by its animal: *Dry-Cured Beef (Cold Smoked)* from Beef or a Steak, *Dry-Cured Mutton*, *Dry-Cured Venison*.
 
@@ -548,7 +557,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 - **Why do warm stacks rot?** Unsalted fish has nothing protecting it but the cold. Once the season averages above 10 C, it spoils faster than it dries.
 - **Why gut it first?** The guts spoil first and fastest. Stockfish makers gutted and headed every fish before it went on the rack.
 - **Why does hot smoking need its hours in a row?** It's cooking. Heat that stops and starts warms the fish and lets it cool again; it never reaches the heat that cooks it through.
-- **Why is cold smoke a winter job?** A smoulder lifts the shed 10 to 15 C over the air. On a cold day that's a gentle, drying warmth; on a summer day it puts the meat at blood heat, where it spoils or half-cooks before it dries.
+- **Why is cold smoke a winter job?** A smoulder lifts the shed about 15 C over the air. On a cold day that's a gentle, drying warmth; on a summer day it puts the meat at blood heat, where it spoils or half-cooks before it dries.
 
 ### Old names, old ways
 
@@ -620,7 +629,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Wanted Salt Dried, got Hot Smoked | The Firebox was stoked long enough. Let it go out while salt stacks hang, or dry them on a frame |
 | Wanted Cold Smoked, got Salt Dried or Charque | Smoke was under a third of the hours the stack hung, or the days were over 20 C (the popup says *Too warm to count*). Bank the Firebox more of the time, in a cooler month |
 | Wanted Charque, got Dry-Cured | The shed's smoulder gave it a third of its time in smoke. For charque, let the fire go out or use a frame in the sun |
-| Drying Rate didn't rise with the fire | Under about 13 C salt fish dries at the slowest rate (27 days) with or without the fire, and charque gains only in a wind. The draught shows on mild and warm days |
+| Drying Rate didn't rise with the fire | Below about -2 C outdoors a banked fire can't lift salt fish off its slowest rate (27 days); stoke it, which helps from about -7 C. Over about 5 C banked is already at full speed, so stoking adds nothing to drying |
 | Add Meat to the Pot is greyed out | The pot already has four cuts, or it has cooked: meat goes in raw |
 | Pack Potted Meat is greyed out | The pot isn't cooked yet, or it burnt (Scrape Out Burnt Fat). The jar must be empty |
 | Put Meat in the Melted Fat is missing | The pot needs a full half litre of Melted Lard or Tallow, as Pour Off leaves it |
