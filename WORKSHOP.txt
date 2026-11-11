@@ -131,7 +131,7 @@ Stockfish is unsalted cod hung on open racks through the cold northern Norwegian
 [b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt: one batch (5 Evaporated Salt, 25 uses) packs a dozen panfish, or one 4 weight walleye with salt to spare. Traditional Preservation (Fish) needs no other mods besides Traditional Preservation (Core).
 
 [h2]Sandbox options[/h2]
-Set salt drying time, the slowest it can take and spoilage strictness.
+Set salt drying time, the slowest it can take, stockfish drying time, stockfish maturing time, the salt press time and spoilage strictness.
 
 [h2]Known issues[/h2]
 [list]

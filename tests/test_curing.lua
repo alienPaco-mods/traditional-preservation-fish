@@ -306,18 +306,25 @@ check("dried fish remembers its stack", stacked:getAllCreatedItems():get(0):getM
 -- Sandbox options
 SandboxVars = { TraditionalPreservationFish = { DryDays = 24, MaxDryDays = 48, Spoilage = 4 } }
 T.applySandbox()
-check("drying days set both methods' hours", T.DRY_HOURS == 576 and T.COLD_DRY_HOURS == 1536)
+check("salt drying days set salt drying alone", T.DRY_HOURS == 576 and T.COLD_DRY_HOURS == 768)
 check("the slowest days set the lowest rate", near(T.MIN_DRY_RATE, 0.5))
 check("harsh spoilage halves the limits", T.RAW_SPOIL_HOURS == 24 and T.SALT_SPOIL_HOURS == 240)
+SandboxVars.TraditionalPreservationFish = { ColdDryDays = 90, MatureDays = 30, PressDays = 4 }
+T.applySandbox()
+check("stockfish drying has its own days", T.COLD_DRY_HOURS == 2160)
+check("and maturing", T.MATURE_DAYS == 30)
+check("press days set the big fish's time, small fish half of it", T.PRESS_HOURS == 96 and T.PRESS_MIN_HOURS == 48
+    and T.pressHours(5) == 96 and T.pressHours(0.5) == 48)
 SandboxVars.TraditionalPreservationFish = { DryDays = 30, MaxDryDays = 10, Spoilage = 1 }
 T.applySandbox()
 check("the slowest can't beat the fastest", T.MIN_DRY_RATE == 1)
 check("spoilage can be turned off", T.RAW_SPOIL_HOURS == math.huge and T.SALT_SPOIL_HOURS == math.huge and T.FREEZE_DAMAGE_HOURS == math.huge and T.WET_DAMAGE_HOURS == math.huge)
 SandboxVars.TraditionalPreservationFish = { DryDays = 30, MaxDryDays = 10, Spoilage = 9 }
 check("a spoilage value out of range loads as normal", pcall(T.applySandbox) and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
-SandboxVars.TraditionalPreservationFish = { DryDays = 12, MaxDryDays = 27, Spoilage = 3 }
+SandboxVars.TraditionalPreservationFish = { DryDays = 12, MaxDryDays = 27, ColdDryDays = 32, MatureDays = 60, PressDays = 2, Spoilage = 3 }
 T.applySandbox()
-check("the defaults put it all back", T.DRY_HOURS == 288 and T.COLD_DRY_HOURS == 768 and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
+check("the defaults put it all back", T.DRY_HOURS == 288 and T.COLD_DRY_HOURS == 768 and T.MATURE_DAYS == 60
+    and T.PRESS_HOURS == 48 and T.PRESS_MIN_HOURS == 24 and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
 SandboxVars = nil
 
 -- What a stack's popup reports

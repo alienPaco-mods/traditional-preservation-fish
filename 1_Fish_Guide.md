@@ -269,8 +269,11 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 | Option | Default | Effect |
 |---|---|---|
-| Salt drying time (days) | 12 | Salt drying in the best weather. Cold drying takes 8/3 as long (32 days by default) |
+| Salt drying time (days) | 12 | Salt drying in the best weather. Kentucky's weather makes it 15 to 34 |
 | Slowest salt drying (days) | 27 | The longest cold or damp weather can stretch salt drying to. Rain pauses come on top |
+| Stockfish drying time (days) | 32 | Cold drying at the best temperature and wind. Hung from late October to January, about 50 to 55 outdoors; the real Lofoten takes about 90 |
+| Stockfish maturing time (days) | 60 | Ripening in storage. A pallet in a loft halves it, in a ground-floor room it takes two thirds |
+| Salt press time (days) | 2 | In the tub, for a batch with a big fish. Small fish take half as long |
 | Spoilage strictness | Normal | Off / Forgiving / Normal / Harsh |
 
 ---

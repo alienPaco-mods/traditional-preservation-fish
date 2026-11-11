@@ -1,5 +1,14 @@
 # Changelog: Traditional Preservation (Fish)
 
+## 0.3.7
+- **Defaults and sandbox options** (ROADMAP §6, decisions 14 and 15). The season report confirms the defaults as
+  they are: stockfish hung from late October to January dries outdoors in 50-55 days (32 at rate 1), February is
+  a gamble (52-93), March rots; salt fish 15-34 days; maturing 60; press 1-2 days. No value changed.
+- New sandbox options, defaults equal to the old fixed values: **Stockfish drying time** (`ColdDryDays`, 32),
+  **Stockfish maturing time** (`MatureDays`, 60), **Salt press time** (`PressDays`, 2: a big fish's time; small
+  fish keep half of it, `PRESS_MIN_HOURS`). Stockfish drying no longer follows Salt drying time at 8/3: a save
+  that had changed DryDays gets 32 days for cold drying unless it sets the new option.
+
 ## 0.3.6
 - **Stockfish Bale** (ROADMAP §6, pallet pitch C; user picks 2026-11-11: capacity 10, weight reduction 30, new icon
   and new world model, tie and untie from the right-click menu). A container item (`StockfishBale`, the pallet's

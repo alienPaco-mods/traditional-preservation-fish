@@ -18,6 +18,33 @@ option TraditionalPreservationFish.MaxDryDays {
     translation = TraditionalPreservationFish_MaxDryDays,
 }
 
+option TraditionalPreservationFish.ColdDryDays {
+    type = double,
+    min = 5.0,
+    max = 120.0,
+    default = 32.0,
+    page = TraditionalPreservationFish,
+    translation = TraditionalPreservationFish_ColdDryDays,
+}
+
+option TraditionalPreservationFish.MatureDays {
+    type = double,
+    min = 1.0,
+    max = 180.0,
+    default = 60.0,
+    page = TraditionalPreservationFish,
+    translation = TraditionalPreservationFish_MatureDays,
+}
+
+option TraditionalPreservationFish.PressDays {
+    type = double,
+    min = 0.5,
+    max = 7.0,
+    default = 2.0,
+    page = TraditionalPreservationFish,
+    translation = TraditionalPreservationFish_PressDays,
+}
+
 option TraditionalPreservationFish.Spoilage {
     type = enum,
     numValues = 4,

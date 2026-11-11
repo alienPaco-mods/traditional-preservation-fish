@@ -102,7 +102,7 @@ Humidity stays low in the game all year, mostly 20 to 45%, so it barely changes 
 
 ## Sandbox options
 
-Under Traditional Preservation (Fish) in the sandbox options: **Salt drying time** (12 days, and cold drying scales with it), **Slowest salt drying** (27 days) and **Spoilage strictness** (Off, Forgiving, Normal, Harsh).
+Under Traditional Preservation (Fish) in the sandbox options: **Salt drying time** (12 days), **Slowest salt drying** (27 days), **Stockfish drying time** (32 days), **Stockfish maturing time** (60 days), **Salt press time** (2 days for a batch with a big fish; small fish half) and **Spoilage strictness** (Off, Forgiving, Normal, Harsh). The defaults are set from the season report: stockfish hung from late October to January dries outdoors in about 50-55 days, salt fish in 15-34. Before 0.3.7 stockfish drying followed salt drying at 8/3; it is its own option now.
 
 ## Tuning
 

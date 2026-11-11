@@ -1221,15 +1221,20 @@ end
 local SPOILAGE_SCALES = { math.huge, 2, 1, 0.5 }
 local RAW_SPOIL_HOURS, SALT_SPOIL_HOURS = F.RAW_SPOIL_HOURS, F.SALT_SPOIL_HOURS
 local FREEZE_DAMAGE_HOURS, WET_DAMAGE_HOURS, HEAT_DAMAGE_HOURS = F.FREEZE_DAMAGE_HOURS, F.WET_DAMAGE_HOURS, F.HEAT_DAMAGE_HOURS
-local BASE_DRY_HOURS, BASE_COLD_DRY_HOURS = F.DRY_HOURS, F.COLD_DRY_HOURS
+-- Small fish press for the same share of the biggest fish's time, whatever the sandbox sets it to.
+local PRESS_MIN_SHARE = F.PRESS_MIN_HOURS / F.PRESS_HOURS
 
--- Reads the sandbox options into the drying times and spoilage limits.
+-- Reads the sandbox options into the drying, pressing and maturing times and the spoilage limits. Each time is
+-- its own option (up to 0.3.6 cold drying followed DryDays at 8/3); their defaults are the times in this file.
 function F.applySandbox()
     local options = SandboxVars and SandboxVars.TraditionalPreservationFish
     if not options then return end
-    if options.DryDays then
-        F.DRY_HOURS = options.DryDays * 24
-        F.COLD_DRY_HOURS = BASE_COLD_DRY_HOURS * F.DRY_HOURS / BASE_DRY_HOURS
+    if options.DryDays then F.DRY_HOURS = options.DryDays * 24 end
+    if options.ColdDryDays then F.COLD_DRY_HOURS = options.ColdDryDays * 24 end
+    if options.MatureDays then F.MATURE_DAYS = options.MatureDays end
+    if options.PressDays then
+        F.PRESS_HOURS = options.PressDays * 24
+        F.PRESS_MIN_HOURS = F.PRESS_HOURS * PRESS_MIN_SHARE
     end
     if options.MaxDryDays then F.MAX_DRY_DAYS = math.max(options.MaxDryDays, F.DRY_HOURS / 24) end
     F.MIN_DRY_RATE = F.DRY_HOURS / (F.MAX_DRY_DAYS * 24)
