@@ -85,6 +85,11 @@ Raw fish or fillet + salt by its size + knife (kept) → **Salt Packed** fish.
 Load up to **50 weight / 35 items**, press **Craft**. The board and stones go on for **1 to 2 in-game days**: the **heaviest fish** sets the time, from 1 day (every fish up to 1.1 weight, about half a kilo) to 2 days (any fish of 2.2 weight, about a kilo, or more). Press small fish together and they come out a day sooner. The tub stays closed until you've taken every pressed fish out.
 - **Mind a warm spell.** When the last ten days average above 20 C, fish in the tub sours by the spine before the salt reaches it, and the finished fish keeps less long: about a seventh off for a day at 21 C, over a third for two days at 25 C. Hover the batch to see it. Salt in spring and autumn, or press small fish.
 
+**Optional: rinse off the salt**
+Right-click Salt Pressed fish and open its submenu: **Rinse Off Salt** is a recipe that takes **0.15 L of clean water** a fish from a bottle or pot you carry (the Craft window does a whole batch). Standing near a sink, bathtub, barrel or well? **Rinse at Sink** in the same submenu rinses every selected fish there. Tainted water won't do. The dried fish comes out **less salty** (a third less thirst, no sour note) but keeps **a tenth less long**: less salt, less protection. Skip it and nothing changes.
+
+> 📜 *On the Volga, vobla makers soak the pressed fish for about an hour per day it spent in salt before hanging it in the shade. Too much salt left on the skin crusts over and makes a fish you'll be drinking water after all evening.*
+
 **Step 3. Hang on the Fish Drying Frame**
 Pick **Hang Salt Pressed Fish to Dry**, load pressed fish, press **Craft**. Each press hangs **one stack** of up to 2.5 weight, which dries on its own timer. There are **8 stacks** per frame, so you can keep adding while others dry.
 
@@ -126,7 +131,7 @@ The Hanging Beam and Gantry work exactly like the frame, with bigger stacks. Use
 |---|---|---|---|
 | Salt Packed | 90% | 100% | 3 / 6 |
 | Salt Pressed | 79–84% | 100% | 7 / 14 |
-| **Salt Dried** | ~37% | 90% | **120 / 180** |
+| **Salt Dried** | ~37% | 90% | **120 / 180** (rinsed: 108 / 162) |
 | Rehydrated (salt) | ~66% | 90% | 2 / 4 |
 | Gutted | 80% | 94% | 3 / 6 |
 | **Cold Dried** | ~18% | 89% | **365 / 730** |

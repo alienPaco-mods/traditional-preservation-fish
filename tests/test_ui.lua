@@ -246,4 +246,70 @@ check("then every fish stage in each shown container is renamed", #renamed == 1 
 check("and the player's things every hour", handlers.EveryHours ~= nil)
 F.rename = realRename
 
+-- Rinse at Sink
+local ui = H.installMenus()
+dofile("42/media/lua/shared/TimedActions/TPFishRinse.lua")
+local function rinsable(fullType, name)
+    local modData = {}
+    return { class = "InventoryItem", getFullType = function() return fullType end, getModData = function() return modData end,
+        getDisplayName = function() return name or "Walleye (Salt Pressed)" end, getTexture = function() return "fish icon" end }
+end
+local sink
+local person = {
+    getX = function() return 10 end, getY = function() return 10 end, getZ = function() return 0 end,
+    isTimedActionInstant = function() return false end,
+}
+function getSpecificPlayer() return person end
+function getCell()
+    return { getGridSquare = function(_, x, y)
+        if x ~= 12 or y ~= 10 or not sink then return nil end
+        return { getObjects = function() return H.list({ sink }) end }
+    end }
+end
+local function rinseMenu(items, context)
+    context = context or H.menu()
+    ui.queued = {}
+    handlers.OnFillInventoryObjectContextMenu(0, context, items)
+    return context
+end
+local function rinseOption(menu)
+    return menu:getOptionFromName("ContextMenu_TraditionalPreservationFish_RinseAtSink")
+end
+local pressedOne, pressedTwo = rinsable(F.RINSE_TYPE), rinsable(F.RINSE_TYPE)
+local stack = { items = { pressedOne, pressedOne, pressedTwo } }
+check("no sink, no option: the Rinse recipe covers carried water", #rinseMenu({ stack }).options == 0)
+sink = {
+    hasWater = function() return true end, isTaintedWater = function() return false end,
+    getFluidAmount = function() return 10 end, getSquare = function() return "sink square" end,
+}
+check("no option on a fish that isn't Salt Pressed", #rinseMenu({ rinsable("TraditionalPreservationFish.SaltDriedFish") }).options == 0)
+
+-- Vanilla's recipe submenu for the fish already there: the option joins it.
+local withSub = H.menu()
+local vanillaSub = withSub:getNew()
+withSub:addSubMenu(withSub:addOption("Walleye (Salt Pressed)"), vanillaSub)
+vanillaSub:addOption("Slice")
+rinseMenu({ stack }, withSub)
+local atSink = rinseOption(vanillaSub)
+check("near a sink it goes in the fish's submenu", #withSub.options == 1 and atSink ~= nil)
+atSink.onSelect(atSink.target, unpack(atSink.args))
+check("and rinses each fish of a stack once, after walking to the sink", #ui.queued == 2 and ui.queued[1].fish == pressedOne
+    and ui.queued[2].fish == pressedTwo and ui.queued[1].source == sink and ui.walks == 1)
+
+-- A lone recipe option: turned into the fish's submenu where it stands.
+function ISInventoryPaneContextMenu.OnNewCraft() end
+local lone = H.menu()
+lone:addOption("Eat")
+local slice = lone:addOption("Slice", pressedOne, ISInventoryPaneContextMenu.OnNewCraft)
+slice.iconTexture = "slice icon"
+rinseMenu({ stack }, lone)
+local parent = lone.options[2]
+check("a lone recipe becomes the fish's submenu in its place", #lone.options == 2 and parent.name == "Walleye (Salt Pressed)" and parent.onSelect == nil)
+local moved = parent.subOption.options[1]
+check("holding the recipe as it was, then Rinse at Sink", moved.name == "Slice" and moved.target == pressedOne
+    and moved.onSelect == ISInventoryPaneContextMenu.OnNewCraft and moved.iconTexture == "slice icon" and rinseOption(parent.subOption) ~= nil)
+
+sink.isTaintedWater = function() return true end
+check("a sink of tainted water doesn't count", #rinseMenu({ stack }).options == 0)
+
 H.done()

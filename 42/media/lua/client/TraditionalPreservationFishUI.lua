@@ -168,3 +168,70 @@ Events.OnRefreshInventoryWindowContainers.Add(function(page, reason)
     if reason ~= "end" then return end
     for _, button in ipairs(page.backpacks or {}) do renameIn(button.inventory) end
 end)
+
+-- Rinse at Sink: the Rinse recipe takes carried water, and this takes it from the nearest sink, bathtub, barrel or
+-- well of clean water, walking there. It goes in the fish's own submenu, beside the recipe, for every selected fish.
+local function selectedFish(items)
+    local fish = {}
+    for _, entry in ipairs(items) do
+        if instanceof(entry, "InventoryItem") then
+            if F.canRinse(entry) then table.insert(fish, entry) end
+        else
+            -- A collapsed stack lists its first item twice.
+            for i = 2, #entry.items do
+                if F.canRinse(entry.items[i]) then table.insert(fish, entry.items[i]) end
+            end
+        end
+    end
+    return fish
+end
+
+local function onRinse(playerObj, fish, source)
+    for _, item in ipairs(fish) do ISInventoryPaneContextMenu.transferIfNeeded(playerObj, item) end
+    if not luautils.walkAdj(playerObj, source:getSquare(), true) then return end
+    for _, item in ipairs(fish) do ISTimedActionQueue.add(TPFishRinse:new(playerObj, item, source)) end
+end
+
+local OPTION_FIELDS = { "target", "onSelect", "param1", "param2", "param3", "param4", "param5", "param6", "param7",
+    "param8", "param9", "param10", "iconTexture", "color", "toolTip", "notAvailable" }
+
+-- The submenu named after the fish that holds its recipes (Gut Fish, Pack Fish in Salt ...). Vanilla makes one only
+-- for two recipes or more; a lone recipe option is turned into it where it stands, and with no recipe it is added.
+local function fishSubMenu(context, fish)
+    local name = fish:getDisplayName()
+    local lone
+    for _, option in ipairs(context.options) do
+        if option.name == name and option.subOption then return context:getSubMenu(option.subOption) end
+        if not lone and option.onSelect and option.onSelect == ISInventoryPaneContextMenu.OnNewCraft then lone = option end
+    end
+    local subMenu = context:getNew(context)
+    local parent = lone
+    if lone then
+        local recipe = subMenu:addOption(lone.name)
+        for _, field in ipairs(OPTION_FIELDS) do
+            recipe[field] = lone[field]
+            lone[field] = nil
+        end
+        lone.name = name
+    else
+        parent = context:addOption(name)
+    end
+    parent.iconTexture = fish:getTexture()
+    context:addSubMenu(parent, subMenu)
+    return subMenu
+end
+
+local function onFillRinseMenu(playerNum, context, items)
+    local fish = selectedFish(items)
+    if #fish == 0 then return end
+    local playerObj = getSpecificPlayer(playerNum)
+    local source = F.findWaterSource(playerObj, F.RINSE_LITRES)
+    if not source then return end
+    local option = fishSubMenu(context, fish[1]):addOption(getText("ContextMenu_TraditionalPreservationFish_RinseAtSink"), playerObj, onRinse, fish, source)
+    option.iconTexture = fish[1]:getTexture()
+    local tooltip = ISWorldObjectContextMenu.addToolTip()
+    tooltip.description = getText("Tooltip_TraditionalPreservationFish_RinseAtSink", tostring(#fish), string.format("%.2f", F.RINSE_LITRES * #fish))
+    option.toolTip = tooltip
+end
+
+Events.OnFillInventoryObjectContextMenu.Add(onFillRinseMenu)

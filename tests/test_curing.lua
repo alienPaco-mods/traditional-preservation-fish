@@ -24,6 +24,7 @@ local NAMES = {
     IGUI_TraditionalPreservationFish_Ripe = "Ripe",
     IGUI_TraditionalPreservationFish_Unripe = "Unripe",
     IGUI_TraditionalPreservationFish_Head = "%1 Head",
+    IGUI_TraditionalPreservationFish_Rinsed = "Rinsed",
 }
 local keptShare
 function ZombRandFloat(low, high)
@@ -89,8 +90,12 @@ local function newFood(fullType, values)
         return tag == ItemTag.UNCUT_FISH and self.fullType:sub(1, 5) == "Base." and self.fullType ~= "Base.FishFillet"
     end
     function food:setWeight(value) self.weight = value end
-    function food:getOffAge() return 120 end
-    function food:getOffAgeMax() return 180 end
+    function food:getOffAge() return self.offAge or 120 end
+    function food:getOffAgeMax() return self.offAgeMax or 180 end
+    function food:setOffAge(value) self.offAge = value end
+    function food:setOffAgeMax(value) self.offAgeMax = value end
+    function food:getThirstChange() return self.thirst or 0 end
+    function food:setThirstChange(value) self.thirst = value end
     function food:setAge(value) self.age = value end
     function food:getAge() return self.age or 0 end
     return food
@@ -999,5 +1004,48 @@ for tenth = 0, 90, 10 do
 end
 local script = io.open("42/media/scripts/TraditionalPreservationFish.txt"):read("*a")
 check("soaking stockfish goes through onCreateSoaked", script:match("craftRecipe SoakColdFish.-OnCreate = ([%w%.]+)") == "TraditionalPreservationFish.onCreateSoaked")
+
+-- Rinsing
+local unrinsed = through(through(packedBass, "SaltPressedFish"), "SaltDriedFish")
+unrinsed.thirst = 0.3
+local toRinse = through(packedBass, "SaltPressedFish")
+toRinse.thirst = 0.2
+check("a Salt Pressed fish can be rinsed", T.canRinse(toRinse))
+check("other stages can't", not T.canRinse(packedBass) and not T.canRinse(unrinsed) and not T.canRinse(fresh))
+check("rinsing works once", T.rinse(toRinse) and not T.canRinse(toRinse) and not T.rinse(toRinse))
+check("a rinsed pressed fish is less salty and keeps a tenth less", near(toRinse.thirst, 0.2 * T.RINSED_THIRST) and toRinse.offAge == 108 and toRinse.offAgeMax == 162)
+check("and says so", toRinse.name == "Medium Walleye (Salt Pressed, Rinsed)")
+local rinsedDried = newFood("TraditionalPreservationFish.SaltDriedFish", {})
+rinsedDried.thirst = 0.3
+rinsedDried.unhappy = 3
+T.onCreateDried(newRecipeData(0, { toRinse }, { rinsedDried }))
+check("the dried fish from it keeps the rinse: thirst 30 to 20, no sour note", near(rinsedDried.thirst, 0.2) and rinsedDried.unhappy == 0)
+check("and keeps a tenth less long, counted from its own script", rinsedDried.offAge == 108)
+check("and its name says so", rinsedDried.name == "Medium Walleye (Salt Dried, Rinsed)")
+check("an unrinsed fish is as it was", unrinsed.thirst == 0.3 and unrinsed.offAge == nil and unrinsed.name == "Medium Walleye (Salt Dried)")
+local rinsedFillet = slice(rinsedDried, "SaltDriedFish")
+check("a slice of rinsed fish is rinsed too", rinsedFillet:getModData().rinsed and rinsedFillet.offAge == 108)
+local soakedRinsed = through(rinsedDried, "SoakedSaltFish")
+check("soaking doesn't rinse a second time", soakedRinsed.offAge == nil and soakedRinsed.name == "Medium Walleye (Rehydrated, Salt Dried)")
+
+-- The Rinse recipe
+local beforeRecipe = through(packedBass, "SaltPressedFish")
+beforeRecipe.thirst, beforeRecipe.age = 0.2, 4
+beforeRecipe:getModData().stackId = 7
+check("the recipe's test lets the water container through", T.canRinseInput(newFood("Base.WaterBottle", {})))
+check("and a fish not rinsed yet", T.canRinseInput(beforeRecipe))
+local fromRecipe = newFood("TraditionalPreservationFish.SaltPressedFish", {})
+fromRecipe.thirst = 0.2
+T.onCreateRinsed(newRecipeData(0, { beforeRecipe }, { fromRecipe }))
+check("the rinsed fish is the same fish: food, weight, age, data", fromRecipe.values.Calories == beforeRecipe.values.Calories
+    and fromRecipe.values.ActualWeight == beforeRecipe.values.ActualWeight and fromRecipe.age == 4
+    and fromRecipe:getModData().stackId == 7 and fromRecipe:getModData().fishName == beforeRecipe:getModData().fishName)
+check("only rinsed", fromRecipe:getModData().rinsed and near(fromRecipe.thirst, 0.2 * T.RINSED_THIRST) and fromRecipe.offAge == 108)
+check("named so", fromRecipe.name == "Medium Walleye (Salt Pressed, Rinsed)")
+check("and the test turns it down a second time", not T.canRinseInput(fromRecipe))
+local rinseRecipe = script:match("craftRecipe RinseSaltedFish(.-)\n    }\n")
+check("the recipe takes 0.15 L of clean water", rinseRecipe:find("-fluid " .. T.RINSE_LITRES .. " [Water]", 1, true) ~= nil)
+check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnTest = TraditionalPreservationFish.canRinseInput", 1, true)
+    and rinseRecipe:find("OnCreate = TraditionalPreservationFish.onCreateRinsed", 1, true))
 
 H.done()

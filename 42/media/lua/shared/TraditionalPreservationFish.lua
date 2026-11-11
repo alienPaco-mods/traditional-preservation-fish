@@ -146,6 +146,14 @@ F.HEAT_DAMAGE = 0.05
 -- fresh-off-the-frame one lowers it as much; halfway is neither. A dish takes on the share it gets.
 F.MATURE_DAYS = 60
 F.MATURE_UNHAPPY = 10
+-- Rinsing salt pressed fish, as on the Volga: the excess salt soaked off before it hangs. Optional. It takes
+-- RINSE_LITRES of water a fish, leaves RINSED_THIRST of the thirst, and the fish keeps RINSED_KEEPING as long
+-- (less salt, less protection). A Salt Dried fish from it loses its sour note too (unhappiness 3 to 0).
+F.RINSE_LITRES = 0.15
+F.RINSED_THIRST = 2 / 3
+F.RINSED_KEEPING = 0.9
+F.RINSE_REACH = 3
+F.RINSE_TICKS = 60
 
 -- From DryingCraftLogic, so the frame's wetness readout tells the truth.
 local RAIN_WETTING = 0.001  -- per game second, at full intensity
@@ -167,8 +175,8 @@ F.FISH_ICONS = {
 -- A prep stage names the fish itself (Gutted Walleye, Walleye Half); the others go in brackets after it.
 F.STAGES = {
     ["TraditionalPreservationFish.SaltPackedFish"] = { name = "IGUI_TraditionalPreservationFish_Packed", weight = 1, nutrition = 1, hunger = 1, gutted = true },
-    ["TraditionalPreservationFish.SaltPressedFish"] = { name = "IGUI_TraditionalPreservationFish_Pressed", weight = 0.88, maxWeight = 0.93, nutrition = 1, hunger = 1 },
-    ["TraditionalPreservationFish.SaltDriedFish"] = { name = "IGUI_TraditionalPreservationFish_Dried", weight = 0.45, nutrition = 0.9, hunger = 0.7 },
+    ["TraditionalPreservationFish.SaltPressedFish"] = { name = "IGUI_TraditionalPreservationFish_Pressed", weight = 0.88, maxWeight = 0.93, nutrition = 1, hunger = 1, salty = true },
+    ["TraditionalPreservationFish.SaltDriedFish"] = { name = "IGUI_TraditionalPreservationFish_Dried", weight = 0.45, nutrition = 0.9, hunger = 0.7, salty = true, rinsedUnhappy = 0 },
     ["TraditionalPreservationFish.SoakedSaltFish"] = { name = "IGUI_TraditionalPreservationFish_SoakedSalt", weight = 1.8, nutrition = 1, hunger = 1 / 0.7 },
     ["TraditionalPreservationFish.GuttedFish"] = { name = "IGUI_TraditionalPreservationFish_Gutted", weight = 1, nutrition = 1, hunger = 1, gutted = true, headless = true, prep = true },
     ["TraditionalPreservationFish.FishHalf"] = { weight = 1, nutrition = 1, hunger = 1, prep = true },
@@ -748,9 +756,83 @@ function F.carry(source, target)
         targetData.sliceable = not F.UNSLICEABLE[source:getFullType()] and source:getActualWeight() > F.MIN_SLICE_WEIGHT
     end
 
+    if sourceData.rinsed then
+        targetData.rinsed = true
+        F.applyRinse(target)
+    end
+
     -- After the icon, which tells whether the fish was gutted.
     target:setModelIndex(F.iconIndex(source))
     F.rename(target)
+end
+
+F.RINSE_TYPE = "TraditionalPreservationFish.SaltPressedFish"
+
+-- Only a Salt Pressed fish not rinsed yet: a dried one has lost the water that lets the salt out.
+function F.canRinse(item)
+    return item:getFullType() == F.RINSE_TYPE and not item:getModData().rinsed
+end
+
+-- What rinsing does to a salty stage, from its script values: less thirst, a little less keeping. A stage
+-- made from a rinsed fish gets it again, as its values come fresh from its own script.
+function F.applyRinse(item)
+    local stage = F.STAGES[item:getFullType()]
+    if not stage or not stage.salty then return end
+    item:setThirstChange(item:getThirstChange() * F.RINSED_THIRST)
+    if stage.rinsedUnhappy then item:setUnhappyChange(stage.rinsedUnhappy) end
+    item:setOffAge(math.floor(item:getOffAge() * F.RINSED_KEEPING + 0.5))
+    item:setOffAgeMax(math.floor(item:getOffAgeMax() * F.RINSED_KEEPING + 0.5))
+end
+
+function F.rinse(item)
+    if not F.canRinse(item) then return false end
+    item:getModData().rinsed = true
+    F.applyRinse(item)
+    F.rename(item)
+    return true
+end
+
+-- The Rinse recipe's OnTest, which runs for every input: only the fish is checked.
+function F.canRinseInput(item)
+    if item:getFullType() ~= F.RINSE_TYPE then return true end
+    return F.canRinse(item)
+end
+
+-- The Rinse recipe gives back the same fish, so each one hands over everything it is, then is rinsed.
+function F.onCreateRinsed(craftRecipeData)
+    local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
+    local created = craftRecipeData:getAllCreatedItems()
+    for i = 0, math.min(fish:size(), created:size()) - 1 do
+        local source, target = fish:get(i), created:get(i)
+        copyFood(source, target, 1)
+        target:setActualWeight(source:getActualWeight())
+        target:setCustomWeight(true)
+        local targetData = target:getModData()
+        for key, value in pairs(source:getModData()) do targetData[key] = value end
+        target:setModelIndex(source:getModelIndex())
+        F.rinse(target)
+        target:setAge(source:getAge())
+    end
+end
+
+-- The nearest sink, bathtub, barrel or well of clean water within RINSE_REACH on the character's floor with at least litres.
+function F.findWaterSource(character, litres)
+    local cell, px, py, z = getCell(), math.floor(character:getX()), math.floor(character:getY()), math.floor(character:getZ())
+    local best, bestDistance
+    for x = px - F.RINSE_REACH, px + F.RINSE_REACH do
+        for y = py - F.RINSE_REACH, py + F.RINSE_REACH do
+            local square = cell:getGridSquare(x, y, z)
+            local objects = square and square:getObjects()
+            for i = 0, objects and objects:size() - 1 or -1 do
+                local object = objects:get(i)
+                if object:hasWater() and not object:isTaintedWater() and object:getFluidAmount() >= litres then
+                    local distance = (x - px) ^ 2 + (y - py) ^ 2
+                    if not best or distance < bestDistance then best, bestDistance = object, distance end
+                end
+            end
+        end
+    end
+    return best
 end
 
 -- How far a stockfish has matured, 0 to 1, by the days on its own food clock since it came off the frame.
@@ -780,6 +862,9 @@ function F.stageName(item)
     if stage.prep then return stage.name and getText(stage.name, fishName) or fishName end
     if F.wasGutted(item) then fishName = getText("IGUI_TraditionalPreservationFish_Gutted", fishName) end
     local state = getText(stage.name)
+    if stage.salty and modData.rinsed then
+        state = getText("IGUI_TraditionalPreservationFish_And", state, getText("IGUI_TraditionalPreservationFish_Rinsed"))
+    end
     local ripeness = (stage.matures or stage.ripened) and F.ripeness(item)
     if ripeness then
         state = getText("IGUI_TraditionalPreservationFish_And", state,
@@ -959,6 +1044,10 @@ function F.onCreateSliced(craftRecipeData)
         modData.sliceable = false
         modData.matureAge = fish:getModData().matureAge
         modData.ripeness = fish:getModData().ripeness
+        if fish:getModData().rinsed then
+            modData.rinsed = true
+            F.applyRinse(fillet)
+        end
         fillet:setModelIndex(0)
         F.rename(fillet)
     end

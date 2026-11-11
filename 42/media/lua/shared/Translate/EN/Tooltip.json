@@ -6,8 +6,8 @@
   "Tooltip_craft_hangFishToDry": "Salt drying, for Salt Pressed fish. Works in any season, fastest in warm, dry air, best in the shade. Keeps for months.",
   "Tooltip_craft_hangFishToColdDry": "Cold drying, for gutted fish and halves. Needs a cold season, out of a room, or the fish rots. Keeps for a year or more.",
   "Tooltip_TraditionalPreservationFish_PackSalt": "Takes 4 salt for each started half weight of the packed fish, about a seventh of its weight. Carry the salt yourself: a shaker holds 10, a Bag of Salt 50. A fish over 4.5 weight is too thick to salt whole: gut and split it first.",
-  "Tooltip_TraditionalPreservationFish_Packed":"Press it in a Salting Tub before it spoils.",
-  "Tooltip_TraditionalPreservationFish_Pressed": "Cured, but not yet preserved. Hang it on a Fish Drying Frame.",
+  "Tooltip_TraditionalPreservationFish_Packed": "Press it in a Salting Tub before it spoils.",
+  "Tooltip_TraditionalPreservationFish_Pressed": "Cured, but not yet preserved. Rinse off the salt if you like (right-click), then hang it on a Fish Drying Frame.",
   "Tooltip_TraditionalPreservationFish_Gutted": "Hang it on a Fish Drying Frame in a cold season, or cook it. Split it if it's too heavy to hang.",
   "Tooltip_TraditionalPreservationFish_Half": "Hang it on a Fish Drying Frame in a cold season, or cook it.",
   "Tooltip_TraditionalPreservationFish_ColdDried": "Keeps for a year or more. Too hard to use: rehydrate it in water before cooking.",
@@ -23,5 +23,7 @@
   "Tooltip_TraditionalPreservationFish_ColdDried_90": "Keeps for a year or more. Too hard to use: rehydrate it in water before cooking. Maturing: 90 percent. Ripe stockfish cheers you up once rehydrated.",
   "Tooltip_TraditionalPreservationFish_Dried": "Keeps for months. Very salty: rehydrate it in water before cooking.",
   "Tooltip_TraditionalPreservationFish_Head": "Raw, it will make you sick. Cook it, or add it to a soup or stew. It can't be dried. It also makes chum.",
-  "Tooltip_TraditionalPreservationFish_HeadStock": "Fish head stock, ready to take up to 6 stew ingredients and your seasonings. It starts out as tasty as a plain stew. Cook it before eating."
+  "Tooltip_TraditionalPreservationFish_HeadStock": "Fish head stock, ready to take up to 6 stew ingredients and your seasonings. It starts out as tasty as a plain stew. Cook it before eating.",
+  "Tooltip_craft_rinseSaltedFish": "Optional. Soaks the excess salt off before hanging, as on the Volga. The dried fish is less salty (less thirst, no sour note) but keeps a tenth less long. Near a sink, bathtub, barrel or well, right-click the fish for Rinse at Sink.",
+  "Tooltip_TraditionalPreservationFish_RinseAtSink": "Rinses %1 fish with %2 L of clean water from the sink, bathtub, barrel or well close by. The dried fish is less salty but keeps a tenth less long."
 }

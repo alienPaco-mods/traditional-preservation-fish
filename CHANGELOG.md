@@ -1,5 +1,19 @@
 # Changelog: Traditional Preservation (Fish)
 
+## 0.3.4
+- Optional rinse (ROADMAP §6, user 2026-11-11, from an Astrakhan vobla account: the excess salt is soaked off after
+  pressing). **Rinse Off Salt** is a craft recipe (`RinseSaltedFish`) on Salt Pressed fish: 0.15 L of clean
+  carried water each (`RINSE_LITRES`), so it sits in the fish's recipe submenu and the Craft window can do many at
+  once, and works in the dark (`CanBeDoneInDark`). It gives back the same fish (`onCreateRinsed`: food, weight, age and mod data carried) marked `rinsed`.
+  Near a sink, bathtub, barrel or well of clean water (3 tiles, same floor, `F.findWaterSource`), **Rinse at Sink**
+  joins the same submenu (a lone vanilla recipe option is turned into that submenu in place) and rinses every
+  selected fish there (`TPFishRinse`, `RINSE_TICKS`), walking over first. Tainted water is refused both ways, as
+  the soaking recipes already refuse it.
+- A rinsed fish has two thirds of the thirst and keeps a tenth less long (`RINSED_THIRST`, `RINSED_KEEPING`: less
+  salt, less protection); the Salt Dried fish made from it gets the same from its own script (thirst 30 to 20) and
+  loses its sour note (unhappiness 3 to 0). Slices keep it; soaking doesn't apply it again. Names show it:
+  *Medium Walleye (Salt Dried, Rinsed)*. Skipping the rinse changes nothing.
+
 ## 0.3.3
 - Stockfish matures (ROADMAP §6, decisions 5 and 6, user 2026-11-11): Cold Dried fish ripens over 60 days
   (`MATURE_DAYS`) on its own food clock, so a fridge slows it and a freezer stops it; no station, any container.

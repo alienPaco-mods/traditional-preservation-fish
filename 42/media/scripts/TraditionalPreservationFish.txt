@@ -729,6 +729,30 @@ module TraditionalPreservationFish
         }
     }
 
+    /* Optional: soaks the excess salt off a Salt Pressed fish before it hangs (Volga practice). The fish comes out
+       the same, marked rinsed (onCreateRinsed). Carried clean water only; a sink or bathtub is the right-click
+       Rinse at Sink (TPFishRinse). */
+    craftRecipe RinseSaltedFish
+    {
+        timedAction = Making,
+        time = 60,
+        Tags = InHandCraft;Cooking;CanBeDoneInDark,
+        category = Cooking,
+        Tooltip = Tooltip_craft_rinseSaltedFish,
+        OnTest = TraditionalPreservationFish.canRinseInput,
+        OnCreate = TraditionalPreservationFish.onCreateRinsed,
+        inputs
+        {
+            item 1 [TraditionalPreservationFish.SaltPressedFish] flags[ItemCount] mode:destroy,
+            item 1 [*],
+            -fluid 0.15 [Water],
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFish.SaltPressedFish,
+        }
+    }
+
     /* InheritFoodAge carries freshness as a share of each item's fresh days (Food.copyAgeFrom), so a stale dried
        fish soaks into a stale one. */
     craftRecipe SoakSaltFish
