@@ -78,5 +78,7 @@
   "IGUI_TraditionalPreservationFishMeat_StoppedTooCold": "Stopped (Too cold)",
   "IGUI_TraditionalPreservationFishMeat_TempHotGood": "Hot sun, best for charque",
   "IGUI_TraditionalPreservationFishMeat_TempTooCold": "Too cold",
-  "IGUI_TraditionalPreservationFishMeat_CharqueOff": "Charque is off in this world's sandbox options"
+  "IGUI_TraditionalPreservationFishMeat_CharqueOff": "Charque is off in this world's sandbox options",
+  "IGUI_TraditionalPreservationFishMeat_CrockPortions": "%1 (%2 portions)",
+  "IGUI_TraditionalPreservationFishMeat_CrockOnePortion": "%1 (1 portion)"
 }

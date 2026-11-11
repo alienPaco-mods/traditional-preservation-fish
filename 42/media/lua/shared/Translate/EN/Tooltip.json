@@ -41,5 +41,8 @@
   "Tooltip_TraditionalPreservationFishMeat_CuredMeat": "Cured, but still damp: it keeps a week or two. Cook it, or rinse off the salt if you like (right-click) and hang it on a drying frame to dry in the sun as Charque.",
   "Tooltip_craft_hangMeatToDry": "Sun drying, for Salt Cured meat: charque. Best in hot sun and a breeze, about 5 days in summer; slow in spring and autumn, nearly stops in winter. Rain on an open frame takes some of it back. Keeps for months.",
   "Tooltip_TraditionalPreservationFishMeat_Charque": "Keeps for months. Salty and as hard as leather: rehydrate it in water before cooking.",
-  "Tooltip_TraditionalPreservationFishMeat_SoakedCharque": "Desalted and soft again. Still a little salty. Cook it soon: it spoils like fresh meat."
+  "Tooltip_TraditionalPreservationFishMeat_SoakedCharque": "Desalted and soft again. Still a little salty. Cook it soon: it spoils like fresh meat.",
+  "Tooltip_TraditionalPreservationFishMeat_PutMeatInFat": "Beef, mutton, venison or pork cooked slowly in Lard or Tallow with salt, as kavurma and confit are made. Add up to four cuts: a block of fat covers four. Cook it on any stove or fire, then pack it into a clay jar or pot.",
+  "Tooltip_TraditionalPreservationFishMeat_PotOfMeatInFat": "Cook it on any stove or fire for about two hours, then pack it into a Clay Jar, Glazed Clay Jar or Clay Pot. Add more meat before it cooks, up to four cuts. Burnt, it is only good for scraping out.",
+  "Tooltip_TraditionalPreservationFishMeat_CrockOfPottedMeat": "Cooked meat sealed under its fat, a portion a cut. Keep it cold: a cellar or a fridge, never a warm kitchen. The jar comes back when it is eaten out."
 }

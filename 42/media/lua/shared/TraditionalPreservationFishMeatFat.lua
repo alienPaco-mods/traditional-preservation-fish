@@ -141,9 +141,10 @@ function F.onPourOffTallow(craftRecipeData)
     fillWith(craftRecipeData, F.COPPER_FATS[2].melted)
 end
 
--- OnTest of Scrape Out Burnt Fat: only a burnt pot.
+-- OnTest of Scrape Out Burnt Fat: only a burnt pot, of fat or of Potted Meat's meat in fat.
 function F.canScrape(item)
-    if not F.FAT_POTS[item:getFullType()] then return true end
+    local fullType = item:getFullType()
+    if not F.FAT_POTS[fullType] and not (F.MEAT_FAT_POTS and F.MEAT_FAT_POTS[fullType]) then return true end
     return item:isBurnt()
 end
 

@@ -58,5 +58,13 @@
   "HangMeatToDry": "Hang Salt Cured Meat to Dry",
   "TraditionalPreservationFishMeat.HangMeatToDry": "Hang Salt Cured Meat to Dry",
   "SoakCharque": "Rehydrate Charque",
-  "TraditionalPreservationFishMeat.SoakCharque": "Rehydrate Charque"
+  "TraditionalPreservationFishMeat.SoakCharque": "Rehydrate Charque",
+  "PutMeatInLard": "Put Meat in Lard or Tallow",
+  "TraditionalPreservationFishMeat.PutMeatInLard": "Put Meat in Lard or Tallow",
+  "PutMeatInMeltedFat": "Put Meat in the Melted Fat",
+  "TraditionalPreservationFishMeat.PutMeatInMeltedFat": "Put Meat in the Melted Fat",
+  "AddMeatToPot": "Add Meat to the Pot",
+  "TraditionalPreservationFishMeat.AddMeatToPot": "Add Meat to the Pot",
+  "PackPottedMeat": "Pack Potted Meat",
+  "TraditionalPreservationFishMeat.PackPottedMeat": "Pack Potted Meat"
 }

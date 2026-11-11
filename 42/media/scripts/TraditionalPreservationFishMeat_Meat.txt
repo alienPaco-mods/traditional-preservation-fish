@@ -383,7 +383,7 @@ module TraditionalPreservationFishMeat
         OnTest = TraditionalPreservationFishMeat.canScrape,
         inputs
         {
-            item 1 [TraditionalPreservationFishMeat.PotOfPorkFat;TraditionalPreservationFishMeat.PotForgedPorkFat;TraditionalPreservationFishMeat.PotOfSuet;TraditionalPreservationFishMeat.PotForgedSuet] mappers[potType] flags[InheritCondition;AllowRottenItem;ItemCount] mode:destroy,
+            item 1 [TraditionalPreservationFishMeat.PotOfPorkFat;TraditionalPreservationFishMeat.PotForgedPorkFat;TraditionalPreservationFishMeat.PotOfSuet;TraditionalPreservationFishMeat.PotForgedSuet;TraditionalPreservationFishMeat.PotOfMeatInFat;TraditionalPreservationFishMeat.PotForgedMeatInFat] mappers[potType] flags[InheritCondition;AllowRottenItem;ItemCount] mode:destroy,
         }
         outputs
         {
@@ -395,6 +395,8 @@ module TraditionalPreservationFishMeat
             Base.Pot = TraditionalPreservationFishMeat.PotOfSuet,
             Base.PotForged = TraditionalPreservationFishMeat.PotForgedPorkFat,
             Base.PotForged = TraditionalPreservationFishMeat.PotForgedSuet,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfMeatInFat,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedMeatInFat,
         }
     }
 
@@ -605,6 +607,192 @@ module TraditionalPreservationFishMeat
         outputs
         {
             item 1 TraditionalPreservationFishMeat.SoakedCharque,
+        }
+    }
+
+    /* Potted Meat, phase 4 (TraditionalPreservationFishMeatPotted.lua): cuts cooked slowly in Lard or Tallow with
+       salt, then packed into a clay jar or pot under the fat. A pot takes a cut, a block of fat and salt, then up to
+       three more cuts (Add Meat to the Pot); a block covers four. Its food values are set from the cuts and the fat
+       (the script's are a Steak and a quarter block); it can't be eaten, cooks in two hours and can burn. */
+    item PotOfMeatInFat
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 1.8,
+        Icon = PotOfMeatInFat,
+        CantEat = true,
+        BadInMicrowave = true,
+        CookingSound = FryingFood,
+        IsCookable = true,
+        MinutesToCook = 120,
+        MinutesToBurn = 240,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -46.0,
+        Calories = 1244.0,
+        Carbohydrates = 0.0,
+        Lipids = 123.0,
+        Proteins = 32.0,
+        FoodType = Meat,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PotOfMeatInFat,
+    }
+
+    item PotForgedMeatInFat
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 1.8,
+        Icon = PotForgedMeatInFat,
+        CantEat = true,
+        BadInMicrowave = true,
+        CookingSound = FryingFood,
+        IsCookable = true,
+        MinutesToCook = 120,
+        MinutesToBurn = 240,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -46.0,
+        Calories = 1244.0,
+        Carbohydrates = 0.0,
+        Lipids = 123.0,
+        Proteins = 32.0,
+        FoodType = Meat,
+        StaticModel = CookingPotForged_StewGround,
+        WorldStaticModel = CookingPotForged_StewGround,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PotOfMeatInFat,
+    }
+
+    /* A crock of Potted Meat: a vanilla Clay Jar, Glazed Clay Jar or Clay Pot (in ModData tpfmVessel, given back
+       with the last bite). Its food values are its portions, a cut each with its share of the fat; eaten from with
+       vanilla's Eat, it is relabelled with the portions left. Keeping is the basement's for now (phase 4c keeps it
+       by place). IconsForTexture and WorldStaticModelsByIndex are POTTED_VESSELS' indices: clay, glazed. */
+    item CrockOfPottedMeat
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 1.0,
+        Icon = PottedMeat_Clay,
+        IconsForTexture = PottedMeat_Clay;PottedMeat_Glazed,
+        DaysFresh = 60,
+        DaysTotallyRotten = 90,
+        HungerChange = -46.0,
+        Calories = 1244.0,
+        Carbohydrates = 0.0,
+        Lipids = 123.0,
+        Proteins = 32.0,
+        ThirstChange = 5.0,
+        FoodType = Meat,
+        StaticModel = ClayJar,
+        WorldStaticModel = ClayJar,
+        WorldStaticModelsByIndex = ClayJar;GlazedClayJar,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_CrockOfPottedMeat,
+    }
+
+    craftRecipe PutMeatInLard
+    {
+        timedAction = MixingBowl,
+        time = 80,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationFishMeat.onPutMeatInFat,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PutMeatInFat,
+        inputs
+        {
+            item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition;IsEmpty] mappers[potType],
+            item 1 [Base.Lard;TraditionalPreservationFishMeat.Tallow] flags[ItemCount] mode:destroy,
+            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 1 tags[base:salt],
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            TraditionalPreservationFishMeat.PotOfMeatInFat = Base.Pot,
+            TraditionalPreservationFishMeat.PotForgedMeatInFat = Base.PotForged,
+        }
+    }
+
+    /* A pot of Melted Lard or Tallow from Pour Off (or ladled from the copper): its 0.5 L is a block. */
+    craftRecipe PutMeatInMeltedFat
+    {
+        timedAction = MixingBowl,
+        time = 80,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationFishMeat.onPutMeatInFat,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PutMeatInFat,
+        inputs
+        {
+            item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition] mappers[potType],
+            -fluid 0.5 [MeltedLard;MeltedTallow],
+            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 1 tags[base:salt],
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            TraditionalPreservationFishMeat.PotOfMeatInFat = Base.Pot,
+            TraditionalPreservationFishMeat.PotForgedMeatInFat = Base.PotForged,
+        }
+    }
+
+    craftRecipe AddMeatToPot
+    {
+        timedAction = MixingBowl,
+        time = 40,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnTest = TraditionalPreservationFishMeat.canAddPottedCut,
+        OnCreate = TraditionalPreservationFishMeat.onAddPottedCut,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.PotOfMeatInFat;TraditionalPreservationFishMeat.PotForgedMeatInFat] mode:destroy flags[InheritCondition] mappers[sameItem],
+            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop] flags[IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 mapper:sameItem,
+        }
+        itemMapper sameItem
+        {
+            TraditionalPreservationFishMeat.PotOfMeatInFat = TraditionalPreservationFishMeat.PotOfMeatInFat,
+            TraditionalPreservationFishMeat.PotForgedMeatInFat = TraditionalPreservationFishMeat.PotForgedMeatInFat,
+        }
+    }
+
+    /* The cooked pot packed into a clay jar or pot: the crock, and the pot back. Burnt, it is only good for
+       Scrape Out Burnt Fat (canPackPotted). */
+    craftRecipe PackPottedMeat
+    {
+        timedAction = MixingBowl,
+        time = 80,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnTest = TraditionalPreservationFishMeat.canPackPotted,
+        OnCreate = TraditionalPreservationFishMeat.onPackPotted,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.PotOfMeatInFat;TraditionalPreservationFishMeat.PotForgedMeatInFat] mappers[potType] flags[InheritCondition;IsCookedFoodItem;ItemCount] mode:destroy,
+            item 1 [Base.ClayJar;Base.ClayJarGlazed;Base.ClayPot] flags[IsEmpty] mode:destroy,
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+            item 1 TraditionalPreservationFishMeat.CrockOfPottedMeat,
+        }
+        itemMapper potType
+        {
+            Base.Pot = TraditionalPreservationFishMeat.PotOfMeatInFat,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedMeatInFat,
         }
     }
 }

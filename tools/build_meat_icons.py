@@ -2,13 +2,15 @@
 """Paints the fat and salted meat icons of Traditional Preservation (Fish & Meat) into 42/media/textures.
 
 Raw Pork Fat, Beef Suet and Mutton Fat are vanilla's loin icons pulled towards a fat colour, Tallow is vanilla's
-Lard block yellowed, and the pots of fat are vanilla's full pots with the soup recoloured. Cracklings use vanilla's
+Lard block yellowed, and the pots of fat are vanilla's full pots with the soup recoloured; Potted Meat's pots and
+crocks are painted the same way. Cracklings use vanilla's
 Pork Rinds icon as it is. Kept apart from build_tileset.py so the fish art doesn't rebuild with it.
 
 Usage: python3 tools/build_meat_icons.py [path/to/ProjectZomboid/projectzomboid]
 Needs Pillow. Rerun after editing the colours below.
 """
 import os
+import random
 import sys
 from pathlib import Path
 
@@ -35,6 +37,12 @@ SALTED = {"SaltPacked": ((236, 232, 224), 0.35), "SaltCured": ((128, 54, 44), 0.
 # The pots of fat: vanilla's full pot, with the soup's reds turned to melting fat.
 POTS = {"PotOfFat": "Item_PotFull", "PotForgedFat": "Item_Pot_Forged_Stew"}
 FAT_IN_POT = (244, 232, 196)
+# Potted Meat (phase 4): the same pots with brown meat in the fat, and vanilla's clay jars (a Clay Pot shares the
+# unglazed jar's icon) with the dark of the mouth turned to set white fat, as Dairy's yoghurt jars are painted.
+MEAT_POTS = {"PotOfMeatInFat": "Item_PotFull", "PotForgedMeatInFat": "Item_Pot_Forged_Stew"}
+MEAT_IN_FAT = (150, 92, 60)
+CROCKS = {"PottedMeat_Clay": "Item_ClayJar_Fired", "PottedMeat_Glazed": "Item_ClayJar_Glazed_Fired"}
+SET_FAT = (240, 234, 212)
 OUTLINE_BELOW = 70  # pixels with no channel above this are the icon's outline and stay as they are
 # Vanilla's icons are spread over these packs.
 ICON_PACKS = ["UI2.pack", "UI.pack"]
@@ -61,7 +69,7 @@ def is_soup(r, g, b):
     return r > 60 and r > g * 1.18 and r > b * 1.25
 
 
-def fat_pot(image):
+def fat_pot(image, colour=FAT_IN_POT):
     image = image.convert("RGBA")
     result = image.copy()
     for x in range(image.width):
@@ -69,8 +77,38 @@ def fat_pot(image):
             r, g, b, a = image.getpixel((x, y))
             if a and is_soup(r, g, b):
                 shade = 0.7 + r / 255 * 0.4
-                result.putpixel((x, y), tuple(min(255, int(c * shade)) for c in FAT_IN_POT) + (a,))
+                result.putpixel((x, y), tuple(min(255, int(c * shade)) for c in colour) + (a,))
     return result
+
+
+def meat_pot(image):
+    """The pot of fat with lumps of meat in it: 3-pixel cells, about half of them meat, the same each build."""
+    fat, meat = fat_pot(image), fat_pot(image, MEAT_IN_FAT)
+    result = fat.copy()
+    lumps = random.Random(42)
+    cells = {}
+    for x in range(image.width):
+        for y in range(image.height):
+            cell = ((x + (y // 3) % 2) // 3, y // 3)
+            if cell not in cells:
+                cells[cell] = lumps.random() < 0.5
+            if cells[cell]:
+                result.putpixel((x, y), meat.getpixel((x, y)))
+    return result
+
+
+def crock(image):
+    """A vanilla clay jar with set fat filling its mouth: the dark inside of the mouth turned white (the region and
+    the darkness test are Dairy's clay_jar_icon)."""
+    icon = image.convert("RGBA").copy()
+    pixels = icon.load()
+    for y in range(3, 12):
+        for x in range(19, 29):
+            r, g, b, a = pixels[x, y]
+            if a > 128 and 120 <= r + g + b < 260:
+                shade = 1.0 - 0.025 * (y - 3) - 0.01 * (x - 19)
+                pixels[x, y] = tuple(min(255, int(c * shade)) for c in SET_FAT) + (255,)
+    return icon
 
 
 def read_icons(game, wanted):
@@ -90,7 +128,8 @@ def read_icons(game, wanted):
 def main():
     game = Path(sys.argv[1]) if len(sys.argv) > 1 else GAME
     folder = Path(__file__).resolve().parent.parent / "42" / "media" / "textures"
-    wanted = {source for source, _, _, _ in FATS.values()} | set(POTS.values()) | set(CUTS.values())
+    wanted = ({source for source, _, _, _ in FATS.values()} | set(POTS.values()) | set(CUTS.values())
+              | set(CROCKS.values()))
     icons = read_icons(game, wanted)
     for name, (source, colour, amount, mirrored) in FATS.items():
         icon = ImageOps.mirror(icons[source]) if mirrored else icons[source]
@@ -102,6 +141,10 @@ def main():
     pull(icons[CUTS["Beef"]], *SALTED["SoakedCharque"]).save(folder / "Item_SoakedCharque.png")
     for name, source in POTS.items():
         fat_pot(icons[source]).save(folder / f"Item_{name}.png")
+    for name, source in MEAT_POTS.items():
+        meat_pot(icons[source]).save(folder / f"Item_{name}.png")
+    for name, source in CROCKS.items():
+        crock(icons[source]).save(folder / f"Item_{name}.png")
 
 
 if __name__ == "__main__":

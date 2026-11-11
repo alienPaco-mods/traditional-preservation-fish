@@ -36,6 +36,7 @@ function TPFM.help()
     say("TPFM.rain(hours)           add this many hours of rain and wet the open frames, to test rain on open charque")
     say("TPFM.fatPot(state)         spawn a Pot of Pork Fat: \"cooked\" (the default), \"burnt\" or \"raw\"")
     say("TPFM.fatRows()             the fat each vanilla animal's butchering table gives now")
+    say("TPFM.potted()              spawn a Pot, Lard, Salt, four cuts and the three clay vessels for Potted Meat")
     say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up curing.")
 end
 
@@ -227,6 +228,15 @@ function TPFM.fatPot(state)
     if state == "cooked" then pot:setCooked(true) end
     if state == "burnt" then pot:setBurnt(true) end
     say("Gave a Pot of Pork Fat (" .. state .. ").")
+end
+
+-- What Potted Meat takes: a Pot, a Lard, salt, four cuts (two of them pork) and one of each clay vessel.
+function TPFM.potted()
+    for _, fullType in ipairs({ "Base.Pot", "Base.Lard", "Base.Salt", "Base.Steak", "Base.Beef", "Base.PorkChop",
+            "Base.Pork", "Base.ClayJar", "Base.ClayJarGlazed", "Base.ClayPot" }) do
+        give(fullType)
+    end
+    say("Gave a Pot, Lard, Salt, Steak, Beef, Pork Chop, Pork and a Clay Jar, Glazed Clay Jar and Clay Pot.")
 end
 
 function TPFM.fatRows()

@@ -26,6 +26,7 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.cured(n)` | Spawns `n` each of those cuts already Salt Cured ("Steak (Salt Cured)"), ready to hang as charque. |
 | `TPFM.rain(hours)` | Adds this many hours of rain (default 6) and wets the open frames: an open charque stack loses a tenth of its progress per 6 hours. `TPFM.dry()` dries the frames off again. |
 | `TPFM.fatPot(state)` | Spawns a Pot of Pork Fat: `"cooked"` (the default, ready to pour off), `"burnt"` (only Scrape Out Burnt Fat takes it) or `"raw"`. |
+| `TPFM.potted()` | Spawns what Potted Meat takes: a Pot, Lard, Salt, a Steak, Beef, Pork Chop and Pork, and a Clay Jar, Glazed Clay Jar and Clay Pot. |
 | `TPFM.fatRows()` | Says whether the sandbox has butchering fat on, and prints the fat row of each vanilla pig, cow and sheep's butchering table (base numbers: about x2.8 on a Butchering Hook, x0.6 on the ground). |
 
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.
@@ -33,6 +34,8 @@ The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't s
 **Typical check of the whole salt route:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(10)` (each 4 weight walleye takes 32 salt, and a shaker holds 10), pack and cure, then hang the fish and `TPFM.age(288)`.
 
 **Typical check of rendering:** `TPFM.fat(2)`, a Pot, Put Pork Fat in a Pot, cook it on any stove or fire (60 minutes), Pour Off Lard: the pot holds 0.5 L Melted Lard; Strain Lard (with a Rag or other cloth, or a Strainer): one Lard, one Cracklings, the pot kept.
+
+**Typical check of Potted Meat:** `TPFM.potted()`, Put Meat in Lard or Tallow (the Steak), Add Meat to the Pot three times (a fifth is refused), cook it on any stove or fire (120 minutes), Pack Potted Meat into the Glazed Clay Jar: "Crock of Potted Meat (4 portions)", glazed look, the pot back. Eat a quarter: 3 portions, lighter. Eat the rest: the Glazed Clay Jar comes back.
 
 **Typical check of the copper:** `TPFM.fat(6)`, a lit Hearth, Put Fat in the Copper (Pork Fat), wait for it to steam and an hour more, Fill from Copper into a pot, Strain Lard three times.
 

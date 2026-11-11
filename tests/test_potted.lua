@@ -1,0 +1,151 @@
+-- Checks Potted Meat (phase 4b) outside the game: the batch in the pot, adding cuts, packing the crock, eating
+-- from it and getting the jar back. Run from the mod folder: luajit tests/test_potted.lua
+local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
+local check, near = H.check, H.near
+H.useModPaths()
+H.installGetText()
+
+-- A food item with just what the Potted Meat code calls.
+local function newFood(fullType, v)
+    local item = { fullType = fullType, modData = {}, age = v.age or 0, condition = 10, burnt = v.burnt, cooked = v.cooked,
+        hunger = v.hunger or 0, base = v.hunger or 0, calories = v.calories or 0, carbs = v.carbs or 0,
+        lipids = v.lipids or 0, proteins = v.proteins or 0, weight = v.weight or 0 }
+    function item:getFullType() return self.fullType end
+    function item:getModData() return self.modData end
+    function item:getHungChange() return self.hunger end
+    function item:setHungChange(x) self.hunger = x end
+    function item:getBaseHunger() return self.base end
+    function item:setBaseHunger(x) self.base = x end
+    function item:getCalories() return self.calories end
+    function item:setCalories(x) self.calories = x end
+    function item:getCarbohydrates() return self.carbs end
+    function item:setCarbohydrates(x) self.carbs = x end
+    function item:getLipids() return self.lipids end
+    function item:setLipids(x) self.lipids = x end
+    function item:getProteins() return self.proteins end
+    function item:setProteins(x) self.proteins = x end
+    function item:getActualWeight() return self.weight end
+    function item:setActualWeight(x) self.weight = x end
+    function item:setCustomWeight(x) self.customWeight = x end
+    function item:setName(x) self.name = x end
+    function item:setCustomName(x) self.customName = x end
+    function item:setModelIndex(x) self.modelIndex = x end
+    function item:getAge() return self.age end
+    function item:setAge(x) self.age = x end
+    function item:getCondition() return self.condition end
+    function item:setCondition(x) self.condition = x end
+    function item:isBurnt() return self.burnt == true end
+    function item:isCooked() return self.cooked == true end
+    function item:getContainer() return self.container end
+    return item
+end
+
+-- Vanilla's values, hunger as the engine keeps it.
+local function steak() return newFood("Base.Steak", { hunger = -0.4, calories = 220, lipids = 9.35, proteins = 31.62, weight = 0.3 }) end
+local function beef() return newFood("Base.Beef", { hunger = -0.8, calories = 440, lipids = 18.7, proteins = 62.62, weight = 0.5 }) end
+local function porkChop() return newFood("Base.PorkChop", { hunger = -0.3, calories = 150, lipids = 6, proteins = 25, weight = 0.3 }) end
+local function lard(share)
+    share = share or 1
+    return newFood("Base.Lard", { hunger = -0.24 * share, calories = 4095 * share, lipids = 454 * share, weight = 0.3 })
+end
+
+local function craft(consumed, created, character)
+    return {
+        getAllConsumedItems = function() return H.list(consumed) end,
+        getAllCreatedItems = function() return H.list(created) end,
+        getCharacter = function() return character end,
+    }
+end
+
+ScriptManager = { instance = { getItem = function(_, fullType)
+    local weights = { ["Base.ClayJar"] = 0.3, ["Base.ClayJarGlazed"] = 0.3, ["Base.ClayPot"] = 0.3 }
+    return weights[fullType] and { getActualWeight = function() return weights[fullType] end }
+end } }
+getItemNameFromFullType = function() return "Crock of Potted Meat" end
+Perks = { Cooking = "Cooking" }
+local xp = 0
+addXp = function(_, perk, amount) if perk == Perks.Cooking then xp = xp + amount end end
+
+-- A stub eat action, wrapped by the mod as the game's is: it eats a share of the item's food.
+ISEatFoodAction = {}
+function ISEatFoodAction.complete(self)
+    local item = self.item
+    for _, key in ipairs({ "hunger", "calories", "carbs", "lipids", "proteins" }) do item[key] = item[key] * (1 - self.share) end
+    return true
+end
+ISEatFoodAction.serverStop = ISEatFoodAction.complete
+
+dofile("42/media/lua/shared/TraditionalPreservationFishMeatPotted.lua")
+local F = TraditionalPreservationFishMeat
+local POT, CROCK = "TraditionalPreservationFishMeat.PotOfMeatInFat", F.CROCK
+
+-- Putting meat in fat
+local pot = newFood(POT, {})
+local salt = newFood("Base.Salt", {})
+F.onPutMeatInFat(craft({ steak(), lard(), salt }, { pot }))
+local batch = pot.modData.tpfmPotted
+check("a Steak and a block of Lard make a batch of one portion", batch.portions == 1)
+check("it takes a quarter block of the fat", near(batch.blocks, 0.75) and near(pot.calories, 220 + 4095 / 4))
+check("the pot shows the batch's food", near(pot.hunger, -0.4 - 0.06) and near(pot.base, pot.hunger))
+check("its weight: two thirds of the cut plus the fat", near(batch.weight, 0.3 * 0.67 + 0.3 / 4))
+
+check("an uncooked pot of one cut takes more", F.canAddPottedCut(pot))
+for _, cut in ipairs({ beef(), porkChop(), steak() }) do
+    local again = newFood(POT, {})
+    F.onAddPottedCut(craft({ pot, cut }, { again }))
+    again.age = pot.age
+    pot = again
+end
+batch = pot.modData.tpfmPotted
+check("three more cuts make four portions", batch.portions == 4)
+check("four cuts use the whole block", near(batch.blocks, 0))
+check("food is the cuts' and the block's", near(pot.calories, 220 + 440 + 150 + 220 + 4095))
+check("a pot of four takes no fifth", not F.canAddPottedCut(pot))
+pot.modData.tpfmPotted = { portions = 2, food = {}, weight = 0, fat = F.FAT_BLOCK, blocks = 0.5 }
+pot.cooked = true
+check("a cooked pot takes no more", not F.canAddPottedCut(pot))
+pot.modData.tpfmPotted = batch
+check("other inputs pass the test", F.canAddPottedCut(steak()))
+
+-- Melted fat counts as a whole block; a part-used block gives what it has left
+local melted = newFood(POT, {})
+F.onPutMeatInFat(craft({ beef(), salt }, { melted }))
+check("a pot of melted fat is a block", near(melted.calories, 440 + 4095 / 4))
+local scraps = newFood(POT, {})
+F.onPutMeatInFat(craft({ steak(), lard(0.1), salt }, { scraps }))
+check("a tenth of a block gives a tenth", near(scraps.calories, 220 + 409.5) and near(scraps.modData.tpfmPotted.blocks, 0))
+local more = newFood(POT, {})
+F.onAddPottedCut(craft({ scraps, steak() }, { more }))
+check("and a second cut gets none", near(more.calories, 220 + 409.5 + 220))
+
+-- Packing
+check("a burnt pot can't be packed", not F.canPackPotted(newFood(POT, { burnt = true })))
+check("a pot with no batch can't be packed", not F.canPackPotted(newFood(POT, {})))
+check("a cooked pot can", F.canPackPotted(pot))
+local crock = newFood(CROCK, { age = 3 })
+local glazed = newFood("Base.ClayJarGlazed", {})
+F.onPackPotted(craft({ pot, glazed }, { newFood("Base.Pot", {}), crock }, {}))
+check("the crock holds four portions", near(F.crockPortions(crock), 4))
+check("its food is the pot's", near(crock.calories, pot.calories) and near(crock.base, crock.hunger))
+check("it starts fresh", crock.age == 0)
+check("it remembers the glazed jar and looks it", crock.modData.tpfmVessel == "Base.ClayJarGlazed" and crock.modelIndex == 1)
+check("it is named with its portions", crock.name == "Crock of Potted Meat (4 portions)" and crock.customName)
+check("it weighs the jar and the meat", near(crock.weight, 0.3 + batch.weight) and crock.customWeight)
+check("packing gives Cooking XP for each cut", xp == 4 * F.POTTED_XP)
+
+-- Eating
+local container = { items = { [crock] = true } }
+function container:contains(item) return self.items[item] == true end
+function container:DoRemoveItem(item) self.items[item] = nil end
+function container:AddItem(fullType) self.added = fullType return fullType end
+crock.container = container
+ISEatFoodAction.complete({ item = crock, share = 0.25 })
+check("a quarter eaten leaves three portions", near(F.crockPortions(crock), 3, 1e-4) and crock.name == "Crock of Potted Meat (3 portions)")
+check("and it weighs less", near(crock.weight, 0.3 + 3 * batch.weight / 4, 1e-4))
+ISEatFoodAction.complete({ item = crock, share = 2 / 3 })
+check("one portion reads singular", crock.name == "Crock of Potted Meat (1 portion)")
+ISEatFoodAction.serverStop({ item = crock, share = 1 })
+check("the last bite gives the glazed jar back", not container:contains(crock) and container.added == "Base.ClayJarGlazed")
+
+check("text checks", #H.textWarnings == 0)
+H.done()

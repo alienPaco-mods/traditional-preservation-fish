@@ -29,5 +29,8 @@
   "TraditionalPreservationFishMeat.SaltCuredMeat": "Salt Cured Meat",
   "TraditionalPreservationFishMeat.Charque": "Charque",
   "TraditionalPreservationFishMeat.SoakedCharque": "Rehydrated Charque",
-  "TraditionalPreservationFishMeat.SoakedCharqueIngredient": "Rehydrated Charque"
+  "TraditionalPreservationFishMeat.SoakedCharqueIngredient": "Rehydrated Charque",
+  "TraditionalPreservationFishMeat.PotOfMeatInFat": "Pot of Meat in Fat",
+  "TraditionalPreservationFishMeat.PotForgedMeatInFat": "Pot of Meat in Fat",
+  "TraditionalPreservationFishMeat.CrockOfPottedMeat": "Crock of Potted Meat"
 }

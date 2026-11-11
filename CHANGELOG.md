@@ -1,5 +1,16 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.5
+- **Potted Meat** (ROADMAP §7, phase 4b): **Put Meat in Lard or Tallow** (an empty Pot, a block of Lard or Tallow,
+  a cut, Salt) or **Put Meat in the Melted Fat** (a pot of 0.5 L Melted Lard or Tallow, as Pour Off leaves it) gives
+  a **Pot of Meat in Fat**; **Add Meat to the Pot** puts in up to four cuts (a block covers four). Beef, Steak,
+  Mutton Chop, Venison, and pork (Pork, Pork Chop): under fat and out of the sun, pork keeps. It cooks in two hours
+  on any stove or fire and can burn (Scrape Out Burnt Fat). **Pack Potted Meat** into a vanilla Clay Jar, Glazed
+  Clay Jar or Clay Pot: a **Crock of Potted Meat**, a portion a cut with a quarter block of fat each; vanilla's Eat
+  takes portions, the name counts them, and the jar or pot comes back with the last bite. Keeps 60 / 90 days for
+  now; keeping by place and the first opening's loss come in 4c. `TPFM.potted()`, `tests/test_potted.lua`, icons
+  from `tools/build_meat_icons.py`.
+
 ## 0.4.4
 - **"Salt Pressed" is now "Salt Cured"** for fish as for meat, and the tub recipes are **Cure Salted Fish** and
   **Cure Salted Meat** (were Press Salted ...); **Hang Salt Cured Fish to Dry**; sandbox "Salt cure time". Display
