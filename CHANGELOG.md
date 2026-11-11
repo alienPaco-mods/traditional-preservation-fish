@@ -9,7 +9,8 @@
   (`smokeCool`), and a stack reads the share since its last look; a stack's hot hours keep their cool part
   (`hotCool`) for when the session breaks off. Short of the third it ends as Salt Dried / Charque, as before.
 - **Fire dries faster:** every hour of fire, stoked or banked, dries the stack at the Covered rate instead of
-  Sheltered's (about 1.5x for salt fish): the warm draught through the shed.
+  Sheltered's: up to 1.5x for salt fish, only over about 13 C (below, both sit at the 27-day floor); charque gains
+  only with wind.
 - **Cold Smoked Fish** (keeps 120 / 180 days like Salt Dried, edible as it is, thirst 25, mood +3) and
   **Dry-Cured Meat** (no longer charque once smoked: "Dry-Cured Beef / Mutton / Venison (Cold Smoked)", named by the
   cut's animal, keeps 120 / 180 like Charque, edible, thirst 25, mood +3; phase 6 adds ripening). In soups, stews,

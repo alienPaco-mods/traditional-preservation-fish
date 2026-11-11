@@ -12,6 +12,7 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [tr][td]Salt and dry[/td][td]Salt Dried fish[/td][td]Charque (beef, mutton, venison)[/td][td]Any for fish, summer for charque[/td][td]4 to 6 months[/td][/tr]
 [tr][td]Freeze-dry in the wind[/td][td]Stockfish[/td][td]-[/td][td]Winter[/td][td]1 to 2 years[/td][/tr]
 [tr][td]Hot smoke[/td][td]Hot Smoked fish[/td][td]Hot Smoked meat[/td][td]Any[/td][td]1 to 2 weeks, ready to eat[/td][/tr]
+[tr][td]Cold smoke[/td][td]Cold Smoked fish[/td][td]Dry-Cured beef, mutton, venison[/td][td]Cool months[/td][td]4 to 6 months, ready to eat[/td][/tr]
 [tr][td]Under fat[/td][td]-[/td][td]Potted Meat (pork too)[/td][td]Any[/td][td]Weeks to months, by where you keep it[/td][/tr]
 [/table]
 
@@ -24,7 +25,7 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [*]Stockfish matures in storage, faster on a pallet in the loft, and travels in bales
 [*]Butchered pigs, cattle and sheep give fat: render it in a pot on any fire, or a whole pig's worth in the Hearth's copper, for Lard, Tallow and Cracklings
 [*]Potted Meat: cuts cooked in Lard or Tallow and packed into a clay jar, eaten by the portion, keeping by where you store it
-[*]A Smokehouse with a stone Firebox joined to it: keep the fire stoked and salt fish or meat comes out Hot Smoked, with a ham hung by the door to tell you
+[*]A Smokehouse with a stone Firebox joined to it: keep the fire stoked and salt fish or meat comes out Hot Smoked, or bank it to a smoulder in the cool months for Cold Smoked fish and Dry-Cured meat, with a ham hung by the door to tell you
 [*]Gutting gives Fish Guts for chum and a Fish Head for a proper stock
 [/list]
 
@@ -55,11 +56,12 @@ Hang Salt Cured Meat to Dry: 5 days in hot sun (25 C and up) and a breeze, about
 [h2]Stockfish[/h2]
 Gut Fish (a big one also gives a Fish Head), split it if it's over 2.5 weight, and Hang Gutted Fish to Cold Dry in the open or under an open roof. No salt, no tub. 32 days at best between 0 and 5 C in a good wind; about 50 to 55 days hung November to January. It rots once the season warms up. Stockfish keeps 1 to 2 years and weighs almost nothing, but it's as hard as wood: Rehydrate Fish before eating. It matures over 60 days in storage, faster on a Stockfish Pallet in a loft, and ripe stockfish cheers you up. Tie it into a Stockfish Bale to carry it.
 
-[h2]The Smokehouse and hot smoking[/h2]
+[h2]The Smokehouse: hot and cold smoking[/h2]
 [list]
 [*]Inside it's always indoors: no rain, no wind, about two thirds of the open drying speed. No stockfish: gutted fish need moving air. The tile in front of its door must stay clear.
 [*][b]Connect the Firebox[/b] (from TP Core) on a tile beside it: a clay pipe (2 Clay Pipe Segments, 1 Clay, mason's trowel kept) or a stone trench (3 Flat Stones, 2 Clay, shovel kept). Not at the door end, not with the Firebox's door towards the shed, one Firebox a shed, and only with the fire out. Disconnect gives the pipe or stones back.
 [*][b]Hot smoking:[/b] keep the joined Firebox stoked and each salt stack inside counts the hours in a row: 4 to 6 for fish, 6 to 8 for meat, by the heaviest piece. Then it comes out Hot Smoked: cooked, ready to eat, 1 to 2 weeks' keeping. Banking the fire for up to an hour doesn't break the run. Stop sooner and nothing is lost: the stack dries on as Salt Dried fish or Charque.
+[*][b]Cold smoking:[/b] bank the Firebox to a smoulder. Banked hours, and stoked runs that broke off, count as smoke on days of 20 C or less. If smoke covered a third of the time a stack hung, it comes out Cold Smoked fish or Dry-Cured Beef, Mutton or Venison: dry, ready to eat sliced thin, 4 to 6 months' keeping. Smoked meat is no longer charque. On mild days a burning fire also dries the shed faster.
 [*]A smoked ham hangs by the door while finished stacks wait inside.
 [/list]
 
@@ -84,6 +86,7 @@ Days are fresh, then rotten.
 [*][b]Stockfish:[/b] about 18%, 365 and 730 days
 [*][b]Charque:[/b] about 50% of the raw cut, 120 and 180 days
 [*][b]Hot Smoked fish / meat:[/b] about 63% / 70%, 7 and 14 days
+[*][b]Cold Smoked fish / Dry-Cured meat:[/b] about 37% / 50%, 120 and 180 days
 [*][b]Crock of Potted Meat:[/b] by where you keep it, 14 to 120 days fresh
 [*][b]Salt Packed / Salt Cured / Gutted / rehydrated:[/b] days, not weeks: cure, hang or cook them
 [/list]
@@ -92,11 +95,11 @@ Days are fresh, then rotten.
 [list]
 [*][b]Packed, cured, gutted fish and halves, fresh fat:[/b] raw, so cook them first or risk getting sick
 [*][b]Stockfish and charque:[/b] can't be eaten until rehydrated
-[*][b]Salt Dried, Hot Smoked, rehydrated fish, Potted Meat:[/b] ready as they are
+[*][b]Salt Dried, Hot and Cold Smoked, Dry-Cured, rehydrated fish, Potted Meat:[/b] ready as they are
 [/list]
 
 [h2]A little history[/h2]
-The salt route is the lower Volga's: around Astrakhan, fish is salted in vats under a weighted lid, soaked, and dried in the shade, small fish whole and big ones split or hung from hooks. Stockfish is unsalted fish hung on open racks through the cold northern Norwegian spring and traded across Europe since the Viking age. In the charqueadas of southern Brazil, beef was salted in piles, washed and dried in the sun as charque. Turkish kavurma, French confit and the Balkan meso u masti are all meat cooked in fat and sealed in clay pots for the winter. The Smokehouse is the Kentucky farm smokehouse and the Bosnian pušnica, fed from a low firebox outside the wall.
+The salt route is the lower Volga's: around Astrakhan, fish is salted in vats under a weighted lid, soaked, and dried in the shade, small fish whole and big ones split or hung from hooks. Stockfish is unsalted fish hung on open racks through the cold northern Norwegian spring and traded across Europe since the Viking age. In the charqueadas of southern Brazil, beef was salted in piles, washed and dried in the sun as charque. Turkish kavurma, French confit and the Balkan meso u masti are all meat cooked in fat and sealed in clay pots for the winter. The Smokehouse is the Kentucky farm smokehouse and the Bosnian pušnica, fed from a low firebox outside the wall; its winter smoke makes the Balkans' dry-cured suho meso.
 
 [h2]Works well with[/h2]
 [b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt: one batch (5 Evaporated Salt, 25 uses) packs a dozen panfish, or one 4 weight walleye with salt to spare. Traditional Preservation (Fish & Meat) needs no other mods besides Traditional Preservation (Core).
