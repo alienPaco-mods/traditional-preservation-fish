@@ -1,4 +1,4 @@
-# Traditional Preservation (Fish & Meat) — Build 42 prototype (v0.4.1)
+# Traditional Preservation (Fish & Meat) — Build 42 prototype (v0.4.3)
 
 **Status: experimental.** The stations build, open and hang fish in the game, but a full year hasn't been played. Back up your save before enabling.
 
@@ -68,6 +68,10 @@ Rendering needs no station. **Put Pork Fat in a Pot** / **Put Suet in a Pot** ta
 The cap rule: two pieces make one block, so a pig's Lard (2 or 3 on the Hook) is worth about its meat and no more. A piece of raw fat has half the calories of a block and its cracklings (2170), keeps 2 / 4 days like raw meat, and is dangerous uncooked.
 
 **In the Hearth's copper (0.4.2).** TP Core's copper holds fluids, so a piece of raw fat goes in as 0.25 L of a raw fluid (`RawPorkFat`, `RawSuet`: suet and mutton fat share one) by **Put Fat in the Copper** on the Hearth's menu (`TPFMFatCopper`, `...FatUI.lua`). Kept steaming (85 C or more) for an hour in all it becomes `MeltedLard` or `MeltedTallow` (`Hearth.turnsHot`), a real fluid that Fill from Copper puts in any container; **Strain Lard** / **Strain Tallow** take 0.5 L for a block and a Cracklings, so two pieces make a block as in a pot. The copper never burns fat. Raw fat can't be filled out (`Hearth.staysIn`) and becomes `RancidFat` when its oldest piece would have rotted (`Hearth.goesOff`, the copper's `offAt`). The five fluids are in `TraditionalPreservationFishMeat_fluids.txt`; their names are in saves, so they never change.
+
+### Salt Cured meat, Charque's tub half (0.4.3)
+
+**Pack Meat in Salt** (`..._Meat.txt`, in hand, no knife) takes the cuts in `F.MEAT_CUTS` (Beef, Steak, Mutton Chop, Venison; pork is left for Country Ham) through fish's `canPack` / `onCreatePacked`, so it costs fish's salt (4 per started 0.5 weight: 4 for any cut). **Salt Packed Meat** and **Salt Cured Meat** carry the cut's food, name ("Steak (Salt Cured)") and icon index (`MEAT_CUTS` order) through `F.carry`. **Press Salted Meat** shares the tub and `onPressStart`; a batch of meat takes `F.meatPressHours(heaviest)`: `PRESS_HOURS` at `MEAT_PRESS_WEIGHT` (0.5), by weight, never under `PRESS_MIN_HOURS`. `F.mixedTub` refuses fish and meat in one tub. Cured meat keeps 7 / 14 days, weighs 88-93%, and cooks; the frame takes it in 3c.
 
 ## Seasons
 

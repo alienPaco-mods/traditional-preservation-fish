@@ -299,6 +299,26 @@ Raw fat left in a cold copper goes **rancid** when its oldest piece would have r
 
 > 📜 **Old names:** Balkan cooks call cracklings *čvarci* and make them every winter at the pig slaughter. In Britain, tallow lit the house and suet went into the pudding.
 
+## 9⅞. Salt Beef for Charque (the tub)
+
+The first half of Charque: red meat salted and pressed in the **Salting Tub**, just like fish. The Drying Frame half comes in a later version.
+
+1. **Pack Meat in Salt** (right-click the meat; no knife needed): a **Beef**, **Steak**, **Mutton Chop** or **Venison** as the butcher gave it, rubbed with **4 salt**. You get **Salt Packed Meat**, named after its cut.
+2. Put it in an empty Salting Tub and **Press Salted Meat**: two days with a Beef or Venison in the batch, about 29 hours for Steaks and Chops alone. The heaviest cut sets the time.
+3. Out comes **Salt Cured Meat** ("Steak (Salt Cured)"): it keeps one to two weeks and can be cooked as it is.
+
+| | Salt Packed Meat | Salt Cured Meat |
+|---|---|---|
+| Keeps | 3 / 6 days | 7 / 14 days |
+| Weight | as the cut | 88 to 93% |
+| Eat it? | No | Cooked; salty and thirsty |
+
+A tub salts **fish or meat, never both at once**. A warm season costs keeping, as it does for fish.
+
+> 📝 **Margin note:** why no pork? Its fat goes rancid in the sun, so pork has always been salted and then dried cool or smoked. That is the country ham's road, not charque's.
+
+> 📜 **Old names:** in the *charqueadas* of southern Brazil a quarter of beef was opened into thick sheets, *mantas*, salted and pressed in piles for a day or two, then laid out in the sun for most of a week. The word comes from the Andes, where *ch'arki* was llama and alpaca.
+
 ---
 
 ## 10. Tips from the Docks
