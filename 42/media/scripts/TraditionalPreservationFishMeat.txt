@@ -687,7 +687,7 @@ module TraditionalPreservationFishMeat
     {
         Tooltip = Tooltip_craft_hangFishToDry,
         time = 1036800,
-        Tags = DryingFrame,
+        Tags = DryingFrame;Smokehouse,
         category = Cooking,
         OnStart = TraditionalPreservationFishMeat.onDryStart,
         OnUpdate = TraditionalPreservationFishMeat.onDryUpdate,

@@ -58,7 +58,7 @@ function TraditionalPreservationFishMeatWorld.tubSprite(waiting, batches, finish
     return nil
 end
 
--- place is the station's: indoors is sheltered, a roof with no room round it covered.
+-- place is the station's: indoors (and inside the Smokehouse) is sheltered, a roof with no room round it covered.
 local function readBatches(logic, uiLogic, place)
     local batches = {}
     for craftData, _ in pairs(uiLogic:getItemsInProgress()) do
@@ -97,6 +97,11 @@ local function refreshFrame(frame, entry, faceIndex, _, waitingStyle, batches, f
     showSprites(frame, entry, table.concat(states, ","), sprites)
 end
 
+-- The Smokehouse chamber is closed: nothing shows from outside.
+local function refreshClosed(station, entry)
+    showSprites(station, entry, "", {})
+end
+
 local function refresh(station, entry)
     local resources = station:getComponent(ComponentType.Resources)
     local logic = station:getComponent(entry.logicType)
@@ -107,7 +112,7 @@ local function refresh(station, entry)
 
     local waiting, _, waitingStyles = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
     local _, finishedStacks, finishedStyles = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output)
-    local batches = readBatches(logic, uiLogic, Weather.placeOf(station, true))
+    local batches = readBatches(logic, uiLogic, entry.place or Weather.placeOf(station, true))
     entry.busyStacks = finishedStacks + #batches
     entry.show(station, entry, entry.faceIndex, waiting, waitingStyles[1], batches, finishedStyles)
 end
@@ -117,11 +122,17 @@ local function newEntry(station)
     if not index then return nil end
 
     local isFrame = index >= FRAME_SPRITE
+    local hanger = F.hangerFor(index)
+    local closed = hanger and hanger.closed
+    local logic = closed and station:getComponent(ComponentType.DryingCraftLogic)
+    if logic and logic:getRecipeTagQuery() ~= F.SMOKEHOUSE_RECIPES then logic:setRecipeTagQuery(F.SMOKEHOUSE_RECIPES) end
+    -- Inside the chamber's walls and roof it is always Sheltered, wherever the shed stands.
     return {
-        hanger = F.hangerFor(index),
+        hanger = hanger,
         faceIndex = index % FACE_COUNT,
         logicType = isFrame and ComponentType.DryingCraftLogic or ComponentType.CraftLogic,
-        show = isFrame and refreshFrame or refreshTub,
+        show = closed and refreshClosed or isFrame and refreshFrame or refreshTub,
+        place = closed and "Sheltered" or nil,
     }
 end
 

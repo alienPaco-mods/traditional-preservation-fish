@@ -1,5 +1,22 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.7
+- **Smokehouse chamber** (ROADMAP §7, phase 5b-2a): a plank shed two tiles long under one roof slope, its door on the
+  high end with a smoke slot under the eave (a two-tile entity like vanilla's Drying Rack: `SpriteGridPos`,
+  `ForceSingleItem`). Carpentry 3, 14 Planks, 20 Nails, hammer kept. Holds 6 stacks of up to 15 weight of salt fish,
+  Cold Dried fish or Salt Cured meat (charque), on the frame's recipes. Open air or under an open roof, not in a
+  room. With no fire it is always **Sheltered** inside, wherever it stands (still air, no rain; cold fish doesn't
+  dry), and nothing hangs in sight. Tiles 856-859 (sheet 2, 448-451), `Tiles.HANGERS.chamber` (`bases` for its two
+  facings, `closed`). Connecting the Core Firebox comes in 5b-2b. Tests.
+- The Smokehouse offers only Hang Salt Cured Fish and Hang Salt Cured Meat (recipe tag `Smokehouse`, added beside
+  `DryingFrame`); cold drying needs moving air. A shed keeps its recipe tag in the save, so one built before gets
+  the new tag when first seen.
+- **Gutted fish is refused indoors**: the slot of any frame, beam or Smokehouse in a room, a basement or the
+  Smokehouse turns away fish for cold drying, with the reason (`F.coldRefusal`). Stacks already hanging indoors
+  stay, stopped as before.
+- A stack's popup no longer shows Wetness indoors (a room or the Smokehouse): it is the rain on open frames.
+- Charque's method reads **Salt drying (charque)**, in the popup and the recipe tooltip (was Sun drying).
+
 ## 0.4.6
 - **Potted Meat keeps by place** (ROADMAP §7, phase 4c): a crock carries its own clock on a new weather ledger
   (global ModData `TraditionalPreservationFishMeatPotted`, kind `potted`) and catches up when next seen, at the place

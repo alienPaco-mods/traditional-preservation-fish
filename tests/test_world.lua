@@ -68,6 +68,9 @@ local function station(spriteName, x, outside, waiting, batches, finished)
     function logic:getInputsGroupName() return "in" end
     function logic:getOutputsGroupName() return "out" end
     function logic:getProgress(data) return data.progress end
+    logic.tag = "DryingFrame"
+    function logic:getRecipeTagQuery() return self.tag end
+    function logic:setRecipeTagQuery(tag) self.tag = tag end
     local resources = {}
     function resources:getResourcesFromGroup(group)
         local items = group == "in" and waiting or finished
@@ -99,6 +102,8 @@ local PRESSED, GUTTED = "TraditionalPreservationFishMeat.SaltPressedFish", "Trad
 check("the map loader knows the tub, the frame and both beams", loaders.traditionalpreservationfishmeat_01_0
     and loaders.traditionalpreservationfishmeat_01_7 and loaders.traditionalpreservationfishmeat_02_0 and loaders.traditionalpreservationfishmeat_02_3)
 check("and nothing else", loaders.traditionalpreservationfishmeat_01_8 == nil)
+check("and both tiles of the Smokehouse, either way round", loaders.traditionalpreservationfishmeat_02_448
+    and loaders.traditionalpreservationfishmeat_02_449 and loaders.traditionalpreservationfishmeat_02_450 and loaders.traditionalpreservationfishmeat_02_451)
 
 -- Frames: a finished salt stack, a gutted stack halfway, and pressed fish waiting.
 local running = recipeData(0.5, T.STYLE_GUTTED)
@@ -139,6 +144,18 @@ check("charque hangs from the meat tiles", table.concat(rack.sprites, " ") ==
 check("a beam's charque is its own run too", W.hangingSprite(T.HANGERS[408], T.STYLE_MEAT * T.DRYING_STAGES, 1, 1) == 797
     and W.hangingSprite(T.HANGERS[410], T.STYLE_MEAT * T.DRYING_STAGES + 4, 2, 0) == 836 + (4 * 2 + 1) * 2)
 check("fish keep theirs", W.hangingSprite(T.HANGERS[6], 4, 1, 0) == 8 + 4 * 8 * 2)
+
+-- The Smokehouse: Sheltered wherever it stands, and nothing hangs in sight.
+local smoked = recipeData(0.5, T.STYLE_MEAT)
+local smokehouse = station("traditionalpreservationfishmeat_02_449", 6, true, { fish(T.CURED_MEAT) }, { smoked }, {})
+smokehouse.sprites = { "old" }
+W.track(smokehouse)
+W.refresh(smokehouse)
+check("a Smokehouse in the open is sheltered inside", smoked.modData.sheltered == true and smoked.modData.covered == false)
+check("and shows no hanging stacks", #smokehouse.sprites == 0)
+check("it counts its busy stacks", W.busyStacks(smokehouse) == 1)
+check("one built before its own recipe tag gets it", smokehouse:getComponent("DryingCraftLogic").tag == "Smokehouse")
+check("a frame keeps the frame's", rack:getComponent("DryingCraftLogic").tag == "DryingFrame")
 
 -- Tubs
 local tub = station("traditionalpreservationfishmeat_01_1", 3, true, {}, { recipeData(0.3) }, {})

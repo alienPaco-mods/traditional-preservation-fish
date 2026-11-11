@@ -54,7 +54,8 @@ local function fish(fullType, weight)
     }
 end
 
-local function station(sprite, stored, running)
+-- indoors puts it in a room; it stands in the open otherwise.
+local function station(sprite, stored, running, indoors)
     local logic = {
         isRunning = function() return running or false end,
         -- A tub built before a slot change keeps its old count, so nothing should depend on this.
@@ -63,6 +64,10 @@ local function station(sprite, stored, running)
     local entity = {
         getSprite = function() return { getName = function() return sprite end } end,
         getComponent = function() return logic end,
+        getSquare = function()
+            return { getZ = function() return 0 end, isOutside = function() return not indoors end,
+                isInARoom = function() return indoors or false end }
+        end,
     }
     local resource = {
         getIO = function() return ResourceIO.Input end,
@@ -86,6 +91,10 @@ check("a frame is green for gutted fish", green(station(FRAME), fish(GUTTED, 0.5
 check("and for halves", green(station(FRAME), fish(HALF, 0.5)))
 check("not for raw fish", not green(station(FRAME), fish("Base.Walleye", 0.5)))
 check("not for a fillet", not green(station(FRAME), fish("Base.FishFillet", 0.5)))
+check("a frame in a room isn't, for gutted fish", not green(station(FRAME, nil, false, true), fish(GUTTED, 0.5)))
+check("but is for salted fish", green(station(FRAME, nil, false, true), fish(PRESSED, 0.5)))
+check("nor is the Smokehouse, even in the open", not green(station("traditionalpreservationfishmeat_02_449"), fish(GUTTED, 0.5))
+    and green(station("traditionalpreservationfishmeat_02_449"), fish(PRESSED, 0.5)))
 check("not for gutted fish on a salted stack", not green(station(FRAME, { fish(PRESSED, 0.5) }), fish(GUTTED, 0.5)))
 check("not for salted fish on a gutted stack", not green(station(FRAME, { fish(GUTTED, 0.5) }), fish(PRESSED, 0.5)))
 check("gutted fish and halves share a stack", green(station(FRAME, { fish(GUTTED, 0.5) }), fish(HALF, 0.5)))

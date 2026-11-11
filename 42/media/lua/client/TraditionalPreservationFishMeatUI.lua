@@ -54,6 +54,10 @@ local function refusal(slot, item, queued)
         return "IGUI_TraditionalPreservationFishMeat_MixedStack"
     end
     local hanger = F.hangerFor(spriteIndex(entity))
+    if F.hangKind(item:getFullType()) == "cold" then
+        local coldRefused = F.coldRefusal(hanger.closed and "Sheltered" or Weather.placeOf(entity, true))
+        if coldRefused then return coldRefused end
+    end
     return F.frameRefusal(hanger, TraditionalPreservationFishMeatWorld.busyStacks(entity), waiting, weight)
 end
 
@@ -101,7 +105,10 @@ local function drawStackTooltip(slot, tooltip, kind)
         local word = isMeat and F.charqueTemperatureWord(ledger.temperature or 0) or F.temperatureWord(isCold, ledger.temperature or 0, place == "Open")
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Temperature", getText(word))
         if isCold or isMeat and not modData.sheltered then UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wind", getText(F.windWord(ledger.wind))) end
-        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wetness", UI.percent(isCold and ledger.coldWetness or ledger.wetness))
+        -- Wetness is rain left on open frames: indoors (a room, the Smokehouse) none reaches the stack.
+        if not modData.sheltered then
+            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wetness", UI.percent(isCold and ledger.coldWetness or ledger.wetness))
+        end
         if status.reason then
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Rate", getText("IGUI_TraditionalPreservationFishMeat_Stopped" .. status.reason), UI.SLOW_COLOUR)
         else

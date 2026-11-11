@@ -66,5 +66,8 @@
   "AddMeatToPot": "Add Meat to the Pot",
   "TraditionalPreservationFishMeat.AddMeatToPot": "Add Meat to the Pot",
   "PackPottedMeat": "Pack Potted Meat",
-  "TraditionalPreservationFishMeat.PackPottedMeat": "Pack Potted Meat"
+  "TraditionalPreservationFishMeat.PackPottedMeat": "Pack Potted Meat",
+  "Smokehouse_Chamber": "Smokehouse",
+  "TraditionalPreservationFishMeat.Smokehouse_Chamber": "Smokehouse",
+  "Smokehouse": "Smokehouse"
 }

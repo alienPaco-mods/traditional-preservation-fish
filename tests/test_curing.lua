@@ -236,6 +236,14 @@ check("eight stacks fill the frame", T.frameRefusal(T.HANGERS[6], 7, 0, 0.1) == 
 check("a full frame is 20 weight", T.STACK_WEIGHT * T.MAX_STACKS == 20)
 check("every station finds its hanger, either way round", T.hangerFor(7) == T.HANGERS[6] and T.hangerFor(409) == T.HANGERS[408] and T.hangerFor(410) == T.HANGERS[410])
 check("a tub has none", T.hangerFor(0) == nil and T.hangerFor(5) == nil)
+check("both tiles of the Smokehouse find it, either way round", T.hangerFor(856) == T.HANGERS[856] and T.hangerFor(857) == T.HANGERS[856]
+    and T.hangerFor(858) == T.HANGERS[856] and T.hangerFor(859) == T.HANGERS[856] and T.HANGERS[856].closed)
+check("gutted fish hang in the open or under an open roof", T.coldRefusal("Open") == nil and T.coldRefusal("Covered") == nil)
+check("not in a room, a basement or the Smokehouse", T.coldRefusal("Sheltered") == "IGUI_TraditionalPreservationFishMeat_NoColdIndoors"
+    and T.coldRefusal("Basement") == "IGUI_TraditionalPreservationFishMeat_NoColdIndoors")
+check("the Smokehouse takes 6 stacks of 15", T.frameRefusal(T.HANGERS[856], 5, 0, 15) == nil
+    and T.frameRefusal(T.HANGERS[856], 0, 0, 15.1) == "IGUI_TraditionalPreservationFishMeat_TooHeavy"
+    and T.frameRefusal(T.HANGERS[856], 6, 0, 1) == "IGUI_TraditionalPreservationFishMeat_FrameFull")
 local function square(inRoom) return { square = { isInARoom = function() return inRoom end } } end
 check("the big beams go up outdoors or under an open roof", T.notInRoom(square(false)))
 check("not in a room", not T.notInRoom(square(true)))
@@ -1223,6 +1231,9 @@ end)()
     local meatScript = io.open("42/media/scripts/TraditionalPreservationFishMeat_Meat.txt"):read("*a")
     local fishScript = io.open("42/media/scripts/TraditionalPreservationFishMeat.txt"):read("*a")
     check("charque hangs on every drying station", meatScript:find("craftRecipe HangMeatToDry%s*{[^}]-Tags = DryingFrame") ~= nil)
+    check("and in the Smokehouse", meatScript:find("craftRecipe HangMeatToDry%s*{[^}]-Tags = DryingFrame;Smokehouse") ~= nil)
+    check("salt fish too", fishScript:find("craftRecipe HangFishToDry%s*{[^}]-Tags = DryingFrame;Smokehouse") ~= nil)
+    check("but not cold drying: it needs open air", fishScript:find("craftRecipe HangFishToColdDry%s*{[^}]-Tags = DryingFrame,") ~= nil)
     check("its time is set from CHARQUE_HOURS", loaded["TraditionalPreservationFishMeat.HangMeatToDry"] == "{ time = " .. T.CHARQUE_HOURS * 3600 .. ", }")
     for _, stage in ipairs({ "Charque", "SoakedCharque" }) do
         local body = meatScript:match("item " .. stage .. "%s*{(.-)}")

@@ -74,11 +74,13 @@
   "IGUI_TraditionalPreservationFishMeat_MixedTub": "A tub salts fish or meat, not both at once",
   "IGUI_TraditionalPreservationFishMeat_Charque": "Charque",
   "IGUI_TraditionalPreservationFishMeat_SoakedCharque": "Rehydrated, Charque",
-  "IGUI_TraditionalPreservationFishMeat_MethodCharque": "Sun drying (charque)",
+  "IGUI_TraditionalPreservationFishMeat_MethodCharque": "Salt drying (charque)",
   "IGUI_TraditionalPreservationFishMeat_StoppedTooCold": "Stopped (Too cold)",
   "IGUI_TraditionalPreservationFishMeat_TempHotGood": "Hot sun, best for charque",
   "IGUI_TraditionalPreservationFishMeat_TempTooCold": "Too cold",
   "IGUI_TraditionalPreservationFishMeat_CharqueOff": "Charque is off in this world's sandbox options",
   "IGUI_TraditionalPreservationFishMeat_CrockPortions": "%1 (%2 portions)",
-  "IGUI_TraditionalPreservationFishMeat_CrockOnePortion": "%1 (1 portion)"
+  "IGUI_TraditionalPreservationFishMeat_CrockOnePortion": "%1 (1 portion)",
+  "IGUI_TraditionalPreservationFishMeat_NoColdIndoors": "Cold drying needs moving air: hang gutted fish outdoors or under an open roof",
+  "IGUI_CraftingWindow_Smokehouse": "Smokehouse"
 }

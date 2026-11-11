@@ -33,10 +33,13 @@ F.STACK_WEIGHT = 2.5
 F.MAX_STACKS = Tiles.HANGERS.frame.stacks
 -- Every station that hangs fish, by its first sprite: the first hanging fish sprite and its stacks
 -- (from Tiles.lua), and the weight of each stack.
-local STACK_WEIGHTS = { frame = F.STACK_WEIGHT, medium = 15, large = 50 }
+-- The Smokehouse chamber is closed (nothing hangs in sight) and its facings are two tiles apart, so it lists both.
+local STACK_WEIGHTS = { frame = F.STACK_WEIGHT, medium = 15, large = 50, chamber = 15 }
 F.HANGERS = {}
 for name, hanger in pairs(Tiles.HANGERS) do
-    F.HANGERS[hanger.base] = { fishSprite = hanger.fishSprite, meatSprite = hanger.meatSprite, stacks = hanger.stacks, stackWeight = STACK_WEIGHTS[name] }
+    local entry = { fishSprite = hanger.fishSprite, meatSprite = hanger.meatSprite, stacks = hanger.stacks, stackWeight = STACK_WEIGHTS[name],
+        closed = hanger.closed }
+    for _, base in ipairs(hanger.bases or { hanger.base }) do F.HANGERS[base] = entry end
 end
 
 -- Vanilla's rules for cutting a fish: over this weight, into two fillets of this share of its
@@ -573,12 +576,12 @@ function F.stationIndex(object)
     return name and STATION_INDEX[name]
 end
 
--- The big beams stand in the open or under an open roof, not in a room, unlike the frame.
+-- The big beams and the Smokehouse stand in the open or under an open roof, not in a room, unlike the frame.
 function F.notInRoom(params)
     return not params.square:isInARoom()
 end
 
--- The hanger a station's sprite belongs to, whichever way it faces, or nil for a tub.
+-- The hanger a station's sprite belongs to, whichever way it faces (and either tile of the chamber), or nil for a tub.
 function F.hangerFor(spriteIndex)
     return F.HANGERS[spriteIndex - spriteIndex % 2]
 end
@@ -593,6 +596,17 @@ function F.frameRefusal(hanger, busyStacks, waitingWeight, weight)
     end
     return nil
 end
+
+-- Cold drying needs moving air: a room, a basement or the Smokehouse (place is Weather.placeOf's, with Covered)
+-- refuses gutted fish. The Smokehouse doesn't list the recipe either.
+function F.coldRefusal(place)
+    if place ~= "Open" and place ~= "Covered" then return "IGUI_TraditionalPreservationFishMeat_NoColdIndoors" end
+    return nil
+end
+
+-- The recipe tag the Smokehouse lists: its own, without cold drying. A shed keeps the tag it was built with in the
+-- save, so one from before the tag gets it when it is first seen.
+F.SMOKEHOUSE_RECIPES = "Smokehouse"
 
 -- A random hanging look for a new stack, kept in its modData so it doesn't change.
 function F.pickStyle(styles)
