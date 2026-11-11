@@ -1,6 +1,6 @@
 [h1]Traditional Preservation (Fish & Meat)[/h1]
 
-Preserve your catch and your kill the old way. Salt fish, cure it and hang it to dry, or gut it and hang it in the winter cold. Salt beef and dry it in the summer sun as charque. Render the fat for Lard and Tallow. It all keeps for months or even years, with no fridge and no power.
+Preserve your catch and your kill the old way. Salt fish, cure it and hang it to dry, or gut it and hang it in the winter cold. Salt beef and dry it in the summer sun as charque. Render the fat for Lard and Tallow, and seal meat under it in a clay jar as Potted Meat. It all keeps for months or even years, with no fridge and no power.
 
 [b]Build 42 only (42.20 or newer). This is an early release, so back up your save before enabling it. Singleplayer only: multiplayer is not supported.[/b]
 
@@ -15,6 +15,7 @@ Preserve your catch and your kill the old way. Salt fish, cure it and hang it to
 [*]Fish keep their species and size through every stage, with their own icons and ground models
 [*]Gutting and packing give Fish Guts for chum, and gutting a big fish gives a Fish Head for the pot
 [*]Charque: beef, mutton and venison salted in the same tub and sun dried on the same stations, for months of keeping
+[*]Potted Meat: beef, mutton, venison or pork cooked in Lard or Tallow with salt and packed into a clay jar, eaten by the portion
 [*]Butchered pigs, cattle and sheep give fat: melt it in a pot on any fire, or a whole pig's worth in the Hearth's copper, and strain it for Lard, Tallow and Cracklings
 [/list]
 
@@ -129,6 +130,14 @@ Rehydrating doesn't bring back calories lost to drying. Salt fish keeps about 90
 [*]Optional: rinse the cured meat before it hangs. It keeps a little less long but rehydrates less salty.
 [/list]
 
+[h2]Potted Meat[/h2]
+[list]
+[*][b]Put Meat in Lard or Tallow:[/b] an empty pot, a block of Lard or Tallow, a cut and 1 salt. Or [b]Put Meat in the Melted Fat[/b] with the pot of half a litre of melted fat that Pour Off leaves.
+[*][b]Add Meat to the Pot:[/b] up to four cuts, as a block of fat covers four. Beef, Steak, Mutton Chop, Venison, Pork and Pork Chop.
+[*]Cook it two hours on any stove or fire. It can burn.
+[*][b]Pack Potted Meat[/b] into a Clay Jar, Glazed Clay Jar or Clay Pot: a Crock of Potted Meat, one portion a cut with its share of the fat. Eat it by the portion; the jar comes back with the last bite. Keeps 2 to 3 months.
+[/list]
+
 [h2]Fish Guts, heads and slicing[/h2]
 A whole fish over 0.6 weight gives one Fish Guts when gutted or packed, weighing 10% of the fish, and loses that weight. Small fish, fillets and salmon give none. A fish big enough to fillet can still be sliced at any salted, dried or rehydrated stage.
 
@@ -137,7 +146,7 @@ Gut Fish also takes the head off. A fish over 1.0 weight gives a Fish Head: 10% 
 [b]Fish Head Stock:[/b] a pot holding 1.5 L of water and a Fish Head make a pot of stock that is already a stew, with the head taking no ingredient slot. Add up to 6 stew ingredients plus seasonings, and it starts with the same mood boost as a plain stew. Divide it into 4 or 2 bowls at a table, as with any stew.
 
 [h2]A little history[/h2]
-Stockfish is unsalted cod hung on open racks through the cold northern Norwegian spring, traded across Europe since the Viking age. Salt cod (klippfisk, bacalhau) is salted, pressed and dried in mild air, and from the 1500s it fed sailors and Catholic fast days on both sides of the Atlantic. On the lower Volga around Astrakhan, large salted fish such as pike are hung from hooks to dry. In the charqueadas of southern Brazil, beef was salted in piles, washed and dried in the sun as charque.
+Stockfish is unsalted cod hung on open racks through the cold northern Norwegian spring, traded across Europe since the Viking age. Salt cod (klippfisk, bacalhau) is salted, pressed and dried in mild air, and from the 1500s it fed sailors and Catholic fast days on both sides of the Atlantic. On the lower Volga around Astrakhan, large salted fish such as pike are hung from hooks to dry. In the charqueadas of southern Brazil, beef was salted in piles, washed and dried in the sun as charque. Turkish kavurma, French confit and the Balkan meso u masti are all meat cooked in fat and sealed in clay pots for the winter.
 
 [h2]Works well with[/h2]
 [b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt: one batch (5 Evaporated Salt, 25 uses) packs a dozen panfish, or one 4 weight walleye with salt to spare. Traditional Preservation (Fish & Meat) needs no other mods besides Traditional Preservation (Core).

@@ -18,10 +18,11 @@
 9½. The Fisherman's Logbook
 9¾. The Butcher's Block: Fat, Lard and Tallow
 9⅞. Charque: Sun-Dried Beef
-10. Tips from the Docks
-11. Troubleshooting
-12. Sandbox Settings
-13. Appendix: The Tester's Toolkit
+10. Potted Meat: Meat Under Fat
+11. Tips from the Docks
+12. Troubleshooting
+13. Sandbox Settings
+14. Appendix: The Tester's Toolkit
 
 ---
 
@@ -29,7 +30,7 @@
 
 You catch more fish than you can eat. This mod turns that surplus into food that keeps for **months (salted)** or **up to two years (cold dried)**, using the two great preserved fish of history: Portuguese *bacalhau* (salt cod) and Norwegian *stockfish* (air-dried in the cold). No power, no fridge, just salt, wood and weather.
 
-Meat follows the same roads: butchering gives fat for **Lard and Tallow** (9¾), and beef, mutton and venison go through the same tub and onto the same frames as **charque**, sun-dried for the summer (9⅞).
+Meat follows the same roads: butchering gives fat for **Lard and Tallow** (9¾), and beef, mutton and venison go through the same tub and onto the same frames as **charque**, sun-dried for the summer (9⅞). Any season, any cut including pork can be cooked in that fat and sealed in a clay jar as **Potted Meat** (10).
 
 ---
 
@@ -349,7 +350,39 @@ From November to February it barely dries at all: that's the season for salt fis
 
 ---
 
-## 10. Tips from the Docks
+## 10. Potted Meat: Meat Under Fat
+
+Potted Meat is the road for any season and any red meat, pork too: cuts cooked slowly in Lard or Tallow with salt, then packed into a clay jar under their own fat. It needs no station, only a pot, a fire and a jar.
+
+1. **Put Meat in Lard or Tallow** (right-click the meat or the fat): an empty **Pot** or Forged Pot, a block of **Lard** or **Tallow**, one cut and **1 Salt**. You get a **Pot of Meat in Fat**.
+   Or, straight from rendering: **Put Meat in the Melted Fat** takes the pot of half a litre of **Melted Lard** or **Melted Tallow** that Pour Off leaves (9¾), one cut and Salt. Half a litre is one block.
+2. **Add Meat to the Pot**, up to **four cuts** in all: a block of fat covers four. **Beef**, **Steak**, **Mutton Chop**, **Venison**, **Pork** and **Pork Chop** all go in.
+3. Cook it on any stove or fire for about **two hours**. It burns if you leave it, and then only **Scrape Out Burnt Fat** gets the pot back. Once it's cooked, no more meat goes in.
+4. **Pack Potted Meat** into an empty **Clay Jar**, **Glazed Clay Jar** or **Clay Pot**: the pot comes back, and you have a **Crock of Potted Meat**, one portion for each cut.
+5. Eat from it like any food: Eat Quarter, Half or All take portions, and the name counts down ("Crock of Potted Meat (3 portions)"). The **jar or pot comes back** with the last bite.
+
+| | Pot of Meat in Fat | Crock of Potted Meat |
+|---|---|---|
+| Keeps | 2 / 4 days, as raw meat | **60 / 90 days** |
+| Holds | 1 to 4 cuts | a portion a cut |
+| Food | the cuts, plus a quarter block of fat for each | the same, cold and ready to eat |
+| Eat it? | No: cook it, then pack it | Yes |
+
+**A portion** is the cut's own food plus a quarter of the fat, about 1,000 calories of it. A full crock of four is around **5,000 calories**: few foods carry more. Fewer than four cuts leave the rest of the block behind in the pot, so cook four at a time when you can.
+
+**The fat counts.** A Lard that has been used in cooking only gives what is left of it: a tenth of a block covers one cut with a tenth of the fat, and the next cut gets none.
+
+> ✏ **Margin note:** the glazed jar is the old confit pot. In south-west France the year's duck and goose were kept under their fat in glazed earthenware *pots à confit*, and the plain earthenware jar did the same job for Turkish and Balkan cooks.
+
+> 📝 **Margin note:** why does pork go in here and not on the charque frame? Charque's sun turns pork fat rancid. Under a seal of lard, out of the light and the air, pork has always kept well: the Balkan crock of *meso u masti* is pork in its own lard.
+
+> ⚠ **Margin note:** keep it cold. Farmhouses kept their crocks in cellars through the winter, for months. Modern food safety is stricter: meat sealed under fat is a cold-storage food, kept below about 4 C for no more than three months, under at least a finger's width of fat. Warm, it is a botulism risk, whatever the seal looks like.
+
+> 📜 **Old names:** Turkish *kavurma* and Central Asian *qovurma* are mutton or beef fried slowly in its own fat and the sheep's tail fat until the water is gone, packed into clay pots and sealed, once the winter stores of the army and the steppe. French *confit* means "preserved", from the same Latin as *confection*. In the Balkans it is *meso u masti*, "meat in fat", put down after the autumn pig-killing.
+
+---
+
+## 11. Tips from the Docks
 
 - **Fillets don't cheat the salt.** A vanilla fillet weighs 5% of its fish but holds half its food, so salted it pays and weighs as half the gutted fish. Fillets cut from a cured fish weigh half of it.
 - **Big catch?** A fish heavier than a stack's limit won't fit. Split it in two, or hang it on the Beam or Gantry.
@@ -361,7 +394,7 @@ From November to February it barely dries at all: that's the season for salt fis
 
 ---
 
-## 11. Troubleshooting
+## 12. Troubleshooting
 
 | Problem | Why |
 |---|---|
@@ -372,6 +405,9 @@ From November to February it barely dries at all: that's the season for salt fis
 | Cold dried fish keeps less than a year | Hard frost or rain caught it in its first days on the frame |
 | Not drying | Rain on an open frame (cold fish too, until it dries off); cold drying indoors; or charque at or below freezing |
 | Charque lost progress | It was rained on, on an open frame: a tenth for every 6 hours of rain |
+| Add Meat to the Pot is greyed out | The pot already has four cuts, or it has cooked: meat goes in raw |
+| Pack Potted Meat is greyed out | The pot isn't cooked yet, or it burnt (Scrape Out Burnt Fat). The jar must be empty |
+| Put Meat in the Melted Fat is missing | The pot needs a full half litre of Melted Lard or Tallow, as Pour Off leaves it |
 | No Eat option on stockfish or charque | They're too hard to eat as they are. Rehydrate them first |
 | Salt fish keeps less than it should | A warm cure (the season was above 20 C while it cured) or hot sun on an open frame before it was half dry |
 | Time Remaining looks wrong in the window | The window shows the time in the best weather, or the longest cure. Hover the stack or the curing batch for the real time left |
@@ -382,7 +418,7 @@ From November to February it barely dries at all: that's the season for salt fis
 
 ---
 
-## 12. Sandbox Settings
+## 13. Sandbox Settings
 
 | Option | Default | Effect |
 |---|---|---|
@@ -398,7 +434,7 @@ From November to February it barely dries at all: that's the season for salt fis
 
 ---
 
-## 13. Appendix: The Tester's Toolkit
+## 14. Appendix: The Tester's Toolkit
 
 *For testers, modders and the curious. These commands exist only when the game is started in debug mode (Steam launch option `-debug`). Type them into the in-game **Command Console** and press Enter. `TPFM.help()` lists them in the game.*
 
@@ -420,11 +456,15 @@ From November to February it barely dries at all: that's the season for salt fis
 | `TPFM.salt(n)` | Spawns vanilla Salt shakers. |
 | `TPFM.meat(n)` | Spawns `n` each of Beef, Steak, Mutton Chop and Venison. |
 | `TPFM.cured(n)` | Spawns `n` each of those cuts already Salt Cured, ready to hang. |
+| `TPFM.fatPot(state)` | Spawns a Pot of Pork Fat, cooked (the default), `"burnt"` or `"raw"`: Pour Off Lard gives the melted fat Potted Meat can use. |
+| `TPFM.potted()` | Spawns what Potted Meat takes: a Pot, Lard, Salt, a Steak, Beef, Pork Chop and Pork, and a Clay Jar, Glazed Clay Jar and Clay Pot. |
 
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.
 
 **Typical check of the whole salt route:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(10)` (each 4 weight walleye takes 32 salt, and a shaker holds 10), pack and cure, then hang the fish and `TPFM.age(288)`.
 
 **Typical check of charque:** `TPFM.cured(2)`, hang them on a frame, `TPFM.age(120)`, take them down and rehydrate one.
+
+**Typical check of Potted Meat:** `TPFM.potted()`, Put Meat in Lard or Tallow with the Steak, Add Meat to the Pot three times, cook it two hours, Pack Potted Meat into the Glazed Clay Jar, then eat a quarter.
 
 **Typical check of heads:** `TPFM.fish("Walleye", 4)` and `TPFM.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.
