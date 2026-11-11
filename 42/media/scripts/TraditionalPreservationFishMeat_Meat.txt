@@ -133,7 +133,7 @@ module TraditionalPreservationFishMeat
     }
 
     /* Two pieces of raw fat in a pot. It can't be eaten: it cooks on any stove or fire, and Pour Off Lard or
-       Pour Off Tallow then takes it once it is cooked. Burnt, only Scrape Out Burnt Fat gives the pot back.
+       Pour Off Tallow then turns it into a pot of melted fat once it is cooked. Burnt, only Scrape Out Burnt Fat gives the pot back.
        One item for each vanilla pot and each rendered fat. */
     item PotOfPorkFat
     {
@@ -281,23 +281,23 @@ module TraditionalPreservationFishMeat
         }
     }
 
-    /* IsCookedFoodItem lets burnt food through, so canPourOff refuses a burnt pot. */
+    /* A cooked pot's fat has melted: pouring it off gives the pot back holding 0.5 L of Melted Lard or Melted
+       Tallow (onPourOffLard, onPourOffTallow fill it), for Strain Lard or Strain Tallow, a bigger container or
+       the Hearth's copper. IsCookedFoodItem lets burnt food through, so canPourOff refuses a burnt pot. */
     craftRecipe PourOffLard
     {
         timedAction = MixingBowl,
         time = 60,
         Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
         category = Cooking,
-        xpAward = Cooking:5,
         OnTest = TraditionalPreservationFishMeat.canPourOff,
+        OnCreate = TraditionalPreservationFishMeat.onPourOffLard,
         inputs
         {
             item 1 [TraditionalPreservationFishMeat.PotOfPorkFat;TraditionalPreservationFishMeat.PotForgedPorkFat] mappers[potType] flags[InheritCondition;IsCookedFoodItem;ItemCount] mode:destroy,
         }
         outputs
         {
-            item 1 Base.Lard,
-            item 1 TraditionalPreservationFishMeat.Cracklings,
             item 1 mapper:potType,
         }
         itemMapper potType
@@ -313,22 +313,63 @@ module TraditionalPreservationFishMeat
         time = 60,
         Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
         category = Cooking,
-        xpAward = Cooking:5,
         OnTest = TraditionalPreservationFishMeat.canPourOff,
+        OnCreate = TraditionalPreservationFishMeat.onPourOffTallow,
         inputs
         {
             item 1 [TraditionalPreservationFishMeat.PotOfSuet;TraditionalPreservationFishMeat.PotForgedSuet] mappers[potType] flags[InheritCondition;IsCookedFoodItem;ItemCount] mode:destroy,
         }
         outputs
         {
-            item 1 TraditionalPreservationFishMeat.Tallow,
-            item 1 TraditionalPreservationFishMeat.Cracklings,
             item 1 mapper:potType,
         }
         itemMapper potType
         {
             Base.Pot = TraditionalPreservationFishMeat.PotOfSuet,
             Base.PotForged = TraditionalPreservationFishMeat.PotForgedSuet,
+        }
+    }
+
+    /* Melted fat from the Hearth's copper (TraditionalPreservationFishMeat_fluids.txt), in whatever it was ladled
+       into: half a litre strains to a block and its cracklings, as a pot's two pieces do. It goes through a cloth or
+       a Strainer (a Cheese Cloth, Dish Towel, clean Rag or Sheet), which is kept, as the container is. */
+    craftRecipe StrainLard
+    {
+        timedAction = MixingBowl,
+        time = 60,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Cooking:5,
+        inputs
+        {
+            item 1 [Base.CheeseCloth;Base.DishCloth;Base.RippedSheets;Base.Sheet;Base.Strainer] mode:keep,
+            item 1 [*],
+            -fluid 0.5 [MeltedLard],
+        }
+        outputs
+        {
+            item 1 Base.Lard,
+            item 1 TraditionalPreservationFishMeat.Cracklings,
+        }
+    }
+
+    craftRecipe StrainTallow
+    {
+        timedAction = MixingBowl,
+        time = 60,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Cooking:5,
+        inputs
+        {
+            item 1 [Base.CheeseCloth;Base.DishCloth;Base.RippedSheets;Base.Sheet;Base.Strainer] mode:keep,
+            item 1 [*],
+            -fluid 0.5 [MeltedTallow],
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.Tallow,
+            item 1 TraditionalPreservationFishMeat.Cracklings,
         }
     }
 

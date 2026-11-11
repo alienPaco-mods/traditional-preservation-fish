@@ -254,7 +254,15 @@ Numbers are for an average animal and an unskilled butcher. A bigger or meatier 
 
 1. **Put Pork Fat in a Pot** (or **Put Suet in a Pot**): an empty Cooking Pot or Forged Pot and **2 pieces** of raw fat. Beef Suet and Mutton Fat share a pot, mixed or not.
 2. **Cook it** on any stove, campfire or fireplace: about an hour. No station needed.
-3. **Pour Off Lard** (or **Pour Off Tallow**): one block of fat, one portion of **Cracklings**, and your pot back.
+3. **Pour Off Lard** (or **Pour Off Tallow**): the fat has melted, and your pot now holds half a litre of **Melted Lard** (or **Melted Tallow**).
+4. **Strain Lard** (or **Strain Tallow**) through a cloth or a Strainer: one block of fat and one portion of **Cracklings**. The pot and the cloth are kept.
+
+| Strains fat | Notes |
+|---|---|
+| Cheese Cloth, Dish Towel, Rag, Sheet | Clean and dry. A dirty rag or a wet towel won't do |
+| Strainer | The kitchen kind |
+
+Melted fat is a liquid like any other: pour several pots into a bucket and strain it later. It does not spoil.
 
 | Item | Keeps (fresh / rotten) | Notes |
 |---|---|---|
@@ -266,6 +274,28 @@ Numbers are for an average animal and an unskilled butcher. A bigger or meatier 
 > 📝 **Margin note:** a pig on the hook gives 2 or 3 blocks of Lard, about as many calories as its meat. That is close to a real lard pig, and the reason the old breeds were kept.
 
 > 🔥 **Don't walk away.** Left on the heat for two and a half hours the fat burns. A burnt pot gives nothing: **Scrape Out Burnt Fat** gets you the pot back.
+
+**A whole pig at once: the Hearth's copper**
+
+A pot takes two pieces. The copper of a **Hearth** (TP Core) takes the lot.
+
+1. Right-click the Hearth: **Put Fat in the Copper**. Every piece of that kind you carry goes in. Pork fat on its own; suet and mutton fat together.
+2. **Light the fire.** Once the copper steams (85 C), the fat needs **one hour** to melt. A banked fire is too cool.
+3. **Fill from Copper** into a pot, a bucket or jars: you now carry **Melted Lard** or **Melted Tallow**.
+4. **Strain Lard** (or **Strain Tallow**) through a cloth or a Strainer: each half litre gives one block and one Cracklings. The container and the cloth are kept.
+
+| | Pot | Copper |
+|---|---|---|
+| Pieces at once | 2 | up to 240 |
+| Time | 1 hour | heating up, then 1 hour steaming (a pig's fat: about 1 h 45 min) |
+| Can it burn? | Yes, if left on the heat 2.5 hours | Never |
+| Yield | 2 pieces → 1 block + Cracklings | the same |
+
+Raw fat left in a cold copper goes **rancid** when its oldest piece would have rotted, and is only good for **Empty the Copper**. Melted fat keeps, in the copper or out of it.
+
+> 📝 **Margin note:** the kettle in the yard on hog-killing day had a little water in the bottom, so the fat melted before it could scorch. That is why the copper never burns it.
+
+> 📝 **Margin note:** straining is what makes lard keep. Fat with scraps of meat left in it turns rancid in weeks; strained clean through a flour sack into a crock, it sat in the cellar till the next hog killing. The cloth was boiled and used again.
 
 > 📜 **Old names:** Balkan cooks call cracklings *čvarci* and make them every winter at the pig slaughter. In Britain, tallow lit the house and suet went into the pudding.
 

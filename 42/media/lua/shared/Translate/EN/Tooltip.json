@@ -31,9 +31,9 @@
   "Tooltip_TraditionalPreservationFishMeat_TieBale": "Ties %1 stockfish (%2 weight) into a bale with %3. A bale holds 10 weight; the rest stay out.",
   "Tooltip_TraditionalPreservationFishMeat_TieBaleNoCord": "Needs Twine or a Rope.",
   "Tooltip_TraditionalPreservationFishMeat_UntieBale": "The fish go into your inventory and you get back the %1.",
-  "Tooltip_TraditionalPreservationFishMeat_PorkFat": "Raw fat from a butchered pig. Put two in a pot and cook it on any stove or fire, then pour off the Lard.",
-  "Tooltip_TraditionalPreservationFishMeat_Suet": "Raw fat from butchered cattle or sheep. Put two in a pot and cook it on any stove or fire, then pour off the Tallow.",
+  "Tooltip_TraditionalPreservationFishMeat_PorkFat": "Raw fat from a butchered pig. Put two in a pot and cook it on any stove or fire, pour off the Melted Lard, then strain it. A Hearth's copper melts many pieces at once.",
+  "Tooltip_TraditionalPreservationFishMeat_Suet": "Raw fat from butchered cattle or sheep. Put two in a pot and cook it on any stove or fire, pour off the Melted Tallow, then strain it. A Hearth's copper melts many pieces at once.",
   "Tooltip_TraditionalPreservationFishMeat_Tallow": "Rendered beef or mutton fat. Bakes and seasons like Lard.",
   "Tooltip_TraditionalPreservationFishMeat_Cracklings": "The crisp bits left in the pot after rendering fat.",
-  "Tooltip_TraditionalPreservationFishMeat_PotOfFat": "Cook it on any stove or fire. Once it is cooked, pour off the fat. Burnt fat is only good for scraping out."
+  "Tooltip_TraditionalPreservationFishMeat_PotOfFat": "Cook it on any stove or fire. Once it is cooked, pour off the melted fat and strain it. Burnt fat is only good for scraping out."
 }

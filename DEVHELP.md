@@ -29,6 +29,8 @@ The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't s
 
 **Typical check of the whole salt route:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(5)` (each 4 weight walleye takes 16 salt, and a shaker holds 10), pack and press, then hang the fish and `TPFM.age(288)`.
 
-**Typical check of rendering:** `TPFM.fat(2)`, a Pot, Put Pork Fat in a Pot, cook it on any stove or fire (60 minutes), Pour Off Lard: one Lard, one Cracklings and the pot.
+**Typical check of rendering:** `TPFM.fat(2)`, a Pot, Put Pork Fat in a Pot, cook it on any stove or fire (60 minutes), Pour Off Lard: the pot holds 0.5 L Melted Lard; Strain Lard (with a Rag or other cloth, or a Strainer): one Lard, one Cracklings, the pot kept.
+
+**Typical check of the copper:** `TPFM.fat(6)`, a lit Hearth, Put Fat in the Copper (Pork Fat), wait for it to steam and an hour more, Fill from Copper into a pot, Strain Lard three times.
 
 **Typical check of heads:** `TPFM.fish("Walleye", 4)` and `TPFM.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.

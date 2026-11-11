@@ -5,5 +5,8 @@
   "ContextMenu_TraditionalPreservationFishMeat_PalletSpeed": "Stockfish Pallet: ripens stockfish x%1 (%2)",
   "ContextMenu_TraditionalPreservationFishMeat_PalletNoSpeed": "Stockfish Pallet: no faster than a shelf here",
   "ContextMenu_TraditionalPreservationFishMeat_TieBale": "Tie a Bale",
-  "ContextMenu_TraditionalPreservationFishMeat_UntieBale": "Untie Bale"
+  "ContextMenu_TraditionalPreservationFishMeat_UntieBale": "Untie Bale",
+  "ContextMenu_TraditionalPreservationFishMeat_FatInCopper": "Put Fat in the Copper",
+  "ContextMenu_TraditionalPreservationFishMeat_FatPieces_PorkFat": "Pork Fat (%1)",
+  "ContextMenu_TraditionalPreservationFishMeat_FatPieces_Suet": "Beef Suet and Mutton Fat (%1)"
 }

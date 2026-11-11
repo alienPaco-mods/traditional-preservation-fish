@@ -1,5 +1,20 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.2
+- **Fat renders in the Hearth's copper** (ROADMAP §7, 2d), many pieces at once. **Put Fat in the Copper** on the
+  Hearth's menu puts in every carried piece of one kind (Pork Fat, or Beef Suet and Mutton Fat together), 0.25 L a
+  piece, up to 240. Over a lit fire, an hour of steaming (85 C or more) melts it to **Melted Lard** or **Melted
+  Tallow**, a fluid that Fill from Copper puts in any pot, bucket or jar. **Strain Lard** / **Strain Tallow** take
+  half a litre for a block and a Cracklings: two pieces a block, as in a pot. The copper never burns fat.
+- Raw fat stays in the copper, and goes to **Rancid Fat** there when its oldest piece would have rotted; only Empty
+  the Copper takes that. Melted fat keeps.
+- **Pots follow the same rule: raw fat is an item, over heat it becomes the fluid.** Pour Off Lard / Pour Off
+  Tallow on a cooked pot now give the pot back holding 0.5 L of Melted Lard or Melted Tallow (hot), not the block;
+  Strain gives the block and Cracklings, and its Cooking XP. A pot still burns if left on the heat (150 minutes).
+- Straining needs a cloth or a Strainer, kept: a Cheese Cloth, Dish Towel, clean Rag, Sheet or Strainer.
+- Hearth Info says how long the fat has to go and when it would go rancid. New fluids `RawPorkFat`, `RawSuet`,
+  `MeltedLard`, `MeltedTallow`, `RancidFat`; `tests/test_fat_ui.lua`. Needs TP Core with `Hearth.turnsHot`.
+
 ## 0.4.1
 - **Fat from butchering** (ROADMAP §7, phase 2). Pigs give **Pork Fat**, cattle **Beef Suet** and sheep **Mutton
   Fat**: one row each in vanilla's butchering parts tables, added when a world starts, so vanilla's own rules scale

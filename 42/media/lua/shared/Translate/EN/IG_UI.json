@@ -63,5 +63,11 @@
   "IGUI_TraditionalPreservationFishMeat_Rinsed": "Rinsed",
   "IGUI_ContainerTitle_stockfishpallet": "Stockfish Pallet",
   "IGUI_TraditionalPreservationFishMeat_PalletLoft": "loft",
-  "IGUI_TraditionalPreservationFishMeat_PalletGround": "ground-floor room"
+  "IGUI_TraditionalPreservationFishMeat_PalletGround": "ground-floor room",
+  "IGUI_TraditionalPreservationFishMeat_FatHelp": "All of it goes in, as far as there is room. Kept steaming for an hour over a lit fire it melts; then fill a pot or bucket from the copper and strain it. It can't burn here.",
+  "IGUI_TraditionalPreservationFishMeat_NoFat": "You have no raw fat.",
+  "IGUI_TraditionalPreservationFishMeat_FatNoRoom": "The copper has no room for it, or holds something else. Empty it first.",
+  "IGUI_TraditionalPreservationFishMeat_FatRendering": "Raw fat melts after %1 more of steaming over a lit fire. Left raw, it goes rancid in %2.",
+  "IGUI_TraditionalPreservationFishMeat_FatMelted": "The fat has melted. Fill a pot, bucket or jar from the copper, then strain it through a cloth or a Strainer: half a litre makes a block and its Cracklings.",
+  "IGUI_TraditionalPreservationFishMeat_FatRancid": "The fat went rancid before it was rendered. Empty the copper."
 }

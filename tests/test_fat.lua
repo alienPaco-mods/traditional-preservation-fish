@@ -111,10 +111,12 @@ check("Put Pork Fat in a Pot takes an empty pot and two raw pieces",
 check("suet and mutton fat share a pot", block("craftRecipe", "PutSuetInPot"):find("[TraditionalPreservationFishMeat.BeefSuet;TraditionalPreservationFishMeat.MuttonFat]", 1, true) ~= nil)
 for recipe, fat in pairs({ PourOffLard = "Base.Lard", PourOffTallow = "TraditionalPreservationFishMeat.Tallow" }) do
     local text = block("craftRecipe", recipe)
-    check(recipe .. " takes a cooked pot and gives the fat, cracklings and the pot",
+    local kind = recipe:match("PourOff(%w+)")
+    check(recipe .. " takes a cooked pot and gives the pot back, filled by its OnCreate; the block and cracklings come from straining",
         text:find("IsCookedFoodItem", 1, true) and text:find("OnTest = TraditionalPreservationFishMeat.canPourOff", 1, true)
-        and text:find("item 1 " .. fat .. ",", 1, true) and text:find("item 1 TraditionalPreservationFishMeat.Cracklings,", 1, true)
-        and text:find("item 1 mapper:potType", 1, true) ~= nil)
+        and text:find("OnCreate = TraditionalPreservationFishMeat.onPourOff" .. kind .. ",", 1, true)
+        and text:find("item 1 mapper:potType", 1, true) and not text:find(fat, 1, true)
+        and not text:find("Cracklings", 1, true) and not text:find("xpAward", 1, true))
 end
 check("Scrape Out Burnt Fat gives only the pot", block("craftRecipe", "ScrapeOutBurntFat"):find("OnTest = TraditionalPreservationFishMeat.canScrape", 1, true) ~= nil
     and not block("craftRecipe", "ScrapeOutBurntFat"):find("Cracklings", 1, true))
@@ -124,6 +126,69 @@ end
 for tooltip in script:gmatch("Tooltip = (Tooltip_[%w_]+)") do
     check(tooltip .. " is translated", getText(tooltip) ~= tooltip)
 end
+-- Fat in the Hearth's copper
+local Hearth = require "TraditionalPreservationCore/Hearth"
+local fluids = io.open("42/media/scripts/TraditionalPreservationFishMeat_fluids.txt"):read("*a")
+for _, fat in ipairs(F.COPPER_FATS) do
+    for _, name in ipairs({ fat.raw, fat.melted }) do
+        check(name .. " is a fluid with a name", fluids:find("\n    fluid " .. name .. "\n", 1, true) ~= nil
+            and H.texts["Fluid_Name_" .. name] ~= nil)
+    end
+    check(fat.raw .. " has its row's text", H.texts["ContextMenu_TraditionalPreservationFishMeat_FatPieces_" .. fat.name] ~= nil)
+    for item in pairs(fat.items) do
+        check(item .. " is a raw fat item", block("item", item:match("%.(%w+)$")) ~= nil)
+    end
+end
+check("Rancid Fat is a fluid with a name", fluids:find("\n    fluid RancidFat\n", 1, true) ~= nil and H.texts.Fluid_Name_RancidFat ~= nil)
+local copper = {}
+check("an empty copper has room for 240 pieces", F.copperFatRoom(copper, "RawPorkFat") == 240)
+check("six pieces of pork fat go in as a litre and a half", F.putFatInCopper(copper, "RawPorkFat", { 96, 30, 96, 96, 96, 96 }, 10) == 6
+    and copper.ml == 1500 and copper.fluid == "RawPorkFat" and copper.tempC == Hearth.ROOM_C)
+check("the oldest piece sets when it goes rancid", copper.offAt == 40)
+check("raw fat can't be ladled out", not Hearth.poursOut(copper))
+check("suet doesn't go in with pork fat", F.copperFatRoom(copper, "RawSuet") == 0 and F.putFatInCopper(copper, "RawSuet", { 96 }, 10) == 0)
+check("more pork fat does, and a rotten piece makes it rancid at once", F.putFatInCopper(copper, "RawPorkFat", { -5 }, 12) == 1
+    and copper.ml == 1750 and copper.offAt == 12)
+copper.offAt, copper.last = 40, 12
+copper.fireUntil = 100
+Hearth.advance(copper, 12 + Hearth.hoursToHot(copper) + 0.9, 20)
+check("not yet melted short of the hour", copper.fluid == "RawPorkFat")
+Hearth.advance(copper, 15, 20)
+check("an hour steaming melts it to Melted Lard, which ladles out and keeps", copper.fluid == "MeltedLard" and Hearth.poursOut(copper)
+    and copper.offAt == nil)
+check("seven pieces are three blocks and a half", copper.ml / 500 == 3.5)
+check("melted fat takes no raw", F.copperFatRoom(copper, "RawPorkFat") == 0)
+local suet = {}
+F.putFatInCopper(suet, "RawSuet", { 50, 50 }, 0)
+Hearth.advance(suet, 51, 20)
+check("suet left cold goes rancid, and stays in the copper", suet.fluid == "RancidFat" and not Hearth.poursOut(suet))
+local tight = { ml = Hearth.COPPER_ML - 600, fluid = "RawSuet", tempC = 20, last = 0 }
+check("a nearly full copper takes only the pieces that fit", F.putFatInCopper(tight, "RawSuet", { 9, 9, 9, 9 }, 0) == 2)
+check("a piece's hours left come from its age", F.fatHoursLeft({ getOffAgeMax = function() return 4 end, getAge = function() return 1.5 end }) == 60)
+for recipe, fat in pairs({ StrainLard = { "MeltedLard", "Base.Lard" }, StrainTallow = { "MeltedTallow", "TraditionalPreservationFishMeat.Tallow" } }) do
+    local text = block("craftRecipe", recipe)
+    check(recipe .. " takes half a litre from any container and gives a block and its cracklings",
+        text:find("item 1 [*],\n            -fluid 0.5 [" .. fat[1] .. "],", 1, true) and text:find("item 1 " .. fat[2] .. ",", 1, true)
+        and text:find("item 1 [Base.CheeseCloth;Base.DishCloth;Base.RippedSheets;Base.Sheet;Base.Strainer] mode:keep,\n            item 1 [*],", 1, true)
+        and text:find("item 1 TraditionalPreservationFishMeat.Cracklings,", 1, true) ~= nil)
+end
+local function poured(onCreate)
+    local pot = { fluids = {} }
+    pot.getFluidContainer = function() return { addFluid = function(_, name, litres) pot.fluids[name] = litres end } end
+    pot.setItemHeat = function(_, heat) pot.heat = heat end
+    onCreate({ getAllCreatedItems = function() return H.list({ pot }) end })
+    return pot
+end
+local potOfLard, potOfTallow = poured(F.onPourOffLard), poured(F.onPourOffTallow)
+check("a pot poured off holds half a litre of Melted Lard, hot: one block's worth, as two pieces are in the copper",
+    potOfLard.fluids.MeltedLard == 0.5 and potOfLard.heat > 1.4 and F.POT_FAT_ML == 2 * F.FAT_PIECE_ML)
+check("a pot of suet pours off as Melted Tallow", potOfTallow.fluids.MeltedTallow == 0.5 and potOfTallow.fluids.MeltedLard == nil)
+check("a litre of melted fat is worth two blocks", tonumber(fluids:match("fluid MeltedLard.-Calories = ([%d%.]+)")) == 2 * lard
+    and tonumber(fluids:match("fluid MeltedTallow.-Calories = ([%d%.]+)")) == 2 * lard)
+for _, key in ipairs({ "FatHelp", "NoFat", "FatNoRoom", "FatRendering", "FatMelted", "FatRancid" }) do
+    check(key .. " is translated", H.texts["IGUI_TraditionalPreservationFishMeat_" .. key] ~= nil)
+end
+
 check("Tallow and Cracklings have names", H.texts["TraditionalPreservationFishMeat.Tallow"] ~= nil and H.texts["TraditionalPreservationFishMeat.Cracklings"] ~= nil)
 check("the sandbox has the option", io.open("42/media/sandbox-options.txt"):read("*a"):find("option TraditionalPreservationFishMeat.ButcheringFat", 1, true) ~= nil)
 
