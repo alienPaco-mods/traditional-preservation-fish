@@ -188,6 +188,13 @@ F.BALE_CORDS = {
 F.BALE_TIE_TICKS = 120
 F.BALE_UNTIE_TICKS = 60
 
+-- Cold smoke (5d, TraditionalPreservationFishMeatSmokehouse.lua): fire hours count only on a day at or under
+-- COLD_SMOKE_MAX (the smoulder lifts the meat 10-15 C; over 30 C at the meat it cooks rather than smokes). Stacks in
+-- a Smokehouse, by stackId, as the World last saw them (not saved); a finished one waits at SHED_WAIT until seen.
+F.COLD_SMOKE_MAX = 20
+F.smokeStations = {}
+F.SHED_WAIT = 0.999
+
 -- Charque (phase 3c): Salt Cured meat dried in the summer sun, as in Brazil's charqueadas. CHARQUE_HOURS at a rate of
 -- 1, which takes CHARQUE_FULL_HEAT and up (heat helps, and does no harm), nothing at 0 C or below, in between by
 -- the temperature; damp air slows it as salt fish (airRate). Still air dries at CHARQUE_CALM_RATE, a breeze of
@@ -239,7 +246,14 @@ F.STAGES = {
     ["TraditionalPreservationFishMeat.HotSmokedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_HotSmoked", weight = 0.78, nutrition = 1, hunger = 1, salty = true },
     ["TraditionalPreservationFishMeat.HotSmokedMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_HotSmoked", weight = 0.78, nutrition = 1, hunger = 1, salty = true },
     ["TraditionalPreservationFishMeat.SoakedCharque"] = { name = "IGUI_TraditionalPreservationFishMeat_SoakedCharque", weight = 1.6, nutrition = 1, hunger = 1 / 0.7, salty = true },
+    -- Cold smoked (the Smokehouse, 5d): dried in smoky air, as dry as Salt Dried fish or charque. Meat smoked so is no
+    -- longer charque but the start of the Dry-Cured line, named by the animal ("Dry-Cured Beef (Cold Smoked)").
+    ["TraditionalPreservationFishMeat.ColdSmokedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdSmoked", weight = 0.45, nutrition = 0.9, hunger = 0.7, salty = true },
+    ["TraditionalPreservationFishMeat.DryCuredMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdSmoked", weight = 0.55, nutrition = 0.9, hunger = 0.7, salty = true, dryCured = true },
 }
+
+-- The animal each of MEAT_CUTS comes from, by model index, for the Dry-Cured names.
+F.MEAT_ANIMALS = { "Beef", "Beef", "Mutton", "Venison" }
 
 -- The low end of DryingCraftLogic's curve: nothing at freezing, 1 at 20 C. It stops there, so
 -- heat can't finish a batch in under DRY_HOURS.
@@ -290,11 +304,12 @@ end
 
 -- The weather totals: hours of drying done open, sheltered (indoors), covered (a roof, no room), cold and cold
 -- covered, charque open, covered and sheltered, hours of spoiling raw and salted,
--- hours of hard frost and of cold fish lying wet above freezing, of a warm cure, of heat and of rain, and the
--- wetness rain left on open frames and on cold ones.
+-- hours of hard frost and of cold fish lying wet above freezing, of a warm cure, of heat and of rain, the
+-- wetness rain left on open frames and on cold ones, and for cold smoke (5d) all hours and the cool ones.
 function F.newLedger(now)
     return { lastHour = now, wetness = 0, coldWetness = 0, open = 0, sheltered = 0, covered = 0, cold = 0, coldCovered = 0, rawSpoil = 0, saltSpoil = 0,
-        hardFrost = 0, coldWet = 0, warmCure = 0, heat = 0, charque = 0, charqueCovered = 0, charqueSheltered = 0, charqueRain = 0 }
+        hardFrost = 0, coldWet = 0, warmCure = 0, heat = 0, charque = 0, charqueCovered = 0, charqueSheltered = 0, charqueRain = 0,
+        clock = 0, smokeCool = 0 }
 end
 
 -- Adds one stretch of weather to the totals. Open frames dry nothing until the rain has gone
@@ -336,6 +351,8 @@ function F.advance(ledger, now, weather)
     ledger.charqueCovered = ledger.charqueCovered + ledger.charqueCoveredRate * hours
     ledger.charqueSheltered = ledger.charqueSheltered + ledger.charqueShelteredRate * hours
     if raining then ledger.charqueRain = ledger.charqueRain + hours end
+    ledger.clock = ledger.clock + hours
+    if weather.temperature <= F.COLD_SMOKE_MAX then ledger.smokeCool = ledger.smokeCool + hours end
     ledger.temperature = weather.temperature
     ledger.wind = weather.wind
     ledger.open = ledger.open + ledger.openRate * hours
@@ -387,7 +404,9 @@ function F.stackStatus(isCold, modData, ledger)
         rate = ledger.coldRate or 0
         if rate <= 0 then reason = "Rain" end
     elseif modData.sheltered then
+        -- A burning Firebox's draught dries a Smokehouse stack at the Covered rate (F.smokeStep).
         rate = ledger.shelteredRate or 0
+        if modData.burning then rate = math.max(rate, ledger.coveredRate or 0) end
     elseif modData.covered then
         rate = ledger.coveredRate or 0
     else
@@ -427,6 +446,7 @@ function F.charqueStatus(modData, ledger)
     local rate, reason
     if modData.sheltered then
         rate = ledger.charqueShelteredRate or 0
+        if modData.burning then rate = math.max(rate, ledger.charqueCoveredRate or 0) end
     elseif modData.covered then
         rate = ledger.charqueCoveredRate or 0
     else
@@ -465,9 +485,9 @@ end
 -- The ledger is the mod's global ModData table itself, so its keys are the ones in every save.
 function F.getLedger()
     local data = ModData.getOrCreate(F.MOD_DATA_KEY)
-    -- cold, hardFrost, covered, warmCure, heat and the charque totals came after the first release, so a save can
-    -- have the rest without them.
-    if not data.charqueRain then
+    -- cold, hardFrost, covered, warmCure, heat, the charque and the smoke totals came after the first release, so a
+    -- save can have the rest without them.
+    if not data.smokeCool then
         local ledger = F.newLedger(getGameTime():getWorldAgeHours())
         for key, value in pairs(ledger) do
             if data[key] == nil then data[key] = value end
@@ -670,12 +690,18 @@ local function startStack(craftRecipeData)
     modData.lastCharqueRain = ledger.charqueRain
     modData.sheltered = nil
     modData.covered = nil
+    -- Recipe data is pooled with its ModData (ENGINE_NOTES): a stack mustn't inherit an old one's shed or smoke.
+    modData.inShed, modData.burning, modData.hotNeed, modData.heaviest = nil, nil, nil, nil
+    modData.lastClock, modData.lastSmokeCool, modData.lastDraughtCovered, modData.lastDraughtSheltered = nil, nil, nil, nil
 end
 
--- Shows a stack's progress, and ends it early if it has rotted or its hot smoking is done (the Smokehouse).
+-- Shows a stack's progress, and ends it early if it has rotted or its hot smoking is done (the Smokehouse). A stack
+-- in a Smokehouse waits at the end until the World has seen its shed since the load, so OnCreate can swap in Cold
+-- Smoked outputs (F.smokeStations).
 local function showProgress(craftRecipeData, modData, hours)
     local time = craftRecipeData:getRecipe():getTime()
     local progress = (modData.spoiled >= 1 or F.hotStations[modData.stackId]) and 1 or math.min(modData.dried / hours, 1)
+    if progress >= 1 and modData.inShed and not F.smokeStations[modData.stackId] then progress = F.SHED_WAIT end
     craftRecipeData:setElapsedTime(progress * time)
 end
 
@@ -1183,6 +1209,10 @@ function F.stageName(item)
     local modData = item:getModData()
     local fishName = modData.fishName
     if not stage or not fishName then return nil end
+    if stage.dryCured then
+        local animal = F.MEAT_ANIMALS[item:getModelIndex() + 1] or F.MEAT_ANIMALS[1]
+        fishName = getText("IGUI_TraditionalPreservationFishMeat_DryCured", getText("IGUI_TraditionalPreservationFishMeat_Animal" .. animal))
+    end
     if stage.prep then return stage.name and getText(stage.name, fishName) or fishName end
     if F.wasGutted(item) then fishName = getText("IGUI_TraditionalPreservationFishMeat_Gutted", fishName) end
     local state = getText(stage.name)
@@ -1378,14 +1408,19 @@ function F.onCreateSliced(craftRecipeData)
 end
 
 -- Marks the fish of a stack, so a frame can tell its finished stacks apart, and ages it by what
--- the season took out of it. A stack hot smoked in the Smokehouse comes out Hot Smoked instead.
+-- the season took out of it. A stack hot smoked in the Smokehouse comes out Hot Smoked instead, and one that had
+-- smoke for a third of its time there Cold Smoked.
 function F.onCreateDried(craftRecipeData)
     local modData = craftRecipeData:getModData()
     local station = F.hotStations[modData.stackId]
     if station then
         F.hotStations[modData.stackId] = nil
-        if F.hotSmokeOutputs(craftRecipeData, station) then return end
+        if F.smokedOutputs(craftRecipeData, station, F.HOT_FISH, F.HOT_MEAT) then return end
     end
+    station = modData.stackId and F.smokeStations[modData.stackId]
+    if station then F.smokeStations[modData.stackId] = nil end
+    if station and F.coldDone(modData, getGameTime():getWorldAgeHours())
+        and F.smokedOutputs(craftRecipeData, station, F.COLD_FISH_OUT, F.DRY_CURED) then return end
     F.onCreateCured(craftRecipeData)
     local spoiled = modData.spoiled or 0
     local created = craftRecipeData:getAllCreatedItems()

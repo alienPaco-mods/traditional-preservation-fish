@@ -145,6 +145,34 @@ module TraditionalPreservationFishMeat
         Tooltip = Tooltip_TraditionalPreservationFishMeat_Dried,
     }
 
+    /* Cold smoked in the Smokehouse (5d): salt cured fish dried in smoky air over a banked Firebox for a third of its
+       time or more, as Volga smoked-dried fish. As dry as Salt Dried and keeps as long, but eaten as it is, sliced
+       thin. Food from the fish (carry); the values here are placeholders. */
+    item ColdSmokedFish
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.08,
+        Icon = ColdSmokedFish,
+        IconsForTexture = ColdSmoked_FishFillet;ColdSmoked_Salmon;ColdSmoked_Fish_BassLargemouth;ColdSmoked_Fish_BassSmallmouth;ColdSmoked_Fish_BassSpotted;ColdSmoked_Fish_BassStriped;ColdSmoked_Fish_Walleye;ColdSmoked_Fish_Sauger;ColdSmoked_Fish_CrappieBlack;ColdSmoked_Fish_CrappieWhite;ColdSmoked_Fish_Bluegill;ColdSmoked_Fish_SunfishRedear;ColdSmoked_Fish_SunfishGreen;ColdSmoked_Fish_CatfishBlue;ColdSmoked_Fish_CatfishChannel;ColdSmoked_Fish_CatfishFlathead;ColdSmoked_Fish_Muskellunge;ColdSmoked_Fish_BassWhite;ColdSmoked_Fish_PerchYellow;ColdSmoked_Fish_DrumFreshwater;ColdSmoked_Fish_GarAlligator;ColdSmoked_Fish_Paddlefish;ColdSmokedGutted_FishFillet;ColdSmokedGutted_Salmon;ColdSmokedGutted_Fish_BassLargemouth;ColdSmokedGutted_Fish_BassSmallmouth;ColdSmokedGutted_Fish_BassSpotted;ColdSmokedGutted_Fish_BassStriped;ColdSmokedGutted_Fish_Walleye;ColdSmokedGutted_Fish_Sauger;ColdSmokedGutted_Fish_CrappieBlack;ColdSmokedGutted_Fish_CrappieWhite;ColdSmokedGutted_Fish_Bluegill;ColdSmokedGutted_Fish_SunfishRedear;ColdSmokedGutted_Fish_SunfishGreen;ColdSmokedGutted_Fish_CatfishBlue;ColdSmokedGutted_Fish_CatfishChannel;ColdSmokedGutted_Fish_CatfishFlathead;ColdSmokedGutted_Fish_Muskellunge;ColdSmokedGutted_Fish_BassWhite;ColdSmokedGutted_Fish_PerchYellow;ColdSmokedGutted_Fish_DrumFreshwater;ColdSmokedGutted_Fish_GarAlligator;ColdSmokedGutted_Fish_Paddlefish;ColdSmokedHalf_FishFillet;ColdSmokedHalf_Salmon;ColdSmokedHalf_Fish_BassLargemouth;ColdSmokedHalf_Fish_BassSmallmouth;ColdSmokedHalf_Fish_BassSpotted;ColdSmokedHalf_Fish_BassStriped;ColdSmokedHalf_Fish_Walleye;ColdSmokedHalf_Fish_Sauger;ColdSmokedHalf_Fish_CrappieBlack;ColdSmokedHalf_Fish_CrappieWhite;ColdSmokedHalf_Fish_Bluegill;ColdSmokedHalf_Fish_SunfishRedear;ColdSmokedHalf_Fish_SunfishGreen;ColdSmokedHalf_Fish_CatfishBlue;ColdSmokedHalf_Fish_CatfishChannel;ColdSmokedHalf_Fish_CatfishFlathead;ColdSmokedHalf_Fish_Muskellunge;ColdSmokedHalf_Fish_BassWhite;ColdSmokedHalf_Fish_PerchYellow;ColdSmokedHalf_Fish_DrumFreshwater;ColdSmokedHalf_Fish_GarAlligator;ColdSmokedHalf_Fish_Paddlefish,
+        DaysFresh = 120,
+        DaysTotallyRotten = 180,
+        HungerChange = -18.0,
+        ThirstChange = 25.0,
+        UnhappyChange = -3,
+        Calories = 185.0,
+        Carbohydrates = 1.0,
+        Lipids = 11.0,
+        Proteins = 25.7,
+        FoodType = Fish,
+        EvolvedRecipe = Soup:10;Stew:10;Rice:10;Pasta:10;Sandwich:5;Salad:10,
+        EvolvedRecipeName = Fish,
+        StaticModel = TraditionalPreservationFishMeat.SaltDriedFishGround,
+        WorldStaticModel = TraditionalPreservationFishMeat.SaltDriedFishGround,
+        WorldStaticModelsByIndex = TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.Dried_Fish_BassLargemouth;TraditionalPreservationFishMeat.Dried_Fish_BassSmallmouth;TraditionalPreservationFishMeat.Dried_Fish_BassSpotted;TraditionalPreservationFishMeat.Dried_Fish_BassStriped;TraditionalPreservationFishMeat.Dried_Fish_Walleye;TraditionalPreservationFishMeat.Dried_Fish_Sauger;TraditionalPreservationFishMeat.Dried_Fish_CrappieBlack;TraditionalPreservationFishMeat.Dried_Fish_CrappieWhite;TraditionalPreservationFishMeat.Dried_Fish_Bluegill;TraditionalPreservationFishMeat.Dried_Fish_SunfishRedear;TraditionalPreservationFishMeat.Dried_Fish_SunfishGreen;TraditionalPreservationFishMeat.Dried_Fish_CatfishBlue;TraditionalPreservationFishMeat.Dried_Fish_CatfishChannel;TraditionalPreservationFishMeat.Dried_Fish_CatfishFlathead;TraditionalPreservationFishMeat.Dried_Fish_Muskellunge;TraditionalPreservationFishMeat.Dried_Fish_BassWhite;TraditionalPreservationFishMeat.Dried_Fish_PerchYellow;TraditionalPreservationFishMeat.Dried_Fish_DrumFreshwater;TraditionalPreservationFishMeat.Dried_Fish_GarAlligator;TraditionalPreservationFishMeat.Dried_Fish_Paddlefish;TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.DriedGutted_Fish_BassLargemouth;TraditionalPreservationFishMeat.DriedGutted_Fish_BassSmallmouth;TraditionalPreservationFishMeat.DriedGutted_Fish_BassSpotted;TraditionalPreservationFishMeat.DriedGutted_Fish_BassStriped;TraditionalPreservationFishMeat.DriedGutted_Fish_Walleye;TraditionalPreservationFishMeat.DriedGutted_Fish_Sauger;TraditionalPreservationFishMeat.DriedGutted_Fish_CrappieBlack;TraditionalPreservationFishMeat.DriedGutted_Fish_CrappieWhite;TraditionalPreservationFishMeat.DriedGutted_Fish_Bluegill;TraditionalPreservationFishMeat.DriedGutted_Fish_SunfishRedear;TraditionalPreservationFishMeat.DriedGutted_Fish_SunfishGreen;TraditionalPreservationFishMeat.DriedGutted_Fish_CatfishBlue;TraditionalPreservationFishMeat.DriedGutted_Fish_CatfishChannel;TraditionalPreservationFishMeat.DriedGutted_Fish_CatfishFlathead;TraditionalPreservationFishMeat.DriedGutted_Fish_Muskellunge;TraditionalPreservationFishMeat.DriedGutted_Fish_BassWhite;TraditionalPreservationFishMeat.DriedGutted_Fish_PerchYellow;TraditionalPreservationFishMeat.DriedGutted_Fish_DrumFreshwater;TraditionalPreservationFishMeat.DriedGutted_Fish_GarAlligator;TraditionalPreservationFishMeat.DriedGutted_Fish_Paddlefish;TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.DriedHalf_Fish_BassLargemouth;TraditionalPreservationFishMeat.DriedHalf_Fish_BassSmallmouth;TraditionalPreservationFishMeat.DriedHalf_Fish_BassSpotted;TraditionalPreservationFishMeat.DriedHalf_Fish_BassStriped;TraditionalPreservationFishMeat.DriedHalf_Fish_Walleye;TraditionalPreservationFishMeat.DriedHalf_Fish_Sauger;TraditionalPreservationFishMeat.DriedHalf_Fish_CrappieBlack;TraditionalPreservationFishMeat.DriedHalf_Fish_CrappieWhite;TraditionalPreservationFishMeat.DriedHalf_Fish_Bluegill;TraditionalPreservationFishMeat.DriedHalf_Fish_SunfishRedear;TraditionalPreservationFishMeat.DriedHalf_Fish_SunfishGreen;TraditionalPreservationFishMeat.DriedHalf_Fish_CatfishBlue;TraditionalPreservationFishMeat.DriedHalf_Fish_CatfishChannel;TraditionalPreservationFishMeat.DriedHalf_Fish_CatfishFlathead;TraditionalPreservationFishMeat.DriedHalf_Fish_Muskellunge;TraditionalPreservationFishMeat.DriedHalf_Fish_BassWhite;TraditionalPreservationFishMeat.DriedHalf_Fish_PerchYellow;TraditionalPreservationFishMeat.DriedHalf_Fish_DrumFreshwater;TraditionalPreservationFishMeat.DriedHalf_Fish_GarAlligator;TraditionalPreservationFishMeat.DriedHalf_Fish_Paddlefish,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_ColdSmoked,
+    }
+
     /* Hot smoked in the Smokehouse (5c): salt cured fish cooked through over a stoked Firebox. Moist and ready to eat,
        so it keeps a week or two, not months. Its food comes from the fish (carry); the values here are placeholders. */
     item HotSmokedFish
@@ -553,6 +581,16 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.1,
         Icon = HotSmokedFish,
+        FoodType = Fish,
+        EvolvedRecipeName = Fish,
+    }
+
+    item ColdSmokedFishIngredient
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.08,
+        Icon = ColdSmokedFish,
         FoodType = Fish,
         EvolvedRecipeName = Fish,
     }

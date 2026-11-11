@@ -527,6 +527,45 @@ module TraditionalPreservationFishMeat
         Tooltip = Tooltip_TraditionalPreservationFishMeat_Charque,
     }
 
+    /* Cold smoked in the Smokehouse (5d): salt cured meat dried in smoky air over a banked Firebox for a third of its
+       time or more. No longer charque (sun and wind only) but the start of the Dry-Cured line, suho meso's family:
+       named by the animal ("Dry-Cured Beef (Cold Smoked)", F.stageName), keeps as charque does and is eaten as it is,
+       sliced thin. Phase 6 adds ripening. Food from the cut (carry); the values here are placeholders. */
+    item DryCuredMeat
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = DryCuredMeat,
+        IconsForTexture = DryCured_Beef;DryCured_Steak;DryCured_Mutton;DryCured_Venison,
+        DaysFresh = 120,
+        DaysTotallyRotten = 180,
+        HungerChange = -28.0,
+        ThirstChange = 25.0,
+        UnhappyChange = -3,
+        Calories = 198.0,
+        Carbohydrates = 0.0,
+        Lipids = 8.4,
+        Proteins = 28.5,
+        FoodType = Beef,
+        EvolvedRecipe = Soup:15;Stew:15;Pie:15;Sandwich:5;Salad:10;Rice:15;Pasta:15;Taco:10;Burrito:15,
+        EvolvedRecipeName = Beef,
+        StaticModel = Steak,
+        WorldStaticModel = Steak,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_DryCured,
+    }
+
+    item DryCuredMeatIngredient
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = DryCuredMeat,
+        FoodType = Beef,
+        EvolvedRecipeName = Beef,
+    }
+
     /* Hot smoked in the Smokehouse (5c): salt cured meat cooked through over a stoked Firebox, smoked jerky's cousin.
        Ready to eat; keeps a week or two. Food from the cut (carry); the values here are placeholders. */
     item HotSmokedMeat

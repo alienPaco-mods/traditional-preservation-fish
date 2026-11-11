@@ -45,6 +45,7 @@ function TPFM.help()
     say("TPFM.smokehouse()          each Smokehouse tile within 3 tiles: facing, part, the Fireboxes beside it and why each can't join")
     say("TPFM.smoke()               the joined Firebox's fire record and each stack's hot and smoke hours, Smokehouses within 3 tiles")
     say("TPFM.stoke(hours)          add stoked hours to the running session of those joined Fireboxes (stoke it first)")
+    say("TPFM.bank(hours)           add banked hours (default 6) to those joined Fireboxes: smoke for Cold Smoked")
     say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up curing.")
 end
 
@@ -437,8 +438,10 @@ function TPFM.smoke()
         local items = CraftLogicUILogic.new(getPlayer(), shed.tile, logic):getItemsInProgress()
         for craftData, _ in pairs(items) do
             local modData = craftData:getModData()
-            say(string.format("  stack %s: hot %.1f of %s h, smoke %.1f h, dried %.0f h%s", tostring(modData.stackId), modData.hot or 0,
-                modData.hotNeed and string.format("%.0f", modData.hotNeed) or "-", modData.cold or 0, modData.dried or 0,
+            local now = getGameTime():getWorldAgeHours()
+            say(string.format("  stack %s (heaviest piece %.2f): hot %.1f of %s h, smoke %.1f of %.1f h%s, dried %.0f h%s", tostring(modData.stackId), modData.heaviest or 0, modData.hot or 0,
+                modData.hotNeed and string.format("%.0f", modData.hotNeed) or "-", modData.cold or 0, F.coldNeed(modData, now),
+                F.coldDone(modData, now) and " (Cold Smoked)" or "", modData.dried or 0,
                 F.hotStations[modData.stackId] and ", cook done" or ""))
         end
     end
@@ -454,6 +457,20 @@ function TPFM.stoke(hours)
             say(string.format("Session now %.1f h", Hearth.sessionHours(fire)))
         else
             say("No stoked session running: join a Firebox and stoke it first.")
+        end
+    end
+end
+
+-- Adds banked hours (default 6) to the joined Fireboxes' record, as if they had smouldered that long.
+function TPFM.bank(hours)
+    local Hearth = require "TraditionalPreservationCore/Hearth"
+    for _, shed in ipairs(smokehouses()) do
+        local fire = shed.firebox and Hearth.stateOf(shed.firebox:getModData())
+        if fire then
+            fire.bankedHours = (fire.bankedHours or 0) + (hours or 6)
+            say(string.format("Banked now %.1f h", fire.bankedHours))
+        else
+            say("No Firebox joined to this Smokehouse.")
         end
     end
 end

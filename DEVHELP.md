@@ -33,8 +33,9 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.keep(days)` | Ages those crocks by this many days at their place's rate now (default 10). |
 | `TPFM.flueKit()` | Spawns both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay) with a Mason's Trowel and a Shovel. |
 | `TPFM.smokehouse()` | Each Smokehouse chamber tile within 3 tiles on your floor: facing, back or door tile, the entry overlay it shows, and each Firebox beside it with its flue and why it can't join (or `may join`, `joined here`). |
-| `TPFM.smoke()` | Each Smokehouse within 3 tiles: its joined Firebox's fire record (mode, stoked and banked hours, the session now running and its hours) and each stack's hot hours against its need, smoke hours, dried hours, and whether its cook is done. |
+| `TPFM.smoke()` | Each Smokehouse within 3 tiles: its joined Firebox's fire record (mode, stoked and banked hours, the session now running and its hours) and each stack's hot hours against its need, smoke hours against Cold Smoked's need (a third of its hours so far), dried hours, and whether its cook is done. |
 | `TPFM.stoke(hours)` | Adds stoked hours (default 1) to the running session of those joined Fireboxes; the stacks pick them up on the World's next look. Stoke the Firebox first: with no session running it says so. |
+| `TPFM.bank(hours)` | Adds banked hours (default 6) to the record of those joined Fireboxes, as if they had smouldered that long: smoke for Cold Smoked (counted only if today is 20 C or less). |
 | `TPFM.fatRows()` | Says whether the sandbox has butchering fat on, and prints the fat row of each vanilla pig, cow and sheep's butchering table (base numbers: about x2.8 on a Butchering Hook, x0.6 on the ground). |
 
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.

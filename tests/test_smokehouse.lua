@@ -127,6 +127,65 @@ check("a rebuilt Firebox starts the count again", before.hot == 0 and near(befor
 local frame = {}
 F.smokeStep(frame, fire)
 check("a stack from before 5c has no need and never counts", frame.hot == nil and not F.hotDone(frame))
+-- Cold smoke (5d): banked hours count on cool days only, by the ledger's share of cool hours since the last look;
+-- every hour of fire dries at the Covered rate; a third of the clock hours in smoke makes it Cold Smoked.
+local ledger = { clock = 0, smokeCool = 0, covered = 0, sheltered = 0, charqueCovered = 0, charqueSheltered = 0, temperature = 10 }
+local cool = {}
+F.startSmoke(cool, pieces(1.1), false)
+cool.dried, cool.stackId = 0, 0
+local bankFire = {}
+Hearth.logFire(bankFire, 300, nil, nil)
+F.smokeStep(cool, bankFire, ledger)
+check("joining with the ledger takes its totals as they stand", cool.lastClock == 0 and cool.dried == 0)
+Hearth.logFire(bankFire, 301, Hearth.BANKED, 400)
+Hearth.logFire(bankFire, 311, Hearth.BANKED, 400)
+ledger.clock, ledger.smokeCool, ledger.covered, ledger.sheltered = 10, 5, 10, 6.5
+F.smokeStep(cool, bankFire, ledger)
+check("half the hours were cool: half the banked hours are smoke", near(cool.cold, 5))
+check("hours of fire dry at the Covered rate", near(cool.dried, 10 * 0.35))
+ledger.clock, ledger.smokeCool, ledger.covered, ledger.sheltered = 20, 5, 20, 13.5
+Hearth.logFire(bankFire, 321, Hearth.BANKED, 400)
+F.smokeStep(cool, bankFire, ledger)
+check("a hot spell counts none", near(cool.cold, 5) and near(cool.dried, 3.5 + 10 * 0.3))
+check("Cold Smoked needs a third of the hours in the shed", near(F.coldNeed(cool, 15), 5) and F.coldDone(cool, 15) and not F.coldDone(cool, 16))
+check("no smoke, never Cold Smoked", not F.coldDone({ cold = 0, stackId = 0 }, 0))
+ledger.temperature = 25
+local warm = {}
+F.startSmoke(warm, pieces(0.3), true)
+F.smokeStep(warm, bankFire, ledger)
+Hearth.logFire(bankFire, 322, Hearth.BANKED, 400)
+F.smokeStep(warm, bankFire, ledger)
+check("with no ledger hours between, the weather now decides", warm.cold == 0)
+local burst = {}
+F.startSmoke(burst, pieces(1.1), false)
+burst.dried, burst.stackId = 0, 20
+local burstFire = {}
+Hearth.logFire(burstFire, 330, nil, nil)
+F.smokeStep(burst, burstFire, ledger)
+Hearth.logFire(burstFire, 331, Hearth.STOKED, 333)
+Hearth.logFire(burstFire, 333, Hearth.STOKED, 333)
+ledger.clock, ledger.covered, ledger.sheltered = 22, 22, 15
+F.smokeStep(burst, burstFire, ledger)
+Hearth.logFire(burstFire, 340, nil, nil)
+ledger.clock, ledger.covered, ledger.sheltered = 29, 29, 22
+F.smokeStep(burst, burstFire, ledger)
+check("a stoked burst on a hot day is no cold smoke when it breaks off", burst.hot == 0 and burst.cold == 0)
+check("but its hours still dry the stack faster", burst.dried > 0)
+
+check("a stack by a burning fire knows it", cool.burning == true)
+local rates = { shelteredRate = 0.4, coveredRate = 0.6, charqueShelteredRate = 0.3, charqueCoveredRate = 0.5 }
+check("its Drying Rate is the Covered rate", near(F.stackStatus(false, { sheltered = true, burning = true, dried = 0 }, rates).rate, 0.6)
+    and near(F.charqueStatus({ sheltered = true, burning = true, dried = 0 }, rates).rate, 0.5))
+check("with the fire out, Sheltered's", near(F.stackStatus(false, { sheltered = true, dried = 0 }, rates).rate, 0.4))
+
+-- Dry-Cured meat is named by the animal its cut came from.
+local function meatItem(index)
+    return { getFullType = function() return F.DRY_CURED end, getModelIndex = function() return index end,
+        getModData = function() return { fishName = "Steak" } end }
+end
+check("a steak is Dry-Cured Beef (Cold Smoked)", F.stageName(meatItem(1)) == "Dry-Cured Beef (Cold Smoked)")
+check("a mutton chop is Dry-Cured Mutton", F.stageName(meatItem(2)) == "Dry-Cured Mutton (Cold Smoked)")
+
 -- The ham by the door (user's idea): the door's tile, by facing, only with finished stacks.
 check("the ham hangs on the door's tile while stacks wait", F.hamSprite(0, 1, true) == Tiles.CHAMBER_HAM and F.hamSprite(1, 1, true) == Tiles.CHAMBER_HAM + 1)
 check("never on the back tile, nor with nothing finished", F.hamSprite(0, 0, true) == nil and F.hamSprite(0, 1, false) == nil)

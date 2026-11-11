@@ -16,6 +16,8 @@ F.INGREDIENT_STANDINS = {
     ["TraditionalPreservationFishMeat.SoakedCharque"] = "TraditionalPreservationFishMeat.SoakedCharqueIngredient",
     ["TraditionalPreservationFishMeat.HotSmokedFish"] = "TraditionalPreservationFishMeat.HotSmokedFishIngredient",
     ["TraditionalPreservationFishMeat.HotSmokedMeat"] = "TraditionalPreservationFishMeat.HotSmokedMeatIngredient",
+    ["TraditionalPreservationFishMeat.ColdSmokedFish"] = "TraditionalPreservationFishMeat.ColdSmokedFishIngredient",
+    ["TraditionalPreservationFishMeat.DryCuredMeat"] = "TraditionalPreservationFishMeat.DryCuredMeatIngredient",
 }
 
 -- Swaps every fish stage in a dish's list for its stand-in.

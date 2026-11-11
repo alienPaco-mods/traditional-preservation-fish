@@ -46,5 +46,7 @@
   "Tooltip_TraditionalPreservationFishMeat_PotOfMeatInFat": "Cook it on any stove or fire for about two hours, then pack it into a Clay Jar, Glazed Clay Jar or Clay Pot. Add more meat before it cooks, up to four cuts. Burnt, it is only good for scraping out.",
   "Tooltip_TraditionalPreservationFishMeat_CrockOfPottedMeat": "Cooked meat sealed under its fat, a portion a cut. Keeps about 120 days in a fridge or the cold, 60 in a basement; a pantry follows the season, down to 14 days in summer. The first portion taken lets the air in: a third of its time goes. The jar comes back when it is eaten out.",
   "Tooltip_craft_smokehouseChamberDesc": "A plank smokehouse two tiles long under one roof slope, its door on the high end. Hangs up to 6 stacks of salt fish or Salt Cured meat, up to 15 weight each. With no fire it dries like a frame in a room: still air, no rain. No cold drying: gutted fish needs open air. Open air or under an open roof, not in a room.",
-  "Tooltip_TraditionalPreservationFishMeat_HotSmoked": "Cooked through in the smokehouse and ready to eat. Still moist: it keeps a week or two."
+  "Tooltip_TraditionalPreservationFishMeat_HotSmoked": "Cooked through in the smokehouse and ready to eat. Still moist: it keeps a week or two.",
+  "Tooltip_TraditionalPreservationFishMeat_ColdSmoked": "Dried in the smoke of a banked fire. Keeps for months and is eaten as it is, sliced thin; a little salty.",
+  "Tooltip_TraditionalPreservationFishMeat_DryCured": "Salted, then dried in the smoke of a banked fire. Keeps for months and is eaten as it is, sliced thin; a little salty."
 }

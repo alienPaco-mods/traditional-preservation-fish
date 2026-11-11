@@ -1,5 +1,30 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.10
+- **Cold smoke** (ROADMAP §7, phase 5d): a salt stack in a Smokehouse joined to a Firebox comes out **Cold Smoked**
+  when it has dried, if its smoke counter reached **a third of its clock hours** in the shed (smoked-dried fish,
+  balyk, suho meso: a few hours of smoke a day over the drying). Smoke = banked hours plus stoked sessions that broke
+  off before a hot cook. **Fire hours count only on days of 20 C or less** (the smoulder lifts the meat 10-15 C; over
+  30 C it cooks rather than cures), stoked or banked: the ledger keeps all hours (`clock`) and the cool ones
+  (`smokeCool`), and a stack reads the share since its last look; a stack's hot hours keep their cool part
+  (`hotCool`) for when the session breaks off. Short of the third it ends as Salt Dried / Charque, as before.
+- **Fire dries faster:** every hour of fire, stoked or banked, dries the stack at the Covered rate instead of
+  Sheltered's (about 1.5x for salt fish): the warm draught through the shed.
+- **Cold Smoked Fish** (keeps 120 / 180 days like Salt Dried, edible as it is, thirst 25, mood +3) and
+  **Dry-Cured Meat** (no longer charque once smoked: "Dry-Cured Beef / Mutton / Venison (Cold Smoked)", named by the
+  cut's animal, keeps 120 / 180 like Charque, edible, thirst 25, mood +3; phase 6 adds ripening). In soups, stews,
+  rice, pasta, sandwiches and salads, with dish stand-ins. Icons: Salt Dried fish pulled to smoky bronze, cuts to
+  burgundy (`build_meat_icons.py`).
+- A finished stack in a Smokehouse waits at the end until the World has seen its shed since the load
+  (`F.smokeStations`, not saved), so OnCreate can swap in the Cold Smoked outputs (`F.smokedOutputs`, which
+  `F.hotSmokeOutputs` became).
+- Stack popup: "Smoke: x h, y h needed so far (a third of the hours hung)", or "Too warm to count" over 20 C. Firebox Info's flue line
+  says what burning and cold smoke do. Dev: `TPFM.bank(hours)`; `TPFM.smoke()` shows the smoke need and each
+  stack's heaviest piece (`heaviest`).
+- Drying Rate in a Smokehouse shows the Covered rate while the Firebox burns (`burning`, set by `F.smokeStep`).
+- A new stack clears the shed and smoke fields (recipe data is pooled with its ModData), so a frame stack after a
+  shed stack can't wait at the end or read an old baseline.
+
 ## 0.4.9
 - **Hot smoking** (ROADMAP §7, phase 5c): a salt stack in the Smokehouse (Salt Cured fish, or charque from Salt Cured
   meat) joined to a Firebox counts the fire on two counters. **Hot** = the Firebox's stoked session now running

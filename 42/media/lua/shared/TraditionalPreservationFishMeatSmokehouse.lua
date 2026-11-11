@@ -227,6 +227,13 @@ F.HOT_MAX_HOURS = 12
 F.HOT_FISH = "TraditionalPreservationFishMeat.HotSmokedFish"
 F.HOT_MEAT = "TraditionalPreservationFishMeat.HotSmokedMeat"
 
+-- Cold smoke (5d): a stack whose cold counter reaches COLD_SMOKE_SHARE of its clock hours in the shed comes out Cold
+-- Smoked when it has dried (smoked-dried fish, balyk, suho meso: a few hours of smoke a day over the drying). Hours
+-- with the fire burning dry it at the Covered rate, not Sheltered's: the warm draught through the shed.
+F.COLD_SMOKE_SHARE = 1 / 3
+F.COLD_FISH_OUT = "TraditionalPreservationFishMeat.ColdSmokedFish"
+F.DRY_CURED = "TraditionalPreservationFishMeat.DryCuredMeat"
+
 -- The stoked hours a stack needs, by its heaviest piece: straight between the two points, on past them, clamped.
 function F.hotHours(isMeat, heaviest)
     local points = isMeat and F.HOT_MEAT_HOURS or F.HOT_FISH_HOURS
@@ -239,19 +246,56 @@ end
 function F.startSmoke(modData, items, isMeat)
     local heaviest = 0
     for i = 0, items:size() - 1 do heaviest = math.max(heaviest, items:get(i):getActualWeight()) end
+    modData.heaviest = heaviest
     modData.hotNeed = F.hotHours(isMeat, heaviest)
-    modData.hot, modData.cold = 0, 0
+    modData.hot, modData.hotCool, modData.cold = 0, 0, 0
+    modData.smokeMeat = isMeat
     modData.smokeFrom, modData.smokeSession, modData.lastStoked, modData.lastBanked = nil, nil, nil, nil
+end
+
+-- The ledger totals a stack's draught reads: salt fish's or charque's Covered and Sheltered drying.
+local function draughtTotals(modData, ledger)
+    if modData.smokeMeat then return ledger.charqueCovered or 0, ledger.charqueSheltered or 0 end
+    return ledger.covered or 0, ledger.sheltered or 0
+end
+
+-- Since the stack's last look: the share of the hours that were cool enough for cold smoke, and how much more a
+-- Covered stack dried than a Sheltered one per hour, from the ledger's totals (a week away reads the week's weather).
+-- With no hours between, the weather now.
+local function sinceLast(modData, ledger)
+    local covered, sheltered = draughtTotals(modData, ledger)
+    local hours = (ledger.clock or 0) - (modData.lastClock or ledger.clock or 0)
+    local coolShare, draught
+    if hours > 0 then
+        coolShare = ((ledger.smokeCool or 0) - (modData.lastSmokeCool or 0)) / hours
+        draught = ((covered - (modData.lastDraughtCovered or covered)) - (sheltered - (modData.lastDraughtSheltered or sheltered))) / hours
+    else
+        coolShare = (ledger.temperature or 0) <= F.COLD_SMOKE_MAX and 1 or 0
+        draught = 0
+    end
+    modData.lastClock, modData.lastSmokeCool = ledger.clock or 0, ledger.smokeCool or 0
+    modData.lastDraughtCovered, modData.lastDraughtSheltered = covered, sheltered
+    return math.max(0, math.min(coolShare, 1)), math.max(draught, 0)
 end
 
 -- Brings a stack's counters up to the fire's record (a Firebox's Hearth state), or none (not joined). A new or
 -- rebuilt Firebox starts from what it has now; whatever hot the stack had becomes cold, as it does when the session
 -- it counted in ends. Of the stoked hours since the last look, those in a session that has since begun are hot.
-function F.smokeStep(modData, fire)
+-- With the ledger (the World's look; tests may leave it out): fire hours count as cold only on cool days, stoked
+-- or banked (user: no Cold Smoked in summer from short stoked bursts), so hot keeps its cool part (hotCool) for
+-- when its session breaks off; and every hour of fire adds the Covered rate's extra drying.
+local function hotToCold(modData)
+    modData.cold = (modData.cold or 0) + (modData.hotCool or modData.hot or 0)
+    modData.hot, modData.hotCool = 0, 0
+end
+
+function F.smokeStep(modData, fire, ledger)
     if not modData.hotNeed then return end
+    modData.burning = fire ~= nil and fire.fireMode ~= nil
+    local coolShare, draught = 1, 0
+    if ledger then coolShare, draught = sinceLast(modData, ledger) end
     if not fire or fire.fireId ~= modData.smokeFrom or (fire.stokedHours or 0) < (modData.lastStoked or 0) then
-        modData.cold = (modData.cold or 0) + (modData.hot or 0)
-        modData.hot = 0
+        hotToCold(modData)
         if fire and fire.fireId then
             modData.smokeFrom, modData.smokeSession = fire.fireId, fire.session
             modData.lastStoked, modData.lastBanked = fire.stokedHours or 0, fire.bankedHours or 0
@@ -266,13 +310,17 @@ function F.smokeStep(modData, fire)
     -- ended between two looks, while away).
     if not fire.session or fire.session ~= modData.smokeSession then
         local inNew = fire.session and math.min(stoked, (fire.stokedHours or 0) - fire.sessionBase) or 0
-        modData.cold = modData.cold + modData.hot + stoked - inNew
-        modData.hot = inNew
+        hotToCold(modData)
+        modData.cold = modData.cold + (stoked - inNew) * coolShare
+        modData.hot, modData.hotCool = inNew, inNew * coolShare
         modData.smokeSession = fire.session
     else
+        modData.hotCool = (modData.hotCool or modData.hot) + stoked * coolShare
         modData.hot = modData.hot + stoked
     end
-    modData.cold = modData.cold + math.max(banked, 0)
+    banked = math.max(banked, 0)
+    modData.cold = modData.cold + banked * coolShare
+    if modData.dried then modData.dried = modData.dried + (math.max(stoked, 0) + banked) * draught end
     modData.lastStoked, modData.lastBanked = fire.stokedHours or 0, fire.bankedHours or 0
 end
 
@@ -281,13 +329,22 @@ function F.hotDone(modData)
     return modData.hotNeed ~= nil and (modData.hot or 0) >= modData.hotNeed
 end
 
+-- Whether a stack has had smoke for its share of the hours since it was hung (stackId is its start time).
+function F.coldNeed(modData, now)
+    return math.max(now - (modData.stackId or now), 0) * F.COLD_SMOKE_SHARE
+end
+
+function F.coldDone(modData, now)
+    return (modData.cold or 0) > 0 and modData.cold >= F.coldNeed(modData, now)
+end
+
 -- Stacks whose cook is done, by stackId, with their chamber: the World sets them, the stack's OnUpdate finishes it,
 -- its OnCreate swaps the outputs in the chamber's slots. Not saved: the World's next look after a load sets it again.
 F.hotStations = {}
 
 -- Swaps a finished stack's outputs, already in the chamber's slots (the engine makes them before OnCreate), for
--- Hot Smoked ones made from its inputs.
-function F.hotSmokeOutputs(craftRecipeData, station)
+-- smoked ones made from its inputs: fishType for fish, meatType for meat (Hot Smoked, or Cold Smoked and Dry-Cured).
+function F.smokedOutputs(craftRecipeData, station, fishType, meatType)
     local modData = craftRecipeData:getModData()
     local inputs = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
     local created = craftRecipeData:getAllCreatedItems()
@@ -298,7 +355,7 @@ function F.hotSmokeOutputs(craftRecipeData, station)
     local spoiled = modData.spoiled or 0
     for i = 0, math.min(inputs:size(), created:size()) - 1 do
         local input, made = inputs:get(i), created:get(i)
-        local hot = instanceItem(input:getFullType() == F.CURED_MEAT and F.HOT_MEAT or F.HOT_FISH)
+        local hot = instanceItem(input:getFullType() == F.CURED_MEAT and meatType or fishType)
         F.carry(input, hot)
         hot:getModData().stackId = modData.stackId
         hot:getModData().style = modData.style

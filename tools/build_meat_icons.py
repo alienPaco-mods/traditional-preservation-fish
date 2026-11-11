@@ -3,7 +3,7 @@
 
 Raw Pork Fat, Beef Suet and Mutton Fat are vanilla's loin icons pulled towards a fat colour, Tallow is vanilla's
 Lard block yellowed, and the pots of fat are vanilla's full pots with the soup recoloured; Potted Meat's pots and
-crocks are painted the same way, and the Hot Smoked fish and meat (5c). Cracklings use vanilla's
+crocks are painted the same way, the Hot Smoked fish and meat (5c), and Cold Smoked fish and Dry-Cured meat (5d). Cracklings use vanilla's
 Pork Rinds icon as it is. Kept apart from build_tileset.py so the fish art doesn't rebuild with it.
 
 Usage: python3 tools/build_meat_icons.py [path/to/ProjectZomboid/projectzomboid]
@@ -39,6 +39,11 @@ SALTED = {"SaltPacked": ((236, 232, 224), 0.35), "SaltCured": ((128, 54, 44), 0.
 HOT_MEAT = ((122, 64, 34), 0.8)
 HOT_FISH = ((204, 136, 56), 0.55)
 HOT_FISH_STAGES = {"Dried_": "HotSmoked_", "DriedGutted_": "HotSmokedGutted_", "DriedHalf_": "HotSmokedHalf_"}
+# Cold Smoked (5d): fish to a darker smoky bronze than hot smoking's gold; Dry-Cured meat to a deep burgundy, darker
+# and redder than charque's brown.
+COLD_FISH = ((140, 88, 48), 0.6)
+COLD_FISH_STAGES = {"Dried_": "ColdSmoked_", "DriedGutted_": "ColdSmokedGutted_", "DriedHalf_": "ColdSmokedHalf_"}
+DRY_CURED = ((96, 34, 34), 0.85)
 # The pots of fat: vanilla's full pot, with the soup's reds turned to melting fat.
 POTS = {"PotOfFat": "Item_PotFull", "PotForgedFat": "Item_Pot_Forged_Stew"}
 FAT_IN_POT = (244, 232, 196)
@@ -148,10 +153,15 @@ def main():
         pull(icons[source], *HOT_MEAT).save(folder / f"Item_HotSmoked_{cut}.png")
     # The stage's own icon (the beef's), for its dish stand-in as Soaked Charque's.
     pull(icons[CUTS["Beef"]], *HOT_MEAT).save(folder / "Item_HotSmokedMeat.png")
+    for cut, source in CUTS.items():
+        pull(icons[source], *DRY_CURED).save(folder / f"Item_DryCured_{cut}.png")
+    pull(icons[CUTS["Beef"]], *DRY_CURED).save(folder / "Item_DryCuredMeat.png")
     for path in sorted(folder.glob("Item_Dried*_*.png")):
         stage, species = path.stem[len("Item_"):].split("_", 1)
         pull(Image.open(path), *HOT_FISH).save(folder / f"Item_{HOT_FISH_STAGES[stage + '_']}{species}.png")
+        pull(Image.open(path), *COLD_FISH).save(folder / f"Item_{COLD_FISH_STAGES[stage + '_']}{species}.png")
     pull(Image.open(folder / "Item_SaltDriedFish.png"), *HOT_FISH).save(folder / "Item_HotSmokedFish.png")
+    pull(Image.open(folder / "Item_SaltDriedFish.png"), *COLD_FISH).save(folder / "Item_ColdSmokedFish.png")
     for name, source in POTS.items():
         fat_pot(icons[source]).save(folder / f"Item_{name}.png")
     for name, source in MEAT_POTS.items():

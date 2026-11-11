@@ -36,5 +36,9 @@
   "TraditionalPreservationFishMeat.HotSmokedFish": "Hot Smoked Fish",
   "TraditionalPreservationFishMeat.HotSmokedFishIngredient": "Hot Smoked Fish",
   "TraditionalPreservationFishMeat.HotSmokedMeat": "Hot Smoked Meat",
-  "TraditionalPreservationFishMeat.HotSmokedMeatIngredient": "Hot Smoked Meat"
+  "TraditionalPreservationFishMeat.HotSmokedMeatIngredient": "Hot Smoked Meat",
+  "TraditionalPreservationFishMeat.ColdSmokedFish": "Cold Smoked Fish",
+  "TraditionalPreservationFishMeat.ColdSmokedFishIngredient": "Cold Smoked Fish",
+  "TraditionalPreservationFishMeat.DryCuredMeat": "Dry-Cured Meat",
+  "TraditionalPreservationFishMeat.DryCuredMeatIngredient": "Dry-Cured Meat"
 }

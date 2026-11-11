@@ -119,9 +119,13 @@ local function drawStackTooltip(slot, tooltip, kind)
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_HotSmoke", getText("IGUI_TraditionalPreservationFishMeat_HotSmokeHours",
                 string.format("%.1f", modData.hot or 0), string.format("%.0f", modData.hotNeed)))
         end
-        if (modData.cold or 0) > 0 then
-            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_ColdSmoke", getText("IGUI_TraditionalPreservationFishMeat_ColdSmokeHours",
-                string.format("%.1f", modData.cold)))
+        -- Smoke so far against Cold Smoked's need (a third of the hours since the stack was hung), or why banked
+        -- hours don't count today.
+        if modData.smokeFrom and (ledger.temperature or 0) > F.COLD_SMOKE_MAX then
+            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_ColdSmoke", getText("IGUI_TraditionalPreservationFishMeat_ColdSmokeTooWarm"), UI.SLOW_COLOUR)
+        elseif modData.smokeFrom or (modData.cold or 0) > 0 then
+            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_ColdSmoke", getText("IGUI_TraditionalPreservationFishMeat_ColdSmokeNeed",
+                string.format("%.1f", modData.cold or 0), string.format("%.1f", F.coldNeed(modData, getGameTime():getWorldAgeHours()))))
         end
         if status.spoiling or status.scorching or status.spoiled > 0 then
             local warning = "IGUI_TraditionalPreservationFishMeat_Spoiled"

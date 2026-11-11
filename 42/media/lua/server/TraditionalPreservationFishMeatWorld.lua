@@ -61,18 +61,21 @@ end
 
 -- place is the station's: indoors (and inside the Smokehouse) is sheltered, a roof with no room round it covered.
 -- In the Smokehouse each stack also counts the joined Firebox's fire (F.smokeStep); a done cook is noted for its
--- OnUpdate to finish.
+-- OnUpdate to finish, and every stack's shed for OnCreate's Cold Smoked swap (F.smokeStations).
 local function readBatches(station, entry, logic, uiLogic, place)
     local batches = {}
     local smoking = entry.hanger and entry.hanger.closed
     local firebox = smoking and F.joinedFirebox(station)
     local fire = firebox and Hearth.stateOf(firebox:getModData())
+    local ledger = smoking and F.getLedger()
     for craftData, _ in pairs(uiLogic:getItemsInProgress()) do
         local modData = craftData:getModData()
         modData.sheltered = place ~= "Open" and place ~= "Covered"
         modData.covered = place == "Covered"
         if smoking then
-            F.smokeStep(modData, fire)
+            F.smokeStep(modData, fire, ledger)
+            modData.inShed = true
+            if modData.stackId then F.smokeStations[modData.stackId] = station end
             if F.hotDone(modData) then F.hotStations[modData.stackId] = station end
         end
         table.insert(batches, { progress = logic:getProgress(craftData), style = craftData:getModData().style or F.STYLE_SALT })
