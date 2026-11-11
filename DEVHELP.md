@@ -8,7 +8,7 @@ These console commands load only when the game runs in **debug mode** (launch op
 |---|---|
 | `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness (open and cold frames), wind, the drying speed open, under a roof and cold, whether unsalted and salted fish are spoiling, and the running totals (with hours of hard frost and of cold fish lying wet). |
 | `TPFM.wind()` | Starts a log of the live wind (0-1) every 10 game minutes; run it again to print the mean, min and max on dry and on rainy or snowy spells, beside the forecast's mean wind for the same days, and stop. For setting the cold-drying wind curve. |
-| `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one. |
+| `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one, `TPFM.age(120)` a charque one. |
 | `TPFM.spoil(hours)` | Adds spoiling weather, to test rotting. A fresh cold stack rots after 48; a part-dried one takes longer. |
 | `TPFM.frost(hours)` | Adds hours of hard frost. A cold stack under 30% dried loses a tenth of its keeping per 72 hours, at most a quarter in all with wet. |
 | `TPFM.heat(hours)` | Adds hours of hot sun (above 25 C). An open salt stack under half dried loses 5% of its keeping per 24 hours, times how wet it still is, at most a quarter. |
@@ -23,12 +23,14 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.salt(n)` | Spawns vanilla Salt shakers. |
 | `TPFM.fat(n)` | Spawns `n` each of Pork Fat, Beef Suet and Mutton Fat (default food values). |
 | `TPFM.meat(n)` | Spawns `n` each of the cuts Pack Meat in Salt takes: Beef, Steak, Mutton Chop, Venison. |
+| `TPFM.cured(n)` | Spawns `n` each of those cuts already Salt Cured ("Steak (Salt Cured)"), ready to hang as charque. |
+| `TPFM.rain(hours)` | Adds this many hours of rain (default 6) and wets the open frames: an open charque stack loses a tenth of its progress per 6 hours. `TPFM.dry()` dries the frames off again. |
 | `TPFM.fatPot(state)` | Spawns a Pot of Pork Fat: `"cooked"` (the default, ready to pour off), `"burnt"` (only Scrape Out Burnt Fat takes it) or `"raw"`. |
 | `TPFM.fatRows()` | Says whether the sandbox has butchering fat on, and prints the fat row of each vanilla pig, cow and sheep's butchering table (base numbers: about x2.8 on a Butchering Hook, x0.6 on the ground). |
 
-The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up pressing. Use the game's own time controls for that.
+The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.
 
-**Typical check of the whole salt route:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(5)` (each 4 weight walleye takes 16 salt, and a shaker holds 10), pack and press, then hang the fish and `TPFM.age(288)`.
+**Typical check of the whole salt route:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(10)` (each 4 weight walleye takes 32 salt, and a shaker holds 10), pack and cure, then hang the fish and `TPFM.age(288)`.
 
 **Typical check of rendering:** `TPFM.fat(2)`, a Pot, Put Pork Fat in a Pot, cook it on any stove or fire (60 minutes), Pour Off Lard: the pot holds 0.5 L Melted Lard; Strain Lard (with a Rag or other cloth, or a Strainer): one Lard, one Cracklings, the pot kept.
 

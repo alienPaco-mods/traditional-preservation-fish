@@ -1,6 +1,6 @@
 [h1]Traditional Preservation (Fish & Meat)[/h1]
 
-Preserve your catch the old way. Salt it, press it and hang it to dry, or gut it and hang it in the winter cold. Dried fish keeps for months or even years, with no fridge and no power.
+Preserve your catch and your kill the old way. Salt fish, cure it and hang it to dry, or gut it and hang it in the winter cold. Salt beef and dry it in the summer sun as charque. Render the fat for Lard and Tallow. It all keeps for months or even years, with no fridge and no power.
 
 [b]Build 42 only (42.20 or newer). This is an early release, so back up your save before enabling it. Singleplayer only: multiplayer is not supported.[/b]
 
@@ -14,6 +14,7 @@ Preserve your catch the old way. Salt it, press it and hang it to dry, or gut it
 [*]Rain, cold, humidity and the seasons all matter, and drying carries on while you're away
 [*]Fish keep their species and size through every stage, with their own icons and ground models
 [*]Gutting and packing give Fish Guts for chum, and gutting a big fish gives a Fish Head for the pot
+[*]Charque: beef, mutton and venison salted in the same tub and sun dried on the same stations, for months of keeping
 [*]Butchered pigs, cattle and sheep give fat: melt it in a pot on any fire, or a whole pig's worth in the Hearth's copper, and strain it for Lard, Tallow and Cracklings
 [/list]
 
@@ -31,11 +32,11 @@ You need a raw fish or fillet, salt and a sharp knife or meat cleaver (kept). Sa
 [h3]2. Build a Salting Tub[/h3]
 Carpentry 2, Fishing 2. Takes 4 planks, 6 nails, 2 twine, a hammer and a saw (both kept).
 
-[h3]3. Press[/h3]
-Load up to 50 weight of packed fish, 35 fish at most, and press Craft. It takes 1 in-game day for small fish (up to 1.1 weight) and up to 2 days with a fish of 2.2 weight or more in the batch, as the heaviest fish sets the time, and nothing else can go in until you've taken out the last pressed fish.
+[h3]3. Cure[/h3]
+Choose Cure Salted Fish, load up to 50 weight of packed fish, 35 fish at most, and press Craft. It takes 1 in-game day for small fish (up to 1.1 weight) and up to 2 days with a fish of 2.2 weight or more in the batch, as the heaviest fish sets the time, and nothing else can go in until you've taken out the last Salt Cured fish.
 
 [h3]4. Hang it to dry[/h3]
-Choose Hang Salt Pressed Fish to Dry on any drying station, load your pressed fish and press Craft. See Drying stations below.
+Choose Hang Salt Cured Fish to Dry on any drying station, load your cured fish and press Craft. See Drying stations below.
 
 [h3]5. Eat, cook or rehydrate[/h3]
 Salt Dried fish is very salty, but can go straight into soup, stew, rice or pasta. Rehydrate Fish uses 1 L of water and gives a milder fish that cooks like fresh, but spoils in days.
@@ -52,12 +53,12 @@ A Gutted Fish over 2.5 weight can be cut into two Fish Halves, each with half th
 Choose Hang Gutted Fish to Cold Dry on any drying station, load your fish and press Craft. Frozen fish is fine. The station must not be in a room: open air, or under an open roof (a porch or open shed) at three quarters of the speed.
 
 [h3]4. Rehydrate[/h3]
-Cold Dried fish is light but too hard to cook with. Rehydrate Fish uses 1 L of water and gives a fish you can cook, which spoils in days. Stockfish matures in storage over 60 days, from Unripe to Ripe. Ripe, it cheers you up once rehydrated, and so does the stew it goes into.
+Cold Dried fish is light but as hard as wood: you can't eat or cook it until it's soaked. Rehydrate Fish uses 1 L of water and gives a fish you can cook, which spoils in days. Stockfish matures in storage over 60 days, from Unripe to Ripe. Ripe, it cheers you up once rehydrated, and so does the stew it goes into.
 
 Changed your mind? A Gutted Fish or Fish Half can still be packed in salt.
 
 [h2]Drying stations[/h2]
-Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate and any spoilage. A stack can't mix salted and gutted fish. Weights are inventory weight, not kilograms.
+Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate and any spoilage. A stack is one kind (salted fish, gutted fish or meat), but one station can run all three. Weights are inventory weight, not kilograms.
 
 [h3]Fish Drying Frame[/h3]
 Carpentry 2, Fishing 2. Takes 6 long sticks, 3 nails, 4 twine and a hammer (kept). Holds 8 stacks of up to 2.5 weight each. The only station that can be built in a room.
@@ -102,7 +103,7 @@ On default weather: cold dry from November to mid-February (about 50 to 55 days)
 Weights are shares of the original whole fish. Days are fresh, then rotten.
 [list]
 [*][b]Salt Packed:[/b] 90%, 3 and 6 days
-[*][b]Salt Pressed:[/b] 79 to 84%, 7 and 14 days
+[*][b]Salt Cured:[/b] 79 to 84%, 7 and 14 days
 [*][b]Salt Dried:[/b] about 37%, 120 and 180 days
 [*][b]Gutted Fish:[/b] 80% (90% for a fish too small to give a head), 3 and 6 days
 [*][b]Cold Dried:[/b] about 18%, 365 and 730 days
@@ -114,8 +115,18 @@ Rehydrating doesn't bring back calories lost to drying. Salt fish keeps about 90
 [h2]Eating uncooked[/h2]
 [list]
 [*][b]Salt Packed:[/b] can't be eaten
-[*][b]Salt Pressed, Gutted Fish and Fish Halves:[/b] raw, so cook them first or risk getting sick
-[*][b]Salt Dried, Cold Dried and Rehydrated:[/b] can be eaten without cooking
+[*][b]Salt Cured, Gutted Fish and Fish Halves:[/b] raw, so cook them first or risk getting sick
+[*][b]Cold Dried and Charque:[/b] can't be eaten until rehydrated
+[*][b]Salt Dried and rehydrated fish:[/b] can be eaten without cooking
+[/list]
+
+[h2]Charque[/h2]
+[list]
+[*][b]Pack Meat in Salt:[/b] a Beef, Steak, Mutton Chop or Venison as the butcher gives it, with 4 salt. No knife needed. Pork is left out: its fat goes rancid in the sun.
+[*][b]Cure Salted Meat[/b] in the Salting Tub: 1 to 2 days by the heaviest cut. A tub holds fish or meat, never both.
+[*][b]Hang Salt Cured Meat to Dry[/b] on any drying station: 5 days in hot sun (25 C and up) and a breeze, about a week in a Kentucky summer under a roof. It slows in cooler weather and stops at freezing. Rain on an open station takes back a tenth of the progress every 6 hours.
+[*][b]Charque[/b] keeps 4 to 6 months at about half the raw weight. Rehydrate Charque (1 L of water) before eating, then cook it or put it in a stew.
+[*]Optional: rinse the cured meat before it hangs. It keeps a little less long but rehydrates less salty.
 [/list]
 
 [h2]Fish Guts, heads and slicing[/h2]
@@ -126,13 +137,13 @@ Gut Fish also takes the head off. A fish over 1.0 weight gives a Fish Head: 10% 
 [b]Fish Head Stock:[/b] a pot holding 1.5 L of water and a Fish Head make a pot of stock that is already a stew, with the head taking no ingredient slot. Add up to 6 stew ingredients plus seasonings, and it starts with the same mood boost as a plain stew. Divide it into 4 or 2 bowls at a table, as with any stew.
 
 [h2]A little history[/h2]
-Stockfish is unsalted cod hung on open racks through the cold northern Norwegian spring, traded across Europe since the Viking age. Salt cod (klippfisk, bacalhau) is salted, pressed and dried in mild air, and from the 1500s it fed sailors and Catholic fast days on both sides of the Atlantic. On the lower Volga around Astrakhan, large salted fish such as pike are hung from hooks to dry.
+Stockfish is unsalted cod hung on open racks through the cold northern Norwegian spring, traded across Europe since the Viking age. Salt cod (klippfisk, bacalhau) is salted, pressed and dried in mild air, and from the 1500s it fed sailors and Catholic fast days on both sides of the Atlantic. On the lower Volga around Astrakhan, large salted fish such as pike are hung from hooks to dry. In the charqueadas of southern Brazil, beef was salted in piles, washed and dried in the sun as charque.
 
 [h2]Works well with[/h2]
 [b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt: one batch (5 Evaporated Salt, 25 uses) packs a dozen panfish, or one 4 weight walleye with salt to spare. Traditional Preservation (Fish & Meat) needs no other mods besides Traditional Preservation (Core).
 
 [h2]Sandbox options[/h2]
-Set salt drying time, the slowest it can take, stockfish drying time, stockfish maturing time, the salt press time and spoilage strictness.
+Set salt drying time, the slowest it can take, stockfish drying time, stockfish maturing time, the salt cure time and spoilage strictness. Turn butchering fat and charque on or off, and set charque drying time.
 
 [h2]Known issues[/h2]
 [list]

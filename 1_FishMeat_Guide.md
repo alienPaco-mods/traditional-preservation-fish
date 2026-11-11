@@ -1,4 +1,4 @@
-# Traditional Preservation: FISH
+# Traditional Preservation: FISH & MEAT
 ### The Official Player's Guide
 
 > *"A fresh fish lasts three days. A dried one lasts the winter. A stockfish outlasts the apocalypse."*
@@ -17,6 +17,7 @@
 9. Secrets & Hidden Features
 9½. The Fisherman's Logbook
 9¾. The Butcher's Block: Fat, Lard and Tallow
+9⅞. Charque: Sun-Dried Beef
 10. Tips from the Docks
 11. Troubleshooting
 12. Sandbox Settings
@@ -28,13 +29,15 @@
 
 You catch more fish than you can eat. This mod turns that surplus into food that keeps for **months (salted)** or **up to two years (cold dried)**, using the two great preserved fish of history: Portuguese *bacalhau* (salt cod) and Norwegian *stockfish* (air-dried in the cold). No power, no fridge, just salt, wood and weather.
 
+Meat follows the same roads: butchering gives fat for **Lard and Tallow** (9¾), and beef, mutton and venison go through the same tub and onto the same frames as **charque**, sun-dried for the summer (9⅞).
+
 ---
 
 ## 2. Quick Start
 
 > **Requires Traditional Preservation (Core)**, the series' shared mod (TP Core for short). Enable it alongside this one; it loads first.
 
-**Summer catch?** Pack it in salt → press it in a **Salting Tub** → hang it on a **Fish Drying Frame**.
+**Summer catch?** Pack it in salt → cure it in a **Salting Tub** → hang it on a **Fish Drying Frame**.
 **Winter catch?** Gut it → hang it on the frame. No salt needed.
 
 | You need | For |
@@ -53,7 +56,7 @@ You catch more fish than you can eat. This mod turns that surplus into food that
 | Season | Any (best in summer) | **Winter only** (about -10 to 5 C) |
 | Salt | 4 per half weight of fish | None |
 | Keeps | About 4–6 months | About 1–2 years |
-| Eating | Straight into soup, stew, rice or pasta (salty) | Must be rehydrated first |
+| Eating | Straight into soup, stew, rice or pasta (salty) | Must be rehydrated first: too hard to eat |
 | Weight | About 37% of the fresh fish | About 18%, the lightest food you can carry |
 
 **Rule of thumb:** salt in summer, cold in winter. The frame takes both kinds at once, in separate stacks.
@@ -82,22 +85,22 @@ Raw fish or fillet + salt by its size + knife (kept) → **Salt Packed** fish.
 - A whole fish over 0.6 weight also gives **Fish Guts** (see Secrets).
 - Packed fish keeps only days. Get it in the tub.
 
-**Step 2. Press in the Salting Tub**
-Load up to **50 weight / 35 items**, press **Craft**. The board and stones go on for **1 to 2 in-game days**: the **heaviest fish** sets the time, from 1 day (every fish up to 1.1 weight, about half a kilo) to 2 days (any fish of 2.2 weight, about a kilo, or more). Press small fish together and they come out a day sooner. The tub stays closed until you've taken every pressed fish out.
-- **Mind a warm spell.** When the last ten days average above 20 C, fish in the tub sours by the spine before the salt reaches it, and the finished fish keeps less long: about a seventh off for a day at 21 C, over a third for two days at 25 C. Hover the batch to see it. Salt in spring and autumn, or press small fish.
+**Step 2. Cure in the Salting Tub**
+Pick **Cure Salted Fish**, load up to **50 weight / 35 items**, press **Craft**. The board and stones go on for **1 to 2 in-game days**: the **heaviest fish** sets the time, from 1 day (every fish up to 1.1 weight, about half a kilo) to 2 days (any fish of 2.2 weight, about a kilo, or more). Cure small fish together and they come out a day sooner. The tub stays closed until you've taken every **Salt Cured** fish out.
+- **Mind a warm spell.** When the last ten days average above 20 C, fish in the tub sours by the spine before the salt reaches it, and the finished fish keeps less long: about a seventh off for a day at 21 C, over a third for two days at 25 C. Hover the batch to see it. Salt in spring and autumn, or cure small fish.
 
 **Optional: rinse off the salt**
-Right-click Salt Pressed fish and open its submenu: **Rinse Off Salt** is a recipe that takes **0.15 L of clean water** a fish from a bottle or pot you carry (the Craft window does a whole batch). Standing near a sink, bathtub, barrel or well? **Rinse at Sink** in the same submenu rinses every selected fish there. Tainted water won't do. The dried fish comes out **less salty** (a third less thirst, no sour note) but keeps **a tenth less long**: less salt, less protection. Skip it and nothing changes.
+Right-click Salt Cured fish and open its submenu: **Rinse Off Salt** is a recipe that takes **0.15 L of clean water** a fish from a bottle or pot you carry (the Craft window does a whole batch). Standing near a sink, bathtub, barrel or well? **Rinse at Sink** in the same submenu rinses every selected fish there. Tainted water won't do. The dried fish comes out **less salty** (a third less thirst, no sour note) but keeps **a tenth less long**: less salt, less protection. Skip it and nothing changes.
 
-> 📜 *On the Volga, vobla makers soak the pressed fish for about an hour per day it spent in salt before hanging it in the shade. Too much salt left on the skin crusts over and makes a fish you'll be drinking water after all evening.*
+> 📜 *On the Volga, vobla makers soak the cured fish for about an hour per day it spent in salt before hanging it in the shade. Too much salt left on the skin crusts over and makes a fish you'll be drinking water after all evening.*
 
 **Step 3. Hang on the Fish Drying Frame**
-Pick **Hang Salt Pressed Fish to Dry**, load pressed fish, press **Craft**. Each press hangs **one stack** of up to 2.5 weight, which dries on its own timer. There are **8 stacks** per frame, so you can keep adding while others dry.
+Pick **Hang Salt Cured Fish to Dry**, load cured fish, press **Craft**. Each press hangs **one stack** of up to 2.5 weight, which dries on its own timer. There are **8 stacks** per frame, so you can keep adding while others dry.
 
 **Step 4. Eat or rehydrate**
 **Salt Dried** fish is safe to eat and goes straight into soups and stews. **Rehydrate Fish** (1 L water, container kept) makes a mild fish that cooks like fresh.
 
-> ⚠ Packed and pressed fish are **not** safe uncooked. Only drying makes salt fish safe.
+> ⚠ Packed and cured fish are **not** safe uncooked. Only drying makes salt fish safe.
 
 ---
 
@@ -110,7 +113,7 @@ Pick **Hang Salt Pressed Fish to Dry**, load pressed fish, press **Craft**. Each
    **Stockfish Pallet** (build menu: hammer, saw, 3 planks, 6 nails, Carpentry 2): stack your stockfish on it the way the warehouses did. In a **loft** (a room upstairs) it ripens **twice as fast** (30 days); in a **ground-floor room**, half as fast again (40 days). Covered, outdoors or down in a damp basement it does no better than a shelf. It holds 20 weight, and the stack on it grows from a third to full as you load it, as long as nothing but stockfish is on it.
    **Stockfish Bale**: select stockfish, right-click, **Tie a Bale**. It takes one use of Twine (or a Rope) and ties up to 10 weight of fish, which then carry 30% lighter. A bale holds nothing but stockfish, and the fish inside keep ripening, on a pallet too. **Untie Bale** gives you the fish and your cord back.
 
-5. **Rehydrate**: Cold Dried fish must be soaked (1 L water) before it can go into recipes. Ripe stockfish cheers you up (unhappiness -10), and so does the stew it goes into. Unripe, it's dull (+10). Halfway, it's neither.
+5. **Rehydrate**: Cold Dried fish is as hard as wood: it must be soaked (**Rehydrate Fish**, 1 L water) before you can eat it or cook with it. Ripe stockfish cheers you up (unhappiness -10), and so does the stew it goes into. Unripe, it's dull (+10). Halfway, it's neither.
 
 > ⚠ Cold drying **rots** if the season warms up. Hang from November to mid-February. See the Almanac.
 
@@ -134,7 +137,7 @@ The Hanging Beam and Gantry work exactly like the frame, with bigger stacks. Use
 | Stage | Weight* | Food value | Fresh / rotten days |
 |---|---|---|---|
 | Salt Packed | 90% | 100% | 3 / 6 |
-| Salt Pressed | 79–84% | 100% | 7 / 14 |
+| Salt Cured | 79–84% | 100% | 7 / 14 |
 | **Salt Dried** | ~37% | 90% | **120 / 180** (rinsed: 108 / 162) |
 | Rehydrated (salt) | ~66% | 90% | 2 / 4 |
 | Gutted | 80% | 94% | 3 / 6 |
@@ -160,7 +163,7 @@ Drying runs on real weather, recorded every 10 minutes, **even while you're away
   - **Indoors**: inside a room, including one you built yourself with walls all round and a full roof. Salt drying runs at about two thirds of the speed; cold drying **stops**, as the air is still.
 - **Hot sun**: above 25 C, salt fish in the open air that is less than half dry takes a little off how long it keeps (the popup says *Too hot in the sun*). A few percent in a Kentucky summer; hang it under an open roof and it's spared.
 
-| Month | Salt, open | Salt, covered | Salt, indoors | Cold, open | Cold, covered | Cold batches that rotted | Cold keeping lost | 2-day press lost |
+| Month | Salt, open | Salt, covered | Salt, indoors | Cold, open | Cold, covered | Cold batches that rotted | Cold keeping lost | 2-day cure lost |
 |---|---|---|---|---|---|---|---|---|
 | Jan | 28–33 d | 27 d | 27 d | 51–55 d | 60–65 d | 0% | 20% | 0% |
 | Feb | 29–33 d | 27 d | 27 d | 52–93 d | 63–101 d | 3% | 16% | 0% |
@@ -175,14 +178,14 @@ Drying runs on real weather, recorded every 10 minutes, **even while you're away
 | Nov | 29–30 d | 27 d | 27 d | 50–52 d | — | 0% | 10% | 0% |
 | Dec | — | 27 d | 27 d | — | — | — | — | 0% |
 
-December batches run past the end of the recorded forecasts, so they have no figure; expect about what January gives. *Keeping lost* is how much of a finished cold batch's keeping time early frost, early wet and a warm spell took, on average. *2-day press lost* is what a warm cure takes from a batch of big fish pressed that month.
+December batches run past the end of the recorded forecasts, so they have no figure; expect about what January gives. *Keeping lost* is how much of a finished cold batch's keeping time early frost, early wet and a warm spell took, on average. *2-day cure lost* is what a warm cure takes from a batch of big fish cured that month.
 
 ---
 
 ## 9. Secrets & Hidden Features
 
 - 🐟 **Fish keep their identity.** A *Small Largemouth Bass* stays one through every stage, so you get *Salt Dried Small Largemouth Bass*. Each fish keeps its own weight and calories, so a batch of mixed sizes comes out mixed too.
-- 🎨 **Icons change with the cure.** Pale with salt when pressed, browned when salt dried, grey when cold dried, darker again when rehydrated. Gutted fish are drawn **without their heads**, as stockfish were. Halves show red flesh and a backbone.
+- 🎨 **Icons change with the cure.** Pale with salt when cured, browned when salt dried, grey when cold dried, darker again when rehydrated. Gutted fish are drawn **without their heads**, as stockfish were. Halves show red flesh and a backbone.
 - 🪝 **Fish Guts are free chum.** Packing or gutting a whole fish over 0.6 weight gives Fish Guts weighing 10% of the fish, the same size limit vanilla uses for filleting. Smaller fish, fillets and salmon give none.
 - 🐟 **Fish Heads.** Gutting a fish over 1.0 weight takes its head off, as stockfish makers did: 10% of the weight and 6% of the food go with it. Salted fish keep their heads. A head spoils like fresh fish, makes you sick raw, is a little grim even cooked, and can't be dried. Put it in a soup, a stew or chum, or better, make stock.
 - 🍲 **Fish Head Stock.** **Create Fish Head Stock** (Craft menu of the head or the pot, anywhere): a Cooking or Forged Pot with 1.5 L of water + a Fish Head. It's a stew from the start, and the head takes no slot, so you still get **6 stew ingredients** plus seasonings. It starts with the same mood boost as a plain stew (-20 unhappiness), and is named for what you add: *Fish Head Stock with Fish and Carrots*, or plain *Fish Head Stock* past 3 kinds, as vanilla stew falls back to *Stew*. Cook it, then **Divide Food into 4 Bowls** or **2 Bowls** at a table or counter, as with any stew.
@@ -190,9 +193,10 @@ December batches run past the end of the recorded forecasts, so they have no fig
 - 🧂 **Changed your mind?** A Gutted Fish or Fish Half can still be packed in salt. It won't give a second lot of guts.
 - 🌫 **Damp air matters a little.** Air more humid than 50% slows salt drying, though the game's air is rarely that damp.
 - 🔥 **Summer spoilage is gentle.** Salt fish only loses keeping time when the last 10 days averaged over 22 C *and* the air is humid: a few days in a hot July, if any.
-- 🎲 **Every frame looks different.** Each stack picks its hanging look at random (whole, headless or split), so a full frame looks hand-hung.
+- 🎲 **Every frame looks different.** Each stack picks its hanging look at random (whole, headless or split), so a full frame looks hand-hung. Charque hangs as dark cuts, red going to deep brown.
 - 📊 **Hover a hanging stack** to see its method, progress, time left, the temperature, how wet it is and how fast it's drying right now, plus a warning if the season is spoiling it.
-- 🥄 **Salt Dried fish needs no soaking for soup.** Toss it straight into a pot.
+- 🥄 **Salt Dried fish needs no soaking for soup.** Toss it straight into a pot. Stockfish and charque do: they're too hard to eat as they are.
+- 🧺 **One frame, three kinds.** A stack is one kind (salt fish, gutted fish or meat), but a frame can run all three side by side.
 
 ---
 
@@ -218,7 +222,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 ### Why it works the way it does
 
-- **Why does salt dry fish?** Salt draws water out through the flesh (osmosis), and bacteria can't live in what's left. That's why packed fish keeps only days, pressed fish a week or two, and fully dried fish for months.
+- **Why does salt dry fish?** Salt draws water out through the flesh (osmosis), and bacteria can't live in what's left. That's why packed fish keeps only days, cured fish a week or two, and fully dried fish for months.
 - **Why press it?** The board and stones squeeze out the brine the salt has pulled from the fish, so drying starts from a firmer, drier fish. Norwegian and Portuguese salt cod makers stacked their fish under weights for the same reason.
 - **Why does cold drying stop indoors?** Stockfish dries in moving air at around freezing: cold enough that nothing rots, dry and windy enough that the water leaves. In a room the air goes still; under an open roof some wind still gets through.
 - **Why dry salt fish in the shade?** In full summer sun the skin dries hard before the inside does, trapping the wet, and the fat turns rusty. Volga salters hang their vobla under awnings and in open sheds.
@@ -299,25 +303,49 @@ Raw fat left in a cold copper goes **rancid** when its oldest piece would have r
 
 > 📜 **Old names:** Balkan cooks call cracklings *čvarci* and make them every winter at the pig slaughter. In Britain, tallow lit the house and suet went into the pudding.
 
-## 9⅞. Salt Beef for Charque (the tub)
+## 9⅞. Charque: Sun-Dried Beef
 
-The first half of Charque: red meat salted and pressed in the **Salting Tub**, just like fish. The Drying Frame half comes in a later version.
+Charque is the summer road for red meat: salted and cured in the **Salting Tub** like fish, then dried in the hot sun on any drying station. It keeps for months.
 
 1. **Pack Meat in Salt** (right-click the meat; no knife needed): a **Beef**, **Steak**, **Mutton Chop** or **Venison** as the butcher gave it, rubbed with **4 salt**. You get **Salt Packed Meat**, named after its cut.
-2. Put it in an empty Salting Tub and **Press Salted Meat**: two days with a Beef or Venison in the batch, about 29 hours for Steaks and Chops alone. The heaviest cut sets the time.
-3. Out comes **Salt Cured Meat** ("Steak (Salt Cured)"): it keeps one to two weeks and can be cooked as it is.
+2. Put it in an empty Salting Tub and **Cure Salted Meat**: two days with a Beef or Venison in the batch, about 29 hours for Steaks and Chops alone. The heaviest cut sets the time. A tub salts **fish or meat, never both at once**, and a warm season costs keeping as it does for fish.
+3. Out comes **Salt Cured Meat** ("Steak (Salt Cured)"). It keeps one to two weeks and can be cooked as it is, salty. **Rinse Off Salt** works on it as on fish.
+4. **Hang Salt Cured Meat to Dry** on the Fish Drying Frame, the Hanging Beam or the Gantry: five days in **hot sun (25 C and up) and a breeze**. Below that it slows, and at freezing it stops.
+5. Take down the **Charque** ("Steak (Charque)"): about half the raw weight, 90% of the food, and it keeps **4 to 6 months**.
+6. **Rehydrate Charque** (1 L of water) before you eat it: it's salty and as hard as leather. **Rehydrated Charque** is still a little salty, cooks like a steak, goes into stews and pies, and spoils like fresh meat.
 
-| | Salt Packed Meat | Salt Cured Meat |
-|---|---|---|
-| Keeps | 3 / 6 days | 7 / 14 days |
-| Weight | as the cut | 88 to 93% |
-| Eat it? | No | Cooked; salty and thirsty |
+| | Salt Packed Meat | Salt Cured Meat | Charque | Rehydrated Charque |
+|---|---|---|---|---|
+| Keeps | 3 / 6 days | 7 / 14 days | **120 / 180 days** (rinsed: 108 / 162) | 2 / 4 days |
+| Weight | as the cut | 88 to 93% | about 50% | about 80% |
+| Food | 100% | 100% | 90% | 90% |
+| Eat it? | No | Cooked; salty and thirsty | **No: rehydrate it** | Cooked; a little salty |
 
-A tub salts **fish or meat, never both at once**. A warm season costs keeping, as it does for fish.
+**Weather on the frame**
+- **Heat helps.** Full speed from 25 C, two fifths at 10 C, nothing at or below freezing. Unlike salt fish, charque takes no harm from the sun.
+- **Wind helps.** Still air dries at two thirds of the speed, a good breeze adds a fifth (the popup shows *Wind*).
+- **Rain hurts.** An open frame waits while the meat is wet, and every 6 hours of rain take back **a tenth** of what had dried. Under an open roof it dries as fast as in the open and is never rained on. Indoors, two thirds of the speed.
+- **Muggy summers** spoil it a little, under the same rule as salt fish: about a percent in a bad July.
+
+| Month | Open | Under an open roof | Indoors |
+|---|---|---|---|
+| Jan | 88–119 d | 51–86 d | 65–94 d |
+| Mar | 31–59 d | 20–36 d | 25–44 d |
+| Apr | 13–34 d | 11–24 d | 14–27 d |
+| May | 9–25 d | 7–12 d | 10–16 d |
+| Jun | 8–19 d | 7–9 d | 9–12 d |
+| Jul | 7–15 d | 7–10 d | 9–12 d |
+| Aug | 9–20 d | 7–11 d | 10–13 d |
+| Sep | 8–17 d | 7–17 d | 10–26 d |
+| Oct | — | 17–65 d | 25–70 d |
+
+From November to February it barely dries at all: that's the season for salt fish and stockfish.
+
+> ✏ **Margin note:** rinse the cured meat before it hangs and the charque keeps a tenth less long, but it rehydrates noticeably less salty (a third less thirst). The charqueadas washed every sheet before the sun.
 
 > 📝 **Margin note:** why no pork? Its fat goes rancid in the sun, so pork has always been salted and then dried cool or smoked. That is the country ham's road, not charque's.
 
-> 📜 **Old names:** in the *charqueadas* of southern Brazil a quarter of beef was opened into thick sheets, *mantas*, salted and pressed in piles for a day or two, then laid out in the sun for most of a week. The word comes from the Andes, where *ch'arki* was llama and alpaca.
+> 📜 **Old names:** in the *charqueadas* of southern Brazil a quarter of beef was opened into thick sheets, *mantas*, salted in brine and then in piles for a few days, washed, and laid out on rails in the sun for four to six days, piled and covered each night. It was never eaten off the rail: cooks soaked it overnight in two or three changes of water first. The word comes from the Andes, where *ch'arki* was llama and alpaca. South Africa's *biltong* is its winter cousin, dried in the cold, dry Highveld air.
 
 ---
 
@@ -337,13 +365,16 @@ A tub salts **fish or meat, never both at once**. A warm season costs keeping, a
 
 | Problem | Why |
 |---|---|
-| Tub won't accept more | It's full (50 weight or 35 items), pressing, or still has pressed fish in it |
-| Frame refuses a fish | It takes only Salt Pressed fish, or Gutted Fish and halves. Raw, frozen salted, rotten and cooked fish are refused, and a frame stack holds 2.5 weight at most |
+| Tub won't accept more | It's full (50 weight or 35 items), curing, or still has cured fish or meat in it; or it holds the other kind (fish or meat) |
+| Frame refuses a fish | It takes only Salt Cured fish or meat, or Gutted Fish and halves. Raw, frozen salted, rotten and cooked fish are refused, and a frame stack holds 2.5 weight at most |
+| Frame refuses meat | The stack waiting to start is fish: one stack is one kind. Craft it first, then load the meat |
 | Cold stack came out rotten | It was hung in a warm season: the last 10 days averaged above 10 C |
 | Cold dried fish keeps less than a year | Hard frost or rain caught it in its first days on the frame |
-| Not drying | Rain on an open frame (cold fish too, until it dries off); or cold drying indoors |
-| Salt fish keeps less than it should | A warm cure (the season was above 20 C while it pressed) or hot sun on an open frame before it was half dry |
-| Time Remaining looks wrong in the window | The window shows the time in the best weather, or the longest press. Hover the stack or the pressing batch for the real time left |
+| Not drying | Rain on an open frame (cold fish too, until it dries off); cold drying indoors; or charque at or below freezing |
+| Charque lost progress | It was rained on, on an open frame: a tenth for every 6 hours of rain |
+| No Eat option on stockfish or charque | They're too hard to eat as they are. Rehydrate them first |
+| Salt fish keeps less than it should | A warm cure (the season was above 20 C while it cured) or hot sun on an open frame before it was half dry |
+| Time Remaining looks wrong in the window | The window shows the time in the best weather, or the longest cure. Hover the stack or the curing batch for the real time left |
 | Pack Fish in Salt won't take a fish | A whole or gutted fish over 4.5 weight must be split first; or you don't carry enough salt for its size |
 | No Fish Head from gutting | The fish was 1.0 weight or less, or it was packed in salt (salted fish keep their heads) |
 | Create Fish Head Stock missing | The pot needs the full 1.5 L of water |
@@ -359,9 +390,11 @@ A tub salts **fish or meat, never both at once**. A warm season costs keeping, a
 | Slowest salt drying (days) | 27 | The longest cold or damp weather can stretch salt drying to. Rain pauses come on top |
 | Stockfish drying time (days) | 32 | Cold drying at the best temperature and wind. Hung from late October to January, about 50 to 55 outdoors; the real Lofoten takes about 90 |
 | Stockfish maturing time (days) | 60 | Ripening in storage. A pallet in a loft halves it, in a ground-floor room it takes two thirds |
-| Salt press time (days) | 2 | In the tub, for a batch with a big fish. Small fish take half as long |
+| Salt cure time (days) | 2 | In the tub, for a batch with a big fish. Small fish take half as long |
 | Spoilage strictness | Normal | Off / Forgiving / Normal / Harsh |
 | Butchering gives fat | On | Off, butchering gives no fat and Lard is loot only, as in the base game |
+| Charque | On | Off, meat can't be packed in salt or hung |
+| Charque drying time (days) | 5 | In hot sun and a breeze. Kentucky's summer makes it about 7 to 11 under a roof; the real charqueadas took 4 to 6 |
 
 ---
 
@@ -374,7 +407,8 @@ A tub salts **fish or meat, never both at once**. A warm season costs keeping, a
 | Command | What it does |
 |---|---|
 | `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness, the wind, the drying speed open, under an open roof, indoors and cold, whether unsalted and salted fish are spoiling, and the running totals. |
-| `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one. |
+| `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one, `TPFM.age(120)` a charque one. |
+| `TPFM.rain(hours)` | Adds hours of rain (default 6) and wets the frames: an open charque stack loses a tenth per 6 hours. Then `TPFM.dry()`. |
 | `TPFM.spoil(hours)` | Adds spoiling weather, to test rotting. A fresh cold stack rots after 48. |
 | `TPFM.frost(hours)` | Adds hours of hard frost, to test early frost on a fresh cold stack (72 hours take a tenth of its keeping). |
 | `TPFM.heat(hours)` | Adds hours of hot sun, to test it on a fresh open salt stack (24 hours take a twentieth of its keeping). |
@@ -384,9 +418,13 @@ A tub salts **fish or meat, never both at once**. A warm season costs keeping, a
 | `TPFM.heads(n)` | Spawns Fish Heads (default food values). |
 | `TPFM.stock()` | Spawns a Pot of Fish Head Stock (default values, no head listed). |
 | `TPFM.salt(n)` | Spawns vanilla Salt shakers. |
+| `TPFM.meat(n)` | Spawns `n` each of Beef, Steak, Mutton Chop and Venison. |
+| `TPFM.cured(n)` | Spawns `n` each of those cuts already Salt Cured, ready to hang. |
 
-The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up pressing. Use the game's own time controls for that.
+The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.
 
-**Typical check of the whole salt route:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(10)` (each 4 weight walleye takes 32 salt, and a shaker holds 10), pack and press, then hang the fish and `TPFM.age(288)`.
+**Typical check of the whole salt route:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(10)` (each 4 weight walleye takes 32 salt, and a shaker holds 10), pack and cure, then hang the fish and `TPFM.age(288)`.
+
+**Typical check of charque:** `TPFM.cured(2)`, hang them on a frame, `TPFM.age(120)`, take them down and rehydrate one.
 
 **Typical check of heads:** `TPFM.fish("Walleye", 4)` and `TPFM.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.
