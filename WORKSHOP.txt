@@ -1,4 +1,4 @@
-[h1]Traditional Preservation (Fish)[/h1]
+[h1]Traditional Preservation (Fish & Meat)[/h1]
 
 Preserve your catch the old way. Salt it, press it and hang it to dry, or gut it and hang it in the winter cold. Dried fish keeps for months or even years, with no fridge and no power.
 
@@ -128,7 +128,7 @@ Gut Fish also takes the head off. A fish over 1.0 weight gives a Fish Head: 10% 
 Stockfish is unsalted cod hung on open racks through the cold northern Norwegian spring, traded across Europe since the Viking age. Salt cod (klippfisk, bacalhau) is salted, pressed and dried in mild air, and from the 1500s it fed sailors and Catholic fast days on both sides of the Atlantic. On the lower Volga around Astrakhan, large salted fish such as pike are hung from hooks to dry.
 
 [h2]Works well with[/h2]
-[b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt: one batch (5 Evaporated Salt, 25 uses) packs a dozen panfish, or one 4 weight walleye with salt to spare. Traditional Preservation (Fish) needs no other mods besides Traditional Preservation (Core).
+[b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt: one batch (5 Evaporated Salt, 25 uses) packs a dozen panfish, or one 4 weight walleye with salt to spare. Traditional Preservation (Fish & Meat) needs no other mods besides Traditional Preservation (Core).
 
 [h2]Sandbox options[/h2]
 Set salt drying time, the slowest it can take, stockfish drying time, stockfish maturing time, the salt press time and spoilage strictness.

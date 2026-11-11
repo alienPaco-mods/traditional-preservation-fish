@@ -6,13 +6,13 @@ H.installClock(100)
 H.installModData()
 H.installEvents()
 H.installGetText()
-dofile("42/media/lua/shared/TraditionalPreservationFish.lua")
-local F = TraditionalPreservationFish
-local Tiles = require "TraditionalPreservationFish/Tiles"
+dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
+local F = TraditionalPreservationFishMeat
+local Tiles = require "TraditionalPreservationFishMeat/Tiles"
 
 local function stockfish(age, weight)
     local modData = { fishName = "Walleye", matureAge = age }
-    local fish = { fullType = "TraditionalPreservationFish.ColdDriedFish", weight = weight or 0.2 }
+    local fish = { fullType = "TraditionalPreservationFishMeat.ColdDriedFish", weight = weight or 0.2 }
     function fish:getFullType() return self.fullType end
     function fish:getModData() return modData end
     function fish:getAge() return age end
@@ -60,7 +60,7 @@ for i = 1, 100 do full[i] = stockfish(0, 0.2) end
 check("12 of 20 weight shows the middle stack", F.palletLevel(container(twoThirds)) == 2)
 check("20 of 20 the full one", F.palletLevel(container(full)) == 3)
 check("anything else on it hides the stack", F.palletLevel(container({ stockfish(0), other("Base.Plank") })) == nil)
-check("salt fish too", F.palletLevel(container({ stockfish(0), other("TraditionalPreservationFish.SaltDriedFish") })) == nil)
+check("salt fish too", F.palletLevel(container({ stockfish(0), other("TraditionalPreservationFishMeat.SaltDriedFish") })) == nil)
 check("a bale of stockfish counts", F.palletLevel(container({ bale({ stockfish(0), stockfish(0) }) })) == 1)
 check("a bale with anything else doesn't", F.palletLevel(container({ bale({ stockfish(0), other("Base.Plank") }) })) == nil)
 
@@ -75,7 +75,7 @@ check("a ripe fish and one made before maturing are left alone", ripe:getModData
 
 -- The bale
 check("a bale takes stockfish", F.acceptBale(nil, stockfish(0)))
-check("and nothing else", not F.acceptBale(nil, other("TraditionalPreservationFish.SaltDriedFish"))
+check("and nothing else", not F.acceptBale(nil, other("TraditionalPreservationFishMeat.SaltDriedFish"))
     and not F.acceptBale(nil, other("Base.Plank")))
 local many = {}
 for i = 1, 60 do many[i] = stockfish(0, 0.2) end
@@ -166,7 +166,7 @@ local placeOf = "Sheltered"
 package.loaded["TraditionalPreservationCore/Weather"].placeOf = function() return placeOf end
 local hours = 100
 function getGameTime() return { getWorldAgeHours = function() return hours end } end
-dofile("42/media/lua/server/TraditionalPreservationFishPallet.lua")
+dofile("42/media/lua/server/TraditionalPreservationFishMeatPallet.lua")
 local shown
 local onIt = stockfish(0)
 local floor = 1
@@ -177,7 +177,7 @@ function pallet:getModData() return self.modData end
 function pallet:clearAttachedAnimSprite() shown = {} end
 function pallet:addAttachedAnimSpriteByName(name) table.insert(shown, name) end
 local entry = {}
-local refresh = TraditionalPreservationFishPallet.refresh
+local refresh = TraditionalPreservationFishMeatPallet.refresh
 refresh(pallet, entry)
 check("a pallet starts counting when first seen", pallet.modData.palletHour == 100 and onIt:getModData().matureAge == 0)
 check("and shows the low stack", #shown == 1 and shown[1] == Tiles.PALLET_STACKS[1])

@@ -1,4 +1,4 @@
--- Traditional Preservation (Fish): starts showing a station's contents as soon as something goes in,
+-- Traditional Preservation (Fish & Meat): starts showing a station's contents as soon as something goes in,
 -- because one built this session hasn't been through the map loader. Also replaces vanilla's
 -- free slot limit: a tub takes one batch at a time by weight, and a frame goes by stacks. The
 -- same rules decide the slot's green border, so it never promises what adding then refuses.
@@ -6,8 +6,8 @@ require "Entity/ISUI/Components/Crafting/ISCraftLogicPanel"
 require "Entity/ISUI/Controls/ISItemSlot"
 local UI = require "TraditionalPreservationCore/UI"
 local Weather = require "TraditionalPreservationCore/Weather"
-local Tiles = require "TraditionalPreservationFish/Tiles"
-local F = TraditionalPreservationFish
+local Tiles = require "TraditionalPreservationFishMeat/Tiles"
+local F = TraditionalPreservationFishMeat
 
 local FIRST_FRAME_SPRITE = Tiles.FRAME
 
@@ -36,33 +36,33 @@ local function refusal(slot, item, queued)
     local waiting = waitingWeight(resource)
     for _, fish in ipairs(queued) do waiting = waiting + fish:getActualWeight() end
     if isTub then
-        if component:isRunning() then return "IGUI_TraditionalPreservationFish_TubInUse" end
+        if component:isRunning() then return "IGUI_TraditionalPreservationFishMeat_TubInUse" end
         -- This asks what is in the tub, because a tub keeps the slot counts it was built with.
-        if TraditionalPreservationFishWorld.busyStacks(entity) > 0 then return "IGUI_TraditionalPreservationFish_TubNotEmpty" end
+        if TraditionalPreservationFishMeatWorld.busyStacks(entity) > 0 then return "IGUI_TraditionalPreservationFishMeat_TubNotEmpty" end
         if resource:getStoredItems():size() + #queued >= F.TUB_MAX_ITEMS
                 or not F.hasRoom(F.TUB_CAPACITY, waiting, weight) then
-            return "IGUI_TraditionalPreservationFish_Full"
+            return "IGUI_TraditionalPreservationFishMeat_Full"
         end
         return nil
     end
     local stored = resource:getStoredItems()
     local isCold = F.COLD_FISH[item:getFullType()]
     if stored:size() > 0 and F.COLD_FISH[stored:get(0):getFullType()] ~= isCold then
-        return "IGUI_TraditionalPreservationFish_MixedStack"
+        return "IGUI_TraditionalPreservationFishMeat_MixedStack"
     end
     local hanger = F.hangerFor(spriteIndex(entity))
-    return F.frameRefusal(hanger, TraditionalPreservationFishWorld.busyStacks(entity), waiting, weight)
+    return F.frameRefusal(hanger, TraditionalPreservationFishMeatWorld.busyStacks(entity), waiting, weight)
 end
 
 -- A tub or a drying station, with whether it's a tub. Asking about one starts tracking it.
 local function station(entity)
     local index = spriteIndex(entity)
-    if not index or not TraditionalPreservationFishWorld then return nil end
+    if not index or not TraditionalPreservationFishMeatWorld then return nil end
 
     local isTub = index < FIRST_FRAME_SPRITE
     local component = entity:getComponent(isTub and ComponentType.CraftLogic or ComponentType.DryingCraftLogic)
     if not component then return nil end
-    TraditionalPreservationFishWorld.track(entity)
+    TraditionalPreservationFishMeatWorld.track(entity)
     return component, isTub
 end
 
@@ -70,12 +70,12 @@ UI.slotRules{
     station = station,
     refusal = refusal,
     -- What hangs there now, so the count of busy stacks is current.
-    added = function(entity) TraditionalPreservationFishWorld.refresh(entity) end,
+    added = function(entity) TraditionalPreservationFishMeatWorld.refresh(entity) end,
 }
 
 local function timeText(hours)
-    if not hours then return getText("IGUI_TraditionalPreservationFish_Paused") end
-    return UI.timeText(hours, "IGUI_TraditionalPreservationFish_Time")
+    if not hours then return getText("IGUI_TraditionalPreservationFishMeat_Paused") end
+    return UI.timeText(hours, "IGUI_TraditionalPreservationFishMeat_Time")
 end
 
 -- Vanilla's popup goes by its own temperature curve and the recipe's time, so hanging stacks get
@@ -84,25 +84,25 @@ local function drawStackTooltip(slot, tooltip, isCold)
     local ledger = F.getLedger()
     local status = F.stackStatus(isCold, slot.craftRecipeData:getModData(), ledger)
     UI.drawTooltip(tooltip, function(layout)
-        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Method", getText(isCold and "IGUI_TraditionalPreservationFish_MethodCold" or "IGUI_TraditionalPreservationFish_MethodSalt"))
-        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Progress", UI.percent(status.progress))
-        UI.addLine(layout, "IGUI_TraditionalPreservationFish_TimeLeft", timeText(status.hoursLeft))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Method", getText(isCold and "IGUI_TraditionalPreservationFishMeat_MethodCold" or "IGUI_TraditionalPreservationFishMeat_MethodSalt"))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Progress", UI.percent(status.progress))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_TimeLeft", timeText(status.hoursLeft))
         local modData = slot.craftRecipeData:getModData()
         local place = modData.sheltered and "Indoors" or modData.covered and "Covered" or "Open"
-        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Place", getText("IGUI_TraditionalPreservationFish_Place" .. place))
-        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Temperature", getText(F.temperatureWord(isCold, ledger.temperature or 0, place == "Open")))
-        if isCold then UI.addLine(layout, "IGUI_TraditionalPreservationFish_Wind", getText(F.windWord(ledger.wind))) end
-        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Wetness", UI.percent(isCold and ledger.coldWetness or ledger.wetness))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Place", getText("IGUI_TraditionalPreservationFishMeat_Place" .. place))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Temperature", getText(F.temperatureWord(isCold, ledger.temperature or 0, place == "Open")))
+        if isCold then UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wind", getText(F.windWord(ledger.wind))) end
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wetness", UI.percent(isCold and ledger.coldWetness or ledger.wetness))
         if status.reason then
-            UI.addLine(layout, "IGUI_TraditionalPreservationFish_Rate", getText("IGUI_TraditionalPreservationFish_Stopped" .. status.reason), UI.SLOW_COLOUR)
+            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Rate", getText("IGUI_TraditionalPreservationFishMeat_Stopped" .. status.reason), UI.SLOW_COLOUR)
         else
-            UI.addLine(layout, "IGUI_TraditionalPreservationFish_Rate", UI.percent(status.rate))
+            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Rate", UI.percent(status.rate))
         end
         if status.spoiling or status.scorching or status.spoiled > 0 then
-            local warning = "IGUI_TraditionalPreservationFish_Spoiled"
-            if status.scorching then warning = "IGUI_TraditionalPreservationFish_SpoilingSun" end
-            if status.spoiling then warning = isCold and "IGUI_TraditionalPreservationFish_SpoilingWarm" or "IGUI_TraditionalPreservationFish_SpoilingMuggy" end
-            UI.addLine(layout, "IGUI_TraditionalPreservationFish_Spoilage", UI.say(warning, UI.percent(status.spoiled)), UI.WARNING_COLOUR)
+            local warning = "IGUI_TraditionalPreservationFishMeat_Spoiled"
+            if status.scorching then warning = "IGUI_TraditionalPreservationFishMeat_SpoilingSun" end
+            if status.spoiling then warning = isCold and "IGUI_TraditionalPreservationFishMeat_SpoilingWarm" or "IGUI_TraditionalPreservationFishMeat_SpoilingMuggy" end
+            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Spoilage", UI.say(warning, UI.percent(status.spoiled)), UI.WARNING_COLOUR)
         end
     end)
 end
@@ -112,11 +112,11 @@ end
 local function drawPressTooltip(slot, tooltip)
     local status = F.pressStatus(slot.craftRecipeData:getModData(), getGameTime():getWorldAgeHours(), F.getLedger())
     UI.drawTooltip(tooltip, function(layout)
-        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Progress", UI.percent(status.progress))
-        UI.addLine(layout, "IGUI_TraditionalPreservationFish_TimeLeft", timeText(status.hoursLeft))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Progress", UI.percent(status.progress))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_TimeLeft", timeText(status.hoursLeft))
         if status.spoiling or status.spoiled > 0 then
-            local warning = status.spoiling and "IGUI_TraditionalPreservationFish_SpoilingWarmCure" or "IGUI_TraditionalPreservationFish_Spoiled"
-            UI.addLine(layout, "IGUI_TraditionalPreservationFish_Spoilage", UI.say(warning, UI.percent(status.spoiled)), UI.WARNING_COLOUR)
+            local warning = status.spoiling and "IGUI_TraditionalPreservationFishMeat_SpoilingWarmCure" or "IGUI_TraditionalPreservationFishMeat_Spoiled"
+            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Spoilage", UI.say(warning, UI.percent(status.spoiled)), UI.WARNING_COLOUR)
         end
     end)
 end
@@ -190,7 +190,7 @@ end
 local function onRinse(playerObj, fish, source)
     for _, item in ipairs(fish) do ISInventoryPaneContextMenu.transferIfNeeded(playerObj, item) end
     if not luautils.walkAdj(playerObj, source:getSquare(), true) then return end
-    for _, item in ipairs(fish) do ISTimedActionQueue.add(TPFishRinse:new(playerObj, item, source)) end
+    for _, item in ipairs(fish) do ISTimedActionQueue.add(TPFMRinse:new(playerObj, item, source)) end
 end
 
 local OPTION_FIELDS = { "target", "onSelect", "param1", "param2", "param3", "param4", "param5", "param6", "param7",
@@ -228,10 +228,10 @@ local function onFillRinseMenu(playerNum, context, items)
     local playerObj = getSpecificPlayer(playerNum)
     local source = F.findWaterSource(playerObj, F.RINSE_LITRES)
     if not source then return end
-    local option = fishSubMenu(context, fish[1]):addOption(getText("ContextMenu_TraditionalPreservationFish_RinseAtSink"), playerObj, onRinse, fish, source)
+    local option = fishSubMenu(context, fish[1]):addOption(getText("ContextMenu_TraditionalPreservationFishMeat_RinseAtSink"), playerObj, onRinse, fish, source)
     option.iconTexture = fish[1]:getTexture()
     local tooltip = ISWorldObjectContextMenu.addToolTip()
-    tooltip.description = getText("Tooltip_TraditionalPreservationFish_RinseAtSink", tostring(#fish), string.format("%.2f", F.RINSE_LITRES * #fish))
+    tooltip.description = getText("Tooltip_TraditionalPreservationFishMeat_RinseAtSink", tostring(#fish), string.format("%.2f", F.RINSE_LITRES * #fish))
     option.toolTip = tooltip
 end
 
@@ -242,13 +242,13 @@ Events.OnFillInventoryObjectContextMenu.Add(onFillRinseMenu)
 local function onTieBale(playerObj, fish, cordItem, cord)
     for _, item in ipairs(fish) do ISInventoryPaneContextMenu.transferIfNeeded(playerObj, item) end
     ISInventoryPaneContextMenu.transferIfNeeded(playerObj, cordItem)
-    ISTimedActionQueue.add(TPFishTieBale:new(playerObj, fish, cordItem, cord))
+    ISTimedActionQueue.add(TPFMTieBale:new(playerObj, fish, cordItem, cord))
 end
 
 local function onUntieBale(playerObj, bales)
     for _, bale in ipairs(bales) do
         ISInventoryPaneContextMenu.transferIfNeeded(playerObj, bale)
-        ISTimedActionQueue.add(TPFishUntieBale:new(playerObj, bale))
+        ISTimedActionQueue.add(TPFMUntieBale:new(playerObj, bale))
     end
 end
 
@@ -261,26 +261,26 @@ local function onFillBaleMenu(playerNum, context, items)
     local fish = F.baleLoad(selectedFish(items, F.isStockfish))
     if #fish > 0 then
         local cordItem, cord = F.findCord(playerObj:getInventory())
-        local option = fishSubMenu(context, fish[1]):addOption(getText("ContextMenu_TraditionalPreservationFish_TieBale"), playerObj, onTieBale, fish, cordItem, cord)
+        local option = fishSubMenu(context, fish[1]):addOption(getText("ContextMenu_TraditionalPreservationFishMeat_TieBale"), playerObj, onTieBale, fish, cordItem, cord)
         option.iconTexture = getTexture("Item_StockfishBale")
         local tooltip = ISWorldObjectContextMenu.addToolTip()
         if cord then
             local weight = 0
             for _, item in ipairs(fish) do weight = weight + item:getActualWeight() end
-            tooltip.description = getText("Tooltip_TraditionalPreservationFish_TieBale", tostring(#fish), string.format("%.1f", weight), cordItem:getDisplayName())
+            tooltip.description = getText("Tooltip_TraditionalPreservationFishMeat_TieBale", tostring(#fish), string.format("%.1f", weight), cordItem:getDisplayName())
         else
-            tooltip.description = getText("Tooltip_TraditionalPreservationFish_TieBaleNoCord")
+            tooltip.description = getText("Tooltip_TraditionalPreservationFishMeat_TieBaleNoCord")
             option.notAvailable = true
         end
         option.toolTip = tooltip
     end
     local bales = selectedFish(items, isBale)
     if #bales > 0 then
-        local option = context:addOption(getText("ContextMenu_TraditionalPreservationFish_UntieBale"), playerObj, onUntieBale, bales)
+        local option = context:addOption(getText("ContextMenu_TraditionalPreservationFishMeat_UntieBale"), playerObj, onUntieBale, bales)
         option.iconTexture = getTexture("Item_StockfishBale")
         local cord = F.cordByKey(bales[1]:getModData().cord) or F.BALE_CORDS[1]
         local tooltip = ISWorldObjectContextMenu.addToolTip()
-        tooltip.description = getText("Tooltip_TraditionalPreservationFish_UntieBale", getItemNameFromFullType(cord.type))
+        tooltip.description = getText("Tooltip_TraditionalPreservationFishMeat_UntieBale", getItemNameFromFullType(cord.type))
         option.toolTip = tooltip
     end
 end
@@ -288,7 +288,7 @@ end
 Events.OnFillInventoryObjectContextMenu.Add(onFillBaleMenu)
 
 -- The Stockfish Pallet has no window: its right-click menu says what it does where it stands.
-local PALLET_PLACES = { [F.PALLET_LOFT] = "IGUI_TraditionalPreservationFish_PalletLoft", [F.PALLET_GROUND] = "IGUI_TraditionalPreservationFish_PalletGround" }
+local PALLET_PLACES = { [F.PALLET_LOFT] = "IGUI_TraditionalPreservationFishMeat_PalletLoft", [F.PALLET_GROUND] = "IGUI_TraditionalPreservationFishMeat_PalletGround" }
 
 local function onFillPalletMenu(playerNum, context, worldobjects, test)
     for _, object in ipairs(worldobjects) do
@@ -298,8 +298,8 @@ local function onFillPalletMenu(playerNum, context, worldobjects, test)
             local square = object:getSquare()
             local speed = F.palletSpeed(Weather.placeOf(object, true), square and square:getZ() or 0)
             local text = PALLET_PLACES[speed]
-                and getText("ContextMenu_TraditionalPreservationFish_PalletSpeed", tostring(speed), getText(PALLET_PLACES[speed]))
-                or getText("ContextMenu_TraditionalPreservationFish_PalletNoSpeed")
+                and getText("ContextMenu_TraditionalPreservationFishMeat_PalletSpeed", tostring(speed), getText(PALLET_PLACES[speed]))
+                or getText("ContextMenu_TraditionalPreservationFishMeat_PalletNoSpeed")
             local option = context:addOption(text)
             option.iconTexture = getTexture("Item_StockfishPallet")
             local tooltip = ISWorldObjectContextMenu.addToolTip()

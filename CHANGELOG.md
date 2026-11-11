@@ -1,4 +1,16 @@
-# Changelog: Traditional Preservation (Fish)
+# Changelog: Traditional Preservation (Fish & Meat)
+
+## 0.4.0
+- **Renamed to Traditional Preservation (Fish & Meat)**, ahead of the meat routes (ROADMAP §7, phase 1). Mod ID
+  `TraditionalPreservationFishMeat` (was `TraditionalPreservationFish`), debug console `TPFM` (was `TPF`), timed
+  actions `TPFM...` (were `TPFish...`). The script module, so every item's and recipe's full type, the Lua table
+  and files, translation keys, sandbox options (`SandboxVars.TraditionalPreservationFishMeat`), ledger and modData
+  keys, the texture pack, tileset and sprite names all follow. Tiledef number 5129 stays. No change in play: tests
+  and the season and storage goldens are the same, and the pack and tiles differ from 0.3.7 only by the name.
+- **Not save compatible with 0.3.7** (nothing is released): a save made with the old ID loses its stations and
+  cured fish. Enable the new mod in place of the old one.
+- Entries below keep the names of their day (`TPF`, `TPFish...`, `TraditionalPreservationFish`).
+- Internal: the guide is `1_FishMeat_Guide.md`; a stray tracked `tools/__pycache__` file is out of git.
 
 ## 0.3.7
 - **Defaults and sandbox options** (ROADMAP §6, decisions 14 and 15). The season report confirms the defaults as

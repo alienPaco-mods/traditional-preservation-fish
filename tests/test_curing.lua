@@ -11,20 +11,20 @@ function getGameTime()
     return { getWorldAgeHours = function() return hours end }
 end
 local NAMES = {
-    IGUI_TraditionalPreservationFish_Packed = "Salt Packed",
-    IGUI_TraditionalPreservationFish_Pressed = "Salt Pressed",
-    IGUI_TraditionalPreservationFish_Dried = "Salt Dried",
-    IGUI_TraditionalPreservationFish_Gutted = "Gutted %1",
-    IGUI_TraditionalPreservationFish_Half = "%1 Half",
-    IGUI_TraditionalPreservationFish_ColdDried = "Cold Dried",
-    IGUI_TraditionalPreservationFish_SoakedSalt = "Rehydrated, Salt Dried",
-    IGUI_TraditionalPreservationFish_SoakedCold = "Rehydrated, Cold Dried",
-    IGUI_TraditionalPreservationFish_Named = "%1 (%2)",
-    IGUI_TraditionalPreservationFish_And = "%1, %2",
-    IGUI_TraditionalPreservationFish_Ripe = "Ripe",
-    IGUI_TraditionalPreservationFish_Unripe = "Unripe",
-    IGUI_TraditionalPreservationFish_Head = "%1 Head",
-    IGUI_TraditionalPreservationFish_Rinsed = "Rinsed",
+    IGUI_TraditionalPreservationFishMeat_Packed = "Salt Packed",
+    IGUI_TraditionalPreservationFishMeat_Pressed = "Salt Pressed",
+    IGUI_TraditionalPreservationFishMeat_Dried = "Salt Dried",
+    IGUI_TraditionalPreservationFishMeat_Gutted = "Gutted %1",
+    IGUI_TraditionalPreservationFishMeat_Half = "%1 Half",
+    IGUI_TraditionalPreservationFishMeat_ColdDried = "Cold Dried",
+    IGUI_TraditionalPreservationFishMeat_SoakedSalt = "Rehydrated, Salt Dried",
+    IGUI_TraditionalPreservationFishMeat_SoakedCold = "Rehydrated, Cold Dried",
+    IGUI_TraditionalPreservationFishMeat_Named = "%1 (%2)",
+    IGUI_TraditionalPreservationFishMeat_And = "%1, %2",
+    IGUI_TraditionalPreservationFishMeat_Ripe = "Ripe",
+    IGUI_TraditionalPreservationFishMeat_Unripe = "Unripe",
+    IGUI_TraditionalPreservationFishMeat_Head = "%1 Head",
+    IGUI_TraditionalPreservationFishMeat_Rinsed = "Rinsed",
 }
 local keptShare
 function ZombRandFloat(low, high)
@@ -46,8 +46,8 @@ ScriptManager = { instance = {} }
 function ScriptManager.instance:getCraftRecipe(name)
     return { Load = function(_, recipeName, text) loaded[recipeName] = text end }
 end
-dofile("42/media/lua/shared/TraditionalPreservationFish.lua")
-local T = TraditionalPreservationFish
+dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
+local T = TraditionalPreservationFishMeat
 
 local check = H.check
 
@@ -105,8 +105,8 @@ local MILD = { temperature = 20, humidity = 0.4, precipitation = 0 }
 
 -- Recipe times
 onInit()
-check("the press time comes from PRESS_HOURS", loaded["TraditionalPreservationFish.PressSaltedFish"] == "{ time = " .. T.PRESS_HOURS * 3600 .. ", }")
-check("the drying time comes from DRY_HOURS", loaded["TraditionalPreservationFish.HangFishToDry"] == "{ time = " .. T.DRY_HOURS * 3600 .. ", }")
+check("the press time comes from PRESS_HOURS", loaded["TraditionalPreservationFishMeat.PressSaltedFish"] == "{ time = " .. T.PRESS_HOURS * 3600 .. ", }")
+check("the drying time comes from DRY_HOURS", loaded["TraditionalPreservationFishMeat.HangFishToDry"] == "{ time = " .. T.DRY_HOURS * 3600 .. ", }")
 
 -- Rates
 check("freezing air dries nothing", T.temperatureRate(-5) == 0 and T.temperatureRate(0) == 0)
@@ -150,7 +150,7 @@ check("in between by weight", near(T.pressHours((T.PRESS_SMALL_WEIGHT + T.PRESS_
 local RECIPE_TIME = T.PRESS_HOURS * 3600
 local function pressed(weights)
     local fish = {}
-    for i, weight in ipairs(weights) do fish[i] = newFood("TraditionalPreservationFish.SaltPackedFish", { ActualWeight = weight }) end
+    for i, weight in ipairs(weights) do fish[i] = newFood("TraditionalPreservationFishMeat.SaltPackedFish", { ActualWeight = weight }) end
     return newRecipeData(RECIPE_TIME, fish)
 end
 local press = pressed({ 0.4, 3, 0.6 })
@@ -188,14 +188,14 @@ local hotCure, hotLedger = warmCure(25, 48)
 check("25 C for two days, 37.5%", near(hotCure, 0.375) and hotLedger.warmCuring)
 check("the tub's popup shows it", near(T.pressStatus({ pressStartHour = 0, pressHours = 48, lastWarmCure = 0 }, 48, hotLedger).spoiled, 0.375))
 check("a press from before counts from now", T.cureSpoiled({}, hotLedger) == 0)
-local hotPress = newRecipeData(RECIPE_TIME, { newFood("TraditionalPreservationFish.SaltPackedFish", { ActualWeight = 1 }) },
-    { newFood("TraditionalPreservationFish.SaltPressedFish", {}) })
+local hotPress = newRecipeData(RECIPE_TIME, { newFood("TraditionalPreservationFishMeat.SaltPackedFish", { ActualWeight = 1 }) },
+    { newFood("TraditionalPreservationFishMeat.SaltPressedFish", {}) })
 hotPress.modData.lastWarmCure = 0
 ModData.tables[T.MOD_DATA_KEY] = hotLedger
 T.onCreatePressed(hotPress)
 local hotFish = hotPress:getAllCreatedItems():get(0)
 check("pressed fish carries what the warm cure took", near(hotFish:getModData().cureSpoiled, 0.375) and hotFish.age > 0)
-local mixed = list({ newFood("TraditionalPreservationFish.SaltPressedFish", { ActualWeight = 3 }), newFood("TraditionalPreservationFish.SaltPressedFish", { ActualWeight = 1 }) })
+local mixed = list({ newFood("TraditionalPreservationFishMeat.SaltPressedFish", { ActualWeight = 3 }), newFood("TraditionalPreservationFishMeat.SaltPressedFish", { ActualWeight = 1 }) })
 mixed:get(0):getModData().cureSpoiled = 0.4
 check("a stack starts with its fish's share, by weight", near(T.stackCureSpoiled(mixed), 0.3))
 ModData.tables = {}
@@ -217,18 +217,18 @@ check("and no more", not T.hasRoom(T.TUB_CAPACITY, T.TUB_CAPACITY - 0.5, 1))
 check("a fish over the capacity never fits", not T.hasRoom(T.TUB_CAPACITY, 0, T.TUB_CAPACITY + 1))
 
 -- The right fish for each station
-check("a tub takes packed fish", T.fishRefusal(true, "TraditionalPreservationFish.SaltPackedFish") == nil)
-check("but not pressed or raw fish", T.fishRefusal(true, "TraditionalPreservationFish.SaltPressedFish") == "IGUI_TraditionalPreservationFish_NeedsPacked" and T.fishRefusal(true, "Base.Walleye") == "IGUI_TraditionalPreservationFish_NeedsPacked")
-check("a frame takes pressed fish", T.fishRefusal(false, "TraditionalPreservationFish.SaltPressedFish") == nil)
-check("but not packed fish", T.fishRefusal(false, "TraditionalPreservationFish.SaltPackedFish") == "IGUI_TraditionalPreservationFish_NeedsPressed")
+check("a tub takes packed fish", T.fishRefusal(true, "TraditionalPreservationFishMeat.SaltPackedFish") == nil)
+check("but not pressed or raw fish", T.fishRefusal(true, "TraditionalPreservationFishMeat.SaltPressedFish") == "IGUI_TraditionalPreservationFishMeat_NeedsPacked" and T.fishRefusal(true, "Base.Walleye") == "IGUI_TraditionalPreservationFishMeat_NeedsPacked")
+check("a frame takes pressed fish", T.fishRefusal(false, "TraditionalPreservationFishMeat.SaltPressedFish") == nil)
+check("but not packed fish", T.fishRefusal(false, "TraditionalPreservationFishMeat.SaltPackedFish") == "IGUI_TraditionalPreservationFishMeat_NeedsPressed")
 
 -- The frame
 check("a stack takes four fish too small to slice", T.frameRefusal(T.HANGERS[6], 0, 0.6 * 3, 0.6) == nil)
-check("but not a fifth", T.frameRefusal(T.HANGERS[6], 0, 2.4, 0.6) == "IGUI_TraditionalPreservationFish_StackFull")
+check("but not a fifth", T.frameRefusal(T.HANGERS[6], 0, 2.4, 0.6) == "IGUI_TraditionalPreservationFishMeat_StackFull")
 check("a fish at the limit hangs", T.frameRefusal(T.HANGERS[6], 0, 0, 2.5) == nil)
-check("and takes nothing with it", T.frameRefusal(T.HANGERS[6], 0, 2.5, 0.1) == "IGUI_TraditionalPreservationFish_StackFull")
-check("a heavier fish is told to slice", T.frameRefusal(T.HANGERS[6], 0, 0, 2.6) == "IGUI_TraditionalPreservationFish_TooHeavy")
-check("eight stacks fill the frame", T.frameRefusal(T.HANGERS[6], 7, 0, 0.1) == nil and T.frameRefusal(T.HANGERS[6], 8, 0, 0.1) == "IGUI_TraditionalPreservationFish_FrameFull")
+check("and takes nothing with it", T.frameRefusal(T.HANGERS[6], 0, 2.5, 0.1) == "IGUI_TraditionalPreservationFishMeat_StackFull")
+check("a heavier fish is told to slice", T.frameRefusal(T.HANGERS[6], 0, 0, 2.6) == "IGUI_TraditionalPreservationFishMeat_TooHeavy")
+check("eight stacks fill the frame", T.frameRefusal(T.HANGERS[6], 7, 0, 0.1) == nil and T.frameRefusal(T.HANGERS[6], 8, 0, 0.1) == "IGUI_TraditionalPreservationFishMeat_FrameFull")
 check("a full frame is 20 weight", T.STACK_WEIGHT * T.MAX_STACKS == 20)
 check("every station finds its hanger, either way round", T.hangerFor(7) == T.HANGERS[6] and T.hangerFor(409) == T.HANGERS[408] and T.hangerFor(410) == T.HANGERS[410])
 check("a tub has none", T.hangerFor(0) == nil and T.hangerFor(5) == nil)
@@ -237,27 +237,27 @@ check("the big beams go up outdoors or under an open roof", T.notInRoom(square(f
 check("not in a room", not T.notInRoom(square(true)))
 for _, name in ipairs({ "Medium", "Large" }) do
     local entity = io.open("42/media/scripts/entities/entity_Drying_Beam_" .. name .. ".txt"):read("*a")
-    check(name .. " beam stays out of rooms", entity:find("OnIsValid = TraditionalPreservationFish.notInRoom", 1, true) ~= nil)
+    check(name .. " beam stays out of rooms", entity:find("OnIsValid = TraditionalPreservationFishMeat.notInRoom", 1, true) ~= nil)
 end
 check("the frame isn't", not io.open("42/media/scripts/entities/entity_Drying_Frame.txt"):read("*a"):find("OnIsValid", 1, true))
-check("sprites below the first sheet's end are on it", T.spriteName(407) == "traditionalpreservationfish_01_407")
-check("the rest are on the second", T.spriteName(408) == "traditionalpreservationfish_02_0" and T.spriteName(711) == "traditionalpreservationfish_02_303")
+check("sprites below the first sheet's end are on it", T.spriteName(407) == "traditionalpreservationfishmeat_01_407")
+check("the rest are on the second", T.spriteName(408) == "traditionalpreservationfishmeat_02_0" and T.spriteName(711) == "traditionalpreservationfishmeat_02_303")
 for _, index in ipairs({ 0, 7, 407, 408, 411, 711 }) do
     check("sprite " .. index .. " reads back", T.spriteIndex(T.spriteName(index)) == index)
 end
 check("other mods' sprites aren't ours", T.spriteIndex("carpentry_02_122") == nil and T.spriteIndex(nil) == nil)
 
 -- The game drops the whole tile file if a sheet has too many tiles, and every station with it.
-local tiles = io.open("42/media/traditionalpreservationfish.tiles", "rb"):read("*a")
+local tiles = io.open("42/media/traditionalpreservationfishmeat.tiles", "rb"):read("*a")
 local function u32(at)
     local a, b, c, d = tiles:byte(at, at + 3)
     return a + b * 256 + c * 65536 + d * 16777216
 end
 check("the tile file has both sheets", u32(9) == 2)
-local sheetCount = u32(13 + #"traditionalpreservationfish_01\ntraditionalpreservationfish_01.png\n" + 12)
+local sheetCount = u32(13 + #"traditionalpreservationfishmeat_01\ntraditionalpreservationfishmeat_01.png\n" + 12)
 check("the first sheet ends where the sprites say", sheetCount == T.FIRST_SHEET_SIZE and sheetCount <= 512)
-check("a medium beam takes 15 a stack on 4 hooks", T.frameRefusal(T.HANGERS[408], 3, 0, 15) == nil and T.frameRefusal(T.HANGERS[408], 0, 0, 15.1) == "IGUI_TraditionalPreservationFish_TooHeavy" and T.frameRefusal(T.HANGERS[408], 4, 0, 1) == "IGUI_TraditionalPreservationFish_FrameFull")
-check("a large beam takes 50 a stack on 2 hooks", T.frameRefusal(T.HANGERS[410], 1, 0, 50) == nil and T.frameRefusal(T.HANGERS[410], 2, 0, 1) == "IGUI_TraditionalPreservationFish_FrameFull")
+check("a medium beam takes 15 a stack on 4 hooks", T.frameRefusal(T.HANGERS[408], 3, 0, 15) == nil and T.frameRefusal(T.HANGERS[408], 0, 0, 15.1) == "IGUI_TraditionalPreservationFishMeat_TooHeavy" and T.frameRefusal(T.HANGERS[408], 4, 0, 1) == "IGUI_TraditionalPreservationFishMeat_FrameFull")
+check("a large beam takes 50 a stack on 2 hooks", T.frameRefusal(T.HANGERS[410], 1, 0, 50) == nil and T.frameRefusal(T.HANGERS[410], 2, 0, 1) == "IGUI_TraditionalPreservationFishMeat_FrameFull")
 
 -- Drying
 local DRY_TIME = T.DRY_HOURS * 3600
@@ -298,30 +298,30 @@ T.onDryStart(reused)
 T.onDryUpdate(reused)
 check("a reused object starts from nothing", reused.elapsed == 0 and reused.modData.sheltered == nil and reused.modData.spoiled == 0)
 
-local stacked = newRecipeData(DRY_TIME, { newFood("TraditionalPreservationFish.SaltPressedFish", {}) }, { newFood("TraditionalPreservationFish.SaltDriedFish", {}) })
+local stacked = newRecipeData(DRY_TIME, { newFood("TraditionalPreservationFishMeat.SaltPressedFish", {}) }, { newFood("TraditionalPreservationFishMeat.SaltDriedFish", {}) })
 T.onDryStart(stacked)
 T.onCreateDried(stacked)
 check("dried fish remembers its stack", stacked:getAllCreatedItems():get(0):getModData().stackId == stacked.modData.stackId)
 
 -- Sandbox options
-SandboxVars = { TraditionalPreservationFish = { DryDays = 24, MaxDryDays = 48, Spoilage = 4 } }
+SandboxVars = { TraditionalPreservationFishMeat = { DryDays = 24, MaxDryDays = 48, Spoilage = 4 } }
 T.applySandbox()
 check("salt drying days set salt drying alone", T.DRY_HOURS == 576 and T.COLD_DRY_HOURS == 768)
 check("the slowest days set the lowest rate", near(T.MIN_DRY_RATE, 0.5))
 check("harsh spoilage halves the limits", T.RAW_SPOIL_HOURS == 24 and T.SALT_SPOIL_HOURS == 240)
-SandboxVars.TraditionalPreservationFish = { ColdDryDays = 90, MatureDays = 30, PressDays = 4 }
+SandboxVars.TraditionalPreservationFishMeat = { ColdDryDays = 90, MatureDays = 30, PressDays = 4 }
 T.applySandbox()
 check("stockfish drying has its own days", T.COLD_DRY_HOURS == 2160)
 check("and maturing", T.MATURE_DAYS == 30)
 check("press days set the big fish's time, small fish half of it", T.PRESS_HOURS == 96 and T.PRESS_MIN_HOURS == 48
     and T.pressHours(5) == 96 and T.pressHours(0.5) == 48)
-SandboxVars.TraditionalPreservationFish = { DryDays = 30, MaxDryDays = 10, Spoilage = 1 }
+SandboxVars.TraditionalPreservationFishMeat = { DryDays = 30, MaxDryDays = 10, Spoilage = 1 }
 T.applySandbox()
 check("the slowest can't beat the fastest", T.MIN_DRY_RATE == 1)
 check("spoilage can be turned off", T.RAW_SPOIL_HOURS == math.huge and T.SALT_SPOIL_HOURS == math.huge and T.FREEZE_DAMAGE_HOURS == math.huge and T.WET_DAMAGE_HOURS == math.huge)
-SandboxVars.TraditionalPreservationFish = { DryDays = 30, MaxDryDays = 10, Spoilage = 9 }
+SandboxVars.TraditionalPreservationFishMeat = { DryDays = 30, MaxDryDays = 10, Spoilage = 9 }
 check("a spoilage value out of range loads as normal", pcall(T.applySandbox) and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
-SandboxVars.TraditionalPreservationFish = { DryDays = 12, MaxDryDays = 27, ColdDryDays = 32, MatureDays = 60, PressDays = 2, Spoilage = 3 }
+SandboxVars.TraditionalPreservationFishMeat = { DryDays = 12, MaxDryDays = 27, ColdDryDays = 32, MatureDays = 60, PressDays = 2, Spoilage = 3 }
 T.applySandbox()
 check("the defaults put it all back", T.DRY_HOURS == 288 and T.COLD_DRY_HOURS == 768 and T.MATURE_DAYS == 60
     and T.PRESS_HOURS == 48 and T.PRESS_MIN_HOURS == 24 and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
@@ -352,9 +352,9 @@ T.advance(heatWave, 1, { temperature = 30, humidity = 0.3, precipitation = 0 })
 check("hot sun warns for fresh salt fish in the open", T.stackStatus(false, { dried = 0 }, heatWave).scorching)
 check("not in the shade, nor once it is half dry", not T.stackStatus(false, { dried = 0, covered = true }, heatWave).scorching
     and not T.stackStatus(false, { dried = 0, sheltered = true }, heatWave).scorching and not T.stackStatus(false, { dried = T.DRY_HOURS / 2 }, heatWave).scorching)
-check("the popup says too hot only in the open", T.temperatureWord(false, 30, true) == "IGUI_TraditionalPreservationFish_TempHot" and T.temperatureWord(false, 30, false) == "IGUI_TraditionalPreservationFish_TempGoodWarm")
-check("frost words for cold fish", T.temperatureWord(true, -2) == "IGUI_TraditionalPreservationFish_TempFrost" and T.temperatureWord(true, -8) == "IGUI_TraditionalPreservationFish_TempHardFrost")
-check("the words fit the method", T.temperatureWord(true, 2) == "IGUI_TraditionalPreservationFish_TempGoodCold" and T.temperatureWord(false, 25) == "IGUI_TraditionalPreservationFish_TempGoodWarm" and T.temperatureWord(true, 25) == "IGUI_TraditionalPreservationFish_TempTooWarm")
+check("the popup says too hot only in the open", T.temperatureWord(false, 30, true) == "IGUI_TraditionalPreservationFishMeat_TempHot" and T.temperatureWord(false, 30, false) == "IGUI_TraditionalPreservationFishMeat_TempGoodWarm")
+check("frost words for cold fish", T.temperatureWord(true, -2) == "IGUI_TraditionalPreservationFishMeat_TempFrost" and T.temperatureWord(true, -8) == "IGUI_TraditionalPreservationFishMeat_TempHardFrost")
+check("the words fit the method", T.temperatureWord(true, 2) == "IGUI_TraditionalPreservationFishMeat_TempGoodCold" and T.temperatureWord(false, 25) == "IGUI_TraditionalPreservationFishMeat_TempGoodWarm" and T.temperatureWord(true, 25) == "IGUI_TraditionalPreservationFishMeat_TempTooWarm")
 
 -- Limits on how long drying takes
 local slowest = T.newLedger(0)
@@ -390,8 +390,8 @@ check("no reading leaves it alone", T.windRate(nil) == 1)
 local windy = T.newLedger(0)
 T.advance(windy, 10, { temperature = 2, humidity = 0.3, precipitation = 0, wind = 0 })
 check("wind sets the cold rate", near(windy.cold, 10 * T.CALM_RATE) and windy.wind == 0)
-check("the words for the wind", T.windWord(0.05) == "IGUI_TraditionalPreservationFish_WindCalm"
-    and T.windWord(0.2) == "IGUI_TraditionalPreservationFish_WindLight" and T.windWord(0.5) == "IGUI_TraditionalPreservationFish_WindGood")
+check("the words for the wind", T.windWord(0.05) == "IGUI_TraditionalPreservationFishMeat_WindCalm"
+    and T.windWord(0.2) == "IGUI_TraditionalPreservationFishMeat_WindLight" and T.windWord(0.5) == "IGUI_TraditionalPreservationFishMeat_WindGood")
 local frosty = T.newLedger(0)
 T.advance(frosty, 5, { temperature = -8, humidity = 0.3, precipitation = 0 })
 check("hard frost is counted", frosty.hardFrost == 5 and frosty.coldWet == 0)
@@ -519,7 +519,7 @@ ModData.tables = {}
 
 -- What the season took shows on the finished fish
 local function finished(spoiled)
-    local stack = newRecipeData(0, { newFood("TraditionalPreservationFish.SaltPressedFish", {}) }, { newFood("TraditionalPreservationFish.SaltDriedFish", {}) })
+    local stack = newRecipeData(0, { newFood("TraditionalPreservationFishMeat.SaltPressedFish", {}) }, { newFood("TraditionalPreservationFishMeat.SaltDriedFish", {}) })
     stack.modData = { spoiled = spoiled, stackId = 1 }
     T.onCreateDried(stack)
     return stack:getAllCreatedItems():get(0)
@@ -543,8 +543,8 @@ local big = newFood("Base.Walleye", { Calories = 800, Proteins = 100, Lipids = 1
 big.displayName = "Big Walleye "
 local small = newFood("Base.Bluegill", { Calories = 100, Proteins = 20, Lipids = 2, Carbohydrates = 1, BaseHunger = -0.1, HungChange = -0.1, ActualWeight = 1 })
 small.displayName = "Small Bluegill "
-local outBig = newFood("TraditionalPreservationFish.SaltDriedFish", {})
-local outSmall = newFood("TraditionalPreservationFish.SaltDriedFish", {})
+local outBig = newFood("TraditionalPreservationFishMeat.SaltDriedFish", {})
+local outSmall = newFood("TraditionalPreservationFishMeat.SaltDriedFish", {})
 T.onCreateCured(newRecipeData(0, { big, small }, { outBig, outSmall }))
 check("each fish keeps its own size", near(outBig.values.Calories, 720) and near(outSmall.values.Calories, 90))
 check("drying takes most of the weight", near(outBig.values.ActualWeight, 3.6) and outBig.customWeight)
@@ -555,7 +555,7 @@ local whole = { Calories = 800, BaseHunger = -0.6, ActualWeight = 8 }
 local item = newFood("Base.Walleye", whole)
 item.displayName = "Medium Walleye "
 for _, stage in ipairs({ "SaltPackedFish", "SaltPressedFish", "SaltDriedFish", "SoakedSaltFish" }) do
-    local nextItem = newFood("TraditionalPreservationFish." .. stage, {})
+    local nextItem = newFood("TraditionalPreservationFishMeat." .. stage, {})
     T.carry(item, nextItem)
     item = nextItem
     if stage == "SaltPressedFish" then
@@ -569,19 +569,19 @@ check("the fish's icon lasts to the end", item.modelIndex == 6)
 
 -- A part-eaten fish stays part-eaten. The engine has already scaled its calories.
 local bitten = newFood("Base.BlackCrappie", { Calories = 50, BaseHunger = -0.2, HungChange = -0.1, ActualWeight = 1 })
-local bittenPacked = newFood("TraditionalPreservationFish.SaltPackedFish", {})
+local bittenPacked = newFood("TraditionalPreservationFishMeat.SaltPackedFish", {})
 T.carry(bitten, bittenPacked)
 check("a part-eaten fish doesn't grow back", near(bittenPacked.values.HungChange, -0.1) and near(bittenPacked.values.BaseHunger, -0.2))
 check("and keeps what's left of its calories", bittenPacked.values.Calories == 50)
 
 -- Slicing
 local function through(source, stage)
-    local nextItem = newFood("TraditionalPreservationFish." .. stage, {})
+    local nextItem = newFood("TraditionalPreservationFishMeat." .. stage, {})
     T.carry(source, nextItem)
     return nextItem
 end
 local function slice(source, stage)
-    local one, two = newFood("TraditionalPreservationFish." .. stage, {}), newFood("TraditionalPreservationFish." .. stage, {})
+    local one, two = newFood("TraditionalPreservationFishMeat." .. stage, {}), newFood("TraditionalPreservationFishMeat." .. stage, {})
     T.onCreateSliced(newRecipeData(0, { source }, { one, two }))
     return one, two
 end
@@ -616,7 +616,7 @@ local stranger = newFood("OtherMod.Fish", {})
 check("a fish from another mod has no icon to keep", T.iconIndex(stranger) == -1)
 
 -- The script's icons have to line up with FISH_ICONS, or a fish shows another's icon.
-local script = io.open("42/media/scripts/TraditionalPreservationFish.txt"):read("*a")
+local script = io.open("42/media/scripts/TraditionalPreservationFishMeat.txt"):read("*a")
 local vanillaIcons = {
     ["Base.FishFillet"] = "FishFillet", ["Base.Salmon"] = "Salmon", ["Base.LargemouthBass"] = "Fish_BassLargemouth",
     ["Base.SmallmouthBass"] = "Fish_BassSmallmouth", ["Base.SpottedBass"] = "Fish_BassSpotted",
@@ -655,14 +655,14 @@ end
 check("all eight stages have the list", lists == 8)
 
 -- Each model list runs in the same order as the icons, and every model exists.
-local models = io.open("42/media/scripts/TraditionalPreservationFish_models.txt"):read("*a")
+local models = io.open("42/media/scripts/TraditionalPreservationFishMeat_models.txt"):read("*a")
 local modelLists = 0
 for list in script:gmatch("WorldStaticModelsByIndex = ([^,]+),") do
     modelLists = modelLists + 1
     local position = 0
     for model in list:gmatch("[^;]+") do
         position = position + 1
-        local name = model:gsub("^TraditionalPreservationFish%.", "")
+        local name = model:gsub("^TraditionalPreservationFishMeat%.", "")
         if (position - 1) % #T.FISH_ICONS >= 2 then
             local icon = vanillaIcons[T.FISH_ICONS[(position - 1) % #T.FISH_ICONS + 1]]
             check(name .. " is in place", name:sub(-#icon - 1) == "_" .. icon)
@@ -708,13 +708,13 @@ check("gutting takes the guts and head, a fifth of the weight", near(coldFish.va
 check("and the head's share of the food", near(coldFish.values.Calories, 752) and near(coldFish.values.BaseHunger, -0.564))
 coldFish = through(coldFish, "ColdDriedFish")
 check("cold drying leaves about a fifth of the weight", near(coldFish.values.ActualWeight, 1.76) and coldFish.name == "Gutted Medium Walleye (Cold Dried, Ripe)")
-local soakedCold = newFood("TraditionalPreservationFish.SoakedColdFish", {})
+local soakedCold = newFood("TraditionalPreservationFishMeat.SoakedColdFish", {})
 T.onCreateSoaked(newRecipeData(0, { coldFish }, { soakedCold }))
 coldFish = soakedCold
 check("soaking gives back about 60%", near(coldFish.values.ActualWeight, 5.28) and near(coldFish.values.Calories, 714.4))
 check("and the bulk drying took", near(coldFish.values.BaseHunger, -0.564))
 check("and says it was cold dried", coldFish.name == "Gutted Medium Walleye (Rehydrated, Cold Dried, Ripe)")
-local spawned = newFood("TraditionalPreservationFish.SaltDriedFish", { ActualWeight = 1 })
+local spawned = newFood("TraditionalPreservationFishMeat.SaltDriedFish", { ActualWeight = 1 })
 spawned.displayName = "Salt Dried Fish"
 spawned = through(spawned, "SoakedSaltFish")
 check("a spawned dried fish keeps the plain item name", spawned.name == nil and spawned:getModData().fishName == nil)
@@ -733,14 +733,14 @@ local gutter = { getInventory = function() return inventory end }
 function instanceItem(fullType) return newFood(fullType, {}) end
 local function gut(fish, stage)
     gutsMade = {}
-    local output = newFood("TraditionalPreservationFish." .. stage, {})
+    local output = newFood("TraditionalPreservationFishMeat." .. stage, {})
     T.onCreateGutted(newRecipeData(0, { fish }, { output }), gutter)
     return output
 end
 local walleye = newFood("Base.Walleye", { ActualWeight = 4, BaseHunger = -0.5, HungChange = -0.5, Calories = 400, Proteins = 80 })
 walleye.displayName, walleye.age = "Medium Walleye ", 1.5
 local gutted = gut(walleye, "GuttedFish")
-check("gutting gives guts, then a head", #gutsMade == 2 and gutsMade[1].fullType == "Base.FishGuts" and gutsMade[2].fullType == "TraditionalPreservationFish.FishHead")
+check("gutting gives guts, then a head", #gutsMade == 2 and gutsMade[1].fullType == "Base.FishGuts" and gutsMade[2].fullType == "TraditionalPreservationFishMeat.FishHead")
 check("the guts are a tenth of the fish, by weight and hunger", near(gutsMade[1].values.ActualWeight, 0.4) and near(gutsMade[1].weight, 0.4) and near(gutsMade[1].values.HungChange, -0.05))
 check("and keep their own nutrition", gutsMade[1].values.Calories == nil and gutsMade[1].values.Proteins == nil)
 local head = gutsMade[2]
@@ -765,24 +765,24 @@ local gutPacked = gut(gutted, "SaltPackedFish")
 check("a gutted fish can't give guts or a head twice", #gutsMade == 0 and near(gutPacked.values.ActualWeight, 3.2))
 
 -- Fish Head Stock
-local stockHead = newFood("TraditionalPreservationFish.FishHead", { Calories = 24, Proteins = 4.8, BaseHunger = -0.03, HungChange = -0.03 })
-local stock = newFood("TraditionalPreservationFish.PotOfFishHeadStock", { Calories = 60, BaseHunger = -0.05, HungChange = -0.05 })
+local stockHead = newFood("TraditionalPreservationFishMeat.FishHead", { Calories = 24, Proteins = 4.8, BaseHunger = -0.03, HungChange = -0.03 })
+local stock = newFood("TraditionalPreservationFishMeat.PotOfFishHeadStock", { Calories = 60, BaseHunger = -0.05, HungChange = -0.05 })
 function stock:addExtraItem(fullType) self.extras = self.extras or {}; table.insert(self.extras, fullType) end
 local pot = newFood("Base.Pot", {})
 T.onCreateHeadStock(newRecipeData(0, { pot, stockHead }, { stock }))
 check("the stock carries the head's food", near(stock.values.Calories, 24) and near(stock.values.Proteins, 4.8))
 check("on top of the broth's hunger", near(stock.values.BaseHunger, -0.08) and near(stock.values.HungChange, -0.08))
-check("and lists the head as an ingredient", stock.extras and #stock.extras == 1 and stock.extras[1] == "TraditionalPreservationFish.FishHead")
+check("and lists the head as an ingredient", stock.extras and #stock.extras == 1 and stock.extras[1] == "TraditionalPreservationFishMeat.FishHead")
 
 -- Ingredient stand-ins
 ISAddItemInRecipe = { complete = function() return true end }
 function require() end
-dofile("42/media/lua/shared/TraditionalPreservationFishEvolved.lua")
-local listed = { "TraditionalPreservationFish.FishHead", "Base.Carrots", "TraditionalPreservationFish.GuttedFish", "TraditionalPreservationFish.SoakedColdFish" }
+dofile("42/media/lua/shared/TraditionalPreservationFishMeatEvolved.lua")
+local listed = { "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "TraditionalPreservationFishMeat.GuttedFish", "TraditionalPreservationFishMeat.SoakedColdFish" }
 local extras = { size = function() return #listed end, get = function(_, i) return listed[i + 1] end, set = function(_, i, v) listed[i + 1] = v end }
 T.useStandins({ getExtraItems = function() return extras end })
-check("fish stages in a dish become stand-ins", listed[3] == "TraditionalPreservationFish.GuttedFishIngredient" and listed[4] == "TraditionalPreservationFish.SoakedColdFishIngredient")
-check("everything else stays", listed[1] == "TraditionalPreservationFish.FishHead" and listed[2] == "Base.Carrots")
+check("fish stages in a dish become stand-ins", listed[3] == "TraditionalPreservationFishMeat.GuttedFishIngredient" and listed[4] == "TraditionalPreservationFishMeat.SoakedColdFishIngredient")
+check("everything else stays", listed[1] == "TraditionalPreservationFishMeat.FishHead" and listed[2] == "Base.Carrots")
 -- In a fixed order, so the output is the same on every run.
 local standinTypes = {}
 for fullType in pairs(T.INGREDIENT_STANDINS) do table.insert(standinTypes, fullType) end
@@ -801,10 +801,10 @@ end
 NAMES.ContextMenu_EvolvedRecipe_FishHeadStock = "Fish Head Stock"
 NAMES.ContextMenu_EvolvedRecipe_and = "and"
 NAMES.ContextMenu_EvolvedRecipe_comma = ","
-NAMES.IGUI_TraditionalPreservationFish_StockWith = "%1 with %2"
+NAMES.IGUI_TraditionalPreservationFishMeat_StockWith = "%1 with %2"
 local FOODS = {
-    ["TraditionalPreservationFish.FishHead"] = { "Fish", "Fish Head", "Fish" },
-    ["TraditionalPreservationFish.GuttedFishIngredient"] = { "Fish", "Gutted Fish", "Fish" },
+    ["TraditionalPreservationFishMeat.FishHead"] = { "Fish", "Fish Head", "Fish" },
+    ["TraditionalPreservationFishMeat.GuttedFishIngredient"] = { "Fish", "Gutted Fish", "Fish" },
     ["Base.Carrots"] = { "Vegetables", "Carrots" }, ["Base.Potato"] = { "Vegetables", "Potato" },
     ["Base.Rabbitmeat"] = { "Game", "Rabbit Meat" }, ["Base.Rice"] = { "Rice", "Rice" }, ["Base.Mushroom"] = { "Mushroom", "Mushroom" },
     ["Base.Pepper"] = { "NoExplicit", "Pepper" }, ["Base.Salt"] = { "NoExplicit", "Salt" },
@@ -821,16 +821,16 @@ local recipe = { getUntranslatedName = function() return "FishHeadStock" end }
 local function stockNamed(extras, spices)
     return T.stockName({ getExtraItems = function() return javaList(extras) end, getSpices = function() return spices and javaList(spices) end }, recipe)
 end
-check("the head alone leaves the name be", stockNamed({ "TraditionalPreservationFish.FishHead" }) == nil)
-check("a fish is named after the stock", stockNamed({ "TraditionalPreservationFish.FishHead", "TraditionalPreservationFish.GuttedFishIngredient" }) == "Fish Head Stock with Fish")
-check("two kinds join with and", stockNamed({ "TraditionalPreservationFish.FishHead", "TraditionalPreservationFish.GuttedFishIngredient", "Base.Carrots" }) == "Fish Head Stock with Fish and Carrots")
-check("two vegetables become Vegetables", stockNamed({ "TraditionalPreservationFish.FishHead", "Base.Carrots", "Base.Potato" }) == "Fish Head Stock with Vegetables")
-check("three kinds use a comma", stockNamed({ "TraditionalPreservationFish.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice" }) == "Fish Head Stock with Carrots, Rabbit Meat and Rice")
-check("more than three is just the stock", stockNamed({ "TraditionalPreservationFish.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice", "Base.Mushroom" }) == "Fish Head Stock")
-check("a seasoning is named while there's room", stockNamed({ "TraditionalPreservationFish.FishHead", "Base.Carrots" }, { "Base.Pepper" }) == "Fish Head Stock with Carrots and Pepper")
-check("minor seasonings such as salt aren't", stockNamed({ "TraditionalPreservationFish.FishHead", "Base.Carrots" }, { "Base.Salt" }) == "Fish Head Stock with Carrots")
-check("seasonings drop out past three", stockNamed({ "TraditionalPreservationFish.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice" }, { "Base.Pepper" }) == "Fish Head Stock with Carrots, Rabbit Meat and Rice")
-check("a second head added as an ingredient is named", stockNamed({ "TraditionalPreservationFish.FishHead", "TraditionalPreservationFish.FishHead" }) == "Fish Head Stock with Fish")
+check("the head alone leaves the name be", stockNamed({ "TraditionalPreservationFishMeat.FishHead" }) == nil)
+check("a fish is named after the stock", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "TraditionalPreservationFishMeat.GuttedFishIngredient" }) == "Fish Head Stock with Fish")
+check("two kinds join with and", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "TraditionalPreservationFishMeat.GuttedFishIngredient", "Base.Carrots" }) == "Fish Head Stock with Fish and Carrots")
+check("two vegetables become Vegetables", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Potato" }) == "Fish Head Stock with Vegetables")
+check("three kinds use a comma", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice" }) == "Fish Head Stock with Carrots, Rabbit Meat and Rice")
+check("more than three is just the stock", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice", "Base.Mushroom" }) == "Fish Head Stock")
+check("a seasoning is named while there's room", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots" }, { "Base.Pepper" }) == "Fish Head Stock with Carrots and Pepper")
+check("minor seasonings such as salt aren't", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots" }, { "Base.Salt" }) == "Fish Head Stock with Carrots")
+check("seasonings drop out past three", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice" }, { "Base.Pepper" }) == "Fish Head Stock with Carrots, Rabbit Meat and Rice")
+check("a second head added as an ingredient is named", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "TraditionalPreservationFishMeat.FishHead" }) == "Fish Head Stock with Fish")
 
 -- Butchering XP for packing
 Perks = { Butchering = "Butchering" }
@@ -838,7 +838,7 @@ local xpGiven = {}
 function addXp(character, perk, amount) table.insert(xpGiven, { character = character, perk = perk, amount = amount }) end
 local function pack(fish)
     xpGiven, gutsMade = {}, {}
-    T.onCreatePacked(newRecipeData(0, { fish }, { newFood("TraditionalPreservationFish.SaltPackedFish", {}) }), gutter)
+    T.onCreatePacked(newRecipeData(0, { fish }, { newFood("TraditionalPreservationFishMeat.SaltPackedFish", {}) }), gutter)
 end
 pack(newFood("Base.Walleye", { ActualWeight = 4 }))
 check("packing a whole fish guts it, for Butchering XP", #gutsMade == 1 and #xpGiven == 1 and xpGiven[1].perk == "Butchering" and xpGiven[1].amount == T.PACK_GUTTING_XP and xpGiven[1].character == gutter)
@@ -852,7 +852,7 @@ local cutFillet = newFood("Base.FishFillet", { ActualWeight = 0.5 })
 cutFillet.customWeight = true
 check("a fish too small to gut takes one step, 4", T.saltFor(newFood("Base.Bluegill", { ActualWeight = 0.5 })) == 4)
 check("a whole fish pays for what is left once gutted", T.saltFor(newFood("Base.Walleye", { ActualWeight = 4 })) == 32)
-check("a whole half weight pays no extra step", T.saltFor(newFood("TraditionalPreservationFish.GuttedFish", { ActualWeight = 1 })) == 8)
+check("a whole half weight pays no extra step", T.saltFor(newFood("TraditionalPreservationFishMeat.GuttedFish", { ActualWeight = 1 })) == 8)
 check("a gutted fish or a half by its weight", T.saltFor(gutted) == 28)
 check("a fillet vanilla cut pays for its food, half the gutted fish", T.saltFor(cutFillet) == 36)
 check("a loot fillet, by its own weight", T.saltFor(newFood("Base.FishFillet", { ActualWeight = 0.2 })) == 4)
@@ -894,8 +894,8 @@ check("a whole fish over 4.5 weight is too thick to salt whole",
     and not T.canPack(newFood("Base.Walleye", { ActualWeight = 4.6 }), nil)
     and T.canPack(newFood("Base.Walleye", { ActualWeight = 4.5 }), nil))
 check("so is a gutted one; a half of any size packs",
-    not T.canPack(newFood("TraditionalPreservationFish.GuttedFish", { ActualWeight = 9 }), nil)
-    and T.canPack(newFood("TraditionalPreservationFish.FishHalf", { ActualWeight = 9 }), nil))
+    not T.canPack(newFood("TraditionalPreservationFishMeat.GuttedFish", { ActualWeight = 9 }), nil)
+    and T.canPack(newFood("TraditionalPreservationFishMeat.FishHalf", { ActualWeight = 9 }), nil))
 local returned
 TraditionalPreservationSalt = { returnEmpties = function(character, emptied) returned = { character = character, emptied = emptied } end }
 T.chargeSalt(walleye4, salter)
@@ -910,17 +910,17 @@ T.chargeSalt(walleye4, salter)
 check("without the Salt mod, an emptied shaker just goes", carried[1].uses == 0 and #removed == 1 and returned == nil)
 local packer = { getInventory = salter.getInventory }
 carry(saltItem("Base.Salt", 20))
-local packData = newRecipeData(0, { newFood("Base.Walleye", { ActualWeight = 2 }) }, { newFood("TraditionalPreservationFish.SaltPackedFish", {}) })
+local packData = newRecipeData(0, { newFood("Base.Walleye", { ActualWeight = 2 }) }, { newFood("TraditionalPreservationFishMeat.SaltPackedFish", {}) })
 function packData:getCharacter() return packer end
 T.onCreatePacked(packData)
 check("both pack recipes charge in onCreatePacked, finding the packer", carried[1].uses == 6)
 instanceof = nil
 
 -- How a stack looks on the frame
-check("salted fish hangs as salted", T.fishStyle(newFood("TraditionalPreservationFish.SaltPressedFish", {})) == T.STYLE_SALT)
-check("gutted fish as gutted", T.fishStyle(newFood("TraditionalPreservationFish.GuttedFish", {})) == T.STYLE_GUTTED)
-check("halves as halves", T.fishStyle(newFood("TraditionalPreservationFish.FishHalf", {})) == T.STYLE_HALF)
-check("finished salt fish from before styles stays salted", T.fishStyle(newFood("TraditionalPreservationFish.SaltDriedFish", {})) == T.STYLE_SALT)
+check("salted fish hangs as salted", T.fishStyle(newFood("TraditionalPreservationFishMeat.SaltPressedFish", {})) == T.STYLE_SALT)
+check("gutted fish as gutted", T.fishStyle(newFood("TraditionalPreservationFishMeat.GuttedFish", {})) == T.STYLE_GUTTED)
+check("halves as halves", T.fishStyle(newFood("TraditionalPreservationFishMeat.FishHalf", {})) == T.STYLE_HALF)
+check("finished salt fish from before styles stays salted", T.fishStyle(newFood("TraditionalPreservationFishMeat.SaltDriedFish", {})) == T.STYLE_SALT)
 
 local function rolled(start, data)
     local seen = {}
@@ -937,7 +937,7 @@ check("salt stacks can be whole, gutted or half", saltLooks[T.STYLE_SALT] and sa
 check("in salt colours only", not saltLooks[T.STYLE_GUTTED] and not saltLooks[T.STYLE_HALF])
 local coldLooks = rolled(T.onColdDryStart)
 check("cold stacks are gutted or half, never whole", coldLooks[T.STYLE_GUTTED] and coldLooks[T.STYLE_HALF] and not coldLooks[T.STYLE_SALT])
-local styled = newRecipeData(0, { newFood("TraditionalPreservationFish.GuttedFish", {}) }, { newFood("TraditionalPreservationFish.ColdDriedFish", {}) })
+local styled = newRecipeData(0, { newFood("TraditionalPreservationFishMeat.GuttedFish", {}) }, { newFood("TraditionalPreservationFishMeat.ColdDriedFish", {}) })
 nextRoll = 2
 T.onColdDryStart(styled)
 T.onCreateDried(styled)
@@ -948,7 +948,7 @@ local heavy = through(newFood("Base.Walleye", { Calories = 800, BaseHunger = -0.
 heavy.displayName = nil
 check("a fish that fits a stack can't be split", not T.canSplit(through(newFood("Base.Walleye", { ActualWeight = 2 }), "GuttedFish")))
 check("a heavier one can", T.canSplit(heavy) and T.canSplit(newFood("Base.KitchenKnife", {})))
-local halfOne, halfTwo = newFood("TraditionalPreservationFish.FishHalf", {}), newFood("TraditionalPreservationFish.FishHalf", {})
+local halfOne, halfTwo = newFood("TraditionalPreservationFishMeat.FishHalf", {}), newFood("TraditionalPreservationFishMeat.FishHalf", {})
 T.onCreateSplit(newRecipeData(0, { heavy }, { halfOne, halfTwo }))
 check("each half keeps half of everything", near(halfOne.values.ActualWeight, 1.6) and near(halfTwo.values.Calories, 376) and near(halfOne.values.HungChange, -0.282))
 check("a half is named for its fish, without Gutted", halfOne.name == "Fish Half")
@@ -968,7 +968,7 @@ check("and keeps Gutted in its name", through(heavy, "SaltPackedFish").name == "
 -- Maturing
 local function coldDried(age)
     local gutted = through(newFood("Base.Walleye", { ActualWeight = 3 }), "GuttedFish")
-    local dried = newFood("TraditionalPreservationFish.ColdDriedFish", {})
+    local dried = newFood("TraditionalPreservationFishMeat.ColdDriedFish", {})
     T.onCreateDried(newRecipeData(0, { gutted }, { dried }))
     dried.age = age
     T.rename(dried)
@@ -976,20 +976,20 @@ local function coldDried(age)
 end
 local fresh = coldDried(0)
 check("stockfish comes off the frame unripe", T.ripeness(fresh) == 0 and fresh.name == "Gutted Fish (Cold Dried, Unripe)")
-check("its tooltip says how far along it is", fresh.tooltip == "Tooltip_TraditionalPreservationFish_ColdDried_0")
+check("its tooltip says how far along it is", fresh.tooltip == "Tooltip_TraditionalPreservationFishMeat_ColdDried_0")
 local halfway = coldDried(T.MATURE_DAYS / 2 + 1)
-check("it ripens on its food clock", near(T.ripeness(halfway), 0.5 + 1 / T.MATURE_DAYS) and halfway.tooltip == "Tooltip_TraditionalPreservationFish_ColdDried_50")
+check("it ripens on its food clock", near(T.ripeness(halfway), 0.5 + 1 / T.MATURE_DAYS) and halfway.tooltip == "Tooltip_TraditionalPreservationFishMeat_ColdDried_50")
 local ripe = coldDried(T.MATURE_DAYS + 30)
 check("after MATURE_DAYS it is ripe", T.ripeness(ripe) == 1 and ripe.name == "Gutted Fish (Cold Dried, Ripe)")
-check("and the tooltip goes back to the plain one", ripe.tooltip == "Tooltip_TraditionalPreservationFish_ColdDried")
-local stale = newFood("TraditionalPreservationFish.ColdDriedFish", {})
+check("and the tooltip goes back to the plain one", ripe.tooltip == "Tooltip_TraditionalPreservationFishMeat_ColdDried")
+local stale = newFood("TraditionalPreservationFishMeat.ColdDriedFish", {})
 stale.age = 3
 stale:getModData().fishName = "Small Bass"
 stale.name = "Cold Dried Small Bass"
 T.rename(stale)
 check("stockfish from before maturing counts as ripe, under the new name", T.ripeness(stale) == 1 and stale.name == "Small Bass (Cold Dried, Ripe)")
 local function soak(dried)
-    local soaked = newFood("TraditionalPreservationFish.SoakedColdFish", {})
+    local soaked = newFood("TraditionalPreservationFishMeat.SoakedColdFish", {})
     T.onCreateSoaked(newRecipeData(0, { dried }, { soaked }))
     return soaked
 end
@@ -1001,16 +1001,16 @@ check("the soaked fish keeps how ripe it was", T.ripeness(soakedHalf) == 0.5)
 local ripeFillet = slice(ripe, "ColdDriedFish")
 ripeFillet.age = ripe.age
 check("a slice of stockfish keeps its ripeness", T.ripeness(ripeFillet) == 1)
-local oldSoaked = newFood("TraditionalPreservationFish.SoakedColdFish", {})
+local oldSoaked = newFood("TraditionalPreservationFishMeat.SoakedColdFish", {})
 oldSoaked:getModData().fishName = "Small Bass"
 T.rename(oldSoaked)
 check("a fish soaked before maturing says nothing about ripeness", oldSoaked.name == "Small Bass (Rehydrated, Cold Dried)")
 local tooltips = io.open("42/media/lua/shared/Translate/EN/Tooltip.json"):read("*a")
 for tenth = 0, 90, 10 do
-    check("the tooltip has a text for " .. tenth .. "%", tooltips:find('"Tooltip_TraditionalPreservationFish_ColdDried_' .. tenth .. '"', 1, true) ~= nil)
+    check("the tooltip has a text for " .. tenth .. "%", tooltips:find('"Tooltip_TraditionalPreservationFishMeat_ColdDried_' .. tenth .. '"', 1, true) ~= nil)
 end
-local script = io.open("42/media/scripts/TraditionalPreservationFish.txt"):read("*a")
-check("soaking stockfish goes through onCreateSoaked", script:match("craftRecipe SoakColdFish.-OnCreate = ([%w%.]+)") == "TraditionalPreservationFish.onCreateSoaked")
+local script = io.open("42/media/scripts/TraditionalPreservationFishMeat.txt"):read("*a")
+check("soaking stockfish goes through onCreateSoaked", script:match("craftRecipe SoakColdFish.-OnCreate = ([%w%.]+)") == "TraditionalPreservationFishMeat.onCreateSoaked")
 
 -- Rinsing
 local unrinsed = through(through(packedBass, "SaltPressedFish"), "SaltDriedFish")
@@ -1022,7 +1022,7 @@ check("other stages can't", not T.canRinse(packedBass) and not T.canRinse(unrins
 check("rinsing works once", T.rinse(toRinse) and not T.canRinse(toRinse) and not T.rinse(toRinse))
 check("a rinsed pressed fish is less salty and keeps a tenth less", near(toRinse.thirst, 0.2 * T.RINSED_THIRST) and toRinse.offAge == 108 and toRinse.offAgeMax == 162)
 check("and says so", toRinse.name == "Medium Walleye (Salt Pressed, Rinsed)")
-local rinsedDried = newFood("TraditionalPreservationFish.SaltDriedFish", {})
+local rinsedDried = newFood("TraditionalPreservationFishMeat.SaltDriedFish", {})
 rinsedDried.thirst = 0.3
 rinsedDried.unhappy = 3
 T.onCreateDried(newRecipeData(0, { toRinse }, { rinsedDried }))
@@ -1041,7 +1041,7 @@ beforeRecipe.thirst, beforeRecipe.age = 0.2, 4
 beforeRecipe:getModData().stackId = 7
 check("the recipe's test lets the water container through", T.canRinseInput(newFood("Base.WaterBottle", {})))
 check("and a fish not rinsed yet", T.canRinseInput(beforeRecipe))
-local fromRecipe = newFood("TraditionalPreservationFish.SaltPressedFish", {})
+local fromRecipe = newFood("TraditionalPreservationFishMeat.SaltPressedFish", {})
 fromRecipe.thirst = 0.2
 T.onCreateRinsed(newRecipeData(0, { beforeRecipe }, { fromRecipe }))
 check("the rinsed fish is the same fish: food, weight, age, data", fromRecipe.values.Calories == beforeRecipe.values.Calories
@@ -1052,7 +1052,7 @@ check("named so", fromRecipe.name == "Medium Walleye (Salt Pressed, Rinsed)")
 check("and the test turns it down a second time", not T.canRinseInput(fromRecipe))
 local rinseRecipe = script:match("craftRecipe RinseSaltedFish(.-)\n    }\n")
 check("the recipe takes 0.15 L of clean water", rinseRecipe:find("-fluid " .. T.RINSE_LITRES .. " [Water]", 1, true) ~= nil)
-check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnTest = TraditionalPreservationFish.canRinseInput", 1, true)
-    and rinseRecipe:find("OnCreate = TraditionalPreservationFish.onCreateRinsed", 1, true))
+check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnTest = TraditionalPreservationFishMeat.canRinseInput", 1, true)
+    and rinseRecipe:find("OnCreate = TraditionalPreservationFishMeat.onCreateRinsed", 1, true))
 
 H.done()

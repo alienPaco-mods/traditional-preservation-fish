@@ -1,12 +1,12 @@
--- Traditional Preservation (Fish): the curing rules shared by the recipes and the world.
+-- Traditional Preservation (Fish & Meat): the curing rules shared by the recipes and the world.
 -- Weather is the same everywhere, so one running total in global ModData tells every frame
 -- how much drying it has had, including while its chunk was unloaded.
-TraditionalPreservationFish = TraditionalPreservationFish or {}
-local F = TraditionalPreservationFish
+TraditionalPreservationFishMeat = TraditionalPreservationFishMeat or {}
+local F = TraditionalPreservationFishMeat
 local Weather = require "TraditionalPreservationCore/Weather"
-local Tiles = require "TraditionalPreservationFish/Tiles"
+local Tiles = require "TraditionalPreservationFishMeat/Tiles"
 
-F.MOD_DATA_KEY = "TraditionalPreservationFish"
+F.MOD_DATA_KEY = "TraditionalPreservationFishMeat"
 
 -- Hours in the tub at most, and hours on the frame at a drying rate of 1. These set the recipes' times.
 F.PRESS_HOURS = 48
@@ -66,7 +66,7 @@ F.HEAD_FOOD = 0.06
 -- Butchering XP for gutting a whole fish while packing it.
 F.PACK_GUTTING_XP = 5
 -- What a frame cold dries.
-F.COLD_FISH = { ["TraditionalPreservationFish.GuttedFish"] = true, ["TraditionalPreservationFish.FishHalf"] = true }
+F.COLD_FISH = { ["TraditionalPreservationFishMeat.GuttedFish"] = true, ["TraditionalPreservationFishMeat.FishHalf"] = true }
 
 -- How many looks a hanging fish has, from fresh to done, and its styles. A stack picks a style at
 -- random when it starts, whatever is in it, so a frame doesn't look all alike. Both come from Tiles.lua.
@@ -165,7 +165,7 @@ F.PALLET_LEVELS = 3
 -- A Stockfish Bale: stockfish tied up for carrying and storing, as it was shipped from the Lofoten. It holds
 -- BALE_CAPACITY weight of stockfish (the script's Capacity) and nothing else; the fish keep their own clocks.
 -- It is tied with one use of Twine or a Rope, and untying gives the cord back; the bale weighs what tied it.
-F.BALE_TYPE = "TraditionalPreservationFish.StockfishBale"
+F.BALE_TYPE = "TraditionalPreservationFishMeat.StockfishBale"
 F.BALE_CAPACITY = 10
 F.BALE_CORDS = {
     { type = "Base.Twine", key = "twine", uses = 1, weight = 0.1 },
@@ -193,14 +193,14 @@ F.FISH_ICONS = {
 -- random share between weight and maxWeight. Soaking gives back the bulk drying took (hunger 0.7).
 -- A prep stage names the fish itself (Gutted Walleye, Walleye Half); the others go in brackets after it.
 F.STAGES = {
-    ["TraditionalPreservationFish.SaltPackedFish"] = { name = "IGUI_TraditionalPreservationFish_Packed", weight = 1, nutrition = 1, hunger = 1, gutted = true },
-    ["TraditionalPreservationFish.SaltPressedFish"] = { name = "IGUI_TraditionalPreservationFish_Pressed", weight = 0.88, maxWeight = 0.93, nutrition = 1, hunger = 1, salty = true },
-    ["TraditionalPreservationFish.SaltDriedFish"] = { name = "IGUI_TraditionalPreservationFish_Dried", weight = 0.45, nutrition = 0.9, hunger = 0.7, salty = true, rinsedUnhappy = 0 },
-    ["TraditionalPreservationFish.SoakedSaltFish"] = { name = "IGUI_TraditionalPreservationFish_SoakedSalt", weight = 1.8, nutrition = 1, hunger = 1 / 0.7 },
-    ["TraditionalPreservationFish.GuttedFish"] = { name = "IGUI_TraditionalPreservationFish_Gutted", weight = 1, nutrition = 1, hunger = 1, gutted = true, headless = true, prep = true },
-    ["TraditionalPreservationFish.FishHalf"] = { weight = 1, nutrition = 1, hunger = 1, prep = true },
-    ["TraditionalPreservationFish.ColdDriedFish"] = { name = "IGUI_TraditionalPreservationFish_ColdDried", weight = 0.22, nutrition = 0.95, hunger = 0.7, matures = true },
-    ["TraditionalPreservationFish.SoakedColdFish"] = { name = "IGUI_TraditionalPreservationFish_SoakedCold", weight = 3, nutrition = 1, hunger = 1 / 0.7, ripened = true },
+    ["TraditionalPreservationFishMeat.SaltPackedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_Packed", weight = 1, nutrition = 1, hunger = 1, gutted = true },
+    ["TraditionalPreservationFishMeat.SaltPressedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_Pressed", weight = 0.88, maxWeight = 0.93, nutrition = 1, hunger = 1, salty = true },
+    ["TraditionalPreservationFishMeat.SaltDriedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_Dried", weight = 0.45, nutrition = 0.9, hunger = 0.7, salty = true, rinsedUnhappy = 0 },
+    ["TraditionalPreservationFishMeat.SoakedSaltFish"] = { name = "IGUI_TraditionalPreservationFishMeat_SoakedSalt", weight = 1.8, nutrition = 1, hunger = 1 / 0.7 },
+    ["TraditionalPreservationFishMeat.GuttedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_Gutted", weight = 1, nutrition = 1, hunger = 1, gutted = true, headless = true, prep = true },
+    ["TraditionalPreservationFishMeat.FishHalf"] = { weight = 1, nutrition = 1, hunger = 1, prep = true },
+    ["TraditionalPreservationFishMeat.ColdDriedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdDried", weight = 0.22, nutrition = 0.95, hunger = 0.7, matures = true },
+    ["TraditionalPreservationFishMeat.SoakedColdFish"] = { name = "IGUI_TraditionalPreservationFishMeat_SoakedCold", weight = 3, nutrition = 1, hunger = 1 / 0.7, ripened = true },
 }
 
 -- The low end of DryingCraftLogic's curve: nothing at freezing, 1 at 20 C. It stops there, so
@@ -352,24 +352,24 @@ end
 -- or for salt fish in the sun, too hot (exposed: no roof over it).
 function F.temperatureWord(isCold, celsius, exposed)
     if isCold then
-        if celsius > F.COLD_LIMIT then return "IGUI_TraditionalPreservationFish_TempTooWarm" end
-        if celsius > F.COLD_BEST then return "IGUI_TraditionalPreservationFish_TempMild" end
-        if celsius >= 0 then return "IGUI_TraditionalPreservationFish_TempGoodCold" end
-        if celsius >= F.HARD_FROST then return "IGUI_TraditionalPreservationFish_TempFrost" end
-        return "IGUI_TraditionalPreservationFish_TempHardFrost"
+        if celsius > F.COLD_LIMIT then return "IGUI_TraditionalPreservationFishMeat_TempTooWarm" end
+        if celsius > F.COLD_BEST then return "IGUI_TraditionalPreservationFishMeat_TempMild" end
+        if celsius >= 0 then return "IGUI_TraditionalPreservationFishMeat_TempGoodCold" end
+        if celsius >= F.HARD_FROST then return "IGUI_TraditionalPreservationFishMeat_TempFrost" end
+        return "IGUI_TraditionalPreservationFishMeat_TempHardFrost"
     end
-    if exposed and celsius > F.HEAT_ABOVE then return "IGUI_TraditionalPreservationFish_TempHot" end
-    if celsius >= 20 then return "IGUI_TraditionalPreservationFish_TempGoodWarm" end
-    if celsius > 0 then return "IGUI_TraditionalPreservationFish_TempCool" end
-    return "IGUI_TraditionalPreservationFish_TempFrost"
+    if exposed and celsius > F.HEAT_ABOVE then return "IGUI_TraditionalPreservationFishMeat_TempHot" end
+    if celsius >= 20 then return "IGUI_TraditionalPreservationFishMeat_TempGoodWarm" end
+    if celsius > 0 then return "IGUI_TraditionalPreservationFishMeat_TempCool" end
+    return "IGUI_TraditionalPreservationFishMeat_TempFrost"
 end
 
 -- The popup's word for the wind on a cold frame: calm, a light breeze or a good drying wind.
 function F.windWord(wind)
     wind = wind or 0
-    if wind >= F.WIND_GOOD then return "IGUI_TraditionalPreservationFish_WindGood" end
-    if wind >= F.WIND_GOOD / 3 then return "IGUI_TraditionalPreservationFish_WindLight" end
-    return "IGUI_TraditionalPreservationFish_WindCalm"
+    if wind >= F.WIND_GOOD then return "IGUI_TraditionalPreservationFishMeat_WindGood" end
+    if wind >= F.WIND_GOOD / 3 then return "IGUI_TraditionalPreservationFishMeat_WindLight" end
+    return "IGUI_TraditionalPreservationFishMeat_WindCalm"
 end
 
 -- The ledger is the mod's global ModData table itself, so its keys are the ones in every save.
@@ -433,9 +433,9 @@ end
 
 -- Vanilla slots take any item and leave Craft greyed out, so each station names its fish.
 function F.fishRefusal(isTub, fullType)
-    if isTub and fullType ~= "TraditionalPreservationFish.SaltPackedFish" then return "IGUI_TraditionalPreservationFish_NeedsPacked" end
-    if not isTub and fullType ~= "TraditionalPreservationFish.SaltPressedFish" and not F.COLD_FISH[fullType] then
-        return "IGUI_TraditionalPreservationFish_NeedsPressed"
+    if isTub and fullType ~= "TraditionalPreservationFishMeat.SaltPackedFish" then return "IGUI_TraditionalPreservationFishMeat_NeedsPacked" end
+    if not isTub and fullType ~= "TraditionalPreservationFishMeat.SaltPressedFish" and not F.COLD_FISH[fullType] then
+        return "IGUI_TraditionalPreservationFishMeat_NeedsPressed"
     end
     return nil
 end
@@ -451,7 +451,7 @@ end
 
 -- The number of one of this mod's sprites, or nil for any other.
 function F.spriteIndex(name)
-    local sheet, index = string.match(name or "", "^traditionalpreservationfish_0([12])_(%d+)$")
+    local sheet, index = string.match(name or "", "^traditionalpreservationfishmeat_0([12])_(%d+)$")
     if not sheet then return nil end
     return tonumber(index) + (sheet == "2" and F.FIRST_SHEET_SIZE or 0)
 end
@@ -480,10 +480,10 @@ end
 -- Why a fish can't join the stack waiting on a frame, as a translation key, or nil if it can.
 -- busyStacks is what is already hanging: running stacks and finished ones not yet taken.
 function F.frameRefusal(hanger, busyStacks, waitingWeight, weight)
-    if busyStacks >= hanger.stacks then return "IGUI_TraditionalPreservationFish_FrameFull" end
-    if weight > hanger.stackWeight then return "IGUI_TraditionalPreservationFish_TooHeavy" end
+    if busyStacks >= hanger.stacks then return "IGUI_TraditionalPreservationFishMeat_FrameFull" end
+    if weight > hanger.stackWeight then return "IGUI_TraditionalPreservationFishMeat_TooHeavy" end
     if not F.hasRoom(hanger.stackWeight, waitingWeight, weight) then
-        return "IGUI_TraditionalPreservationFish_StackFull"
+        return "IGUI_TraditionalPreservationFishMeat_StackFull"
     end
     return nil
 end
@@ -498,8 +498,8 @@ function F.fishStyle(item)
     local style = item:getModData().style
     if style then return style end
     local fullType = item:getFullType()
-    if fullType == "TraditionalPreservationFish.FishHalf" then return F.STYLE_HALF end
-    if fullType == "TraditionalPreservationFish.GuttedFish" or fullType == "TraditionalPreservationFish.ColdDriedFish" then return F.STYLE_GUTTED end
+    if fullType == "TraditionalPreservationFishMeat.FishHalf" then return F.STYLE_HALF end
+    if fullType == "TraditionalPreservationFishMeat.GuttedFish" or fullType == "TraditionalPreservationFishMeat.ColdDriedFish" then return F.STYLE_GUTTED end
     return F.STYLE_SALT
 end
 
@@ -636,8 +636,8 @@ end
 function F.iconIndex(source)
     local fullType = source:getFullType()
     -- Stages after these list their icons three times over: whole, gutted, then half.
-    if fullType == "TraditionalPreservationFish.GuttedFish" then return source:getModelIndex() + #F.FISH_ICONS end
-    if fullType == "TraditionalPreservationFish.FishHalf" then return source:getModelIndex() + #F.FISH_ICONS * 2 end
+    if fullType == "TraditionalPreservationFishMeat.GuttedFish" then return source:getModelIndex() + #F.FISH_ICONS end
+    if fullType == "TraditionalPreservationFishMeat.FishHalf" then return source:getModelIndex() + #F.FISH_ICONS * 2 end
     if source:getModelIndex() >= 0 then return source:getModelIndex() end
     for index, fishType in ipairs(F.FISH_ICONS) do
         if fishType == fullType then return index - 1 end
@@ -679,7 +679,7 @@ end
 -- A whole or gutted fish over SALT_WHOLE_MAX, which has to be split before it goes in the salt.
 function F.tooBigToSaltWhole(fish)
     local whole = fish:hasTag(ItemTag.UNCUT_FISH) and not F.UNSLICEABLE[fish:getFullType()]
-    local gutted = fish:getFullType() == "TraditionalPreservationFish.GuttedFish"
+    local gutted = fish:getFullType() == "TraditionalPreservationFishMeat.GuttedFish"
     return (whole or gutted) and fish:getActualWeight() > F.SALT_WHOLE_MAX
 end
 
@@ -785,7 +785,7 @@ function F.carry(source, target)
     F.rename(target)
 end
 
-F.RINSE_TYPE = "TraditionalPreservationFish.SaltPressedFish"
+F.RINSE_TYPE = "TraditionalPreservationFishMeat.SaltPressedFish"
 
 -- Only a Salt Pressed fish not rinsed yet: a dried one has lost the water that lets the salt out.
 function F.canRinse(item)
@@ -1005,17 +1005,17 @@ function F.stageName(item)
     local fishName = modData.fishName
     if not stage or not fishName then return nil end
     if stage.prep then return stage.name and getText(stage.name, fishName) or fishName end
-    if F.wasGutted(item) then fishName = getText("IGUI_TraditionalPreservationFish_Gutted", fishName) end
+    if F.wasGutted(item) then fishName = getText("IGUI_TraditionalPreservationFishMeat_Gutted", fishName) end
     local state = getText(stage.name)
     if stage.salty and modData.rinsed then
-        state = getText("IGUI_TraditionalPreservationFish_And", state, getText("IGUI_TraditionalPreservationFish_Rinsed"))
+        state = getText("IGUI_TraditionalPreservationFishMeat_And", state, getText("IGUI_TraditionalPreservationFishMeat_Rinsed"))
     end
     local ripeness = (stage.matures or stage.ripened) and F.ripeness(item)
     if ripeness then
-        state = getText("IGUI_TraditionalPreservationFish_And", state,
-            getText(ripeness >= 1 and "IGUI_TraditionalPreservationFish_Ripe" or "IGUI_TraditionalPreservationFish_Unripe"))
+        state = getText("IGUI_TraditionalPreservationFishMeat_And", state,
+            getText(ripeness >= 1 and "IGUI_TraditionalPreservationFishMeat_Ripe" or "IGUI_TraditionalPreservationFishMeat_Unripe"))
     end
-    return getText("IGUI_TraditionalPreservationFish_Named", fishName, state)
+    return getText("IGUI_TraditionalPreservationFishMeat_Named", fishName, state)
 end
 
 -- Brings a fish stage's name up to date (ripening, or a name from before the bracket names), and a maturing
@@ -1029,7 +1029,7 @@ function F.rename(item)
     end
     if not F.STAGES[item:getFullType()].matures then return end
     local ripeness = F.ripeness(item)
-    local tooltip = "Tooltip_TraditionalPreservationFish_ColdDried"
+    local tooltip = "Tooltip_TraditionalPreservationFishMeat_ColdDried"
     if ripeness < 1 then tooltip = tooltip .. "_" .. math.floor(ripeness * 10) * 10 end
     item:setTooltip(tooltip)
 end
@@ -1085,11 +1085,11 @@ end
 -- The head keeps the fish's name and age.
 function F.fishHead(fish)
     local share = F.HEAD_FOOD
-    local head = cutFrom(fish, "TraditionalPreservationFish.FishHead", F.HEAD_WEIGHT, share)
+    local head = cutFrom(fish, "TraditionalPreservationFishMeat.FishHead", F.HEAD_WEIGHT, share)
     copyFood(fish, head, share)
     head:setAge(fish:getAge())
     local fishName = fish:getModData().fishName or string.gsub(fish:getDisplayName(), "%s+$", "")
-    head:setName(getText("IGUI_TraditionalPreservationFish_Head", fishName))
+    head:setName(getText("IGUI_TraditionalPreservationFishMeat_Head", fishName))
     head:setCustomName(true)
     return head
 end
@@ -1100,7 +1100,7 @@ function F.onCreateHeadStock(craftRecipeData)
     local head
     local inputs = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
     for i = 0, inputs:size() - 1 do
-        if inputs:get(i):getFullType() == "TraditionalPreservationFish.FishHead" then head = inputs:get(i) end
+        if inputs:get(i):getFullType() == "TraditionalPreservationFishMeat.FishHead" then head = inputs:get(i) end
     end
     local stock = craftRecipeData:getAllCreatedItems():get(0)
     if not head or not stock then return end
@@ -1142,7 +1142,7 @@ end
 
 -- OnTest sees every input, so the knife passes here too.
 function F.canSplit(item, character)
-    if item:getFullType() ~= "TraditionalPreservationFish.GuttedFish" then return true end
+    if item:getFullType() ~= "TraditionalPreservationFishMeat.GuttedFish" then return true end
     return item:getActualWeight() > F.STACK_WEIGHT
 end
 
@@ -1150,7 +1150,7 @@ end
 function F.onCreateSplit(craftRecipeData)
     local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount"):get(0)
     local created = craftRecipeData:getAllCreatedItems()
-    local halfName = getText("IGUI_TraditionalPreservationFish_Half", fish:getModData().fishName)
+    local halfName = getText("IGUI_TraditionalPreservationFishMeat_Half", fish:getModData().fishName)
     for i = 0, created:size() - 1 do
         local half = created:get(i)
         copyFood(fish, half, 0.5)
@@ -1227,7 +1227,7 @@ local PRESS_MIN_SHARE = F.PRESS_MIN_HOURS / F.PRESS_HOURS
 -- Reads the sandbox options into the drying, pressing and maturing times and the spoilage limits. Each time is
 -- its own option (up to 0.3.6 cold drying followed DryDays at 8/3); their defaults are the times in this file.
 function F.applySandbox()
-    local options = SandboxVars and SandboxVars.TraditionalPreservationFish
+    local options = SandboxVars and SandboxVars.TraditionalPreservationFishMeat
     if not options then return end
     if options.DryDays then F.DRY_HOURS = options.DryDays * 24 end
     if options.ColdDryDays then F.COLD_DRY_HOURS = options.ColdDryDays * 24 end
@@ -1247,15 +1247,15 @@ function F.applySandbox()
 end
 
 local function applyRecipeTime(name, hours)
-    Weather.setRecipeHours(name, hours, "TraditionalPreservationFish")
+    Weather.setRecipeHours(name, hours, "TraditionalPreservationFishMeat")
 end
 
 -- Sets each slow recipe's script time to the sandbox's, so the crafting window shows the right length.
 function F.applyRecipeTimes()
     F.applySandbox()
-    applyRecipeTime("TraditionalPreservationFish.PressSaltedFish", F.PRESS_HOURS)
-    applyRecipeTime("TraditionalPreservationFish.HangFishToDry", F.DRY_HOURS)
-    applyRecipeTime("TraditionalPreservationFish.HangFishToColdDry", F.COLD_DRY_HOURS)
+    applyRecipeTime("TraditionalPreservationFishMeat.PressSaltedFish", F.PRESS_HOURS)
+    applyRecipeTime("TraditionalPreservationFishMeat.HangFishToDry", F.DRY_HOURS)
+    applyRecipeTime("TraditionalPreservationFishMeat.HangFishToColdDry", F.COLD_DRY_HOURS)
 end
 
 Events.OnInitGlobalModData.Add(F.applyRecipeTimes)

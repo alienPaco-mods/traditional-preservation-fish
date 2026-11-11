@@ -6,8 +6,8 @@
 dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua").useModPaths()
 ModData = { getOrCreate = function() return {} end }
 Events = { OnInitGlobalModData = { Add = function() end } }
-dofile("42/media/lua/shared/TraditionalPreservationFish.lua")
-local T = TraditionalPreservationFish
+dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
+local T = TraditionalPreservationFishMeat
 
 local MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
 local RAIN_HOURS = 6

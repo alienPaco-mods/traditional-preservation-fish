@@ -10,7 +10,7 @@ H.installEvents()
 -- The mod's own modules load for real, vanilla's are left out.
 local realRequire = require
 require = function(name)
-    if name:find("^TraditionalPreservationFish/") or name:find("^TraditionalPreservationCore/") then return realRequire(name) end
+    if name:find("^TraditionalPreservationFishMeat/") or name:find("^TraditionalPreservationCore/") then return realRequire(name) end
 end
 
 -- Engine stand-ins
@@ -90,48 +90,48 @@ local function tick(times)
     for _ = 1, times do H.fire("OnTick") end
 end
 
-dofile("42/media/lua/shared/TraditionalPreservationFish.lua")
-dofile("42/media/lua/server/TraditionalPreservationFishWorld.lua")
-local T, W = TraditionalPreservationFish, TraditionalPreservationFishWorld
-local PRESSED, GUTTED = "TraditionalPreservationFish.SaltPressedFish", "TraditionalPreservationFish.GuttedFish"
+dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
+dofile("42/media/lua/server/TraditionalPreservationFishMeatWorld.lua")
+local T, W = TraditionalPreservationFishMeat, TraditionalPreservationFishMeatWorld
+local PRESSED, GUTTED = "TraditionalPreservationFishMeat.SaltPressedFish", "TraditionalPreservationFishMeat.GuttedFish"
 
-check("the map loader knows the tub, the frame and both beams", loaders.traditionalpreservationfish_01_0
-    and loaders.traditionalpreservationfish_01_7 and loaders.traditionalpreservationfish_02_0 and loaders.traditionalpreservationfish_02_3)
-check("and nothing else", loaders.traditionalpreservationfish_01_8 == nil)
+check("the map loader knows the tub, the frame and both beams", loaders.traditionalpreservationfishmeat_01_0
+    and loaders.traditionalpreservationfishmeat_01_7 and loaders.traditionalpreservationfishmeat_02_0 and loaders.traditionalpreservationfishmeat_02_3)
+check("and nothing else", loaders.traditionalpreservationfishmeat_01_8 == nil)
 
 -- Frames: a finished salt stack, a gutted stack halfway, and pressed fish waiting.
 local running = recipeData(0.5, T.STYLE_GUTTED)
-local shed = station("traditionalpreservationfish_01_6", 1, false, { fish(PRESSED) }, { running },
-    { fish("TraditionalPreservationFish.SaltDriedFish", { stackId = 5, style = T.STYLE_SALT }) })
-loaders.traditionalpreservationfish_01_6(shed)
+local shed = station("traditionalpreservationfishmeat_01_6", 1, false, { fish(PRESSED) }, { running },
+    { fish("TraditionalPreservationFishMeat.SaltDriedFish", { stackId = 5, style = T.STYLE_SALT }) })
+loaders.traditionalpreservationfishmeat_01_6(shed)
 tick(30)
 -- States 4 (salt, done), 7 (gutted, stage 2), 0 (salt, fresh) in slots 0-2 of face 0.
 check("each stack gets its sprite, driest first", table.concat(shed.sprites, " ") ==
-    "traditionalpreservationfish_01_72 traditionalpreservationfish_01_122 traditionalpreservationfish_01_12")
+    "traditionalpreservationfishmeat_01_72 traditionalpreservationfishmeat_01_122 traditionalpreservationfishmeat_01_12")
 check("running stacks learn they are under a roof", running.modData.sheltered == true)
 check("the frame counts its busy stacks", W.busyStacks(shed) == 2)
 tick(30)
 check("an unchanged frame is left alone", shed.clears == 1)
 
 local outdoors = recipeData(0.1, T.STYLE_SALT)
-local yard = station("traditionalpreservationfish_01_7", 2, true, {}, { outdoors }, {})
+local yard = station("traditionalpreservationfishmeat_01_7", 2, true, {}, { outdoors }, {})
 W.track(yard)
 tick(30)
-check("an open frame is open", outdoors.modData.sheltered == false and outdoors.modData.covered == false and yard.sprites[1] == "traditionalpreservationfish_01_9")
+check("an open frame is open", outdoors.modData.sheltered == false and outdoors.modData.covered == false and yard.sprites[1] == "traditionalpreservationfishmeat_01_9")
 check("a frame in a room is indoors", running.modData.covered == false)
 
 local porched = recipeData(0.1, T.STYLE_SALT)
-local porch = station("traditionalpreservationfish_01_7", 4, false, {}, { porched }, {})
+local porch = station("traditionalpreservationfishmeat_01_7", 4, false, {}, { porched }, {})
 porch.porch = true
 W.track(porch)
 W.refresh(porch)
 check("a frame under an open roof is covered", porched.modData.covered == true and porched.modData.sheltered == false)
 
 -- Tubs
-local tub = station("traditionalpreservationfish_01_1", 3, true, {}, { recipeData(0.3) }, {})
+local tub = station("traditionalpreservationfishmeat_01_1", 3, true, {}, { recipeData(0.3) }, {})
 W.track(tub)
 W.refresh(tub)
-check("a pressing tub shows its weights", table.concat(tub.sprites, " ") == "traditionalpreservationfish_01_5")
+check("a pressing tub shows its weights", table.concat(tub.sprites, " ") == "traditionalpreservationfishmeat_01_5")
 check("other mods' objects aren't tracked", W.track(station("carpentry_02_122", 4, true, {}, {}, {})) == nil)
 check("an untracked station is safe to ask", W.busyStacks({}) == 0)
 

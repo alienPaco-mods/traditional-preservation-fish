@@ -1,11 +1,11 @@
--- Traditional Preservation (Fish): commands for the debug Lua console, loaded only in debug mode.
--- Type TPF.help() in the console for the list. See DEVHELP.md in the mod folder.
+-- Traditional Preservation (Fish & Meat): commands for the debug Lua console, loaded only in debug mode.
+-- Type TPFM.help() in the console for the list. See DEVHELP.md in the mod folder.
 if not isDebugEnabled() then return end
 
-local F = TraditionalPreservationFish
-TPF = {}
+local F = TraditionalPreservationFishMeat
+TPFM = {}
 
-local function say(text) print("[TPF] " .. text) end
+local function say(text) print("[TPFM] " .. text) end
 
 local function give(fullType, count)
     local inventory = getPlayer():getInventory()
@@ -14,26 +14,26 @@ local function give(fullType, count)
     return items
 end
 
-function TPF.help()
-    say("TPF.weather()             the drying weather now: temperature, season, wetness, rates, spoilage and totals")
-    say("TPF.wind()                start a log of live wind every 10 minutes; again to print it beside the forecast")
-    say("TPF.age(hours)            give every hanging stack this many hours of perfect drying weather")
-    say("TPF.spoil(hours)          add this many hours of spoiling weather, to test rotting stacks")
-    say("TPF.frost(hours)          add this many hours of hard frost, to test early frost on fresh cold stacks")
-    say("TPF.heat(hours)           add this many hours of hot sun, to test it on fresh open salt stacks")
-    say("TPF.warmCure(hours)       add this many hours of a warm cure at 25 C, to test souring in a running tub")
-    say("TPF.dry()                 clear the wetness, so open and cold frames start drying again at once")
-    say("TPF.mature(days)          age the Cold Dried fish you carry by this many days, to test ripening")
-    say("TPF.stockfish(n)          spawn n unripe Cold Dried fish (fresh off the frame), for the pallet")
-    say("TPF.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
-    say("TPF.fish(name, weight, n) spawn n whole fish, e.g. TPF.fish(\"Walleye\", 4, 2). TPF.fish() lists the names")
-    say("TPF.heads(n)              spawn n Fish Heads")
-    say("TPF.stock()               spawn a Pot of Fish Head Stock")
-    say("TPF.salt(n)               spawn n vanilla Salt shakers")
-    say("The Salting Tub runs on the game clock, so TPF.age doesn't speed up pressing.")
+function TPFM.help()
+    say("TPFM.weather()             the drying weather now: temperature, season, wetness, rates, spoilage and totals")
+    say("TPFM.wind()                start a log of live wind every 10 minutes; again to print it beside the forecast")
+    say("TPFM.age(hours)            give every hanging stack this many hours of perfect drying weather")
+    say("TPFM.spoil(hours)          add this many hours of spoiling weather, to test rotting stacks")
+    say("TPFM.frost(hours)          add this many hours of hard frost, to test early frost on fresh cold stacks")
+    say("TPFM.heat(hours)           add this many hours of hot sun, to test it on fresh open salt stacks")
+    say("TPFM.warmCure(hours)       add this many hours of a warm cure at 25 C, to test souring in a running tub")
+    say("TPFM.dry()                 clear the wetness, so open and cold frames start drying again at once")
+    say("TPFM.mature(days)          age the Cold Dried fish you carry by this many days, to test ripening")
+    say("TPFM.stockfish(n)          spawn n unripe Cold Dried fish (fresh off the frame), for the pallet")
+    say("TPFM.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
+    say("TPFM.fish(name, weight, n) spawn n whole fish, e.g. TPFM.fish(\"Walleye\", 4, 2). TPFM.fish() lists the names")
+    say("TPFM.heads(n)              spawn n Fish Heads")
+    say("TPFM.stock()               spawn a Pot of Fish Head Stock")
+    say("TPFM.salt(n)               spawn n vanilla Salt shakers")
+    say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up pressing.")
 end
 
-function TPF.weather()
+function TPFM.weather()
     local ledger = F.getLedger()
     local function n(value) return value and string.format("%.2f", value) or "-" end
     say("Temperature now " .. n(ledger.temperature) .. " C, season (10-day average) " .. n(ledger.seasonTemperature)
@@ -63,7 +63,7 @@ local function sampleWind()
     windLog.forecast = windLog.forecast + (forecast and forecast:getWindPower():getTotalMean() or 0)
 end
 
-function TPF.wind()
+function TPFM.wind()
     local function line(name, s)
         if s.n == 0 then return say(name .. ": no samples") end
         say(string.format("%s: %d samples, mean %.3f, min %.3f, max %.3f", name, s.n, s.sum / s.n, s.min, s.max))
@@ -72,7 +72,7 @@ function TPF.wind()
         local function empty() return { n = 0, sum = 0, min = 1, max = 0 } end
         windLog = { dry = empty(), wet = empty(), forecast = 0 }
         Events.EveryTenMinutes.Add(sampleWind)
-        return say("Wind log started: live wind every 10 minutes. TPF.wind() again prints it and stops.")
+        return say("Wind log started: live wind every 10 minutes. TPFM.wind() again prints it and stops.")
     end
     Events.EveryTenMinutes.Remove(sampleWind)
     line("Live wind, dry", windLog.dry)
@@ -82,7 +82,7 @@ function TPF.wind()
     windLog = nil
 end
 
-function TPF.age(hours)
+function TPFM.age(hours)
     hours = hours or 24
     local ledger = F.getLedger()
     ledger.open, ledger.sheltered, ledger.cold = ledger.open + hours, ledger.sheltered + hours, ledger.cold + hours
@@ -90,14 +90,14 @@ function TPF.age(hours)
     say(string.format("Added %.0f hours of perfect drying weather. Stacks update within a few seconds.", hours))
 end
 
-function TPF.spoil(hours)
+function TPFM.spoil(hours)
     hours = hours or 24
     local ledger = F.getLedger()
     ledger.rawSpoil, ledger.saltSpoil = ledger.rawSpoil + hours, ledger.saltSpoil + hours
     say(string.format("Added %.0f hours of spoiling weather. A fresh cold stack rots after %d.", hours, F.RAW_SPOIL_HOURS))
 end
 
-function TPF.frost(hours)
+function TPFM.frost(hours)
     hours = hours or 24
     local ledger = F.getLedger()
     ledger.hardFrost = ledger.hardFrost + hours
@@ -105,7 +105,7 @@ function TPF.frost(hours)
         hours, F.FREEZE_DAMAGE * 100, F.FREEZE_DAMAGE_HOURS, F.DAMAGE_CAP * 100))
 end
 
-function TPF.heat(hours)
+function TPFM.heat(hours)
     hours = hours or 24
     local ledger = F.getLedger()
     ledger.heat = ledger.heat + hours
@@ -114,7 +114,7 @@ function TPF.heat(hours)
 end
 
 -- At 25 C a warm cure runs at 1.5 times its 20 C rate.
-function TPF.warmCure(hours)
+function TPFM.warmCure(hours)
     hours = hours or 24
     local ledger = F.getLedger()
     ledger.warmCure = ledger.warmCure + hours * 1.5
@@ -123,9 +123,9 @@ function TPF.warmCure(hours)
 end
 
 -- Ripeness runs on the fish's own food clock, so this ages the fish themselves.
-function TPF.mature(days)
+function TPFM.mature(days)
     days = days or 10
-    local fish = getPlayer():getInventory():getAllTypeRecurse("TraditionalPreservationFish.ColdDriedFish")
+    local fish = getPlayer():getInventory():getAllTypeRecurse("TraditionalPreservationFishMeat.ColdDriedFish")
     for i = 0, fish:size() - 1 do
         local item = fish:get(i)
         item:setAge(item:getAge() + days)
@@ -134,13 +134,13 @@ function TPF.mature(days)
     say(string.format("Aged %d Cold Dried fish by %d days. Ripe after %d.", fish:size(), days, F.MATURE_DAYS))
 end
 
-function TPF.dry()
+function TPFM.dry()
     local ledger = F.getLedger()
     ledger.wetness, ledger.coldWetness = 0, 0
     say("Wetness cleared.")
 end
 
-function TPF.fish(name, weight, count)
+function TPFM.fish(name, weight, count)
     if not name then
         local names = {}
         for _, fullType in ipairs(F.FISH_ICONS) do table.insert(names, (fullType:gsub("^Base%.", ""))) end
@@ -165,23 +165,23 @@ function TPF.fish(name, weight, count)
     say(string.format("Gave %d %s%s.", count or 1, fullType, weight and (" at weight " .. weight) or ""))
 end
 
-function TPF.heads(count)
-    give("TraditionalPreservationFish.FishHead", count)
+function TPFM.heads(count)
+    give("TraditionalPreservationFishMeat.FishHead", count)
     say("Gave " .. (count or 1) .. " Fish Head(s). Spawned heads have the item's default food values.")
 end
 
-function TPF.stock()
-    give("TraditionalPreservationFish.PotOfFishHeadStock")
+function TPFM.stock()
+    give("TraditionalPreservationFishMeat.PotOfFishHeadStock")
     say("Gave a Pot of Fish Head Stock (default values, no head listed).")
 end
 
-function TPF.salt(count)
+function TPFM.salt(count)
     give("Base.Salt", count)
     say("Gave " .. (count or 1) .. " Salt shaker(s).")
 end
 
-function TPF.stockfish(count)
-    for _, fish in ipairs(give("TraditionalPreservationFish.ColdDriedFish", count)) do
+function TPFM.stockfish(count)
+    for _, fish in ipairs(give("TraditionalPreservationFishMeat.ColdDriedFish", count)) do
         fish:getModData().fishName = "Walleye"
         fish:getModData().matureAge = fish:getAge()
         F.rename(fish)
@@ -189,9 +189,9 @@ function TPF.stockfish(count)
     say(string.format("Gave %d unripe Cold Dried fish. Ripe after %d days on a shelf.", count or 1, F.MATURE_DAYS))
 end
 
-function TPF.pallet()
+function TPFM.pallet()
     local Weather = require "TraditionalPreservationCore/Weather"
-    local Tiles = require "TraditionalPreservationFish/Tiles"
+    local Tiles = require "TraditionalPreservationFishMeat/Tiles"
     local player = getPlayer()
     local px, py, z = math.floor(player:getX()), math.floor(player:getY()), math.floor(player:getZ())
     for x = px - 3, px + 3 do
@@ -218,4 +218,4 @@ function TPF.pallet()
     say("No Stockfish Pallet within 3 tiles on this floor.")
 end
 
-say("Debug commands loaded. Type TPF.help() in the Lua console.")
+say("Debug commands loaded. Type TPFM.help() in the Lua console.")

@@ -280,26 +280,26 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 ## 13. Appendix: The Tester's Toolkit
 
-*For testers, modders and the curious. These commands exist only when the game is started in debug mode (Steam launch option `-debug`). Type them into the in-game **Command Console** and press Enter. `TPF.help()` lists them in the game.*
+*For testers, modders and the curious. These commands exist only when the game is started in debug mode (Steam launch option `-debug`). Type them into the in-game **Command Console** and press Enter. `TPFM.help()` lists them in the game.*
 
 > ⚠ They change your save directly, so try them on a test save, not a playthrough you care about.
 
 | Command | What it does |
 |---|---|
-| `TPF.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness, the wind, the drying speed open, under an open roof, indoors and cold, whether unsalted and salted fish are spoiling, and the running totals. |
-| `TPF.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPF.age(288)` finishes a salt stack, `TPF.age(768)` a cold one. |
-| `TPF.spoil(hours)` | Adds spoiling weather, to test rotting. A fresh cold stack rots after 48. |
-| `TPF.frost(hours)` | Adds hours of hard frost, to test early frost on a fresh cold stack (72 hours take a tenth of its keeping). |
-| `TPF.heat(hours)` | Adds hours of hot sun, to test it on a fresh open salt stack (24 hours take a twentieth of its keeping). |
-| `TPF.warmCure(hours)` | Adds hours of a warm cure at 25 C, to test souring in a running tub (24 hours take about a fifth). |
-| `TPF.dry()` | Clears the wetness, so open and cold frames start drying again at once after rain. |
-| `TPF.fish(name, weight, n)` | Spawns `n` whole fish at that weight, with food scaled to match, e.g. `TPF.fish("Walleye", 4, 2)`. `TPF.fish()` lists the names. |
-| `TPF.heads(n)` | Spawns Fish Heads (default food values). |
-| `TPF.stock()` | Spawns a Pot of Fish Head Stock (default values, no head listed). |
-| `TPF.salt(n)` | Spawns vanilla Salt shakers. |
+| `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness, the wind, the drying speed open, under an open roof, indoors and cold, whether unsalted and salted fish are spoiling, and the running totals. |
+| `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one. |
+| `TPFM.spoil(hours)` | Adds spoiling weather, to test rotting. A fresh cold stack rots after 48. |
+| `TPFM.frost(hours)` | Adds hours of hard frost, to test early frost on a fresh cold stack (72 hours take a tenth of its keeping). |
+| `TPFM.heat(hours)` | Adds hours of hot sun, to test it on a fresh open salt stack (24 hours take a twentieth of its keeping). |
+| `TPFM.warmCure(hours)` | Adds hours of a warm cure at 25 C, to test souring in a running tub (24 hours take about a fifth). |
+| `TPFM.dry()` | Clears the wetness, so open and cold frames start drying again at once after rain. |
+| `TPFM.fish(name, weight, n)` | Spawns `n` whole fish at that weight, with food scaled to match, e.g. `TPFM.fish("Walleye", 4, 2)`. `TPFM.fish()` lists the names. |
+| `TPFM.heads(n)` | Spawns Fish Heads (default food values). |
+| `TPFM.stock()` | Spawns a Pot of Fish Head Stock (default values, no head listed). |
+| `TPFM.salt(n)` | Spawns vanilla Salt shakers. |
 
-The Salting Tub runs on the game clock, not the weather, so `TPF.age` doesn't speed up pressing. Use the game's own time controls for that.
+The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up pressing. Use the game's own time controls for that.
 
-**Typical check of the whole salt route:** `TPF.fish("Walleye", 4, 3)` and `TPF.salt(10)` (each 4 weight walleye takes 32 salt, and a shaker holds 10), pack and press, then hang the fish and `TPF.age(288)`.
+**Typical check of the whole salt route:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(10)` (each 4 weight walleye takes 32 salt, and a shaker holds 10), pack and press, then hang the fish and `TPFM.age(288)`.
 
-**Typical check of heads:** `TPF.fish("Walleye", 4)` and `TPF.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.
+**Typical check of heads:** `TPFM.fish("Walleye", 4)` and `TPFM.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.

@@ -1,4 +1,4 @@
-module TraditionalPreservationFish
+module TraditionalPreservationFishMeat
 {
     entity Salting_Tub
     {
@@ -34,14 +34,14 @@ module TraditionalPreservationFish
             {
                 layer
                 {
-                    row = traditionalpreservationfish_01_0,
+                    row = traditionalpreservationfishmeat_01_0,
                 }
             }
             face E
             {
                 layer
                 {
-                    row = traditionalpreservationfish_01_1,
+                    row = traditionalpreservationfishmeat_01_1,
                 }
             }
         }

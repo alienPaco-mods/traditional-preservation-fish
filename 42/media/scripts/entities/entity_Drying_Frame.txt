@@ -1,4 +1,4 @@
-module TraditionalPreservationFish
+module TraditionalPreservationFishMeat
 {
     entity Drying_Frame
     {
@@ -36,14 +36,14 @@ module TraditionalPreservationFish
             {
                 layer
                 {
-                    row = traditionalpreservationfish_01_6,
+                    row = traditionalpreservationfishmeat_01_6,
                 }
             }
             face E
             {
                 layer
                 {
-                    row = traditionalpreservationfish_01_7,
+                    row = traditionalpreservationfishmeat_01_7,
                 }
             }
         }

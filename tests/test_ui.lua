@@ -11,9 +11,9 @@ end } end })
 -- The mod's own modules load for real, vanilla's are left out.
 local realRequire = require
 require = function(name)
-    if name:find("^TraditionalPreservationFish/") or name:find("^TraditionalPreservationCore/") then return realRequire(name) end
+    if name:find("^TraditionalPreservationFishMeat/") or name:find("^TraditionalPreservationCore/") then return realRequire(name) end
 end
-dofile("42/media/lua/shared/TraditionalPreservationFish.lua")
+dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
 
 local halos, vanillaVerdict, vanillaUps, addCalls = {}, true, 0, 0
 ResourceIO = { Input = "input", Output = "output" }
@@ -32,14 +32,14 @@ function ISItemSlot:defaultVerifyItem() return vanillaVerdict end
 function ISItemSlot:onMouseUp() vanillaUps = vanillaUps + 1 end
 
 local busyStacks = 0
-TraditionalPreservationFishWorld = {
+TraditionalPreservationFishMeatWorld = {
     busyStacks = function() return busyStacks end,
     track = function() end,
     refresh = function() end,
 }
 ISMoveableSpriteProps = {}
 function ISMoveableSpriteProps:canPlaceMoveable() return true end
-dofile("42/media/lua/client/TraditionalPreservationFishUI.lua")
+dofile("42/media/lua/client/TraditionalPreservationFishMeatUI.lua")
 
 
 local check = H.check
@@ -71,9 +71,9 @@ local function station(sprite, stored, running)
     return { resource = resource }
 end
 
-local PACKED, PRESSED = "TraditionalPreservationFish.SaltPackedFish", "TraditionalPreservationFish.SaltPressedFish"
-local GUTTED, HALF = "TraditionalPreservationFish.GuttedFish", "TraditionalPreservationFish.FishHalf"
-local TUB, FRAME = "traditionalpreservationfish_01_0", "traditionalpreservationfish_01_7"
+local PACKED, PRESSED = "TraditionalPreservationFishMeat.SaltPackedFish", "TraditionalPreservationFishMeat.SaltPressedFish"
+local GUTTED, HALF = "TraditionalPreservationFishMeat.GuttedFish", "TraditionalPreservationFishMeat.FishHalf"
+local TUB, FRAME = "traditionalpreservationfishmeat_01_0", "traditionalpreservationfishmeat_01_7"
 local function green(slot, item) return ISItemSlot.defaultVerifyItem({}, slot, item) end
 
 check("a frame is green for pressed fish", green(station(FRAME), fish(PRESSED, 0.5)))
@@ -89,7 +89,7 @@ check("not for gutted fish on a salted stack", not green(station(FRAME, { fish(P
 check("not for salted fish on a gutted stack", not green(station(FRAME, { fish(GUTTED, 0.5) }), fish(PRESSED, 0.5)))
 check("gutted fish and halves share a stack", green(station(FRAME, { fish(GUTTED, 0.5) }), fish(HALF, 0.5)))
 check("a half over the limit is refused", not green(station(FRAME), fish(HALF, 3)))
-local MEDIUM, LARGE = "traditionalpreservationfish_02_0", "traditionalpreservationfish_02_3"
+local MEDIUM, LARGE = "traditionalpreservationfishmeat_02_0", "traditionalpreservationfishmeat_02_3"
 check("a medium beam takes a fish too heavy for a frame", green(station(MEDIUM), fish(PRESSED, 12)))
 check("but not over its limit", not green(station(MEDIUM), fish(PRESSED, 16)))
 check("a large beam takes the biggest", green(station(LARGE), fish(GUTTED, 48)))
@@ -115,7 +115,7 @@ for i = 1, 35 do
 end
 check("a tub takes a 35th fish", green(station(TUB, thirtyFour), fish(PACKED, 0.01)))
 check("but not a 36th, however light", not green(station(TUB, thirtyFive), fish(PACKED, 0.01)))
-check("not past its capacity", not green(station(TUB, { fish(PACKED, TraditionalPreservationFish.TUB_CAPACITY - 0.5) }), fish(PACKED, 1)))
+check("not past its capacity", not green(station(TUB, { fish(PACKED, TraditionalPreservationFishMeat.TUB_CAPACITY - 0.5) }), fish(PACKED, 1)))
 
 vanillaVerdict = false
 check("vanilla can still say no", not green(station(FRAME), fish(PRESSED, 0.5)))
@@ -134,7 +134,7 @@ check("a slot with no entity is safe", green(spriteless, fish(PACKED, 1)))
 local frame = station(FRAME)
 ISMouseDrag.dragging = { fish(PACKED, 1) }
 ISItemSlot.onMouseUp(frame, 0, 0)
-check("a refused drop says why", halos[1] == "IGUI_TraditionalPreservationFish_NeedsPressed" and vanillaUps == 1)
+check("a refused drop says why", halos[1] == "IGUI_TraditionalPreservationFishMeat_NeedsPressed" and vanillaUps == 1)
 
 halos = {}
 ISMouseDrag.dragging = { fish(PACKED, 1), fish(PRESSED, 0.5) }
@@ -160,20 +160,20 @@ local function refusedWith(slot)
     ISCraftLogicPanel.ItemSlotAddItems("player", slot.resource:getGameEntity(), slot, { fish(PACKED, 1) }, slot.resource:getGameEntity():getComponent())
     return halos[1]
 end
-check("a running tub says it's in use", refusedWith(station(TUB, nil, true)) == "IGUI_TraditionalPreservationFish_TubInUse")
+check("a running tub says it's in use", refusedWith(station(TUB, nil, true)) == "IGUI_TraditionalPreservationFishMeat_TubInUse")
 busyStacks = 1
-check("a finished one says to empty it", refusedWith(station(TUB)) == "IGUI_TraditionalPreservationFish_TubNotEmpty")
+check("a finished one says to empty it", refusedWith(station(TUB)) == "IGUI_TraditionalPreservationFishMeat_TubNotEmpty")
 busyStacks = 0
 local tubSlot = station(TUB)
 halos = {}
 ISCraftLogicPanel.ItemSlotAddItems("player", tubSlot.resource:getGameEntity(), tubSlot, { fish(PRESSED, 1) }, tubSlot.resource:getGameEntity():getComponent())
-check("adding the wrong fish is refused", #entityList == 0 and halos[1] == "IGUI_TraditionalPreservationFish_NeedsPacked")
+check("adding the wrong fish is refused", #entityList == 0 and halos[1] == "IGUI_TraditionalPreservationFishMeat_NeedsPacked")
 ISCraftLogicPanel.ItemSlotAddItems("player", tubSlot.resource:getGameEntity(), tubSlot, { fish(PACKED, 1), fish(PACKED, 1) }, tubSlot.resource:getGameEntity():getComponent())
 check("the right fish goes in", #entityList == 2)
 
 -- A hanging stack's popup
 local function stackLines(recipeName, modData, ledger)
-    TraditionalPreservationFish.getLedger = function() return ledger end
+    TraditionalPreservationFishMeat.getLedger = function() return ledger end
     local slot = {
         craftRecipeData = {
             getRecipe = function() return { getName = function() return recipeName end } end,
@@ -208,17 +208,17 @@ local function stackLines(recipeName, modData, ledger)
 end
 
 local winter = { wetness = 0, temperature = 0, coldRate = 1, openRate = 0.44, shelteredRate = 0.44 }
-local coldLines = stackLines("TraditionalPreservationFish.HangFishToColdDry", { dried = 384 }, winter)
-check("a cold stack says so", coldLines["IGUI_TraditionalPreservationFish_Method:"] == "IGUI_TraditionalPreservationFish_MethodCold")
-check("and shows its real rate and progress", coldLines["IGUI_TraditionalPreservationFish_Rate:"] == "100%" and coldLines["IGUI_TraditionalPreservationFish_Progress:"] == "50%")
-check("with no warning in a cold season", coldLines["IGUI_TraditionalPreservationFish_Spoilage:"] == nil)
+local coldLines = stackLines("TraditionalPreservationFishMeat.HangFishToColdDry", { dried = 384 }, winter)
+check("a cold stack says so", coldLines["IGUI_TraditionalPreservationFishMeat_Method:"] == "IGUI_TraditionalPreservationFishMeat_MethodCold")
+check("and shows its real rate and progress", coldLines["IGUI_TraditionalPreservationFishMeat_Rate:"] == "100%" and coldLines["IGUI_TraditionalPreservationFishMeat_Progress:"] == "50%")
+check("with no warning in a cold season", coldLines["IGUI_TraditionalPreservationFishMeat_Spoilage:"] == nil)
 local saltLines = stackLines("HangFishToDry", { dried = 144 }, winter)
-check("a salt stack shows its own rate", saltLines["IGUI_TraditionalPreservationFish_Method:"] == "IGUI_TraditionalPreservationFish_MethodSalt" and saltLines["IGUI_TraditionalPreservationFish_Rate:"] == "44%")
+check("a salt stack shows its own rate", saltLines["IGUI_TraditionalPreservationFishMeat_Method:"] == "IGUI_TraditionalPreservationFishMeat_MethodSalt" and saltLines["IGUI_TraditionalPreservationFishMeat_Rate:"] == "44%")
 local warm = { wetness = 0, temperature = 18, coldRate = 0, openRate = 0.8, shelteredRate = 0.52, rawSpoiling = true }
 local warmLines = stackLines("HangFishToColdDry", { dried = 10, spoiled = 0.4 }, warm)
-check("a warm season stops cold drying", warmLines["IGUI_TraditionalPreservationFish_Rate:"] == "IGUI_TraditionalPreservationFish_StoppedTooWarm")
-check("and warns of spoilage", warmLines["IGUI_TraditionalPreservationFish_Spoilage:"] == "IGUI_TraditionalPreservationFish_SpoilingWarm")
-check("and has no time left to give", warmLines["IGUI_TraditionalPreservationFish_TimeLeft:"] == "IGUI_TraditionalPreservationFish_Paused")
+check("a warm season stops cold drying", warmLines["IGUI_TraditionalPreservationFishMeat_Rate:"] == "IGUI_TraditionalPreservationFishMeat_StoppedTooWarm")
+check("and warns of spoilage", warmLines["IGUI_TraditionalPreservationFishMeat_Spoilage:"] == "IGUI_TraditionalPreservationFishMeat_SpoilingWarm")
+check("and has no time left to give", warmLines["IGUI_TraditionalPreservationFishMeat_TimeLeft:"] == "IGUI_TraditionalPreservationFishMeat_Paused")
 check("other recipes are left alone", stackLines("DryCorn", {}, winter) == nil)
 
 -- The game can't format a bare %, so a line's own percent sign belongs in the value it is given.
@@ -229,18 +229,18 @@ check("translations have no bare percent signs", not translations:find("%%%D"))
 local function placing(spriteName, inRoom)
     return ISMoveableSpriteProps.canPlaceMoveable({ spriteName = spriteName }, nil, { isInARoom = function() return inRoom end }, nil)
 end
-check("a beam can't be put down in a room", not placing("traditionalpreservationfish_02_0", true) and not placing("traditionalpreservationfish_02_3", true))
-check("but can outdoors or under an open roof", placing("traditionalpreservationfish_02_2", false))
-check("and the frame can go anywhere", placing("traditionalpreservationfish_01_0", true))
+check("a beam can't be put down in a room", not placing("traditionalpreservationfishmeat_02_0", true) and not placing("traditionalpreservationfishmeat_02_3", true))
+check("but can outdoors or under an open roof", placing("traditionalpreservationfishmeat_02_2", false))
+check("and the frame can go anywhere", placing("traditionalpreservationfishmeat_01_0", true))
 
 -- Names follow the days in any container the inventory shows
 local renamed = {}
-local fakeFish = { fullType = "TraditionalPreservationFish.ColdDriedFish" }
+local fakeFish = { fullType = "TraditionalPreservationFishMeat.ColdDriedFish" }
 local container = {}
 function container:getAllTypeRecurse(fullType)
     return H.list(fullType == fakeFish.fullType and { fakeFish } or {})
 end
-local F = TraditionalPreservationFish
+local F = TraditionalPreservationFishMeat
 local realRename = F.rename
 F.rename = function(item) table.insert(renamed, item) end
 handlers.OnRefreshInventoryWindowContainers({ backpacks = { { inventory = container } } }, "begin")
@@ -252,7 +252,7 @@ F.rename = realRename
 
 -- Rinse at Sink
 local ui = H.installMenus()
-dofile("42/media/lua/shared/TimedActions/TPFishRinse.lua")
+dofile("42/media/lua/shared/TimedActions/TPFMRinse.lua")
 local function rinsable(fullType, name)
     local modData = {}
     return { class = "InventoryItem", getFullType = function() return fullType end, getModData = function() return modData end,
@@ -277,7 +277,7 @@ local function rinseMenu(items, context)
     return context
 end
 local function rinseOption(menu)
-    return menu:getOptionFromName("ContextMenu_TraditionalPreservationFish_RinseAtSink")
+    return menu:getOptionFromName("ContextMenu_TraditionalPreservationFishMeat_RinseAtSink")
 end
 local pressedOne, pressedTwo = rinsable(F.RINSE_TYPE), rinsable(F.RINSE_TYPE)
 local stack = { items = { pressedOne, pressedOne, pressedTwo } }
@@ -286,7 +286,7 @@ sink = {
     hasWater = function() return true end, isTaintedWater = function() return false end,
     getFluidAmount = function() return 10 end, getSquare = function() return "sink square" end,
 }
-check("no option on a fish that isn't Salt Pressed", #rinseMenu({ rinsable("TraditionalPreservationFish.SaltDriedFish") }).options == 0)
+check("no option on a fish that isn't Salt Pressed", #rinseMenu({ rinsable("TraditionalPreservationFishMeat.SaltDriedFish") }).options == 0)
 
 -- Vanilla's recipe submenu for the fish already there: the option joins it.
 local withSub = H.menu()
@@ -317,20 +317,20 @@ sink.isTaintedWater = function() return true end
 check("a sink of tainted water doesn't count", #rinseMenu({ stack }).options == 0)
 
 -- Tie a Bale and Untie Bale
-dofile("42/media/lua/shared/TimedActions/TPFishTieBale.lua")
-dofile("42/media/lua/shared/TimedActions/TPFishUntieBale.lua")
+dofile("42/media/lua/shared/TimedActions/TPFMTieBale.lua")
+dofile("42/media/lua/shared/TimedActions/TPFMUntieBale.lua")
 function getItemNameFromFullType(fullType) return fullType == "Base.Rope" and "Rope" or "Twine" end
 local cordItem
 local carried = { getFirstEvalRecurse = function(_, fn) return cordItem and fn(cordItem) and cordItem or nil end }
 person.getInventory = function() return carried end
 local function stockfishItem(weight)
-    return { class = "InventoryItem", getFullType = function() return "TraditionalPreservationFish.ColdDriedFish" end,
+    return { class = "InventoryItem", getFullType = function() return "TraditionalPreservationFishMeat.ColdDriedFish" end,
         getActualWeight = function() return weight end, getDisplayName = function() return "Gutted Walleye (Cold Dried)" end,
         getTexture = function() return "fish icon" end, getModData = function() return {} end }
 end
 local function tieOption(context)
     local sub = context.options[1] and context.options[1].subOption
-    return sub and sub:getOptionFromName("ContextMenu_TraditionalPreservationFish_TieBale")
+    return sub and sub:getOptionFromName("ContextMenu_TraditionalPreservationFishMeat_TieBale")
 end
 local dried = {}
 for i = 1, 60 do dried[i] = stockfishItem(0.2) end
@@ -344,17 +344,17 @@ check("with twine it goes in the fish's submenu", tie ~= nil and not tie.notAvai
 tie.onSelect(tie.target, unpack(tie.args))
 check("and ties the first 10 weight with the twine", #ui.queued == 1 and #ui.queued[1].fish == 50
     and ui.queued[1].cordItem == cordItem and ui.queued[1].cord.key == "twine")
-check("no Tie option on salt fish", tieOption(rinseMenu({ rinsable("TraditionalPreservationFish.SaltDriedFish") })) == nil)
+check("no Tie option on salt fish", tieOption(rinseMenu({ rinsable("TraditionalPreservationFishMeat.SaltDriedFish") })) == nil)
 local baleData = { cord = "rope" }
 local bale = { class = "InventoryItem", getFullType = function() return F.BALE_TYPE end, getModData = function() return baleData end }
 local untieMenu = rinseMenu({ bale })
-local untie = untieMenu:getOptionFromName("ContextMenu_TraditionalPreservationFish_UntieBale")
+local untie = untieMenu:getOptionFromName("ContextMenu_TraditionalPreservationFishMeat_UntieBale")
 check("a bale has Untie Bale", untie ~= nil and untie.toolTip ~= nil)
 untie.onSelect(untie.target, unpack(untie.args))
 check("which unties it", #ui.queued == 1 and ui.queued[1].bale == bale)
 
 -- The pallet's right-click line
-local Tiles = require "TraditionalPreservationFish/Tiles"
+local Tiles = require "TraditionalPreservationFishMeat/Tiles"
 local function palletAt(z, place)
     package.loaded["TraditionalPreservationCore/Weather"].placeOf = function() return place end
     return { getSprite = function() return { getName = function() return Tiles.PALLET end } end,
@@ -366,8 +366,8 @@ local function palletLine(z, place)
     handlers.OnFillWorldObjectContextMenu(0, context, { palletAt(z, place) })
     return context.options[1]
 end
-check("a loft pallet says x2", palletLine(1, "Sheltered").name == "ContextMenu_TraditionalPreservationFish_PalletSpeed")
-check("a covered one says it's no faster", palletLine(0, "Covered").name == "ContextMenu_TraditionalPreservationFish_PalletNoSpeed")
+check("a loft pallet says x2", palletLine(1, "Sheltered").name == "ContextMenu_TraditionalPreservationFishMeat_PalletSpeed")
+check("a covered one says it's no faster", palletLine(0, "Covered").name == "ContextMenu_TraditionalPreservationFishMeat_PalletNoSpeed")
 check("the line explains the places on hover", palletLine(0, "Sheltered").toolTip.description == "Tooltip_craft_stockfishPalletDesc")
 local none = H.menu()
 handlers.OnFillWorldObjectContextMenu(0, none, { { getSprite = function() return nil end } })

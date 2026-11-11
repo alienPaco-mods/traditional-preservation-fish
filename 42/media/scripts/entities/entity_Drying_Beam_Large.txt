@@ -1,4 +1,4 @@
-module TraditionalPreservationFish
+module TraditionalPreservationFishMeat
 {
     entity Drying_Beam_Large
     {
@@ -32,19 +32,19 @@ module TraditionalPreservationFish
         component SpriteConfig
         {
             isThumpable = false,
-            OnIsValid = TraditionalPreservationFish.notInRoom,
+            OnIsValid = TraditionalPreservationFishMeat.notInRoom,
             face S
             {
                 layer
                 {
-                    row = traditionalpreservationfish_02_2,
+                    row = traditionalpreservationfishmeat_02_2,
                 }
             }
             face E
             {
                 layer
                 {
-                    row = traditionalpreservationfish_02_3,
+                    row = traditionalpreservationfishmeat_02_3,
                 }
             }
         }

@@ -1,36 +1,36 @@
--- Traditional Preservation (Fish): Untie Bale, putting a Stockfish Bale's fish and the cord that tied it back
+-- Traditional Preservation (Fish & Meat): Untie Bale, putting a Stockfish Bale's fish and the cord that tied it back
 -- in the inventory.
 require "TimedActions/ISBaseTimedAction"
-require "TraditionalPreservationFish"
+require "TraditionalPreservationFishMeat"
 
-TPFishUntieBale = ISBaseTimedAction:derive("TPFishUntieBale")
+TPFMUntieBale = ISBaseTimedAction:derive("TPFMUntieBale")
 
-local F = TraditionalPreservationFish
+local F = TraditionalPreservationFishMeat
 local Action = require "TraditionalPreservationCore/Action"
 
-function TPFishUntieBale:isValid()
+function TPFMUntieBale:isValid()
     return self.character:getInventory():contains(self.bale)
 end
 
-function TPFishUntieBale:start()
+function TPFMUntieBale:start()
     self:setActionAnim(CharacterActionAnims.Craft)
 end
 
-function TPFishUntieBale:complete()
+function TPFMUntieBale:complete()
     if not self.character:getInventory():contains(self.bale) then return false end
     F.untieBale(self.character:getInventory(), self.bale)
     return true
 end
 
-function TPFishUntieBale:perform()
+function TPFMUntieBale:perform()
     ISBaseTimedAction.perform(self)
 end
 
-function TPFishUntieBale:getDuration()
+function TPFMUntieBale:getDuration()
     return Action.duration(self.character, F.BALE_UNTIE_TICKS)
 end
 
-function TPFishUntieBale:new(character, bale)
+function TPFMUntieBale:new(character, bale)
     local o = ISBaseTimedAction.new(self, character)
     o.bale = bale
     o.maxTime = o:getDuration()

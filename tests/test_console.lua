@@ -1,4 +1,4 @@
--- Checks the debug console (TPF) loads and its commands run. Run from the mod folder: luajit tests/test_console.lua
+-- Checks the debug console (TPFM) loads and its commands run. Run from the mod folder: luajit tests/test_console.lua
 local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
 local check = H.check
 H.useModPaths()
@@ -23,9 +23,9 @@ end
 local player = H.player()
 function getPlayer() return player end
 
-dofile("42/media/lua/shared/TraditionalPreservationFish.lua")
-local F = TraditionalPreservationFish
-local TPF, run = H.checkConsole("42/media/lua/client/TraditionalPreservationFishDev.lua", "TPF")
+dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
+local F = TraditionalPreservationFishMeat
+local TPFM, run = H.checkConsole("42/media/lua/client/TraditionalPreservationFishMeatDev.lua", "TPFM")
 
 check("weather prints the rates and the totals", run("weather"):find("Totals", 1, true) ~= nil)
 
@@ -57,8 +57,8 @@ run("heads", 2)
 run("stock")
 run("salt")
 check("heads, stock and salt land in the inventory", #player.given == 6
-    and player.given[3] == "TraditionalPreservationFish.FishHead"
-    and player.given[5] == "TraditionalPreservationFish.PotOfFishHeadStock" and player.given[6] == "Base.Salt")
+    and player.given[3] == "TraditionalPreservationFishMeat.FishHead"
+    and player.given[5] == "TraditionalPreservationFishMeat.PotOfFishHeadStock" and player.given[6] == "Base.Salt")
 
 local stamped = {}
 player:getInventory().AddItem = function(_, fullType)
@@ -77,7 +77,7 @@ player:getInventory().AddItem = function(_, fullType)
 end
 H.installGetText()
 run("stockfish", 2)
-check("stockfish gives unripe Cold Dried fish", #stamped == 2 and stamped[1].fullType == "TraditionalPreservationFish.ColdDriedFish"
+check("stockfish gives unripe Cold Dried fish", #stamped == 2 and stamped[1].fullType == "TraditionalPreservationFishMeat.ColdDriedFish"
     and stamped[1]:getModData().matureAge == 3 and stamped[1].name == "Walleye (Cold Dried, Unripe)")
 function getCell() return { getGridSquare = function() return nil end } end
 check("pallet says when there is none near", run("pallet"):find("No Stockfish Pallet", 1, true) ~= nil)

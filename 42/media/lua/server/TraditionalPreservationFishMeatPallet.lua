@@ -1,14 +1,14 @@
--- Traditional Preservation (Fish): the Stockfish Pallet. Once an in-game hour it gives the stockfish on it the extra days of
+-- Traditional Preservation (Fish & Meat): the Stockfish Pallet. Once an in-game hour it gives the stockfish on it the extra days of
 -- ripening its place earned since the last one (while the area was unloaded too, as nothing could move them), and
 -- shows the stack while it holds only stockfish.
 if isClient() then return end
 
 local Station = require "TraditionalPreservationCore/Station"
 local Weather = require "TraditionalPreservationCore/Weather"
-local Tiles = require "TraditionalPreservationFish/Tiles"
-local F = TraditionalPreservationFish
+local Tiles = require "TraditionalPreservationFishMeat/Tiles"
+local F = TraditionalPreservationFishMeat
 
-TraditionalPreservationFishPallet = TraditionalPreservationFishPallet or {}
+TraditionalPreservationFishMeatPallet = TraditionalPreservationFishMeatPallet or {}
 
 local function isPallet(object)
     local sprite = object:getSprite()
@@ -16,7 +16,7 @@ local function isPallet(object)
 end
 
 -- The hour last counted is kept on the pallet, not its movableData, so one picked up and put down starts afresh.
-function TraditionalPreservationFishPallet.refresh(pallet, entry, now)
+function TraditionalPreservationFishMeatPallet.refresh(pallet, entry, now)
     local container = pallet:getContainer()
     local square = pallet:getSquare()
     if not container or not square then return end
@@ -36,7 +36,7 @@ end
 local tracker = Station.tracker({
     sprites = { Tiles.PALLET },
     entry = function(object) return isPallet(object) and {} or nil end,
-    refresh = function(pallet, entry) TraditionalPreservationFishPallet.refresh(pallet, entry) end,
+    refresh = function(pallet, entry) TraditionalPreservationFishMeatPallet.refresh(pallet, entry) end,
     scan = true,
 })
 

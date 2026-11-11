@@ -1,5 +1,5 @@
 /* Written by tools/build_tileset.py. */
-module TraditionalPreservationFish
+module TraditionalPreservationFishMeat
 {
     model Packed_Fish_BassLargemouth
     {

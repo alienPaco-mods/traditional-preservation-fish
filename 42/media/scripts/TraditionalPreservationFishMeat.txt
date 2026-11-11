@@ -1,0 +1,818 @@
+module TraditionalPreservationFishMeat
+{
+    imports
+    {
+        Base,
+    }
+
+    model SaltPackedFishGround
+    {
+        mesh = WorldItems/FishFillet,
+        texture = SaltPackedFishModel,
+        scale = 0.3,
+    }
+
+    model SaltPressedFishGround
+    {
+        mesh = WorldItems/FishFillet,
+        texture = SaltPressedFishModel,
+        scale = 0.3,
+    }
+
+    model ColdDriedFishGround
+    {
+        mesh = WorldItems/FishFillet,
+        texture = ColdDriedFishModel,
+        scale = 0.3,
+    }
+
+    /* A bale of stockfish tied with a band, from tools/build_model.py. */
+    model StockfishBaleGround
+    {
+        mesh = StockfishBale,
+        texture = StockfishBaleModel,
+        scale = 0.54,
+    }
+
+    /* Gutted fish still looks like a fish, and a half is a fillet with its skin on. */
+    model GuttedFishGround
+    {
+        mesh = WorldItems/Fish_Bass_Trout,
+        texture = WorldItems/Fish_Bass_LargeMouth,
+        scale = 0.15,
+    }
+
+    model FishHalfGround
+    {
+        mesh = WorldItems/FishFillet,
+        texture = FishHalfModel,
+        scale = 0.36,
+    }
+
+    model SoakedFishGround
+    {
+        mesh = WorldItems/FishFillet,
+        texture = SoakedFishModel,
+        scale = 0.3,
+    }
+
+    model SaltDriedFishGround
+    {
+        mesh = WorldItems/FishFillet,
+        texture = SaltDriedFishModel,
+        scale = 0.3,
+    }
+
+    /* The nutrition, hunger and weight below are for a fillet. Real ones come from the fish that
+       went in, through TraditionalPreservationFishMeat.onCreateCured. IconsForTexture is the order of
+       FISH_ICONS in TraditionalPreservationFishMeat.lua, and the icon for the fish saves with the item. Salt
+       Pressed and Salt Dried use tinted copies from tools/build_tileset.py. Icon is for fish from other mods. */
+    item SaltPackedFish
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.2,
+        Icon = SaltPackedFish,
+        IconsForTexture = FishFillet;Salmon;Fish_BassLargemouth;Fish_BassSmallmouth;Fish_BassSpotted;Fish_BassStriped;Fish_Walleye;Fish_Sauger;Fish_CrappieBlack;Fish_CrappieWhite;Fish_Bluegill;Fish_SunfishRedear;Fish_SunfishGreen;Fish_CatfishBlue;Fish_CatfishChannel;Fish_CatfishFlathead;Fish_Muskellunge;Fish_BassWhite;Fish_PerchYellow;Fish_DrumFreshwater;Fish_GarAlligator;Fish_Paddlefish;PackedGutted_FishFillet;PackedGutted_Salmon;PackedGutted_Fish_BassLargemouth;PackedGutted_Fish_BassSmallmouth;PackedGutted_Fish_BassSpotted;PackedGutted_Fish_BassStriped;PackedGutted_Fish_Walleye;PackedGutted_Fish_Sauger;PackedGutted_Fish_CrappieBlack;PackedGutted_Fish_CrappieWhite;PackedGutted_Fish_Bluegill;PackedGutted_Fish_SunfishRedear;PackedGutted_Fish_SunfishGreen;PackedGutted_Fish_CatfishBlue;PackedGutted_Fish_CatfishChannel;PackedGutted_Fish_CatfishFlathead;PackedGutted_Fish_Muskellunge;PackedGutted_Fish_BassWhite;PackedGutted_Fish_PerchYellow;PackedGutted_Fish_DrumFreshwater;PackedGutted_Fish_GarAlligator;PackedGutted_Fish_Paddlefish;PackedHalf_FishFillet;PackedHalf_Salmon;PackedHalf_Fish_BassLargemouth;PackedHalf_Fish_BassSmallmouth;PackedHalf_Fish_BassSpotted;PackedHalf_Fish_BassStriped;PackedHalf_Fish_Walleye;PackedHalf_Fish_Sauger;PackedHalf_Fish_CrappieBlack;PackedHalf_Fish_CrappieWhite;PackedHalf_Fish_Bluegill;PackedHalf_Fish_SunfishRedear;PackedHalf_Fish_SunfishGreen;PackedHalf_Fish_CatfishBlue;PackedHalf_Fish_CatfishChannel;PackedHalf_Fish_CatfishFlathead;PackedHalf_Fish_Muskellunge;PackedHalf_Fish_BassWhite;PackedHalf_Fish_PerchYellow;PackedHalf_Fish_DrumFreshwater;PackedHalf_Fish_GarAlligator;PackedHalf_Fish_Paddlefish,
+        CantEat = true,
+        DangerousUncooked = true,
+        DaysFresh = 3,
+        DaysTotallyRotten = 6,
+        HungerChange = -25.0,
+        Calories = 205.0,
+        Carbohydrates = 1.0,
+        Lipids = 12.0,
+        Proteins = 28.52,
+        FoodType = Fish,
+        StaticModel = TraditionalPreservationFishMeat.SaltPackedFishGround,
+        WorldStaticModel = TraditionalPreservationFishMeat.SaltPackedFishGround,
+        WorldStaticModelsByIndex = TraditionalPreservationFishMeat.SaltPackedFishGround;TraditionalPreservationFishMeat.SaltPackedFishGround;TraditionalPreservationFishMeat.Packed_Fish_BassLargemouth;TraditionalPreservationFishMeat.Packed_Fish_BassSmallmouth;TraditionalPreservationFishMeat.Packed_Fish_BassSpotted;TraditionalPreservationFishMeat.Packed_Fish_BassStriped;TraditionalPreservationFishMeat.Packed_Fish_Walleye;TraditionalPreservationFishMeat.Packed_Fish_Sauger;TraditionalPreservationFishMeat.Packed_Fish_CrappieBlack;TraditionalPreservationFishMeat.Packed_Fish_CrappieWhite;TraditionalPreservationFishMeat.Packed_Fish_Bluegill;TraditionalPreservationFishMeat.Packed_Fish_SunfishRedear;TraditionalPreservationFishMeat.Packed_Fish_SunfishGreen;TraditionalPreservationFishMeat.Packed_Fish_CatfishBlue;TraditionalPreservationFishMeat.Packed_Fish_CatfishChannel;TraditionalPreservationFishMeat.Packed_Fish_CatfishFlathead;TraditionalPreservationFishMeat.Packed_Fish_Muskellunge;TraditionalPreservationFishMeat.Packed_Fish_BassWhite;TraditionalPreservationFishMeat.Packed_Fish_PerchYellow;TraditionalPreservationFishMeat.Packed_Fish_DrumFreshwater;TraditionalPreservationFishMeat.Packed_Fish_GarAlligator;TraditionalPreservationFishMeat.Packed_Fish_Paddlefish;TraditionalPreservationFishMeat.SaltPackedFishGround;TraditionalPreservationFishMeat.SaltPackedFishGround;TraditionalPreservationFishMeat.PackedGutted_Fish_BassLargemouth;TraditionalPreservationFishMeat.PackedGutted_Fish_BassSmallmouth;TraditionalPreservationFishMeat.PackedGutted_Fish_BassSpotted;TraditionalPreservationFishMeat.PackedGutted_Fish_BassStriped;TraditionalPreservationFishMeat.PackedGutted_Fish_Walleye;TraditionalPreservationFishMeat.PackedGutted_Fish_Sauger;TraditionalPreservationFishMeat.PackedGutted_Fish_CrappieBlack;TraditionalPreservationFishMeat.PackedGutted_Fish_CrappieWhite;TraditionalPreservationFishMeat.PackedGutted_Fish_Bluegill;TraditionalPreservationFishMeat.PackedGutted_Fish_SunfishRedear;TraditionalPreservationFishMeat.PackedGutted_Fish_SunfishGreen;TraditionalPreservationFishMeat.PackedGutted_Fish_CatfishBlue;TraditionalPreservationFishMeat.PackedGutted_Fish_CatfishChannel;TraditionalPreservationFishMeat.PackedGutted_Fish_CatfishFlathead;TraditionalPreservationFishMeat.PackedGutted_Fish_Muskellunge;TraditionalPreservationFishMeat.PackedGutted_Fish_BassWhite;TraditionalPreservationFishMeat.PackedGutted_Fish_PerchYellow;TraditionalPreservationFishMeat.PackedGutted_Fish_DrumFreshwater;TraditionalPreservationFishMeat.PackedGutted_Fish_GarAlligator;TraditionalPreservationFishMeat.PackedGutted_Fish_Paddlefish;TraditionalPreservationFishMeat.SaltPackedFishGround;TraditionalPreservationFishMeat.SaltPackedFishGround;TraditionalPreservationFishMeat.PackedHalf_Fish_BassLargemouth;TraditionalPreservationFishMeat.PackedHalf_Fish_BassSmallmouth;TraditionalPreservationFishMeat.PackedHalf_Fish_BassSpotted;TraditionalPreservationFishMeat.PackedHalf_Fish_BassStriped;TraditionalPreservationFishMeat.PackedHalf_Fish_Walleye;TraditionalPreservationFishMeat.PackedHalf_Fish_Sauger;TraditionalPreservationFishMeat.PackedHalf_Fish_CrappieBlack;TraditionalPreservationFishMeat.PackedHalf_Fish_CrappieWhite;TraditionalPreservationFishMeat.PackedHalf_Fish_Bluegill;TraditionalPreservationFishMeat.PackedHalf_Fish_SunfishRedear;TraditionalPreservationFishMeat.PackedHalf_Fish_SunfishGreen;TraditionalPreservationFishMeat.PackedHalf_Fish_CatfishBlue;TraditionalPreservationFishMeat.PackedHalf_Fish_CatfishChannel;TraditionalPreservationFishMeat.PackedHalf_Fish_CatfishFlathead;TraditionalPreservationFishMeat.PackedHalf_Fish_Muskellunge;TraditionalPreservationFishMeat.PackedHalf_Fish_BassWhite;TraditionalPreservationFishMeat.PackedHalf_Fish_PerchYellow;TraditionalPreservationFishMeat.PackedHalf_Fish_DrumFreshwater;TraditionalPreservationFishMeat.PackedHalf_Fish_GarAlligator;TraditionalPreservationFishMeat.PackedHalf_Fish_Paddlefish,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Packed,
+    }
+
+    /* Cured but still damp: it keeps a week or so, not a season. */
+    item SaltPressedFish
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.18,
+        Icon = SaltPressedFish,
+        IconsForTexture = Pressed_FishFillet;Pressed_Salmon;Pressed_Fish_BassLargemouth;Pressed_Fish_BassSmallmouth;Pressed_Fish_BassSpotted;Pressed_Fish_BassStriped;Pressed_Fish_Walleye;Pressed_Fish_Sauger;Pressed_Fish_CrappieBlack;Pressed_Fish_CrappieWhite;Pressed_Fish_Bluegill;Pressed_Fish_SunfishRedear;Pressed_Fish_SunfishGreen;Pressed_Fish_CatfishBlue;Pressed_Fish_CatfishChannel;Pressed_Fish_CatfishFlathead;Pressed_Fish_Muskellunge;Pressed_Fish_BassWhite;Pressed_Fish_PerchYellow;Pressed_Fish_DrumFreshwater;Pressed_Fish_GarAlligator;Pressed_Fish_Paddlefish;PressedGutted_FishFillet;PressedGutted_Salmon;PressedGutted_Fish_BassLargemouth;PressedGutted_Fish_BassSmallmouth;PressedGutted_Fish_BassSpotted;PressedGutted_Fish_BassStriped;PressedGutted_Fish_Walleye;PressedGutted_Fish_Sauger;PressedGutted_Fish_CrappieBlack;PressedGutted_Fish_CrappieWhite;PressedGutted_Fish_Bluegill;PressedGutted_Fish_SunfishRedear;PressedGutted_Fish_SunfishGreen;PressedGutted_Fish_CatfishBlue;PressedGutted_Fish_CatfishChannel;PressedGutted_Fish_CatfishFlathead;PressedGutted_Fish_Muskellunge;PressedGutted_Fish_BassWhite;PressedGutted_Fish_PerchYellow;PressedGutted_Fish_DrumFreshwater;PressedGutted_Fish_GarAlligator;PressedGutted_Fish_Paddlefish;PressedHalf_FishFillet;PressedHalf_Salmon;PressedHalf_Fish_BassLargemouth;PressedHalf_Fish_BassSmallmouth;PressedHalf_Fish_BassSpotted;PressedHalf_Fish_BassStriped;PressedHalf_Fish_Walleye;PressedHalf_Fish_Sauger;PressedHalf_Fish_CrappieBlack;PressedHalf_Fish_CrappieWhite;PressedHalf_Fish_Bluegill;PressedHalf_Fish_SunfishRedear;PressedHalf_Fish_SunfishGreen;PressedHalf_Fish_CatfishBlue;PressedHalf_Fish_CatfishChannel;PressedHalf_Fish_CatfishFlathead;PressedHalf_Fish_Muskellunge;PressedHalf_Fish_BassWhite;PressedHalf_Fish_PerchYellow;PressedHalf_Fish_DrumFreshwater;PressedHalf_Fish_GarAlligator;PressedHalf_Fish_Paddlefish,
+        DaysFresh = 7,
+        DaysTotallyRotten = 14,
+        HungerChange = -25.0,
+        ThirstChange = 20.0,
+        UnhappyChange = 10,
+        Calories = 205.0,
+        Carbohydrates = 1.0,
+        Lipids = 12.0,
+        Proteins = 28.52,
+        FoodType = Fish,
+        IsCookable = true,
+        DangerousUncooked = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        GoodHot = true,
+        CookingSound = FryingFood,
+        StaticModel = TraditionalPreservationFishMeat.SaltPressedFishGround,
+        WorldStaticModel = TraditionalPreservationFishMeat.SaltPressedFishGround,
+        WorldStaticModelsByIndex = TraditionalPreservationFishMeat.SaltPressedFishGround;TraditionalPreservationFishMeat.SaltPressedFishGround;TraditionalPreservationFishMeat.Pressed_Fish_BassLargemouth;TraditionalPreservationFishMeat.Pressed_Fish_BassSmallmouth;TraditionalPreservationFishMeat.Pressed_Fish_BassSpotted;TraditionalPreservationFishMeat.Pressed_Fish_BassStriped;TraditionalPreservationFishMeat.Pressed_Fish_Walleye;TraditionalPreservationFishMeat.Pressed_Fish_Sauger;TraditionalPreservationFishMeat.Pressed_Fish_CrappieBlack;TraditionalPreservationFishMeat.Pressed_Fish_CrappieWhite;TraditionalPreservationFishMeat.Pressed_Fish_Bluegill;TraditionalPreservationFishMeat.Pressed_Fish_SunfishRedear;TraditionalPreservationFishMeat.Pressed_Fish_SunfishGreen;TraditionalPreservationFishMeat.Pressed_Fish_CatfishBlue;TraditionalPreservationFishMeat.Pressed_Fish_CatfishChannel;TraditionalPreservationFishMeat.Pressed_Fish_CatfishFlathead;TraditionalPreservationFishMeat.Pressed_Fish_Muskellunge;TraditionalPreservationFishMeat.Pressed_Fish_BassWhite;TraditionalPreservationFishMeat.Pressed_Fish_PerchYellow;TraditionalPreservationFishMeat.Pressed_Fish_DrumFreshwater;TraditionalPreservationFishMeat.Pressed_Fish_GarAlligator;TraditionalPreservationFishMeat.Pressed_Fish_Paddlefish;TraditionalPreservationFishMeat.SaltPressedFishGround;TraditionalPreservationFishMeat.SaltPressedFishGround;TraditionalPreservationFishMeat.PressedGutted_Fish_BassLargemouth;TraditionalPreservationFishMeat.PressedGutted_Fish_BassSmallmouth;TraditionalPreservationFishMeat.PressedGutted_Fish_BassSpotted;TraditionalPreservationFishMeat.PressedGutted_Fish_BassStriped;TraditionalPreservationFishMeat.PressedGutted_Fish_Walleye;TraditionalPreservationFishMeat.PressedGutted_Fish_Sauger;TraditionalPreservationFishMeat.PressedGutted_Fish_CrappieBlack;TraditionalPreservationFishMeat.PressedGutted_Fish_CrappieWhite;TraditionalPreservationFishMeat.PressedGutted_Fish_Bluegill;TraditionalPreservationFishMeat.PressedGutted_Fish_SunfishRedear;TraditionalPreservationFishMeat.PressedGutted_Fish_SunfishGreen;TraditionalPreservationFishMeat.PressedGutted_Fish_CatfishBlue;TraditionalPreservationFishMeat.PressedGutted_Fish_CatfishChannel;TraditionalPreservationFishMeat.PressedGutted_Fish_CatfishFlathead;TraditionalPreservationFishMeat.PressedGutted_Fish_Muskellunge;TraditionalPreservationFishMeat.PressedGutted_Fish_BassWhite;TraditionalPreservationFishMeat.PressedGutted_Fish_PerchYellow;TraditionalPreservationFishMeat.PressedGutted_Fish_DrumFreshwater;TraditionalPreservationFishMeat.PressedGutted_Fish_GarAlligator;TraditionalPreservationFishMeat.PressedGutted_Fish_Paddlefish;TraditionalPreservationFishMeat.SaltPressedFishGround;TraditionalPreservationFishMeat.SaltPressedFishGround;TraditionalPreservationFishMeat.PressedHalf_Fish_BassLargemouth;TraditionalPreservationFishMeat.PressedHalf_Fish_BassSmallmouth;TraditionalPreservationFishMeat.PressedHalf_Fish_BassSpotted;TraditionalPreservationFishMeat.PressedHalf_Fish_BassStriped;TraditionalPreservationFishMeat.PressedHalf_Fish_Walleye;TraditionalPreservationFishMeat.PressedHalf_Fish_Sauger;TraditionalPreservationFishMeat.PressedHalf_Fish_CrappieBlack;TraditionalPreservationFishMeat.PressedHalf_Fish_CrappieWhite;TraditionalPreservationFishMeat.PressedHalf_Fish_Bluegill;TraditionalPreservationFishMeat.PressedHalf_Fish_SunfishRedear;TraditionalPreservationFishMeat.PressedHalf_Fish_SunfishGreen;TraditionalPreservationFishMeat.PressedHalf_Fish_CatfishBlue;TraditionalPreservationFishMeat.PressedHalf_Fish_CatfishChannel;TraditionalPreservationFishMeat.PressedHalf_Fish_CatfishFlathead;TraditionalPreservationFishMeat.PressedHalf_Fish_Muskellunge;TraditionalPreservationFishMeat.PressedHalf_Fish_BassWhite;TraditionalPreservationFishMeat.PressedHalf_Fish_PerchYellow;TraditionalPreservationFishMeat.PressedHalf_Fish_DrumFreshwater;TraditionalPreservationFishMeat.PressedHalf_Fish_GarAlligator;TraditionalPreservationFishMeat.PressedHalf_Fish_Paddlefish,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Pressed,
+    }
+
+    item SaltDriedFish
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.08,
+        Icon = SaltDriedFish,
+        IconsForTexture = Dried_FishFillet;Dried_Salmon;Dried_Fish_BassLargemouth;Dried_Fish_BassSmallmouth;Dried_Fish_BassSpotted;Dried_Fish_BassStriped;Dried_Fish_Walleye;Dried_Fish_Sauger;Dried_Fish_CrappieBlack;Dried_Fish_CrappieWhite;Dried_Fish_Bluegill;Dried_Fish_SunfishRedear;Dried_Fish_SunfishGreen;Dried_Fish_CatfishBlue;Dried_Fish_CatfishChannel;Dried_Fish_CatfishFlathead;Dried_Fish_Muskellunge;Dried_Fish_BassWhite;Dried_Fish_PerchYellow;Dried_Fish_DrumFreshwater;Dried_Fish_GarAlligator;Dried_Fish_Paddlefish;DriedGutted_FishFillet;DriedGutted_Salmon;DriedGutted_Fish_BassLargemouth;DriedGutted_Fish_BassSmallmouth;DriedGutted_Fish_BassSpotted;DriedGutted_Fish_BassStriped;DriedGutted_Fish_Walleye;DriedGutted_Fish_Sauger;DriedGutted_Fish_CrappieBlack;DriedGutted_Fish_CrappieWhite;DriedGutted_Fish_Bluegill;DriedGutted_Fish_SunfishRedear;DriedGutted_Fish_SunfishGreen;DriedGutted_Fish_CatfishBlue;DriedGutted_Fish_CatfishChannel;DriedGutted_Fish_CatfishFlathead;DriedGutted_Fish_Muskellunge;DriedGutted_Fish_BassWhite;DriedGutted_Fish_PerchYellow;DriedGutted_Fish_DrumFreshwater;DriedGutted_Fish_GarAlligator;DriedGutted_Fish_Paddlefish;DriedHalf_FishFillet;DriedHalf_Salmon;DriedHalf_Fish_BassLargemouth;DriedHalf_Fish_BassSmallmouth;DriedHalf_Fish_BassSpotted;DriedHalf_Fish_BassStriped;DriedHalf_Fish_Walleye;DriedHalf_Fish_Sauger;DriedHalf_Fish_CrappieBlack;DriedHalf_Fish_CrappieWhite;DriedHalf_Fish_Bluegill;DriedHalf_Fish_SunfishRedear;DriedHalf_Fish_SunfishGreen;DriedHalf_Fish_CatfishBlue;DriedHalf_Fish_CatfishChannel;DriedHalf_Fish_CatfishFlathead;DriedHalf_Fish_Muskellunge;DriedHalf_Fish_BassWhite;DriedHalf_Fish_PerchYellow;DriedHalf_Fish_DrumFreshwater;DriedHalf_Fish_GarAlligator;DriedHalf_Fish_Paddlefish,
+        DaysFresh = 120,
+        DaysTotallyRotten = 180,
+        HungerChange = -18.0,
+        ThirstChange = 30.0,
+        UnhappyChange = 3,
+        Calories = 185.0,
+        Carbohydrates = 1.0,
+        Lipids = 11.0,
+        Proteins = 25.7,
+        FoodType = Fish,
+        EvolvedRecipe = Soup:10;Stew:10;Rice:10;Pasta:10,
+        EvolvedRecipeName = Fish,
+        StaticModel = TraditionalPreservationFishMeat.SaltDriedFishGround,
+        WorldStaticModel = TraditionalPreservationFishMeat.SaltDriedFishGround,
+        WorldStaticModelsByIndex = TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.Dried_Fish_BassLargemouth;TraditionalPreservationFishMeat.Dried_Fish_BassSmallmouth;TraditionalPreservationFishMeat.Dried_Fish_BassSpotted;TraditionalPreservationFishMeat.Dried_Fish_BassStriped;TraditionalPreservationFishMeat.Dried_Fish_Walleye;TraditionalPreservationFishMeat.Dried_Fish_Sauger;TraditionalPreservationFishMeat.Dried_Fish_CrappieBlack;TraditionalPreservationFishMeat.Dried_Fish_CrappieWhite;TraditionalPreservationFishMeat.Dried_Fish_Bluegill;TraditionalPreservationFishMeat.Dried_Fish_SunfishRedear;TraditionalPreservationFishMeat.Dried_Fish_SunfishGreen;TraditionalPreservationFishMeat.Dried_Fish_CatfishBlue;TraditionalPreservationFishMeat.Dried_Fish_CatfishChannel;TraditionalPreservationFishMeat.Dried_Fish_CatfishFlathead;TraditionalPreservationFishMeat.Dried_Fish_Muskellunge;TraditionalPreservationFishMeat.Dried_Fish_BassWhite;TraditionalPreservationFishMeat.Dried_Fish_PerchYellow;TraditionalPreservationFishMeat.Dried_Fish_DrumFreshwater;TraditionalPreservationFishMeat.Dried_Fish_GarAlligator;TraditionalPreservationFishMeat.Dried_Fish_Paddlefish;TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.DriedGutted_Fish_BassLargemouth;TraditionalPreservationFishMeat.DriedGutted_Fish_BassSmallmouth;TraditionalPreservationFishMeat.DriedGutted_Fish_BassSpotted;TraditionalPreservationFishMeat.DriedGutted_Fish_BassStriped;TraditionalPreservationFishMeat.DriedGutted_Fish_Walleye;TraditionalPreservationFishMeat.DriedGutted_Fish_Sauger;TraditionalPreservationFishMeat.DriedGutted_Fish_CrappieBlack;TraditionalPreservationFishMeat.DriedGutted_Fish_CrappieWhite;TraditionalPreservationFishMeat.DriedGutted_Fish_Bluegill;TraditionalPreservationFishMeat.DriedGutted_Fish_SunfishRedear;TraditionalPreservationFishMeat.DriedGutted_Fish_SunfishGreen;TraditionalPreservationFishMeat.DriedGutted_Fish_CatfishBlue;TraditionalPreservationFishMeat.DriedGutted_Fish_CatfishChannel;TraditionalPreservationFishMeat.DriedGutted_Fish_CatfishFlathead;TraditionalPreservationFishMeat.DriedGutted_Fish_Muskellunge;TraditionalPreservationFishMeat.DriedGutted_Fish_BassWhite;TraditionalPreservationFishMeat.DriedGutted_Fish_PerchYellow;TraditionalPreservationFishMeat.DriedGutted_Fish_DrumFreshwater;TraditionalPreservationFishMeat.DriedGutted_Fish_GarAlligator;TraditionalPreservationFishMeat.DriedGutted_Fish_Paddlefish;TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.SaltDriedFishGround;TraditionalPreservationFishMeat.DriedHalf_Fish_BassLargemouth;TraditionalPreservationFishMeat.DriedHalf_Fish_BassSmallmouth;TraditionalPreservationFishMeat.DriedHalf_Fish_BassSpotted;TraditionalPreservationFishMeat.DriedHalf_Fish_BassStriped;TraditionalPreservationFishMeat.DriedHalf_Fish_Walleye;TraditionalPreservationFishMeat.DriedHalf_Fish_Sauger;TraditionalPreservationFishMeat.DriedHalf_Fish_CrappieBlack;TraditionalPreservationFishMeat.DriedHalf_Fish_CrappieWhite;TraditionalPreservationFishMeat.DriedHalf_Fish_Bluegill;TraditionalPreservationFishMeat.DriedHalf_Fish_SunfishRedear;TraditionalPreservationFishMeat.DriedHalf_Fish_SunfishGreen;TraditionalPreservationFishMeat.DriedHalf_Fish_CatfishBlue;TraditionalPreservationFishMeat.DriedHalf_Fish_CatfishChannel;TraditionalPreservationFishMeat.DriedHalf_Fish_CatfishFlathead;TraditionalPreservationFishMeat.DriedHalf_Fish_Muskellunge;TraditionalPreservationFishMeat.DriedHalf_Fish_BassWhite;TraditionalPreservationFishMeat.DriedHalf_Fish_PerchYellow;TraditionalPreservationFishMeat.DriedHalf_Fish_DrumFreshwater;TraditionalPreservationFishMeat.DriedHalf_Fish_GarAlligator;TraditionalPreservationFishMeat.DriedHalf_Fish_Paddlefish,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Dried,
+    }
+
+    /* No salt, so it keeps longer than Salt Dried but is too hard to use until soaked. */
+    item ColdDriedFish
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.08,
+        Icon = ColdDriedFish,
+        IconsForTexture = Cold_FishFillet;Cold_Salmon;Cold_Fish_BassLargemouth;Cold_Fish_BassSmallmouth;Cold_Fish_BassSpotted;Cold_Fish_BassStriped;Cold_Fish_Walleye;Cold_Fish_Sauger;Cold_Fish_CrappieBlack;Cold_Fish_CrappieWhite;Cold_Fish_Bluegill;Cold_Fish_SunfishRedear;Cold_Fish_SunfishGreen;Cold_Fish_CatfishBlue;Cold_Fish_CatfishChannel;Cold_Fish_CatfishFlathead;Cold_Fish_Muskellunge;Cold_Fish_BassWhite;Cold_Fish_PerchYellow;Cold_Fish_DrumFreshwater;Cold_Fish_GarAlligator;Cold_Fish_Paddlefish;ColdGutted_FishFillet;ColdGutted_Salmon;ColdGutted_Fish_BassLargemouth;ColdGutted_Fish_BassSmallmouth;ColdGutted_Fish_BassSpotted;ColdGutted_Fish_BassStriped;ColdGutted_Fish_Walleye;ColdGutted_Fish_Sauger;ColdGutted_Fish_CrappieBlack;ColdGutted_Fish_CrappieWhite;ColdGutted_Fish_Bluegill;ColdGutted_Fish_SunfishRedear;ColdGutted_Fish_SunfishGreen;ColdGutted_Fish_CatfishBlue;ColdGutted_Fish_CatfishChannel;ColdGutted_Fish_CatfishFlathead;ColdGutted_Fish_Muskellunge;ColdGutted_Fish_BassWhite;ColdGutted_Fish_PerchYellow;ColdGutted_Fish_DrumFreshwater;ColdGutted_Fish_GarAlligator;ColdGutted_Fish_Paddlefish;ColdHalf_FishFillet;ColdHalf_Salmon;ColdHalf_Fish_BassLargemouth;ColdHalf_Fish_BassSmallmouth;ColdHalf_Fish_BassSpotted;ColdHalf_Fish_BassStriped;ColdHalf_Fish_Walleye;ColdHalf_Fish_Sauger;ColdHalf_Fish_CrappieBlack;ColdHalf_Fish_CrappieWhite;ColdHalf_Fish_Bluegill;ColdHalf_Fish_SunfishRedear;ColdHalf_Fish_SunfishGreen;ColdHalf_Fish_CatfishBlue;ColdHalf_Fish_CatfishChannel;ColdHalf_Fish_CatfishFlathead;ColdHalf_Fish_Muskellunge;ColdHalf_Fish_BassWhite;ColdHalf_Fish_PerchYellow;ColdHalf_Fish_DrumFreshwater;ColdHalf_Fish_GarAlligator;ColdHalf_Fish_Paddlefish,
+        DaysFresh = 365,
+        DaysTotallyRotten = 730,
+        HungerChange = -18.0,
+        ThirstChange = 10.0,
+        UnhappyChange = 20,
+        Calories = 185.0,
+        Carbohydrates = 1.0,
+        Lipids = 11.0,
+        Proteins = 25.7,
+        FoodType = Fish,
+        StaticModel = TraditionalPreservationFishMeat.ColdDriedFishGround,
+        WorldStaticModel = TraditionalPreservationFishMeat.ColdDriedFishGround,
+        WorldStaticModelsByIndex = TraditionalPreservationFishMeat.ColdDriedFishGround;TraditionalPreservationFishMeat.ColdDriedFishGround;TraditionalPreservationFishMeat.Cold_Fish_BassLargemouth;TraditionalPreservationFishMeat.Cold_Fish_BassSmallmouth;TraditionalPreservationFishMeat.Cold_Fish_BassSpotted;TraditionalPreservationFishMeat.Cold_Fish_BassStriped;TraditionalPreservationFishMeat.Cold_Fish_Walleye;TraditionalPreservationFishMeat.Cold_Fish_Sauger;TraditionalPreservationFishMeat.Cold_Fish_CrappieBlack;TraditionalPreservationFishMeat.Cold_Fish_CrappieWhite;TraditionalPreservationFishMeat.Cold_Fish_Bluegill;TraditionalPreservationFishMeat.Cold_Fish_SunfishRedear;TraditionalPreservationFishMeat.Cold_Fish_SunfishGreen;TraditionalPreservationFishMeat.Cold_Fish_CatfishBlue;TraditionalPreservationFishMeat.Cold_Fish_CatfishChannel;TraditionalPreservationFishMeat.Cold_Fish_CatfishFlathead;TraditionalPreservationFishMeat.Cold_Fish_Muskellunge;TraditionalPreservationFishMeat.Cold_Fish_BassWhite;TraditionalPreservationFishMeat.Cold_Fish_PerchYellow;TraditionalPreservationFishMeat.Cold_Fish_DrumFreshwater;TraditionalPreservationFishMeat.Cold_Fish_GarAlligator;TraditionalPreservationFishMeat.Cold_Fish_Paddlefish;TraditionalPreservationFishMeat.ColdDriedFishGround;TraditionalPreservationFishMeat.ColdDriedFishGround;TraditionalPreservationFishMeat.Cold_Fish_BassLargemouth;TraditionalPreservationFishMeat.Cold_Fish_BassSmallmouth;TraditionalPreservationFishMeat.Cold_Fish_BassSpotted;TraditionalPreservationFishMeat.Cold_Fish_BassStriped;TraditionalPreservationFishMeat.Cold_Fish_Walleye;TraditionalPreservationFishMeat.Cold_Fish_Sauger;TraditionalPreservationFishMeat.Cold_Fish_CrappieBlack;TraditionalPreservationFishMeat.Cold_Fish_CrappieWhite;TraditionalPreservationFishMeat.Cold_Fish_Bluegill;TraditionalPreservationFishMeat.Cold_Fish_SunfishRedear;TraditionalPreservationFishMeat.Cold_Fish_SunfishGreen;TraditionalPreservationFishMeat.Cold_Fish_CatfishBlue;TraditionalPreservationFishMeat.Cold_Fish_CatfishChannel;TraditionalPreservationFishMeat.Cold_Fish_CatfishFlathead;TraditionalPreservationFishMeat.Cold_Fish_Muskellunge;TraditionalPreservationFishMeat.Cold_Fish_BassWhite;TraditionalPreservationFishMeat.Cold_Fish_PerchYellow;TraditionalPreservationFishMeat.Cold_Fish_DrumFreshwater;TraditionalPreservationFishMeat.Cold_Fish_GarAlligator;TraditionalPreservationFishMeat.Cold_Fish_Paddlefish;TraditionalPreservationFishMeat.ColdDriedFishGround;TraditionalPreservationFishMeat.ColdDriedFishGround;TraditionalPreservationFishMeat.ColdHalf_Fish_BassLargemouth;TraditionalPreservationFishMeat.ColdHalf_Fish_BassSmallmouth;TraditionalPreservationFishMeat.ColdHalf_Fish_BassSpotted;TraditionalPreservationFishMeat.ColdHalf_Fish_BassStriped;TraditionalPreservationFishMeat.ColdHalf_Fish_Walleye;TraditionalPreservationFishMeat.ColdHalf_Fish_Sauger;TraditionalPreservationFishMeat.ColdHalf_Fish_CrappieBlack;TraditionalPreservationFishMeat.ColdHalf_Fish_CrappieWhite;TraditionalPreservationFishMeat.ColdHalf_Fish_Bluegill;TraditionalPreservationFishMeat.ColdHalf_Fish_SunfishRedear;TraditionalPreservationFishMeat.ColdHalf_Fish_SunfishGreen;TraditionalPreservationFishMeat.ColdHalf_Fish_CatfishBlue;TraditionalPreservationFishMeat.ColdHalf_Fish_CatfishChannel;TraditionalPreservationFishMeat.ColdHalf_Fish_CatfishFlathead;TraditionalPreservationFishMeat.ColdHalf_Fish_Muskellunge;TraditionalPreservationFishMeat.ColdHalf_Fish_BassWhite;TraditionalPreservationFishMeat.ColdHalf_Fish_PerchYellow;TraditionalPreservationFishMeat.ColdHalf_Fish_DrumFreshwater;TraditionalPreservationFishMeat.ColdHalf_Fish_GarAlligator;TraditionalPreservationFishMeat.ColdHalf_Fish_Paddlefish,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_ColdDried,
+    }
+
+    /* Stockfish tied up for carrying and storing. Tied and untied from the right-click menu; the bale weighs
+       what tied it (TraditionalPreservationFishMeat.tieBale), and only stockfish goes in. */
+    item StockfishBale
+    {
+        DisplayCategory = Container,
+        ItemType = base:container,
+        Weight = 0.1,
+        Icon = StockfishBale,
+        Capacity = 10,
+        WeightReduction = 30,
+        AcceptItemFunction = TraditionalPreservationFishMeat.acceptBale,
+        WorldStaticModel = TraditionalPreservationFishMeat.StockfishBaleGround,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_StockfishBale,
+    }
+
+    /* Water back in, so it spoils like fresh fish again. */
+    item SoakedSaltFish
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = SoakedSaltFish,
+        IconsForTexture = Soaked_FishFillet;Soaked_Salmon;Soaked_Fish_BassLargemouth;Soaked_Fish_BassSmallmouth;Soaked_Fish_BassSpotted;Soaked_Fish_BassStriped;Soaked_Fish_Walleye;Soaked_Fish_Sauger;Soaked_Fish_CrappieBlack;Soaked_Fish_CrappieWhite;Soaked_Fish_Bluegill;Soaked_Fish_SunfishRedear;Soaked_Fish_SunfishGreen;Soaked_Fish_CatfishBlue;Soaked_Fish_CatfishChannel;Soaked_Fish_CatfishFlathead;Soaked_Fish_Muskellunge;Soaked_Fish_BassWhite;Soaked_Fish_PerchYellow;Soaked_Fish_DrumFreshwater;Soaked_Fish_GarAlligator;Soaked_Fish_Paddlefish;SoakedGutted_FishFillet;SoakedGutted_Salmon;SoakedGutted_Fish_BassLargemouth;SoakedGutted_Fish_BassSmallmouth;SoakedGutted_Fish_BassSpotted;SoakedGutted_Fish_BassStriped;SoakedGutted_Fish_Walleye;SoakedGutted_Fish_Sauger;SoakedGutted_Fish_CrappieBlack;SoakedGutted_Fish_CrappieWhite;SoakedGutted_Fish_Bluegill;SoakedGutted_Fish_SunfishRedear;SoakedGutted_Fish_SunfishGreen;SoakedGutted_Fish_CatfishBlue;SoakedGutted_Fish_CatfishChannel;SoakedGutted_Fish_CatfishFlathead;SoakedGutted_Fish_Muskellunge;SoakedGutted_Fish_BassWhite;SoakedGutted_Fish_PerchYellow;SoakedGutted_Fish_DrumFreshwater;SoakedGutted_Fish_GarAlligator;SoakedGutted_Fish_Paddlefish;SoakedHalf_FishFillet;SoakedHalf_Salmon;SoakedHalf_Fish_BassLargemouth;SoakedHalf_Fish_BassSmallmouth;SoakedHalf_Fish_BassSpotted;SoakedHalf_Fish_BassStriped;SoakedHalf_Fish_Walleye;SoakedHalf_Fish_Sauger;SoakedHalf_Fish_CrappieBlack;SoakedHalf_Fish_CrappieWhite;SoakedHalf_Fish_Bluegill;SoakedHalf_Fish_SunfishRedear;SoakedHalf_Fish_SunfishGreen;SoakedHalf_Fish_CatfishBlue;SoakedHalf_Fish_CatfishChannel;SoakedHalf_Fish_CatfishFlathead;SoakedHalf_Fish_Muskellunge;SoakedHalf_Fish_BassWhite;SoakedHalf_Fish_PerchYellow;SoakedHalf_Fish_DrumFreshwater;SoakedHalf_Fish_GarAlligator;SoakedHalf_Fish_Paddlefish,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -18.0,
+        ThirstChange = 5.0,
+        Calories = 185.0,
+        Carbohydrates = 1.0,
+        Lipids = 11.0,
+        Proteins = 25.7,
+        FoodType = Fish,
+        IsCookable = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        GoodHot = true,
+        CookingSound = FryingFood,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Pie:15;Stir fry:15;Sandwich:5|Cooked;Burger:10|Cooked;Salad:10|Cooked;Rice:15;Pasta:15;Taco:10|Cooked;Burrito:15|Cooked,
+        EvolvedRecipeName = Fish,
+        StaticModel = TraditionalPreservationFishMeat.SoakedFishGround,
+        WorldStaticModel = TraditionalPreservationFishMeat.SoakedFishGround,
+        WorldStaticModelsByIndex = TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.Soaked_Fish_BassLargemouth;TraditionalPreservationFishMeat.Soaked_Fish_BassSmallmouth;TraditionalPreservationFishMeat.Soaked_Fish_BassSpotted;TraditionalPreservationFishMeat.Soaked_Fish_BassStriped;TraditionalPreservationFishMeat.Soaked_Fish_Walleye;TraditionalPreservationFishMeat.Soaked_Fish_Sauger;TraditionalPreservationFishMeat.Soaked_Fish_CrappieBlack;TraditionalPreservationFishMeat.Soaked_Fish_CrappieWhite;TraditionalPreservationFishMeat.Soaked_Fish_Bluegill;TraditionalPreservationFishMeat.Soaked_Fish_SunfishRedear;TraditionalPreservationFishMeat.Soaked_Fish_SunfishGreen;TraditionalPreservationFishMeat.Soaked_Fish_CatfishBlue;TraditionalPreservationFishMeat.Soaked_Fish_CatfishChannel;TraditionalPreservationFishMeat.Soaked_Fish_CatfishFlathead;TraditionalPreservationFishMeat.Soaked_Fish_Muskellunge;TraditionalPreservationFishMeat.Soaked_Fish_BassWhite;TraditionalPreservationFishMeat.Soaked_Fish_PerchYellow;TraditionalPreservationFishMeat.Soaked_Fish_DrumFreshwater;TraditionalPreservationFishMeat.Soaked_Fish_GarAlligator;TraditionalPreservationFishMeat.Soaked_Fish_Paddlefish;TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.SoakedGutted_Fish_BassLargemouth;TraditionalPreservationFishMeat.SoakedGutted_Fish_BassSmallmouth;TraditionalPreservationFishMeat.SoakedGutted_Fish_BassSpotted;TraditionalPreservationFishMeat.SoakedGutted_Fish_BassStriped;TraditionalPreservationFishMeat.SoakedGutted_Fish_Walleye;TraditionalPreservationFishMeat.SoakedGutted_Fish_Sauger;TraditionalPreservationFishMeat.SoakedGutted_Fish_CrappieBlack;TraditionalPreservationFishMeat.SoakedGutted_Fish_CrappieWhite;TraditionalPreservationFishMeat.SoakedGutted_Fish_Bluegill;TraditionalPreservationFishMeat.SoakedGutted_Fish_SunfishRedear;TraditionalPreservationFishMeat.SoakedGutted_Fish_SunfishGreen;TraditionalPreservationFishMeat.SoakedGutted_Fish_CatfishBlue;TraditionalPreservationFishMeat.SoakedGutted_Fish_CatfishChannel;TraditionalPreservationFishMeat.SoakedGutted_Fish_CatfishFlathead;TraditionalPreservationFishMeat.SoakedGutted_Fish_Muskellunge;TraditionalPreservationFishMeat.SoakedGutted_Fish_BassWhite;TraditionalPreservationFishMeat.SoakedGutted_Fish_PerchYellow;TraditionalPreservationFishMeat.SoakedGutted_Fish_DrumFreshwater;TraditionalPreservationFishMeat.SoakedGutted_Fish_GarAlligator;TraditionalPreservationFishMeat.SoakedGutted_Fish_Paddlefish;TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.SoakedHalf_Fish_BassLargemouth;TraditionalPreservationFishMeat.SoakedHalf_Fish_BassSmallmouth;TraditionalPreservationFishMeat.SoakedHalf_Fish_BassSpotted;TraditionalPreservationFishMeat.SoakedHalf_Fish_BassStriped;TraditionalPreservationFishMeat.SoakedHalf_Fish_Walleye;TraditionalPreservationFishMeat.SoakedHalf_Fish_Sauger;TraditionalPreservationFishMeat.SoakedHalf_Fish_CrappieBlack;TraditionalPreservationFishMeat.SoakedHalf_Fish_CrappieWhite;TraditionalPreservationFishMeat.SoakedHalf_Fish_Bluegill;TraditionalPreservationFishMeat.SoakedHalf_Fish_SunfishRedear;TraditionalPreservationFishMeat.SoakedHalf_Fish_SunfishGreen;TraditionalPreservationFishMeat.SoakedHalf_Fish_CatfishBlue;TraditionalPreservationFishMeat.SoakedHalf_Fish_CatfishChannel;TraditionalPreservationFishMeat.SoakedHalf_Fish_CatfishFlathead;TraditionalPreservationFishMeat.SoakedHalf_Fish_Muskellunge;TraditionalPreservationFishMeat.SoakedHalf_Fish_BassWhite;TraditionalPreservationFishMeat.SoakedHalf_Fish_PerchYellow;TraditionalPreservationFishMeat.SoakedHalf_Fish_DrumFreshwater;TraditionalPreservationFishMeat.SoakedHalf_Fish_GarAlligator;TraditionalPreservationFishMeat.SoakedHalf_Fish_Paddlefish,
+    }
+
+    /* Its own item, because it takes up more water than salt fish does. */
+    item SoakedColdFish
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = SoakedColdFish,
+        IconsForTexture = SoakedCold_FishFillet;SoakedCold_Salmon;SoakedCold_Fish_BassLargemouth;SoakedCold_Fish_BassSmallmouth;SoakedCold_Fish_BassSpotted;SoakedCold_Fish_BassStriped;SoakedCold_Fish_Walleye;SoakedCold_Fish_Sauger;SoakedCold_Fish_CrappieBlack;SoakedCold_Fish_CrappieWhite;SoakedCold_Fish_Bluegill;SoakedCold_Fish_SunfishRedear;SoakedCold_Fish_SunfishGreen;SoakedCold_Fish_CatfishBlue;SoakedCold_Fish_CatfishChannel;SoakedCold_Fish_CatfishFlathead;SoakedCold_Fish_Muskellunge;SoakedCold_Fish_BassWhite;SoakedCold_Fish_PerchYellow;SoakedCold_Fish_DrumFreshwater;SoakedCold_Fish_GarAlligator;SoakedCold_Fish_Paddlefish;SoakedColdGutted_FishFillet;SoakedColdGutted_Salmon;SoakedColdGutted_Fish_BassLargemouth;SoakedColdGutted_Fish_BassSmallmouth;SoakedColdGutted_Fish_BassSpotted;SoakedColdGutted_Fish_BassStriped;SoakedColdGutted_Fish_Walleye;SoakedColdGutted_Fish_Sauger;SoakedColdGutted_Fish_CrappieBlack;SoakedColdGutted_Fish_CrappieWhite;SoakedColdGutted_Fish_Bluegill;SoakedColdGutted_Fish_SunfishRedear;SoakedColdGutted_Fish_SunfishGreen;SoakedColdGutted_Fish_CatfishBlue;SoakedColdGutted_Fish_CatfishChannel;SoakedColdGutted_Fish_CatfishFlathead;SoakedColdGutted_Fish_Muskellunge;SoakedColdGutted_Fish_BassWhite;SoakedColdGutted_Fish_PerchYellow;SoakedColdGutted_Fish_DrumFreshwater;SoakedColdGutted_Fish_GarAlligator;SoakedColdGutted_Fish_Paddlefish;SoakedColdHalf_FishFillet;SoakedColdHalf_Salmon;SoakedColdHalf_Fish_BassLargemouth;SoakedColdHalf_Fish_BassSmallmouth;SoakedColdHalf_Fish_BassSpotted;SoakedColdHalf_Fish_BassStriped;SoakedColdHalf_Fish_Walleye;SoakedColdHalf_Fish_Sauger;SoakedColdHalf_Fish_CrappieBlack;SoakedColdHalf_Fish_CrappieWhite;SoakedColdHalf_Fish_Bluegill;SoakedColdHalf_Fish_SunfishRedear;SoakedColdHalf_Fish_SunfishGreen;SoakedColdHalf_Fish_CatfishBlue;SoakedColdHalf_Fish_CatfishChannel;SoakedColdHalf_Fish_CatfishFlathead;SoakedColdHalf_Fish_Muskellunge;SoakedColdHalf_Fish_BassWhite;SoakedColdHalf_Fish_PerchYellow;SoakedColdHalf_Fish_DrumFreshwater;SoakedColdHalf_Fish_GarAlligator;SoakedColdHalf_Fish_Paddlefish,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -18.0,
+        ThirstChange = 5.0,
+        Calories = 185.0,
+        Carbohydrates = 1.0,
+        Lipids = 11.0,
+        Proteins = 25.7,
+        FoodType = Fish,
+        IsCookable = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        GoodHot = true,
+        CookingSound = FryingFood,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Pie:15;Stir fry:15;Sandwich:5|Cooked;Burger:10|Cooked;Salad:10|Cooked;Rice:15;Pasta:15;Taco:10|Cooked;Burrito:15|Cooked,
+        EvolvedRecipeName = Fish,
+        StaticModel = TraditionalPreservationFishMeat.SoakedFishGround,
+        WorldStaticModel = TraditionalPreservationFishMeat.SoakedFishGround,
+        WorldStaticModelsByIndex = TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.SoakedCold_Fish_BassLargemouth;TraditionalPreservationFishMeat.SoakedCold_Fish_BassSmallmouth;TraditionalPreservationFishMeat.SoakedCold_Fish_BassSpotted;TraditionalPreservationFishMeat.SoakedCold_Fish_BassStriped;TraditionalPreservationFishMeat.SoakedCold_Fish_Walleye;TraditionalPreservationFishMeat.SoakedCold_Fish_Sauger;TraditionalPreservationFishMeat.SoakedCold_Fish_CrappieBlack;TraditionalPreservationFishMeat.SoakedCold_Fish_CrappieWhite;TraditionalPreservationFishMeat.SoakedCold_Fish_Bluegill;TraditionalPreservationFishMeat.SoakedCold_Fish_SunfishRedear;TraditionalPreservationFishMeat.SoakedCold_Fish_SunfishGreen;TraditionalPreservationFishMeat.SoakedCold_Fish_CatfishBlue;TraditionalPreservationFishMeat.SoakedCold_Fish_CatfishChannel;TraditionalPreservationFishMeat.SoakedCold_Fish_CatfishFlathead;TraditionalPreservationFishMeat.SoakedCold_Fish_Muskellunge;TraditionalPreservationFishMeat.SoakedCold_Fish_BassWhite;TraditionalPreservationFishMeat.SoakedCold_Fish_PerchYellow;TraditionalPreservationFishMeat.SoakedCold_Fish_DrumFreshwater;TraditionalPreservationFishMeat.SoakedCold_Fish_GarAlligator;TraditionalPreservationFishMeat.SoakedCold_Fish_Paddlefish;TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.SoakedCold_Fish_BassLargemouth;TraditionalPreservationFishMeat.SoakedCold_Fish_BassSmallmouth;TraditionalPreservationFishMeat.SoakedCold_Fish_BassSpotted;TraditionalPreservationFishMeat.SoakedCold_Fish_BassStriped;TraditionalPreservationFishMeat.SoakedCold_Fish_Walleye;TraditionalPreservationFishMeat.SoakedCold_Fish_Sauger;TraditionalPreservationFishMeat.SoakedCold_Fish_CrappieBlack;TraditionalPreservationFishMeat.SoakedCold_Fish_CrappieWhite;TraditionalPreservationFishMeat.SoakedCold_Fish_Bluegill;TraditionalPreservationFishMeat.SoakedCold_Fish_SunfishRedear;TraditionalPreservationFishMeat.SoakedCold_Fish_SunfishGreen;TraditionalPreservationFishMeat.SoakedCold_Fish_CatfishBlue;TraditionalPreservationFishMeat.SoakedCold_Fish_CatfishChannel;TraditionalPreservationFishMeat.SoakedCold_Fish_CatfishFlathead;TraditionalPreservationFishMeat.SoakedCold_Fish_Muskellunge;TraditionalPreservationFishMeat.SoakedCold_Fish_BassWhite;TraditionalPreservationFishMeat.SoakedCold_Fish_PerchYellow;TraditionalPreservationFishMeat.SoakedCold_Fish_DrumFreshwater;TraditionalPreservationFishMeat.SoakedCold_Fish_GarAlligator;TraditionalPreservationFishMeat.SoakedCold_Fish_Paddlefish;TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.SoakedFishGround;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_BassLargemouth;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_BassSmallmouth;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_BassSpotted;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_BassStriped;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_Walleye;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_Sauger;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_CrappieBlack;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_CrappieWhite;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_Bluegill;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_SunfishRedear;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_SunfishGreen;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_CatfishBlue;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_CatfishChannel;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_CatfishFlathead;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_Muskellunge;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_BassWhite;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_PerchYellow;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_DrumFreshwater;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_GarAlligator;TraditionalPreservationFishMeat.SoakedColdHalf_Fish_Paddlefish,
+    }
+
+    /* Cleaned for the frame. It still cooks like a fresh fish. */
+    item GuttedFish
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = GuttedFish,
+        IconsForTexture = Gutted_FishFillet;Gutted_Salmon;Gutted_Fish_BassLargemouth;Gutted_Fish_BassSmallmouth;Gutted_Fish_BassSpotted;Gutted_Fish_BassStriped;Gutted_Fish_Walleye;Gutted_Fish_Sauger;Gutted_Fish_CrappieBlack;Gutted_Fish_CrappieWhite;Gutted_Fish_Bluegill;Gutted_Fish_SunfishRedear;Gutted_Fish_SunfishGreen;Gutted_Fish_CatfishBlue;Gutted_Fish_CatfishChannel;Gutted_Fish_CatfishFlathead;Gutted_Fish_Muskellunge;Gutted_Fish_BassWhite;Gutted_Fish_PerchYellow;Gutted_Fish_DrumFreshwater;Gutted_Fish_GarAlligator;Gutted_Fish_Paddlefish,
+        DaysFresh = 3,
+        DaysTotallyRotten = 6,
+        HungerChange = -18.0,
+        ThirstChange = 5.0,
+        Calories = 185.0,
+        Carbohydrates = 1.0,
+        Lipids = 11.0,
+        Proteins = 25.7,
+        FoodType = Fish,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        GoodHot = true,
+        CookingSound = FryingFood,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Pie:15;Stir fry:15;Sandwich:5|Cooked;Burger:10|Cooked;Salad:10|Cooked;Rice:15;Pasta:15;Taco:10|Cooked;Burrito:15|Cooked,
+        EvolvedRecipeName = Fish,
+        StaticModel = TraditionalPreservationFishMeat.GuttedFishGround,
+        WorldStaticModel = TraditionalPreservationFishMeat.GuttedFishGround,
+        WorldStaticModelsByIndex = TraditionalPreservationFishMeat.SaltPressedFishGround;TraditionalPreservationFishMeat.SaltPressedFishGround;TraditionalPreservationFishMeat.Gutted_Fish_BassLargemouth;TraditionalPreservationFishMeat.Gutted_Fish_BassSmallmouth;TraditionalPreservationFishMeat.Gutted_Fish_BassSpotted;TraditionalPreservationFishMeat.Gutted_Fish_BassStriped;TraditionalPreservationFishMeat.Gutted_Fish_Walleye;TraditionalPreservationFishMeat.Gutted_Fish_Sauger;TraditionalPreservationFishMeat.Gutted_Fish_CrappieBlack;TraditionalPreservationFishMeat.Gutted_Fish_CrappieWhite;TraditionalPreservationFishMeat.Gutted_Fish_Bluegill;TraditionalPreservationFishMeat.Gutted_Fish_SunfishRedear;TraditionalPreservationFishMeat.Gutted_Fish_SunfishGreen;TraditionalPreservationFishMeat.Gutted_Fish_CatfishBlue;TraditionalPreservationFishMeat.Gutted_Fish_CatfishChannel;TraditionalPreservationFishMeat.Gutted_Fish_CatfishFlathead;TraditionalPreservationFishMeat.Gutted_Fish_Muskellunge;TraditionalPreservationFishMeat.Gutted_Fish_BassWhite;TraditionalPreservationFishMeat.Gutted_Fish_PerchYellow;TraditionalPreservationFishMeat.Gutted_Fish_DrumFreshwater;TraditionalPreservationFishMeat.Gutted_Fish_GarAlligator;TraditionalPreservationFishMeat.Gutted_Fish_Paddlefish,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Gutted,
+    }
+
+    /* A gutted fish split open, to fit a stack on the frame. */
+    item FishHalf
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = FishHalf,
+        IconsForTexture = Half_FishFillet;Half_Salmon;Half_Fish_BassLargemouth;Half_Fish_BassSmallmouth;Half_Fish_BassSpotted;Half_Fish_BassStriped;Half_Fish_Walleye;Half_Fish_Sauger;Half_Fish_CrappieBlack;Half_Fish_CrappieWhite;Half_Fish_Bluegill;Half_Fish_SunfishRedear;Half_Fish_SunfishGreen;Half_Fish_CatfishBlue;Half_Fish_CatfishChannel;Half_Fish_CatfishFlathead;Half_Fish_Muskellunge;Half_Fish_BassWhite;Half_Fish_PerchYellow;Half_Fish_DrumFreshwater;Half_Fish_GarAlligator;Half_Fish_Paddlefish,
+        DaysFresh = 3,
+        DaysTotallyRotten = 6,
+        HungerChange = -18.0,
+        ThirstChange = 5.0,
+        Calories = 185.0,
+        Carbohydrates = 1.0,
+        Lipids = 11.0,
+        Proteins = 25.7,
+        FoodType = Fish,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        GoodHot = true,
+        CookingSound = FryingFood,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Pie:15;Stir fry:15;Sandwich:5|Cooked;Burger:10|Cooked;Salad:10|Cooked;Rice:15;Pasta:15;Taco:10|Cooked;Burrito:15|Cooked,
+        EvolvedRecipeName = Fish,
+        StaticModel = TraditionalPreservationFishMeat.FishHalfGround,
+        WorldStaticModel = TraditionalPreservationFishMeat.FishHalfGround,
+        WorldStaticModelsByIndex = TraditionalPreservationFishMeat.FishHalfGround;TraditionalPreservationFishMeat.FishHalfGround;TraditionalPreservationFishMeat.Half_Fish_BassLargemouth;TraditionalPreservationFishMeat.Half_Fish_BassSmallmouth;TraditionalPreservationFishMeat.Half_Fish_BassSpotted;TraditionalPreservationFishMeat.Half_Fish_BassStriped;TraditionalPreservationFishMeat.Half_Fish_Walleye;TraditionalPreservationFishMeat.Half_Fish_Sauger;TraditionalPreservationFishMeat.Half_Fish_CrappieBlack;TraditionalPreservationFishMeat.Half_Fish_CrappieWhite;TraditionalPreservationFishMeat.Half_Fish_Bluegill;TraditionalPreservationFishMeat.Half_Fish_SunfishRedear;TraditionalPreservationFishMeat.Half_Fish_SunfishGreen;TraditionalPreservationFishMeat.Half_Fish_CatfishBlue;TraditionalPreservationFishMeat.Half_Fish_CatfishChannel;TraditionalPreservationFishMeat.Half_Fish_CatfishFlathead;TraditionalPreservationFishMeat.Half_Fish_Muskellunge;TraditionalPreservationFishMeat.Half_Fish_BassWhite;TraditionalPreservationFishMeat.Half_Fish_PerchYellow;TraditionalPreservationFishMeat.Half_Fish_DrumFreshwater;TraditionalPreservationFishMeat.Half_Fish_GarAlligator;TraditionalPreservationFishMeat.Half_Fish_Paddlefish,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Half,
+    }
+
+    /* From Gut Fish, for a fish over HEAD_MIN_WEIGHT. onCreateGutted sets its weight and food from the fish. */
+    item FishHead
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = FishHead,
+        ScaleWorldIcon = 0.5,
+        DaysFresh = 3,
+        DaysTotallyRotten = 6,
+        HungerChange = -5.0,
+        UnhappyChange = 5,
+        ThirstChange = 2.0,
+        Calories = 60.0,
+        Carbohydrates = 0.0,
+        Lipids = 4.0,
+        Proteins = 8.0,
+        FoodType = Fish,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        GoodHot = true,
+        CookingSound = FryingFood,
+        EvolvedRecipe = Soup:10;Stew:10;AddBaitToChum:5,
+        EvolvedRecipeName = Fish,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Head,
+    }
+
+    /* Fish head stock that is already a stew: the evolved recipes below add up to 6 stew ingredients and
+       any seasonings, as vanilla stew does. onCreateHeadStock gives it the head's food and lists the head. */
+    item PotOfFishHeadStock
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = PotFull,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.Pot,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -20,
+        Calories = 60.0,
+        Carbohydrates = 0.0,
+        Lipids = 4.0,
+        Proteins = 8.0,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_HeadStock,
+    }
+
+    item PotForgedFishHeadStock
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = Pot_Forged_Stew,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.PotForged,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -20,
+        Calories = 60.0,
+        Carbohydrates = 0.0,
+        Lipids = 4.0,
+        Proteins = 8.0,
+        StaticModel = CookingPotForged_StewGround,
+        WorldStaticModel = CookingPotForged_StewGround,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_HeadStock,
+    }
+
+    /* A pot of water and a head make stock that already counts as a stew, so it takes ingredients straight away.
+       The head is listed among them but doesn't count: MaxItems is vanilla's 6 plus the head. Seasonings don't count
+       towards MaxItems, as in vanilla. */
+    craftRecipe CreateFishHeadStock
+    {
+        timedAction = MixingBowl,
+        time = 50,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationFishMeat.onCreateHeadStock,
+        inputs
+        {
+            item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition] mappers[potType],
+            -fluid 1.5 categories[Water] mode:mixture,
+            item 1 [TraditionalPreservationFishMeat.FishHead] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            TraditionalPreservationFishMeat.PotOfFishHeadStock = Base.Pot,
+            TraditionalPreservationFishMeat.PotForgedFishHeadStock = Base.PotForged,
+        }
+    }
+
+    evolvedrecipe FishHeadStock
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+        Cookable = true,
+        Name = Prepare Fish Head Stock,
+        Template = Stew,
+    }
+
+    evolvedrecipe FishHeadStockForged
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+        Cookable = true,
+        Name = Prepare Fish Head Stock,
+        Template = Stew,
+    }
+
+    /* Vanilla's Divide Food into Bowls only knows vanilla's pots, so the stock has its own, the same in every other way. */
+    craftRecipe MakeFishHeadStock4Bowls
+    {
+        timedAction = MixingBowl,
+        time = 80,
+        OnCreate = RecipeCodeOnCreate.inheritFoodNameBowl,
+        Tooltip = Tooltip_Recipe_CookedPortion,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        inputs
+        {
+            item 4 [Base.Bowl;Base.ClayBowl] mode:destroy flags[ItemCount],
+            item 1 [TraditionalPreservationFishMeat.PotOfFishHeadStock;TraditionalPreservationFishMeat.PotForgedFishHeadStock] mappers[bowlType;potType] flags[InheritCondition;InheritCooked;InheritFood;ItemCount],
+        }
+        outputs
+        {
+            item 4 mapper:bowlType flags[DontInheritCondition],
+            item 1 mapper:potType,
+        }
+        itemMapper bowlType
+        {
+            Base.StewBowl = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+        }
+        itemMapper potType
+        {
+            Base.Pot = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+        }
+    }
+
+    craftRecipe MakeFishHeadStock2Bowls
+    {
+        timedAction = MixingBowl,
+        time = 80,
+        OnCreate = RecipeCodeOnCreate.inheritFoodNameBowl,
+        Tooltip = Tooltip_Recipe_CookedPortion,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        inputs
+        {
+            item 2 [Base.Bowl;Base.ClayBowl] mode:destroy flags[ItemCount],
+            item 1 [TraditionalPreservationFishMeat.PotOfFishHeadStock;TraditionalPreservationFishMeat.PotForgedFishHeadStock] mappers[bowlType;potType] flags[InheritCondition;InheritCooked;InheritFood;ItemCount],
+        }
+        outputs
+        {
+            item 2 mapper:bowlType flags[DontInheritCondition],
+            item 1 mapper:potType,
+        }
+        itemMapper bowlType
+        {
+            Base.StewBowl = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+        }
+        itemMapper potType
+        {
+            Base.Pot = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+        }
+    }
+
+    /* What a dish's ingredient list records for a fish stage. The stages pick a species model by index, and the
+       tooltip makes a fresh item for each ingredient every frame, so the stage itself would show a random species
+       each time. TraditionalPreservationFishMeatEvolved.lua swaps these in. They have no EvolvedRecipe, so they only
+       ever appear in that list. */
+    item SaltDriedFishIngredient
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.08,
+        Icon = SaltDriedFish,
+        FoodType = Fish,
+        EvolvedRecipeName = Fish,
+    }
+
+    item SoakedSaltFishIngredient
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = SoakedSaltFish,
+        FoodType = Fish,
+        EvolvedRecipeName = Fish,
+    }
+
+    item GuttedFishIngredient
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = GuttedFish,
+        FoodType = Fish,
+        EvolvedRecipeName = Fish,
+    }
+
+    item FishHalfIngredient
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = FishHalf,
+        FoodType = Fish,
+        EvolvedRecipeName = Fish,
+    }
+
+    item SoakedColdFishIngredient
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = SoakedColdFish,
+        FoodType = Fish,
+        EvolvedRecipeName = Fish,
+    }
+
+    /* Salt goes by the packed fish's weight: 2 for each started half weight, so a bluegill takes 2 and a 10 weight
+       catfish half 16. The recipe asks for the first 2; canPack checks the rest is on you (and refuses a whole fish
+       over SALT_WHOLE_MAX) and onCreatePacked takes it.
+       A shaker holds 10, an Evaporated Salt 5, a Bag of Salt 50. The fish is the input with ItemCount,
+       which is how onCreateCured finds it. Don't use IsWholeFoodItem: it needs the script's exact
+       hunger, and fishing and these stages all change that. */
+    craftRecipe PackFishInSalt
+    {
+        timedAction = SliceFish,
+        time = 100,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Cooking:3,
+        OnTest = TraditionalPreservationFishMeat.canPack,
+        OnCreate = TraditionalPreservationFishMeat.onCreatePacked,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PackSalt,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 tags[base:fishmeat] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 2 tags[base:salt],
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.SaltPackedFish,
+        }
+    }
+
+    /* The same for a fish that was gutted first, so changing your mind costs nothing. */
+    craftRecipe PackGuttedFishInSalt
+    {
+        timedAction = SliceFish,
+        time = 100,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Cooking:3,
+        OnTest = TraditionalPreservationFishMeat.canPack,
+        OnCreate = TraditionalPreservationFishMeat.onCreatePacked,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PackSalt,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.GuttedFish;TraditionalPreservationFishMeat.FishHalf] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 2 tags[base:salt],
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.SaltPackedFish,
+        }
+    }
+
+    /* Whole fish only. Guts and the head come from onCreateGutted, as a small fish gives none. */
+    craftRecipe GutFish
+    {
+        timedAction = SliceFish,
+        time = 100,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Butchering:10,
+        OnCreate = TraditionalPreservationFishMeat.onCreateGutted,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 tags[base:uncutfish] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.GuttedFish,
+        }
+    }
+
+    /* canSplit lets through only a fish too heavy for a frame stack. */
+    craftRecipe SplitFish
+    {
+        timedAction = SliceFish,
+        time = 50,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Butchering:10,
+        OnTest = TraditionalPreservationFishMeat.canSplit,
+        OnCreate = TraditionalPreservationFishMeat.onCreateSplit,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.GuttedFish] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 2 TraditionalPreservationFishMeat.FishHalf,
+        }
+    }
+
+    /* time is overwritten from PRESS_HOURS in TraditionalPreservationFishMeat.lua */
+    craftRecipe PressSaltedFish
+    {
+        time = 43200,
+        Tags = SaltingTub,
+        category = Cooking,
+        OnStart = TraditionalPreservationFishMeat.onPressStart,
+        OnUpdate = TraditionalPreservationFishMeat.onPressUpdate,
+        OnCreate = TraditionalPreservationFishMeat.onCreatePressed,
+        inputs
+        {
+            item variable[1:35] [TraditionalPreservationFishMeat.SaltPackedFish] flags[IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item variable[1:35] TraditionalPreservationFishMeat.SaltPressedFish,
+        }
+    }
+
+    /* time is overwritten from DRY_HOURS in TraditionalPreservationFishMeat.lua. OnUpdate sets the progress from
+       the weather, so the frame's Time Remaining is what it would take at a drying rate of 1. */
+    craftRecipe HangFishToDry
+    {
+        Tooltip = Tooltip_craft_hangFishToDry,
+        time = 1036800,
+        Tags = DryingFrame,
+        category = Cooking,
+        OnStart = TraditionalPreservationFishMeat.onDryStart,
+        OnUpdate = TraditionalPreservationFishMeat.onDryUpdate,
+        OnCreate = TraditionalPreservationFishMeat.onCreateDried,
+        inputs
+        {
+            item variable[1:25] [TraditionalPreservationFishMeat.SaltPressedFish] flags[IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item variable[1:25] TraditionalPreservationFishMeat.SaltDriedFish,
+        }
+    }
+
+    /* Gutted fish on the same frame, with no salt. Frozen fish is welcome, because hard frosts are
+       part of it. time is overwritten from COLD_DRY_HOURS in TraditionalPreservationFishMeat.lua. */
+    craftRecipe HangFishToColdDry
+    {
+        Tooltip = Tooltip_craft_hangFishToColdDry,
+        time = 1728000,
+        Tags = DryingFrame,
+        category = Cooking,
+        OnStart = TraditionalPreservationFishMeat.onColdDryStart,
+        OnUpdate = TraditionalPreservationFishMeat.onColdDryUpdate,
+        OnCreate = TraditionalPreservationFishMeat.onCreateDried,
+        inputs
+        {
+            item variable[1:25] [TraditionalPreservationFishMeat.GuttedFish;TraditionalPreservationFishMeat.FishHalf] flags[IsUncookedFoodItem;AllowFrozenItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item variable[1:25] TraditionalPreservationFishMeat.ColdDriedFish,
+        }
+    }
+
+    /* Vanilla's fish cutting for a fish at any stage, which stays at that stage. canSlice lets
+       through only a fish that vanilla could have cut before it was packed. */
+    craftRecipe SliceSaltedFish
+    {
+        timedAction = SliceFish,
+        time = 50,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Butchering:10,
+        OnTest = TraditionalPreservationFishMeat.canSlice,
+        OnCreate = TraditionalPreservationFishMeat.onCreateSliced,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.SaltPackedFish;TraditionalPreservationFishMeat.SaltPressedFish;TraditionalPreservationFishMeat.SaltDriedFish;TraditionalPreservationFishMeat.SoakedSaltFish;TraditionalPreservationFishMeat.ColdDriedFish;TraditionalPreservationFishMeat.SoakedColdFish] flags[InheritCooked;InheritFoodAge;ItemCount] mode:destroy mappers[sameStage],
+        }
+        outputs
+        {
+            item 2 mapper:sameStage,
+        }
+        itemMapper sameStage
+        {
+            TraditionalPreservationFishMeat.SaltPackedFish = TraditionalPreservationFishMeat.SaltPackedFish,
+            TraditionalPreservationFishMeat.SaltPressedFish = TraditionalPreservationFishMeat.SaltPressedFish,
+            TraditionalPreservationFishMeat.SaltDriedFish = TraditionalPreservationFishMeat.SaltDriedFish,
+            TraditionalPreservationFishMeat.SoakedSaltFish = TraditionalPreservationFishMeat.SoakedSaltFish,
+            TraditionalPreservationFishMeat.ColdDriedFish = TraditionalPreservationFishMeat.ColdDriedFish,
+            TraditionalPreservationFishMeat.SoakedColdFish = TraditionalPreservationFishMeat.SoakedColdFish,
+        }
+    }
+
+    /* Optional: soaks the excess salt off a Salt Pressed fish before it hangs (Volga practice). The fish comes out
+       the same, marked rinsed (onCreateRinsed). Carried clean water only; a sink or bathtub is the right-click
+       Rinse at Sink (TPFMRinse). */
+    craftRecipe RinseSaltedFish
+    {
+        timedAction = Making,
+        time = 60,
+        Tags = InHandCraft;Cooking;CanBeDoneInDark,
+        category = Cooking,
+        Tooltip = Tooltip_craft_rinseSaltedFish,
+        OnTest = TraditionalPreservationFishMeat.canRinseInput,
+        OnCreate = TraditionalPreservationFishMeat.onCreateRinsed,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.SaltPressedFish] flags[ItemCount] mode:destroy,
+            item 1 [*],
+            -fluid 0.15 [Water],
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.SaltPressedFish,
+        }
+    }
+
+    /* InheritFoodAge carries freshness as a share of each item's fresh days (Food.copyAgeFrom), so a stale dried
+       fish soaks into a stale one. */
+    craftRecipe SoakSaltFish
+    {
+        timedAction = Making,
+        time = 100,
+        Tags = InHandCraft;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationFishMeat.onCreateCured,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.SaltDriedFish] flags[InheritFoodAge;ItemCount] mode:destroy,
+            item 1 [*],
+            -fluid 1.0 [Water],
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.SoakedSaltFish,
+        }
+    }
+
+    craftRecipe SoakColdFish
+    {
+        timedAction = Making,
+        time = 100,
+        Tags = InHandCraft;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationFishMeat.onCreateSoaked,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.ColdDriedFish] flags[InheritFoodAge;ItemCount] mode:destroy,
+            item 1 [*],
+            -fluid 1.0 [Water],
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.SoakedColdFish,
+        }
+    }
+}

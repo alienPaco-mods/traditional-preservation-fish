@@ -1,55 +1,55 @@
 VERSION = 1,
 
-option TraditionalPreservationFish.DryDays {
+option TraditionalPreservationFishMeat.DryDays {
     type = double,
     min = 3.0,
     max = 60.0,
     default = 12.0,
-    page = TraditionalPreservationFish,
-    translation = TraditionalPreservationFish_DryDays,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_DryDays,
 }
 
-option TraditionalPreservationFish.MaxDryDays {
+option TraditionalPreservationFishMeat.MaxDryDays {
     type = double,
     min = 3.0,
     max = 120.0,
     default = 27.0,
-    page = TraditionalPreservationFish,
-    translation = TraditionalPreservationFish_MaxDryDays,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_MaxDryDays,
 }
 
-option TraditionalPreservationFish.ColdDryDays {
+option TraditionalPreservationFishMeat.ColdDryDays {
     type = double,
     min = 5.0,
     max = 120.0,
     default = 32.0,
-    page = TraditionalPreservationFish,
-    translation = TraditionalPreservationFish_ColdDryDays,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_ColdDryDays,
 }
 
-option TraditionalPreservationFish.MatureDays {
+option TraditionalPreservationFishMeat.MatureDays {
     type = double,
     min = 1.0,
     max = 180.0,
     default = 60.0,
-    page = TraditionalPreservationFish,
-    translation = TraditionalPreservationFish_MatureDays,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_MatureDays,
 }
 
-option TraditionalPreservationFish.PressDays {
+option TraditionalPreservationFishMeat.PressDays {
     type = double,
     min = 0.5,
     max = 7.0,
     default = 2.0,
-    page = TraditionalPreservationFish,
-    translation = TraditionalPreservationFish_PressDays,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_PressDays,
 }
 
-option TraditionalPreservationFish.Spoilage {
+option TraditionalPreservationFishMeat.Spoilage {
     type = enum,
     numValues = 4,
     default = 3,
-    page = TraditionalPreservationFish,
-    translation = TraditionalPreservationFish_Spoilage,
-    valueTranslation = TraditionalPreservationFish_Spoilage,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_Spoilage,
+    valueTranslation = TraditionalPreservationFishMeat_Spoilage,
 }

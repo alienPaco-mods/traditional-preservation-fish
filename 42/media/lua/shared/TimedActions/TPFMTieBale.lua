@@ -1,11 +1,11 @@
--- Traditional Preservation (Fish): Tie a Bale, tying stockfish from the inventory into a Stockfish Bale with one use
+-- Traditional Preservation (Fish & Meat): Tie a Bale, tying stockfish from the inventory into a Stockfish Bale with one use
 -- of Twine or a Rope.
 require "TimedActions/ISBaseTimedAction"
-require "TraditionalPreservationFish"
+require "TraditionalPreservationFishMeat"
 
-TPFishTieBale = ISBaseTimedAction:derive("TPFishTieBale")
+TPFMTieBale = ISBaseTimedAction:derive("TPFMTieBale")
 
-local F = TraditionalPreservationFish
+local F = TraditionalPreservationFishMeat
 local Action = require "TraditionalPreservationCore/Action"
 
 local function cordLeft(self)
@@ -21,29 +21,29 @@ local function fishHere(self)
     return true
 end
 
-function TPFishTieBale:isValid()
+function TPFMTieBale:isValid()
     return cordLeft(self) and fishHere(self)
 end
 
-function TPFishTieBale:start()
+function TPFMTieBale:start()
     self:setActionAnim(CharacterActionAnims.Craft)
 end
 
-function TPFishTieBale:complete()
+function TPFMTieBale:complete()
     if not cordLeft(self) or not fishHere(self) then return false end
     F.tieBale(self.character:getInventory(), self.fish, self.cordItem, self.cord)
     return true
 end
 
-function TPFishTieBale:perform()
+function TPFMTieBale:perform()
     ISBaseTimedAction.perform(self)
 end
 
-function TPFishTieBale:getDuration()
+function TPFMTieBale:getDuration()
     return Action.duration(self.character, F.BALE_TIE_TICKS)
 end
 
-function TPFishTieBale:new(character, fish, cordItem, cord)
+function TPFMTieBale:new(character, fish, cordItem, cord)
     local o = ISBaseTimedAction.new(self, character)
     o.fish = fish
     o.cordItem = cordItem

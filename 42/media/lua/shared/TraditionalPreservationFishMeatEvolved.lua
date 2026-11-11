@@ -1,18 +1,18 @@
--- Traditional Preservation (Fish): a dish's ingredient list stores item types, and its tooltip makes a
+-- Traditional Preservation (Fish & Meat): a dish's ingredient list stores item types, and its tooltip makes a
 -- fresh item of each type every frame to draw the icon. A fish stage picks a random species model when
 -- made, so its icon would change every frame. After a fish stage goes into a dish, the list records a
 -- single-icon stand-in for that stage instead, which names the dish the same way.
 require "TimedActions/ISAddItemInRecipe"
 
-TraditionalPreservationFish = TraditionalPreservationFish or {}
-local F = TraditionalPreservationFish
+TraditionalPreservationFishMeat = TraditionalPreservationFishMeat or {}
+local F = TraditionalPreservationFishMeat
 
 F.INGREDIENT_STANDINS = {
-    ["TraditionalPreservationFish.SaltDriedFish"] = "TraditionalPreservationFish.SaltDriedFishIngredient",
-    ["TraditionalPreservationFish.SoakedSaltFish"] = "TraditionalPreservationFish.SoakedSaltFishIngredient",
-    ["TraditionalPreservationFish.GuttedFish"] = "TraditionalPreservationFish.GuttedFishIngredient",
-    ["TraditionalPreservationFish.FishHalf"] = "TraditionalPreservationFish.FishHalfIngredient",
-    ["TraditionalPreservationFish.SoakedColdFish"] = "TraditionalPreservationFish.SoakedColdFishIngredient",
+    ["TraditionalPreservationFishMeat.SaltDriedFish"] = "TraditionalPreservationFishMeat.SaltDriedFishIngredient",
+    ["TraditionalPreservationFishMeat.SoakedSaltFish"] = "TraditionalPreservationFishMeat.SoakedSaltFishIngredient",
+    ["TraditionalPreservationFishMeat.GuttedFish"] = "TraditionalPreservationFishMeat.GuttedFishIngredient",
+    ["TraditionalPreservationFishMeat.FishHalf"] = "TraditionalPreservationFishMeat.FishHalfIngredient",
+    ["TraditionalPreservationFishMeat.SoakedColdFish"] = "TraditionalPreservationFishMeat.SoakedColdFishIngredient",
 }
 
 -- Swaps every fish stage in a dish's list for its stand-in.
@@ -39,11 +39,11 @@ end
 -- once two different ones share it; more than MAX_NAMED kinds of food give just "Fish Head Stock", and
 -- seasonings are named only while the total stays within it. The head the stock started with isn't named.
 F.STOCK_POTS = {
-    ["TraditionalPreservationFish.PotOfFishHeadStock"] = true,
-    ["TraditionalPreservationFish.PotForgedFishHeadStock"] = true,
+    ["TraditionalPreservationFishMeat.PotOfFishHeadStock"] = true,
+    ["TraditionalPreservationFishMeat.PotForgedFishHeadStock"] = true,
 }
 local MAX_NAMED = 3
-local HEAD = "TraditionalPreservationFish.FishHead"
+local HEAD = "TraditionalPreservationFishMeat.FishHead"
 
 local function namedKinds(list, skipHead, withMinor)
     local names, byType, order, plain = {}, {}, {}, nil
@@ -99,7 +99,7 @@ function F.stockName(stock, recipe)
         end
     end
     if #names == 0 then return nil end
-    return getText("IGUI_TraditionalPreservationFish_StockWith", dish, joined(names))
+    return getText("IGUI_TraditionalPreservationFishMeat_StockWith", dish, joined(names))
 end
 
 -- A stock pot is named by stockName instead of vanilla's rule; other dishes pass through.

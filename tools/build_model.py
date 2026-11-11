@@ -3,7 +3,7 @@
 
 The bale is seven stockfish in three layers, heads and tails alternating as they were packed, held by two twine
 bands. Each fish is a flat slab swept along PROFILE. Units are metres, Y up, base on the ground; its in-game size is
-the `scale` of the StockfishBaleGround model in 42/media/scripts/TraditionalPreservationFish.txt. The glb writer is
+the `scale` of the StockfishBaleGround model in 42/media/scripts/TraditionalPreservationFishMeat.txt. The glb writer is
 FuelBarrel's (tools/build_model.py there): FuelBarrel isn't TP, so the two can't share it through pzart.
 
 The texture: the fish's skin on the left (FISH_U, along the fish), its edges and neck cut in a strip, the twine on
@@ -250,7 +250,7 @@ def write_glb(path, mesh):
         "indices": add(indices, "SCALAR", 5123, 34963),
     }
     document = {
-        "asset": {"version": "2.0", "generator": "TraditionalPreservationFish build_model.py"},
+        "asset": {"version": "2.0", "generator": "TraditionalPreservationFishMeat build_model.py"},
         "scene": 0,
         "scenes": [{"nodes": [0]}],
         "nodes": [{"mesh": 0, "name": "Bale"}],

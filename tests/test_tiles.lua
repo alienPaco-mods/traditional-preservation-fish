@@ -1,5 +1,5 @@
 -- Checks the generated Tiles.lua against the entity scripts. Run from the mod folder: luajit tests/test_tiles.lua
 local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
 H.useModPaths()
-H.checkTiles(require "TraditionalPreservationFish/Tiles")
+H.checkTiles(require "TraditionalPreservationFishMeat/Tiles")
 H.done()

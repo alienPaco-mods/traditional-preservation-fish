@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Builds the Traditional Preservation (Fish) tileset (42/media/traditionalpreservationfish.tiles and texturepacks/traditionalpreservationfish.pack).
+"""Builds the Traditional Preservation (Fish & Meat) tileset (42/media/traditionalpreservationfishmeat.tiles and texturepacks/traditionalpreservationfishmeat.pack).
 
 Tiles 0 and 1 are the empty Salting Tub, 2 and 3 its filled overlay, 4 and 5 its weighted overlay. Tiles 6 and 7
 are the Drying Frame. From tile 8 there is one hanging fish per frame slot, drying stage and face, made from vanilla's
-fish icons, which TraditionalPreservationFishWorld.lua layers on top. In every pair the even tile is face S and the odd one face E.
+fish icons, which TraditionalPreservationFishMeatWorld.lua layers on top. In every pair the even tile is face S and the odd one face E.
 Workstations need their own sprite: the game refuses to load a world if two entities share one.
 
 It also writes the item icons and the fish model textures to 42/media/textures. The model textures are vanilla's
@@ -26,14 +26,14 @@ import pzart  # noqa: E402
 from pzart import FOOT, TILE_W, TILE_H, light_at, project, shrink, tint  # noqa: E402
 
 GAME = Path.home() / ".local/share/Steam/steamapps/common/ProjectZomboid/projectzomboid"
-NAME = "traditionalpreservationfish"
+NAME = "traditionalpreservationfishmeat"
 # A tileset can't hold more than 512 tiles (pzart.MAX_SHEET_TILES), or the game drops the whole file and every
 # station with it. Tiles are numbered straight through both. The Lua reads these numbers from the generated Tiles.lua.
 TILESETS = [NAME + "_01", NAME + "_02"]
 COLUMNS = 8
 SHEET_ROWS = [51, 39]
 FIRST_SHEET_SIZE = COLUMNS * SHEET_ROWS[0]
-NAME_TITLE = "TraditionalPreservationFish"
+NAME_TITLE = "TraditionalPreservationFishMeat"
 PAGE_SIZE = 2048
 SS = 4
 # How much of the beam to keep from the top: enough for the fish, as the list draws icons small.
@@ -229,7 +229,7 @@ def station_props(custom, group, facing, weight):
 
 
 def fish_index(face_index, slot, stage, first=FISH, slots=len(SLOTS)):
-    """refreshFrame in TraditionalPreservationFishWorld.lua numbers them the same way, from the generated Tiles.lua."""
+    """refreshFrame in TraditionalPreservationFishMeatWorld.lua numbers them the same way, from the generated Tiles.lua."""
     return first + (stage * slots + slot) * len(FACES) + face_index
 
 
@@ -924,7 +924,7 @@ def write_fish_models(media, game):
     icons = read_icons(game)
     fillet = Image.open(game / "media/textures/WorldItems/FishFillet.png")
     blocks = vanilla_ground_models(game)
-    lines = ["/* Written by tools/build_tileset.py. */", "module TraditionalPreservationFish", "{"]
+    lines = ["/* Written by tools/build_tileset.py. */", "module TraditionalPreservationFishMeat", "{"]
     for index, (icon, block) in enumerate(blocks.items()):
         path = re.search(r"texture = (\S+?),", block).group(1)
         source = Image.open(game / f"media/textures/{path}.png").convert("RGBA")
@@ -1104,7 +1104,7 @@ def lua_tiles():
 def main():
     game = Path(sys.argv[1]) if len(sys.argv) > 1 else GAME
     media = Path(__file__).resolve().parent.parent / "42" / "media"
-    pzart.write_lua_tiles(media, "TraditionalPreservationFish", lua_tiles(), "tools/build_tileset.py")
+    pzart.write_lua_tiles(media, "TraditionalPreservationFishMeat", lua_tiles(), "tools/build_tileset.py")
     (media / "texturepacks").mkdir(parents=True, exist_ok=True)
     (media / "textures").mkdir(parents=True, exist_ok=True)
 

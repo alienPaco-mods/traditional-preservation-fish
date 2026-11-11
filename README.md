@@ -1,4 +1,4 @@
-# Traditional Preservation (Fish) — Build 42 prototype (v0.2.8)
+# Traditional Preservation (Fish & Meat) — Build 42 prototype (v0.4.0)
 
 **Status: experimental.** The stations build, open and hang fish in the game, but a full year hasn't been played. Back up your save before enabling.
 
@@ -8,7 +8,7 @@ The mod's two routes are the two great preserved fish of the North Atlantic. Sto
 
 ## Install
 
-Copy this folder to `~/Zomboid/mods/TraditionalPreservationFish`, as a real copy rather than a symlink. It needs the **TP Core** mod (`TraditionalPreservationCore`, the series' shared mod) installed and enabled the same way, and no other mods.
+Copy this folder to `~/Zomboid/mods/TraditionalPreservationFishMeat`, as a real copy rather than a symlink. It needs the **TP Core** mod (`TraditionalPreservationCore`, the series' shared mod) installed and enabled the same way, and no other mods.
 
 ## How it works
 
@@ -102,19 +102,19 @@ Humidity stays low in the game all year, mostly 20 to 45%, so it barely changes 
 
 ## Sandbox options
 
-Under Traditional Preservation (Fish) in the sandbox options: **Salt drying time** (12 days), **Slowest salt drying** (27 days), **Stockfish drying time** (32 days), **Stockfish maturing time** (60 days), **Salt press time** (2 days for a batch with a big fish; small fish half) and **Spoilage strictness** (Off, Forgiving, Normal, Harsh). The defaults are set from the season report: stockfish hung from late October to January dries outdoors in about 50-55 days, salt fish in 15-34. Before 0.3.7 stockfish drying followed salt drying at 8/3; it is its own option now.
+Under Traditional Preservation (Fish & Meat) in the sandbox options: **Salt drying time** (12 days), **Slowest salt drying** (27 days), **Stockfish drying time** (32 days), **Stockfish maturing time** (60 days), **Salt press time** (2 days for a batch with a big fish; small fish half) and **Spoilage strictness** (Off, Forgiving, Normal, Harsh). The defaults are set from the season report: stockfish hung from late October to January dries outdoors in about 50-55 days, salt fish in 15-34. Before 0.3.7 stockfish drying followed salt drying at 8/3; it is its own option now.
 
 ## Tuning
 
-Times, capacity, stage values, weather rates and spoilage limits are at the top of `42/media/lua/shared/TraditionalPreservationFish.lua`. `PRESS_HOURS` (the longest press; `PRESS_MIN_HOURS` and the two `PRESS_..._WEIGHT` values set the rest), `DRY_HOURS` and `COLD_DRY_HOURS` set the recipe times when the game starts, so they are the only times to edit. Restart the game after changing them. Slot counts are set in the entity scripts and recipes. A station keeps the counts it was built with, even when picked up and placed again.
+Times, capacity, stage values, weather rates and spoilage limits are at the top of `42/media/lua/shared/TraditionalPreservationFishMeat.lua`. `PRESS_HOURS` (the longest press; `PRESS_MIN_HOURS` and the two `PRESS_..._WEIGHT` values set the rest), `DRY_HOURS` and `COLD_DRY_HOURS` set the recipe times when the game starts, so they are the only times to edit. Restart the game after changing them. Slot counts are set in the entity scripts and recipes. A station keeps the counts it was built with, even when picked up and placed again.
 
-`tools/build_tileset.py` repaints the stations, hanging fish, icons, the mod list icon and model textures, tints the vanilla fish icons, and writes `42/media/scripts/TraditionalPreservationFish_models.txt` (needs Pillow and the game files). `tools/build_model.py` writes the Stockfish Bale's ground model (`42/media/Models_X/StockfishBale.glb`), its texture and icon (needs Pillow, numpy and the game files). It also writes the generated `42/media/lua/shared/TraditionalPreservationFish/Tiles.lua`, the tile numbers the Lua reads (don't edit it by hand), and `luajit tests/test_tiles.lua` checks the entity scripts against it. `luajit tests/test_curing.lua` checks the curing rules, `luajit tests/test_ui.lua` the station slots and popup, `luajit tests/test_world.lua` the station sprites and the weather record, `luajit tests/test_pallet.lua` the Stockfish Pallet and Bale, and `luajit tests/test_console.lua` the debug commands. The season table above is for the default settings. `luajit tools/season_report.lua` runs the rules against `tools/climate_year.csv`, about a year and a half of forecasts read from the game, so run it after changing any rates. `tools/climate_wind.csv` adds a year of the game's forecast wind (one world per start month), which the wind curve (`WIND_GOOD`) was scaled from.
+`tools/build_tileset.py` repaints the stations, hanging fish, icons, the mod list icon and model textures, tints the vanilla fish icons, and writes `42/media/scripts/TraditionalPreservationFishMeat_models.txt` (needs Pillow and the game files). `tools/build_model.py` writes the Stockfish Bale's ground model (`42/media/Models_X/StockfishBale.glb`), its texture and icon (needs Pillow, numpy and the game files). It also writes the generated `42/media/lua/shared/TraditionalPreservationFishMeat/Tiles.lua`, the tile numbers the Lua reads (don't edit it by hand), and `luajit tests/test_tiles.lua` checks the entity scripts against it. `luajit tests/test_curing.lua` checks the curing rules, `luajit tests/test_ui.lua` the station slots and popup, `luajit tests/test_world.lua` the station sprites and the weather record, `luajit tests/test_pallet.lua` the Stockfish Pallet and Bale, and `luajit tests/test_console.lua` the debug commands. The season table above is for the default settings. `luajit tools/season_report.lua` runs the rules against `tools/climate_year.csv`, about a year and a half of forecasts read from the game, so run it after changing any rates. `tools/climate_wind.csv` adds a year of the game's forecast wind (one world per start month), which the wind curve (`WIND_GOOD`) was scaled from.
 
 The shared Traditional Preservation core (season averages, station tracking, popups) is the required TP Core mod (`~/MODS/TraditionalPreservationCore`), loaded as `require "TraditionalPreservationCore/Weather"`. Edit it there. The drying and spoilage rates, wetness and the frame's stacks stay in this mod's own files.
 
 ## Debug commands
 
-In debug mode, `TPF.help()` in the Lua console lists commands for testing this mod. They are described in `DEVHELP.md`.
+In debug mode, `TPFM.help()` in the Lua console lists commands for testing this mod. They are described in `DEVHELP.md`.
 
 ## Known prototype caveats
 

@@ -1,13 +1,13 @@
--- Traditional Preservation (Fish): keeps the weather totals, and shows what is in each tub and frame.
+-- Traditional Preservation (Fish & Meat): keeps the weather totals, and shows what is in each tub and frame.
 -- SpriteOverlayConfig can't show a tub waiting to start or one sprite per fish, so this reads
 -- each station and layers sprites itself.
 if isClient() then return end
 
-TraditionalPreservationFishWorld = TraditionalPreservationFishWorld or {}
+TraditionalPreservationFishMeatWorld = TraditionalPreservationFishMeatWorld or {}
 local Station = require "TraditionalPreservationCore/Station"
 local Weather = require "TraditionalPreservationCore/Weather"
-local Tiles = require "TraditionalPreservationFish/Tiles"
-local F = TraditionalPreservationFish
+local Tiles = require "TraditionalPreservationFishMeat/Tiles"
+local F = TraditionalPreservationFishMeat
 
 local FACE_COUNT = Tiles.FACE_COUNT
 
@@ -37,7 +37,7 @@ end
 
 -- One sprite per stack. Driest first: finished stacks, then running ones by progress, then the
 -- stack waiting to start. Each style has its own run of stages.
-function TraditionalPreservationFishWorld.fishStates(waitingStyle, batches, finishedStyles)
+function TraditionalPreservationFishMeatWorld.fishStates(waitingStyle, batches, finishedStyles)
     local stages = F.DRYING_STAGES
     local states = {}
     for _, style in ipairs(finishedStyles) do table.insert(states, style * stages + stages - 1) end
@@ -52,7 +52,7 @@ function TraditionalPreservationFishWorld.fishStates(waitingStyle, batches, fini
 end
 
 -- The board and stones stay on until the pressed fish is taken out.
-function TraditionalPreservationFishWorld.tubSprite(waiting, batches, finished)
+function TraditionalPreservationFishMeatWorld.tubSprite(waiting, batches, finished)
     if #batches > 0 or finished > 0 then return TUB_WEIGHTED_SPRITE end
     if waiting > 0 then return TUB_FILLED_SPRITE end
     return nil
@@ -76,13 +76,13 @@ local function showSprites(station, entry, signature, sprites)
 end
 
 local function refreshTub(tub, entry, faceIndex, waiting, _, batches, finishedStyles)
-    local sprite = TraditionalPreservationFishWorld.tubSprite(waiting, batches, #finishedStyles)
+    local sprite = TraditionalPreservationFishMeatWorld.tubSprite(waiting, batches, #finishedStyles)
     showSprites(tub, entry, tostring(sprite), sprite and { sprite + faceIndex } or {})
 end
 
 -- The same numbering as fish_index in tools/build_tileset.py.
 local function refreshFrame(frame, entry, faceIndex, _, waitingStyle, batches, finishedStyles)
-    local states = TraditionalPreservationFishWorld.fishStates(waitingStyle, batches, finishedStyles)
+    local states = TraditionalPreservationFishMeatWorld.fishStates(waitingStyle, batches, finishedStyles)
     local sprites = {}
     for slot, state in ipairs(states) do
         table.insert(sprites, entry.hanger.fishSprite + (state * entry.hanger.stacks + slot - 1) * FACE_COUNT + faceIndex)
@@ -120,16 +120,16 @@ end
 
 local tracker = Station.tracker({ sprites = Tiles.STATIONS, entry = newEntry, refresh = refresh })
 
-TraditionalPreservationFishWorld.track = tracker.track
+TraditionalPreservationFishMeatWorld.track = tracker.track
 
 -- Redraws a tracked station now, without waiting for the next tick, e.g. after a player adds fish.
-function TraditionalPreservationFishWorld.refresh(station)
+function TraditionalPreservationFishMeatWorld.refresh(station)
     local entry = tracker.entry(station)
     if entry then refresh(station, entry) end
 end
 
 -- The stacks on a station that are past its input slots: running, or finished and not yet taken.
-function TraditionalPreservationFishWorld.busyStacks(station)
+function TraditionalPreservationFishMeatWorld.busyStacks(station)
     local entry = tracker.entry(station)
     return entry and entry.busyStacks or 0
 end
