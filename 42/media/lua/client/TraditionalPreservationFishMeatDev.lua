@@ -40,6 +40,8 @@ function TPFM.help()
     say("TPFM.crock(count)          spawn full Crocks of Potted Meat (four Steaks in Lard each, in a Glazed Clay Jar)")
     say("TPFM.crocks()              each Crock of Potted Meat on you or within 4 tiles: place, keeping rate, days left")
     say("TPFM.keep(days)            age those crocks by this many days at their place's rate now")
+    say("TPFM.flueKit()             spawn both flue kits: 2 Clay Pipe Segments, 3 Flat Stones, 3 Clay, a trowel and a shovel")
+    say("TPFM.smokehouse()          each Smokehouse tile within 3 tiles: facing, part, the Fireboxes beside it and why each can't join")
     say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up curing.")
 end
 
@@ -355,6 +357,41 @@ function TPFM.pallet()
         end
     end
     say("No Stockfish Pallet within 3 tiles on this floor.")
+end
+
+function TPFM.flueKit()
+    for _, fullType in ipairs({ "Base.ClayPipeSegment", "Base.ClayPipeSegment", "Base.FlatStone", "Base.FlatStone",
+        "Base.FlatStone", "Base.Clay", "Base.Clay", "Base.Clay", "Base.MasonsTrowel", "Base.Shovel" }) do
+        give(fullType)
+    end
+    say("Gave both flue kits, a Mason's Trowel and a Shovel. Connect from the Firebox's menu or the Smokehouse's.")
+end
+
+local PARTS = { [0] = "back", [1] = "door" }
+
+function TPFM.smokehouse()
+    local player, seen = getPlayer(), 0
+    local cell, x, y, z = getCell(), math.floor(player:getX()), math.floor(player:getY()), player:getZ()
+    for dx = -3, 3 do
+        for dy = -3, 3 do
+            local tile, face, part = F.chamberOn(cell:getGridSquare(x + dx, y + dy, z))
+            if tile then
+                seen = seen + 1
+                local lines = {}
+                for _, found in ipairs(F.fireboxesBy(tile)) do
+                    if found.tile == tile then
+                        local flue, side = F.flueOf(found.firebox)
+                        table.insert(lines, string.format("Firebox at %d,%d: flue %s %s, %s", found.firebox:getX(), found.firebox:getY(),
+                            tostring(flue), tostring(side), F.joinedChamber(found.firebox) == tile and "joined here"
+                            or (F.connectRefusalFor(found) or "may join")))
+                    end
+                end
+                say(string.format("%d,%d facing %s, %s tile, entry art %s; %s", tile:getX(), tile:getY(), face == 0 and "S" or "E",
+                    PARTS[part], tostring(F.chamberEntry(tile)), #lines > 0 and table.concat(lines, "; ") or "no Firebox beside it"))
+            end
+        end
+    end
+    if seen == 0 then say("No Smokehouse within 3 tiles on this floor.") end
 end
 
 say("Debug commands loaded. Type TPFM.help() in the Lua console.")

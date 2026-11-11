@@ -47,6 +47,8 @@ local function square(x, z)
     function s:getX() return x end
     function s:getY() return 0 end
     function s:getZ() return z end
+    -- Nothing else stands on it: no Firebox beside a Smokehouse.
+    function s:getObjects() return { size = function() return 0 end } end
     cellSquares[x .. ",0," .. z] = s
     return s
 end
@@ -95,6 +97,7 @@ end
 
 dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
 dofile("42/media/lua/shared/TraditionalPreservationFishMeatPotted.lua")
+dofile("42/media/lua/shared/TraditionalPreservationFishMeatSmokehouse.lua")
 dofile("42/media/lua/server/TraditionalPreservationFishMeatWorld.lua")
 local T, W = TraditionalPreservationFishMeat, TraditionalPreservationFishMeatWorld
 local PRESSED, GUTTED = "TraditionalPreservationFishMeat.SaltPressedFish", "TraditionalPreservationFishMeat.GuttedFish"

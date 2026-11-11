@@ -165,6 +165,7 @@ end)
 
 -- The Fish Hanging Beam and Gantry each stands in the open or under an open roof, not in a room.
 UI.notInRooms(Tiles.OUTDOOR)
+UI.keepDoorsFree(Tiles.OUTDOOR)
 
 -- Fish names and the stockfish's ripeness follow the days: the player's own things every hour, and any
 -- container as soon as the inventory windows show it. Names from before the bracket names update the same way.

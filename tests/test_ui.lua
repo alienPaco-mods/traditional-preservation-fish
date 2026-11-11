@@ -249,8 +249,16 @@ local translations = io.open("42/media/lua/shared/Translate/EN/IG_UI.json"):read
 check("translations have no bare percent signs", not translations:find("%%%D"))
 
 -- Picked-up beams can't be put down in a room
+-- An empty map round the square: no door opens onto it.
+local function emptyCell() return { getGridSquare = function() return nil end } end
 local function placing(spriteName, inRoom)
-    return ISMoveableSpriteProps.canPlaceMoveable({ spriteName = spriteName }, nil, { isInARoom = function() return inRoom end }, nil)
+    local realCell = getCell
+    getCell = emptyCell
+    local square = { isInARoom = function() return inRoom end, getX = function() return 0 end, getY = function() return 0 end,
+        getZ = function() return 0 end }
+    local fits = ISMoveableSpriteProps.canPlaceMoveable({ spriteName = spriteName }, nil, square, nil)
+    getCell = realCell
+    return fits
 end
 check("a beam can't be put down in a room", not placing("traditionalpreservationfishmeat_02_0", true) and not placing("traditionalpreservationfishmeat_02_3", true))
 check("but can outdoors or under an open roof", placing("traditionalpreservationfishmeat_02_2", false))

@@ -8,5 +8,9 @@
   "ContextMenu_TraditionalPreservationFishMeat_UntieBale": "Untie Bale",
   "ContextMenu_TraditionalPreservationFishMeat_FatInCopper": "Put Fat in the Copper",
   "ContextMenu_TraditionalPreservationFishMeat_FatPieces_PorkFat": "Pork Fat (%1)",
-  "ContextMenu_TraditionalPreservationFishMeat_FatPieces_Suet": "Beef Suet and Mutton Fat (%1)"
+  "ContextMenu_TraditionalPreservationFishMeat_FatPieces_Suet": "Beef Suet and Mutton Fat (%1)",
+  "ContextMenu_TraditionalPreservationFishMeat_ConnectFirebox": "Connect the Firebox",
+  "ContextMenu_TraditionalPreservationFishMeat_ConnectPipe": "With a Clay Pipe",
+  "ContextMenu_TraditionalPreservationFishMeat_ConnectStones": "With a Stone Trench",
+  "ContextMenu_TraditionalPreservationFishMeat_DisconnectFirebox": "Disconnect the Firebox"
 }

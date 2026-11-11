@@ -50,6 +50,7 @@ function ScriptManager.instance:getCraftRecipe(name)
     return { Load = function(_, recipeName, text) loaded[recipeName] = text end }
 end
 dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
+dofile("42/media/lua/shared/TraditionalPreservationFishMeatSmokehouse.lua")
 local T = TraditionalPreservationFishMeat
 
 local check = H.check
@@ -244,9 +245,42 @@ check("not in a room, a basement or the Smokehouse", T.coldRefusal("Sheltered") 
 check("the Smokehouse takes 6 stacks of 15", T.frameRefusal(T.HANGERS[856], 5, 0, 15) == nil
     and T.frameRefusal(T.HANGERS[856], 0, 0, 15.1) == "IGUI_TraditionalPreservationFishMeat_TooHeavy"
     and T.frameRefusal(T.HANGERS[856], 6, 0, 1) == "IGUI_TraditionalPreservationFishMeat_FrameFull")
-local function square(inRoom) return { square = { isInARoom = function() return inRoom end } } end
-check("the big beams go up outdoors or under an open roof", T.notInRoom(square(false)))
-check("not in a room", not T.notInRoom(square(true)))
+IsoFlagType = IsoFlagType or {}
+-- A tiny map: squares by "x,y", each with the sprites standing on it.
+local grid = {}
+local function gridSquare(x, y, sprites)
+    local s = { x = x, y = y, sprites = sprites or {} }
+    function s:getX() return self.x end
+    function s:getY() return self.y end
+    function s:getZ() return 0 end
+    function s:isInARoom() return self.inRoom end
+    function s:getProperties() return { has = function() return false end } end
+    function s:getObjects()
+        local objects = {}
+        for i, name in ipairs(self.sprites) do
+            objects[i] = { getSprite = function() return { getName = function() return name end,
+                getProperties = function() return { has = function() return true end } end } end }
+        end
+        return { size = function() return #objects end, get = function(_, i) return objects[i + 1] end }
+    end
+    grid[x .. "," .. y] = s
+    return s
+end
+getCell = function() return { getGridSquare = function(_, x, y) return grid[x .. "," .. y] end } end
+local function building(square, spriteName)
+    return { square = square, tileInfo = spriteName and { getSpriteName = function() return spriteName end } }
+end
+local outside, inside = gridSquare(0, 0), gridSquare(10, 10)
+inside.inRoom = true
+check("the big beams go up outdoors or under an open roof", T.notInRoom(building(outside)))
+check("not in a room", not T.notInRoom(building(inside)))
+-- The Smokehouse facing S, its door's tile at 20,20: nothing goes up on 20,21, and its door needs that tile free.
+gridSquare(20, 20, { T.spriteName(857) })
+check("nothing is built in front of the Smokehouse's door", not T.notInRoom(building(gridSquare(20, 21))))
+check("beside it is fine", T.notInRoom(building(gridSquare(21, 20))))
+gridSquare(30, 31, { "a crate" })
+check("the Smokehouse's door needs its front free", not T.notInRoom(building(gridSquare(30, 30), T.spriteName(857)))
+    and T.notInRoom(building(gridSquare(31, 30), T.spriteName(857))))
 for _, name in ipairs({ "Medium", "Large" }) do
     local entity = io.open("42/media/scripts/entities/entity_Drying_Beam_" .. name .. ".txt"):read("*a")
     check(name .. " beam stays out of rooms", entity:find("OnIsValid = TraditionalPreservationFishMeat.notInRoom", 1, true) ~= nil)

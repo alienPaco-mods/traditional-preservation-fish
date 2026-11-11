@@ -31,7 +31,7 @@ NAME = "traditionalpreservationfishmeat"
 # station with it. Tiles are numbered straight through both. The Lua reads these numbers from the generated Tiles.lua.
 TILESETS = [NAME + "_01", NAME + "_02"]
 COLUMNS = 8
-SHEET_ROWS = [51, 57]
+SHEET_ROWS = [51, 58]
 FIRST_SHEET_SIZE = COLUMNS * SHEET_ROWS[0]
 NAME_TITLE = "TraditionalPreservationFishMeat"
 PAGE_SIZE = 2048
@@ -65,6 +65,16 @@ CHAMBER_WOOD = (112, 78, 50)
 CHAMBER_ROOF = (90, 64, 44)
 CHAMBER_STONE = (120, 112, 100)
 CHAMBER_DARK = (24, 18, 14)
+# Where a joined Firebox's flue enters the chamber (5b-2b), on the long side the camera sees: one overlay per flue
+# kind, face and part (chamber_entry_index). TP Core's Firebox pipe ends at its tile's edge this high (its TOP + CAP +
+# FLUE_RISE) and its trench at ground level, both on the tile's middle; the colours are Core's clay pipe and daub.
+CHAMBER_ENTRY = 860
+FLUE_KINDS = ["Pipe", "Stones"]
+FLUE_Z = 56
+FLUE_R = 4.5
+FLUE_CLAY = (172, 96, 64)
+FLUE_DAUB = (150, 124, 98)
+TRENCH_W = 0.07
 JOIN = 0.02               # the back tile runs this far under the front one, so no seam shows
 PALLET_LEVELS = [3, 6, 10]  # layers of fish
 PALLET_SPRITE = "construction_01_5"  # vanilla's Empty Pallet, in Tiles2x.pack
@@ -261,6 +271,11 @@ def chamber_index(face_index, part):
     return CHAMBER + face_index * 2 + part
 
 
+def chamber_entry_index(kind, face_index, part):
+    """chamberEntry / F.entrySprite in TraditionalPreservationFishMeatSmokehouse.lua number them the same way."""
+    return CHAMBER_ENTRY + (FLUE_KINDS.index(kind) * len(FACES) + face_index) * 2 + part
+
+
 def fish_index(face_index, slot, stage, first=FISH, slots=len(SLOTS)):
     """refreshFrame in TraditionalPreservationFishMeatWorld.lua numbers them the same way, from the generated Tiles.lua."""
     return first + (stage * slots + slot) * len(FACES) + face_index
@@ -279,6 +294,10 @@ for face_index, face in enumerate(FACES):
         grid = f"0,{part}" if face == "S" else f"{part},0"
         TILE_PROPS[chamber_index(face_index, part)] = station_props("Chamber", "Smokehouse", face, "200") + [
             ("ForceSingleItem", ""), ("SpriteGridPos", grid)]
+for kind in FLUE_KINDS:
+    for face_index, face in enumerate(FACES):
+        for part in range(2):
+            TILE_PROPS[chamber_entry_index(kind, face_index, part)] = [("Facing", face)]
 for face_index, face in enumerate(FACES):
     TILE_PROPS[TUB + face_index] = station_props("Tub", "Salting", face, "100")
     TILE_PROPS[FRAME + face_index] = station_props("Frame", "Drying", face, "100")
@@ -1212,6 +1231,50 @@ def paint_chamber(face, part):
     return pzart.hard_edges(weather(shrink(layer), 250 + 2 * FACES.index(face) + part, WOOD_WEATHER, streaks=True).convert("RGBA"))
 
 
+def paint_chamber_entry(kind, face, part):
+    """Where the flue enters the visible long side, at this tile's middle: a clay pipe's last stub through a collar
+    of clay on the planks, or the stone-roofed trench running in under the sill through a dark gap."""
+    layer = new_layer()
+    draw = ImageDraw.Draw(layer)
+    h, mid = CHAMBER_HALF, part - 1
+    light = 0.72 if face == "S" else 1.0
+
+    def px(a, b, z):
+        return chamber_px(face, part, a, b, z)
+
+    def wall(b0, b1, z0, z1):
+        return [px(h, mid + b0, z0), px(h, mid + b1, z0), px(h, mid + b1, z1), px(h, mid + b0, z1)]
+
+    if kind == "Pipe":
+        draw.polygon(wall(-0.075, 0.075, FLUE_Z - 8, FLUE_Z + 9), fill=tint(FLUE_DAUB, light * 0.95))
+        draw.polygon(wall(-0.06, 0.06, FLUE_Z - 6, FLUE_Z + 7), fill=tint(FLUE_DAUB, light * 1.08))
+        steps = 8
+        for i in range(steps + 1):
+            a = h + (0.5 - h) * i / steps
+            x, y = px(a, mid, FLUE_Z)
+            r = FLUE_R + (0.8 if i == 0 else 0)
+            draw.ellipse([x - r * SS, y - r * 0.85 * SS, x + r * SS, y + r * 0.85 * SS], fill=tint(FLUE_CLAY, 0.78))
+            draw.ellipse([x - (r - 1.6) * SS, y - (r - 0.6) * 0.85 * SS, x + (r - 2.6) * SS, y + (r - 2.4) * 0.85 * SS],
+                         fill=tint(FLUE_CLAY, 1.16))
+    else:
+        w = TRENCH_W
+        draw.polygon(wall(-w - 0.03, w + 0.03, 0, CHAMBER_SILL + 2), fill=tint(FLUE_DAUB, light * 0.9))
+        draw.polygon(wall(-w + 0.01, w - 0.01, 0, 3), fill=tint(CHAMBER_DARK, 1))
+        draw.polygon(wall(-w - 0.02, w + 0.02, 3, CHAMBER_SILL + 1), fill=tint(CHAMBER_STONE, light * 1.05))
+
+        def ground(a, across, z):
+            return px(a, mid + across, z)
+
+        a0, a1 = h, 0.5
+        draw.polygon([ground(a0, -w - 0.03, 0), ground(a1, -w - 0.03, 0), ground(a1, w + 0.03, 0), ground(a0, w + 0.03, 0)],
+                     fill=tint(FLUE_DAUB, 0.7))
+        draw.polygon([ground(a0, -w - 0.02, 2.2), ground(a1, -w - 0.02, 2.2), ground(a1, w + 0.02, 2.2), ground(a0, w + 0.02, 2.2)],
+                     fill=tint(FLUE_DAUB, 0.95))
+        draw.polygon([ground(a0 + 0.004, -w, 2.8), ground(a1, -w, 3.0), ground(a1, w, 3.0), ground(a0 + 0.004, w, 2.8)],
+                     fill=tint(CHAMBER_STONE, 1.1))
+    return pzart.hard_edges(shrink(layer).convert("RGBA"))
+
+
 def chamber_icon(tiles, face_index=0):
     """Both halves of the chamber as they stand, the back one drawn first, for the build menu."""
     face = FACES[face_index]
@@ -1255,6 +1318,8 @@ def build_tiles(game=GAME):
     for face_index, face in enumerate(FACES):
         for part in range(2):
             tiles[chamber_index(face_index, part)] = paint_chamber(face, part)
+            for kind in FLUE_KINDS:
+                tiles[chamber_entry_index(kind, face_index, part)] = paint_chamber_entry(kind, face, part)
     tiles[PALLET] = pzart.extract_sprites(game / "media/texturepacks/Tiles2x.pack", {PALLET_SPRITE})[PALLET_SPRITE]
     for level, layers in enumerate(PALLET_LEVELS):
         tiles[PALLET_STACK + level] = paint_pallet_stack(icons, layers)
@@ -1284,6 +1349,8 @@ def lua_tiles():
             "chamber": {"base": CHAMBER, "bases": [chamber_index(face, 0) for face in range(len(FACES))], "stacks": CHAMBER_STACKS,
                         "closed": True},
         },
+        # Where a joined Firebox's flue enters the chamber: Pipe then Stones, each face, each part.
+        "CHAMBER_ENTRY": CHAMBER_ENTRY,
         "PALLET": tile_name(PALLET),
         "PALLET_STACKS": [tile_name(PALLET_STACK + level) for level in range(len(PALLET_LEVELS))],
         "DRYING_STAGES": FISH_STAGES,

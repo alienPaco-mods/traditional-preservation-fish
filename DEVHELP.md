@@ -30,6 +30,8 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.crock(count)` | Spawns full Crocks of Potted Meat: four Steaks in Lard each, in a Glazed Clay Jar. |
 | `TPFM.crocks()` | Each Crock of Potted Meat on you or in containers within 4 tiles on your floor: its place (Fridge, Freezer, Basement, Sheltered, Open), keeping rate (x1 = a basement's 60 days), age, days until stale and rotten there, and whether it has been opened. |
 | `TPFM.keep(days)` | Ages those crocks by this many days at their place's rate now (default 10). |
+| `TPFM.flueKit()` | Spawns both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay) with a Mason's Trowel and a Shovel. |
+| `TPFM.smokehouse()` | Each Smokehouse chamber tile within 3 tiles on your floor: facing, back or door tile, the entry overlay it shows, and each Firebox beside it with its flue and why it can't join (or `may join`, `joined here`). |
 | `TPFM.fatRows()` | Says whether the sandbox has butchering fat on, and prints the fat row of each vanilla pig, cow and sheep's butchering table (base numbers: about x2.8 on a Butchering Hook, x0.6 on the ground). |
 
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.

@@ -5,6 +5,7 @@ TraditionalPreservationFishMeat = TraditionalPreservationFishMeat or {}
 local F = TraditionalPreservationFishMeat
 local Weather = require "TraditionalPreservationCore/Weather"
 local Tiles = require "TraditionalPreservationFishMeat/Tiles"
+local Doors = require "TraditionalPreservationCore/Doors"
 
 F.MOD_DATA_KEY = "TraditionalPreservationFishMeat"
 
@@ -576,9 +577,12 @@ function F.stationIndex(object)
     return name and STATION_INDEX[name]
 end
 
--- The big beams and the Smokehouse stand in the open or under an open roof, not in a room, unlike the frame.
+-- The big beams and the Smokehouse stand in the open or under an open roof, not in a room, unlike the frame; and
+-- not in front of a door (TP Core's Doors: the Hearth's mouth, the Firebox's door, the Smokehouse's), with the
+-- Smokehouse's own door's front free.
 function F.notInRoom(params)
-    return not params.square:isInARoom()
+    local name = params.tileInfo and params.tileInfo:getSpriteName()
+    return not params.square:isInARoom() and Doors.fits(params.square, name)
 end
 
 -- The hanger a station's sprite belongs to, whichever way it faces (and either tile of the chamber), or nil for a tub.

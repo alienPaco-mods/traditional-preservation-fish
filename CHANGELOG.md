@@ -1,5 +1,23 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.8
+- **Connect the Firebox** (ROADMAP §7, phase 5b-2b): TP Core's Firebox joins the Smokehouse chamber beside it, with a
+  **clay pipe** (2 Clay Pipe Segments + 1 Clay, Mason's Trowel kept) or a **stone trench** (3 Flat Stones + 2 Clay,
+  a shovel or spade kept: `DIG_GRAVE`). No skill, a little Masonry XP. On the Firebox's menu (Core's
+  `HearthUI.addFireboxMenu`) and the chamber's right-click. The Firebox may stand by either long side or the back gable,
+  never at the door's end, and never with its own door towards the shed (`Hearth.flueSideTo`); one Firebox a shed, and
+  not while its fire burns (lit or banked). **Disconnect** gives the pipe segments or flat stones back, the clay is lost.
+  Neither the Firebox nor the shed picks up while joined. The link lives on the Firebox alone (Core's `flue`,
+  `flueSide`). Firebox Info says where its flue goes. Smoke does nothing yet (5c, 5d): the shed still dries as Sheltered.
+- Where the flue enters, on the long side the camera sees: a pipe stub in a collar of clay, or the trench's mouth under
+  the sill (hidden by the Firebox itself). Tiles 860-867 (sheet 2 grows to 58 rows), `Tiles.CHAMBER_ENTRY`; the
+  World draws them on either chamber tile. Rules in `TraditionalPreservationFishMeatSmokehouse.lua`, per chamber tile,
+  so a bigger shed can reuse them. Dev: `TPFM.flueKit()`, `TPFM.smokehouse()`. Tests: `test_smokehouse.lua`.
+- The Smokehouse's door needs its front tile free, and nothing of TP's (Firebox, Hearth, beams, another shed) goes up
+  or is put down in front of it (Core's `Doors`: the door tiles registered in `...FishMeatSmokehouse.lua`;
+  `F.notInRoom` asks `Doors.fits`; `UI.keepDoorsFree(Tiles.OUTDOOR)`). User, after step 75: a Firebox could be built
+  at the shed's door end, and with its own door against the shed.
+
 ## 0.4.7
 - **Smokehouse chamber** (ROADMAP §7, phase 5b-2a): a plank shed two tiles long under one roof slope, its door on the
   high end with a smoke slot under the eave (a two-tile entity like vanilla's Drying Rack: `SpriteGridPos`,

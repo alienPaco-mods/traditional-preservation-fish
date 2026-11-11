@@ -97,12 +97,15 @@ local function refreshFrame(frame, entry, faceIndex, _, waitingStyle, batches, f
     showSprites(frame, entry, table.concat(states, ","), sprites)
 end
 
--- The Smokehouse chamber is closed: nothing shows from outside.
-local function refreshClosed(station, entry)
-    showSprites(station, entry, "", {})
+-- The Smokehouse chamber is closed: nothing hangs in sight. Each of its tiles shows only where a joined Firebox's flue
+-- enters it, master or not (the other tile has no slots).
+local function showEntry(station, entry)
+    local sprite = F.chamberEntry(station)
+    showSprites(station, entry, tostring(sprite), sprite and { sprite } or {})
 end
 
 local function refresh(station, entry)
+    if entry.hanger and entry.hanger.closed then showEntry(station, entry) end
     local resources = station:getComponent(ComponentType.Resources)
     local logic = station:getComponent(entry.logicType)
     local sprite = station:getSprite()
@@ -131,7 +134,7 @@ local function newEntry(station)
         hanger = hanger,
         faceIndex = index % FACE_COUNT,
         logicType = isFrame and ComponentType.DryingCraftLogic or ComponentType.CraftLogic,
-        show = closed and refreshClosed or isFrame and refreshFrame or refreshTub,
+        show = closed and function() end or isFrame and refreshFrame or refreshTub,
         place = closed and "Sheltered" or nil,
     }
 end

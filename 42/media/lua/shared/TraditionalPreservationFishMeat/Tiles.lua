@@ -8,7 +8,7 @@ return {
         },
         {
             prefix = "traditionalpreservationfishmeat_02_",
-            tiles = 456,
+            tiles = 464,
         },
     },
     FIRST_SHEET_SIZE = 408,
@@ -54,6 +54,7 @@ return {
             closed = true,
         },
     },
+    CHAMBER_ENTRY = 860,
     PALLET = "traditionalpreservationfishmeat_02_304",
     PALLET_STACKS = { "traditionalpreservationfishmeat_02_305", "traditionalpreservationfishmeat_02_306", "traditionalpreservationfishmeat_02_307" },
     DRYING_STAGES = 5,
