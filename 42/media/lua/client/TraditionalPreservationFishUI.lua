@@ -146,3 +146,25 @@ end)
 
 -- The Fish Hanging Beam and Gantry each stands in the open or under an open roof, not in a room.
 UI.notInRooms(Tiles.OUTDOOR)
+
+-- Fish names and the stockfish's ripeness follow the days: the player's own things every hour, and any
+-- container as soon as the inventory windows show it. Names from before the bracket names update the same way.
+local function renameIn(container)
+    if not container then return end
+    for fullType in pairs(F.STAGES) do
+        local items = container:getAllTypeRecurse(fullType)
+        for i = 0, items:size() - 1 do F.rename(items:get(i)) end
+    end
+end
+
+Events.EveryHours.Add(function()
+    for i = 0, getNumActivePlayers() - 1 do
+        local player = getSpecificPlayer(i)
+        if player then renameIn(player:getInventory()) end
+    end
+end)
+
+Events.OnRefreshInventoryWindowContainers.Add(function(page, reason)
+    if reason ~= "end" then return end
+    for _, button in ipairs(page.backpacks or {}) do renameIn(button.inventory) end
+end)

@@ -756,7 +756,7 @@ module TraditionalPreservationFish
         time = 100,
         Tags = InHandCraft;Cooking,
         category = Cooking,
-        OnCreate = TraditionalPreservationFish.onCreateCured,
+        OnCreate = TraditionalPreservationFish.onCreateSoaked,
         inputs
         {
             item 1 [TraditionalPreservationFish.ColdDriedFish] flags[InheritFoodAge;ItemCount] mode:destroy,

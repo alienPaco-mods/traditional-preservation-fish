@@ -23,6 +23,7 @@ function TPF.help()
     say("TPF.heat(hours)           add this many hours of hot sun, to test it on fresh open salt stacks")
     say("TPF.warmCure(hours)       add this many hours of a warm cure at 25 C, to test souring in a running tub")
     say("TPF.dry()                 clear the wetness, so open and cold frames start drying again at once")
+    say("TPF.mature(days)          age the Cold Dried fish you carry by this many days, to test ripening")
     say("TPF.fish(name, weight, n) spawn n whole fish, e.g. TPF.fish(\"Walleye\", 4, 2). TPF.fish() lists the names")
     say("TPF.heads(n)              spawn n Fish Heads")
     say("TPF.stock()               spawn a Pot of Fish Head Stock")
@@ -117,6 +118,18 @@ function TPF.warmCure(hours)
     ledger.warmCure = ledger.warmCure + hours * 1.5
     say(string.format("Added %.0f hours of a warm cure at 25 C: about %.0f%% off a batch in the tub now.",
         hours, hours * 1.5 * F.WARM_CURE_SHARE / F.RAW_SPOIL_HOURS * 100))
+end
+
+-- Ripeness runs on the fish's own food clock, so this ages the fish themselves.
+function TPF.mature(days)
+    days = days or 10
+    local fish = getPlayer():getInventory():getAllTypeRecurse("TraditionalPreservationFish.ColdDriedFish")
+    for i = 0, fish:size() - 1 do
+        local item = fish:get(i)
+        item:setAge(item:getAge() + days)
+        F.rename(item)
+    end
+    say(string.format("Aged %d Cold Dried fish by %d days. Ripe after %d.", fish:size(), days, F.MATURE_DAYS))
 end
 
 function TPF.dry()

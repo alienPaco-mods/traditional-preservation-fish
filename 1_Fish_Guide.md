@@ -100,7 +100,8 @@ Pick **Hang Salt Pressed Fish to Dry**, load pressed fish, press **Craft**. Each
 1. **Gut Fish**: whole raw fish + knife → **Gutted Fish** (+ guts, and a **Fish Head** from a fish over 1.0 weight). Fillets can't be gutted.
 2. **Split Fish** (optional): a gutted fish over 2.5 weight can be split into two **Fish Halves**.
 3. **Hang**: pick **Hang Gutted Fish to Cold Dry** on the frame. Frozen fish is fine.
-4. **Rehydrate**: Cold Dried fish must be soaked (1 L water) before it can go into recipes.
+4. **Let it mature**: stockfish ripens in storage over **60 days**, in any container (a fridge slows it, a freezer stops it). The name reads *(Cold Dried, Unripe)* until it's *(Cold Dried, Ripe)*, and the tooltip shows the percentage.
+5. **Rehydrate**: Cold Dried fish must be soaked (1 L water) before it can go into recipes. Ripe stockfish cheers you up (unhappiness -10), and so does the stew it goes into. Unripe, it's dull (+10). Halfway, it's neither.
 
 > ⚠ Cold drying **rots** if the season warms up. Hang from November to mid-February. See the Almanac.
 
@@ -218,6 +219,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 ### Old names, old ways
 
 - **Stockfish** comes from the Lofoten islands of northern Norway, hung on wooden racks called *hjell* from February to May. It was traded across Europe from the Viking age on, and keeps for years.
+- **Stockfish was never eaten off the rack.** After about three months on the *hjell*, it was stacked on pallets in dry, airy warehouses for two or three more months to mature, then sorted by hand into a dozen or more grades for Italy, Nigeria and the rest of the trade.
 - **The heads weren't wasted.** Norway still dries its stockfish heads separately, and ships them to West Africa, where they're prized for soups and stews.
 - **Bacalhau** (Portuguese) and **klippfisk** (Norwegian) are salt cod, salted, pressed and dried on rocks in the sun. Portugal is said to have a different bacalhau recipe for every day of the year.
 - **On the lower Volga** around Astrakhan, large salted fish such as pike are hung from hooks to dry, and smaller ones dried whole with their heads on.
@@ -231,6 +233,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 - **An open shed beats a room.** A frame under a porch or lean-to roof dries salt fish at full speed, rain or shine, in the shade. Keep the room for when you have nowhere else.
 - **Winter is stockfish season.** Gut everything you catch in December and January. The lightest, longest-keeping food in the game. Turn the heads into stock the same day, as they spoil like fresh fish.
 - **Rehydrate only what you'll cook today.** Rehydrated fish keeps just 2 days.
+- **Don't eat December's stockfish in January.** Give it the 60 days. A crate in the shed is enough, and the freezer is the one place it won't ripen.
 - With the **Salt mod**, a salt lick keeps you packing forever. See the Collection Guide.
 
 ---

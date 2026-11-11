@@ -2,7 +2,8 @@
 local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
 H.useModPaths()
 ModData = { getOrCreate = function() return {} end }
-Events = { OnInitGlobalModData = { Add = function() end } }
+local handlers = {}
+Events = setmetatable({}, { __index = function(_, name) return { Add = function(handler) handlers[name] = handler end } end })
 -- The mod's own modules load for real, vanilla's are left out.
 local realRequire = require
 require = function(name)
@@ -227,5 +228,22 @@ end
 check("a beam can't be put down in a room", not placing("traditionalpreservationfish_02_0", true) and not placing("traditionalpreservationfish_02_3", true))
 check("but can outdoors or under an open roof", placing("traditionalpreservationfish_02_2", false))
 check("and the frame can go anywhere", placing("traditionalpreservationfish_01_0", true))
+
+-- Names follow the days in any container the inventory shows
+local renamed = {}
+local fakeFish = { fullType = "TraditionalPreservationFish.ColdDriedFish" }
+local container = {}
+function container:getAllTypeRecurse(fullType)
+    return H.list(fullType == fakeFish.fullType and { fakeFish } or {})
+end
+local F = TraditionalPreservationFish
+local realRename = F.rename
+F.rename = function(item) table.insert(renamed, item) end
+handlers.OnRefreshInventoryWindowContainers({ backpacks = { { inventory = container } } }, "begin")
+check("names wait for the window to finish refreshing", #renamed == 0)
+handlers.OnRefreshInventoryWindowContainers({ backpacks = { { inventory = container } } }, "end")
+check("then every fish stage in each shown container is renamed", #renamed == 1 and renamed[1] == fakeFish)
+check("and the player's things every hour", handlers.EveryHours ~= nil)
+F.rename = realRename
 
 H.done()

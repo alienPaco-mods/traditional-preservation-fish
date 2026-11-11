@@ -1,5 +1,20 @@
 # Changelog: Traditional Preservation (Fish)
 
+## 0.3.3
+- Stockfish matures (ROADMAP §6, decisions 5 and 6, user 2026-11-11): Cold Dried fish ripens over 60 days
+  (`MATURE_DAYS`) on its own food clock, so a fridge slows it and a freezer stops it; no station, any container.
+  `onCreateDried` stamps `matureAge` (item modData); a fish with no stamp (made before 0.3.3) counts as ripe.
+- Rehydrate Fish on stockfish now runs `onCreateSoaked`: the soaked fish keeps `ripeness` and its unhappiness
+  goes from +10 unripe through 0 halfway to -10 ripe (`MATURE_UNHAPPY`); a dish takes on its share, as vanilla does.
+- Names: the stage goes in brackets after the fish, and vanilla's (Fresh) / (Stale) follows: *Gutted Medium Walleye
+  (Salt Pressed)*, *Fish Half (Cold Dried, Unripe)*, *Medium Walleye (Rehydrated, Cold Dried, Ripe)*. Gutted and
+  Half stay part of the fish's name; "Gutted" shows on every later stage of a fish that went through Gut Fish (user:
+  packing takes the guts but leaves the fish whole), read from its headless icon (`F.wasGutted`), so old saves too. `F.stageName`, `F.rename`; slices carry the ripeness.
+- Names and the stockfish's tooltip ("Maturing: 40 percent", one Tooltip key per tenth, `..._ColdDried_40`, as the game neither saves a per-item tooltip nor formats one) update
+  every in-game hour for the player's own things and whenever the inventory windows show a container. Fish from
+  older saves take the new names the same way.
+- Debug: `TPF.mature(days)` ages the Cold Dried fish you carry.
+
 ## 0.3.2
 - Realism (ROADMAP §6, decision 16, user 2026-11-11): salt per fish doubled to 4 uses per started half weight
   (`SALT_PER_STEP`), about 15% of the fish's weight, the Volga figure (was about 7%).

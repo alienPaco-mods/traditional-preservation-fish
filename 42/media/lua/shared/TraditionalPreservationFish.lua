@@ -141,6 +141,11 @@ F.HEAT_ABOVE = 25
 F.SALT_FRESH_UNTIL = 0.5
 F.HEAT_DAMAGE_HOURS = 24
 F.HEAT_DAMAGE = 0.05
+-- Stockfish matures in storage, as it did in the warehouses after the racks: MATURE_DAYS on its own food clock
+-- (a fridge slows it, a freezer stops it). Rehydrated, a ripe fish lifts the mood by MATURE_UNHAPPY and a
+-- fresh-off-the-frame one lowers it as much; halfway is neither. A dish takes on the share it gets.
+F.MATURE_DAYS = 60
+F.MATURE_UNHAPPY = 10
 
 -- From DryingCraftLogic, so the frame's wetness readout tells the truth.
 local RAIN_WETTING = 0.001  -- per game second, at full intensity
@@ -159,15 +164,16 @@ F.FISH_ICONS = {
 
 -- What each stage keeps of the item it was made from. With a maxWeight, each fish keeps a
 -- random share between weight and maxWeight. Soaking gives back the bulk drying took (hunger 0.7).
+-- A prep stage names the fish itself (Gutted Walleye, Walleye Half); the others go in brackets after it.
 F.STAGES = {
     ["TraditionalPreservationFish.SaltPackedFish"] = { name = "IGUI_TraditionalPreservationFish_Packed", weight = 1, nutrition = 1, hunger = 1, gutted = true },
     ["TraditionalPreservationFish.SaltPressedFish"] = { name = "IGUI_TraditionalPreservationFish_Pressed", weight = 0.88, maxWeight = 0.93, nutrition = 1, hunger = 1 },
     ["TraditionalPreservationFish.SaltDriedFish"] = { name = "IGUI_TraditionalPreservationFish_Dried", weight = 0.45, nutrition = 0.9, hunger = 0.7 },
     ["TraditionalPreservationFish.SoakedSaltFish"] = { name = "IGUI_TraditionalPreservationFish_SoakedSalt", weight = 1.8, nutrition = 1, hunger = 1 / 0.7 },
-    ["TraditionalPreservationFish.GuttedFish"] = { name = "IGUI_TraditionalPreservationFish_Gutted", weight = 1, nutrition = 1, hunger = 1, gutted = true, headless = true },
-    ["TraditionalPreservationFish.FishHalf"] = { name = "IGUI_TraditionalPreservationFish_Half", weight = 1, nutrition = 1, hunger = 1 },
-    ["TraditionalPreservationFish.ColdDriedFish"] = { name = "IGUI_TraditionalPreservationFish_ColdDried", weight = 0.22, nutrition = 0.95, hunger = 0.7 },
-    ["TraditionalPreservationFish.SoakedColdFish"] = { name = "IGUI_TraditionalPreservationFish_SoakedCold", weight = 3, nutrition = 1, hunger = 1 / 0.7 },
+    ["TraditionalPreservationFish.GuttedFish"] = { name = "IGUI_TraditionalPreservationFish_Gutted", weight = 1, nutrition = 1, hunger = 1, gutted = true, headless = true, prep = true },
+    ["TraditionalPreservationFish.FishHalf"] = { weight = 1, nutrition = 1, hunger = 1, prep = true },
+    ["TraditionalPreservationFish.ColdDriedFish"] = { name = "IGUI_TraditionalPreservationFish_ColdDried", weight = 0.22, nutrition = 0.95, hunger = 0.7, matures = true },
+    ["TraditionalPreservationFish.SoakedColdFish"] = { name = "IGUI_TraditionalPreservationFish_SoakedCold", weight = 3, nutrition = 1, hunger = 1 / 0.7, ripened = true },
 }
 
 -- The low end of DryingCraftLogic's curve: nothing at freezing, 1 at 20 C. It stops there, so
@@ -734,11 +740,7 @@ function F.carry(source, target)
     if not fishName and not F.STAGES[source:getFullType()] then
         fishName = string.gsub(source:getDisplayName(), "%s+$", "")
     end
-    if fishName then
-        targetData.fishName = fishName
-        target:setName(getText(stage.name, fishName))
-        target:setCustomName(true)
-    end
+    if fishName then targetData.fishName = fishName end
 
     if sourceData.fishName then
         targetData.sliceable = sourceData.sliceable
@@ -746,7 +748,60 @@ function F.carry(source, target)
         targetData.sliceable = not F.UNSLICEABLE[source:getFullType()] and source:getActualWeight() > F.MIN_SLICE_WEIGHT
     end
 
+    -- After the icon, which tells whether the fish was gutted.
     target:setModelIndex(F.iconIndex(source))
+    F.rename(target)
+end
+
+-- How far a stockfish has matured, 0 to 1, by the days on its own food clock since it came off the frame.
+-- One made before maturing existed (no stamp) counts as ripe; a rehydrated one keeps what it had.
+function F.ripeness(item)
+    local modData = item:getModData()
+    if F.STAGES[item:getFullType()].ripened then return modData.ripeness end
+    if not modData.matureAge then return 1 end
+    return math.max(0, math.min((item:getAge() - modData.matureAge) / F.MATURE_DAYS, 1))
+end
+
+-- Whether a later stage came from a Gutted Fish (headless). Packing a whole fish takes its guts but leaves it
+-- whole, head on, so it isn't. The icon already says which: stages list theirs whole, gutted, then half.
+function F.wasGutted(item)
+    local index, count = item:getModelIndex(), #F.FISH_ICONS
+    return index >= count and index < count * 2
+end
+
+-- A fish stage's name: the fish (Gutted if it went through Gut Fish), then its stage in brackets, as in
+-- "Gutted Medium Walleye (Cold Dried, Ripe)". Vanilla adds (Fresh) or (Stale) after it. Nil for a stage
+-- item that never had a species.
+function F.stageName(item)
+    local stage = F.STAGES[item:getFullType()]
+    local modData = item:getModData()
+    local fishName = modData.fishName
+    if not stage or not fishName then return nil end
+    if stage.prep then return stage.name and getText(stage.name, fishName) or fishName end
+    if F.wasGutted(item) then fishName = getText("IGUI_TraditionalPreservationFish_Gutted", fishName) end
+    local state = getText(stage.name)
+    local ripeness = (stage.matures or stage.ripened) and F.ripeness(item)
+    if ripeness then
+        state = getText("IGUI_TraditionalPreservationFish_And", state,
+            getText(ripeness >= 1 and "IGUI_TraditionalPreservationFish_Ripe" or "IGUI_TraditionalPreservationFish_Unripe"))
+    end
+    return getText("IGUI_TraditionalPreservationFish_Named", fishName, state)
+end
+
+-- Brings a fish stage's name up to date (ripening, or a name from before the bracket names), and a maturing
+-- stockfish's tooltip, which the game doesn't save. The tooltip has a key for each tenth (..._ColdDried_40):
+-- the game looks the text up without formatting it, so a made-up text would log a missing translation.
+function F.rename(item)
+    local name = F.stageName(item)
+    if name and item:getDisplayName() ~= name then
+        item:setName(name)
+        item:setCustomName(true)
+    end
+    if not F.STAGES[item:getFullType()].matures then return end
+    local ripeness = F.ripeness(item)
+    local tooltip = "Tooltip_TraditionalPreservationFish_ColdDried"
+    if ripeness < 1 then tooltip = tooltip .. "_" .. math.floor(ripeness * 10) * 10 end
+    item:setTooltip(tooltip)
 end
 
 -- InheritFood would copy the first fish onto all of them, and a batch can mix sizes, so each
@@ -756,6 +811,19 @@ function F.onCreateCured(craftRecipeData)
     local created = craftRecipeData:getAllCreatedItems()
     for i = 0, math.min(fish:size(), created:size()) - 1 do
         F.carry(fish:get(i), created:get(i))
+    end
+end
+
+-- Soaking a stockfish fixes how ripe it was, and with it how the fish lifts or lowers the mood.
+function F.onCreateSoaked(craftRecipeData)
+    local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
+    local created = craftRecipeData:getAllCreatedItems()
+    for i = 0, math.min(fish:size(), created:size()) - 1 do
+        local soaked = created:get(i)
+        local ripeness = F.ripeness(fish:get(i))
+        soaked:getModData().ripeness = ripeness
+        soaked:setUnhappyChange(F.MATURE_UNHAPPY * (1 - 2 * ripeness))
+        F.carry(fish:get(i), soaked)
     end
 end
 
@@ -882,7 +950,6 @@ function F.onCreateSliced(craftRecipeData)
     local filletName = getItemNameFromFullType("Base.FishFillet")
     for i = 0, created:size() - 1 do
         local fillet = created:get(i)
-        local stage = F.STAGES[fillet:getFullType()]
         copyFood(fish, fillet, 0.5)
         fillet:setActualWeight(fish:getActualWeight() / 2)
         fillet:setCustomWeight(true)
@@ -890,9 +957,10 @@ function F.onCreateSliced(craftRecipeData)
         local modData = fillet:getModData()
         modData.fishName = filletName
         modData.sliceable = false
-        fillet:setName(getText(stage.name, filletName))
-        fillet:setCustomName(true)
+        modData.matureAge = fish:getModData().matureAge
+        modData.ripeness = fish:getModData().ripeness
         fillet:setModelIndex(0)
+        F.rename(fillet)
     end
 end
 
@@ -908,6 +976,10 @@ function F.onCreateDried(craftRecipeData)
         fish:getModData().stackId = modData.stackId
         fish:getModData().style = modData.style
         fish:setAge(spoiled >= 1 and fish:getOffAgeMax() or fish:getOffAge() * spoiled)
+        if F.STAGES[fish:getFullType()].matures then
+            fish:getModData().matureAge = fish:getAge()
+            F.rename(fish)
+        end
     end
 end
 
