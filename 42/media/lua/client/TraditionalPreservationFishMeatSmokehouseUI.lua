@@ -134,5 +134,5 @@ HearthUI.addFireboxNotes(function(info, notes)
     local flue = info.copper and info.copper.flue
     if not flue then return end
     table.insert(notes, UI.say("IGUI_TraditionalPreservationFishMeat_FlueJoined", getText(KIND_NAMES[flue])))
-    table.insert(notes, getText("IGUI_TraditionalPreservationFishMeat_FlueNoEffectYet"))
+    table.insert(notes, getText("IGUI_TraditionalPreservationFishMeat_FlueSmokes"))
 end)

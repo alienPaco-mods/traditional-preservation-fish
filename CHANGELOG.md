@@ -17,6 +17,12 @@
 - **A ham hangs by the Smokehouse door** while finished stacks wait inside (user's idea): tiles 868-869, on the door's
   tile (`F.hamSprite`).
 - Stack popup: "Hot Smoke: x of y h stoked in a row" in a joined shed, "Smoke: x h" once there is any.
+- Firebox Info's flue line now says what a joined Firebox does (stoked 4 to 8 hours in a row it hot smokes the
+  stacks; banked or out they dry as Sheltered) instead of "Smoking comes in a later version".
+- Docs: the player guide, README and Workshop text rewritten as one Fish & Meat manual, by process (cleaning table,
+  Salting Tub, drying stations, Salt Dried fish, Charque, Stockfish, Smokehouse and hot smoking, fat, Potted Meat),
+  checked against the code; history follows the Volga, Lofoten, the charqueadas, kavurma and the Kentucky smokehouse
+  (no salt cod or biltong). README splits player notes from a code map for modders.
 - Dev: `TPFM.smoke()` (the joined Firebox's record and each stack's counters), `TPFM.stoke(hours)` (adds stoked hours
   to the running session), `TPFM.curedFish(name, n)` (Salt Cured fish, default Walleye).
 

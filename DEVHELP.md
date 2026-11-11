@@ -24,6 +24,7 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.fat(n)` | Spawns `n` each of Pork Fat, Beef Suet and Mutton Fat (default food values). |
 | `TPFM.meat(n)` | Spawns `n` each of the cuts Pack Meat in Salt takes: Beef, Steak, Mutton Chop, Venison. |
 | `TPFM.cured(n)` | Spawns `n` each of those cuts already Salt Cured ("Steak (Salt Cured)"), ready to hang as charque. |
+| `TPFM.curedFish(name, n)` | Spawns `n` fish (default Walleye) already Salt Cured ("Walleye (Salt Cured)"), ready for a frame or the Smokehouse. |
 | `TPFM.rain(hours)` | Adds this many hours of rain (default 6) and wets the open frames: an open charque stack loses a tenth of its progress per 6 hours. `TPFM.dry()` dries the frames off again. |
 | `TPFM.fatPot(state)` | Spawns a Pot of Pork Fat: `"cooked"` (the default, ready to pour off), `"burnt"` (only Scrape Out Burnt Fat takes it) or `"raw"`. |
 | `TPFM.potted()` | Spawns what Potted Meat takes: a Pot, Lard, Salt, a Steak, Beef, Pork Chop and Pork, and a Clay Jar, Glazed Clay Jar and Clay Pot. |
@@ -32,6 +33,8 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.keep(days)` | Ages those crocks by this many days at their place's rate now (default 10). |
 | `TPFM.flueKit()` | Spawns both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay) with a Mason's Trowel and a Shovel. |
 | `TPFM.smokehouse()` | Each Smokehouse chamber tile within 3 tiles on your floor: facing, back or door tile, the entry overlay it shows, and each Firebox beside it with its flue and why it can't join (or `may join`, `joined here`). |
+| `TPFM.smoke()` | Each Smokehouse within 3 tiles: its joined Firebox's fire record (mode, stoked and banked hours, the session now running and its hours) and each stack's hot hours against its need, smoke hours, dried hours, and whether its cook is done. |
+| `TPFM.stoke(hours)` | Adds stoked hours (default 1) to the running session of those joined Fireboxes; the stacks pick them up on the World's next look. Stoke the Firebox first: with no session running it says so. |
 | `TPFM.fatRows()` | Says whether the sandbox has butchering fat on, and prints the fat row of each vanilla pig, cow and sheep's butchering table (base numbers: about x2.8 on a Butchering Hook, x0.6 on the ground). |
 
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.
@@ -45,5 +48,7 @@ The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't s
 **Typical check of keeping by place (4c):** three crocks, one in a powered fridge, one in a basement, one in a room upstairs; stand by each and `TPFM.crocks()`: Fridge x0.50 (120 days), Basement x1.00 (60), the room by the season mean (x0.5 at 4 C and below, x1 at 15 C, x4.29 at 25 C and up). `TPFM.keep(30)` by each: about 15, 30 and up to 128 days old. Eat a quarter of one: it loses a third of its days to stale once (`opened`); a second bite costs nothing.
 
 **Typical check of the copper:** `TPFM.fat(6)`, a lit Hearth, Put Fat in the Copper (Pork Fat), wait for it to steam and an hour more, Fill from Copper into a pot, Strain Lard three times.
+
+**Typical check of hot smoking:** a Smokehouse with a Firebox joined (`TPC.fireboxKit()`, `TPFM.flueKit()`), `TPFM.cured(2)` and `TPFM.curedFish("Walleye", 3)`, hang one stack of each, light the Firebox, `TPFM.smoke()` (a session, hot 0 of 6-8 and 4), `TPFM.stoke(8)`: within a second both come out Hot Smoked and a ham hangs by the door. For a broken run: stoke 2 h, bank it and wait over an hour: hot back to 0, Smoke 2.0 h.
 
 **Typical check of heads:** `TPFM.fish("Walleye", 4)` and `TPFM.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.

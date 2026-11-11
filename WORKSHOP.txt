@@ -1,168 +1,108 @@
 [h1]Traditional Preservation (Fish & Meat)[/h1]
 
-Preserve your catch and your kill the old way. Salt fish, cure it and hang it to dry, or gut it and hang it in the winter cold. Salt beef and dry it in the summer sun as charque. Render the fat for Lard and Tallow, and seal meat under it in a clay jar as Potted Meat. It all keeps for months or even years, with no fridge and no power.
+Preserve your catch and your kill the old way, with salt, wood, fat, smoke and the weather. One workshop for both: the same Salting Tub cures fish and meat, the same drying stations hang both, a Smokehouse smokes both, and butchering gives the fat that seals meat away in a clay jar. It all keeps for weeks, months or even years, with no fridge and no power.
 
 [b]Build 42 only (42.20 or newer). This is an early release, so back up your save before enabling it. Singleplayer only: multiplayer is not supported.[/b]
 
 [b]Requires Traditional Preservation (Core)[/b]: subscribe to it too, and enable it in the Mods menu (it loads first).
 
+[h2]The roads[/h2]
+[table]
+[tr][th]Road[/th][th]Fish[/th][th]Meat[/th][th]Season[/th][th]Keeps[/th][/tr]
+[tr][td]Salt and dry[/td][td]Salt Dried fish[/td][td]Charque (beef, mutton, venison)[/td][td]Any for fish, summer for charque[/td][td]4 to 6 months[/td][/tr]
+[tr][td]Freeze-dry in the wind[/td][td]Stockfish[/td][td]-[/td][td]Winter[/td][td]1 to 2 years[/td][/tr]
+[tr][td]Hot smoke[/td][td]Hot Smoked fish[/td][td]Hot Smoked meat[/td][td]Any[/td][td]1 to 2 weeks, ready to eat[/td][/tr]
+[tr][td]Under fat[/td][td]-[/td][td]Potted Meat (pork too)[/td][td]Any[/td][td]Weeks to months, by where you keep it[/td][/tr]
+[/table]
+
 [h2]Features[/h2]
 [list]
-[*]Two methods: salt drying all year, and cold drying in winter with no salt
-[*]A salting tub and three drying stations, with their own art and two facings
+[*]A Salting Tub for fish and meat, three drying stations and a Smokehouse, with their own art and two facings
 [*]Each hanging stack has its own drying progress and look, so you can start and collect batches independently
-[*]Rain, cold, humidity and the seasons all matter, and drying carries on while you're away
-[*]Fish keep their species and size through every stage, with their own icons and ground models
-[*]Gutting and packing give Fish Guts for chum, and gutting a big fish gives a Fish Head for the pot
-[*]Charque: beef, mutton and venison salted in the same tub and sun dried on the same stations, for months of keeping
-[*]Potted Meat: beef, mutton, venison or pork cooked in Lard or Tallow with salt and packed into a clay jar, eaten by the portion
-[*]A Smokehouse: a plank shed for salt fish and charque, out of the rain, that a stone Firebox can be joined to
-[*]Butchered pigs, cattle and sheep give fat: melt it in a pot on any fire, or a whole pig's worth in the Hearth's copper, and strain it for Lard, Tallow and Cracklings
+[*]Rain, cold, wind, humidity and the seasons all matter, and drying carries on while you're away
+[*]Fish keep their species and size, and meat its cut, through every stage, with their own icons
+[*]Stockfish matures in storage, faster on a pallet in the loft, and travels in bales
+[*]Butchered pigs, cattle and sheep give fat: render it in a pot on any fire, or a whole pig's worth in the Hearth's copper, for Lard, Tallow and Cracklings
+[*]Potted Meat: cuts cooked in Lard or Tallow and packed into a clay jar, eaten by the portion, keeping by where you store it
+[*]A Smokehouse with a stone Firebox joined to it: keep the fire stoked and salt fish or meat comes out Hot Smoked, with a ham hung by the door to tell you
+[*]Gutting gives Fish Guts for chum and a Fish Head for a proper stock
 [/list]
 
-[h2]Which method should I use?[/h2]
+[h2]Salting (fish and meat)[/h2]
 [list]
-[*][b]Salt drying[/b] can be done in any season, though weather slows it. It costs salt and needs a tub, and the fish keeps for 4 to 6 months and goes straight into soups and stews.
-[*][b]Cold drying[/b] needs no salt or tub, and the fish keeps for 1 to 2 years. It only works in a cold season, and the fish must be rehydrated before use.
+[*][b]Salting Tub:[/b] Carpentry 2, Fishing 2. 4 planks, 6 nails, 2 twine, hammer and saw kept. Holds 50 weight or 35 pieces, fish or meat, never both at once.
+[*][b]Pack Fish in Salt:[/b] a raw fish or fillet and a sharp knife or meat cleaver (kept). 4 salt for each started half weight, about 15%, as on the Volga: a bluegill takes 4, a 4.5 weight walleye 36. A fish over 4.5 weight is too thick to salt whole: gut and split it first.
+[*][b]Pack Meat in Salt:[/b] a Beef, Steak, Mutton Chop or Venison as the butcher gives it, with 4 salt. No knife needed. Pork stays out: its fat goes rancid in the sun.
+[*][b]Cure Salted Fish / Cure Salted Meat:[/b] the heaviest piece sets the time, 1 to 2 in-game days. Nothing else goes in until the last Salt Cured piece is out. A warm spell above 20 C sours the batch and costs it keeping.
+[*][b]Rinse Off Salt (optional):[/b] 0.15 L of clean water a piece, or at a sink. Less salty, keeps a tenth less long.
 [/list]
-
-[h2]Salt drying[/h2]
-
-[h3]1. Pack Fish in Salt[/h3]
-You need a raw fish or fillet, salt and a sharp knife or meat cleaver (kept). Salt goes by size: 4 for each started half weight of the packed fish (about 15% of its weight, as on the Volga), so a bluegill takes 4 and a 4.5 weight walleye 36. A vanilla shaker holds 10. A fish over 4.5 weight (about 2 kg) is too thick to salt whole: gut and split it, then pack the halves. Rotten, frozen and cooked fish can't be packed. Salt Packed fish only keeps for days.
-
-[h3]2. Build a Salting Tub[/h3]
-Carpentry 2, Fishing 2. Takes 4 planks, 6 nails, 2 twine, a hammer and a saw (both kept).
-
-[h3]3. Cure[/h3]
-Choose Cure Salted Fish, load up to 50 weight of packed fish, 35 fish at most, and press Craft. It takes 1 in-game day for small fish (up to 1.1 weight) and up to 2 days with a fish of 2.2 weight or more in the batch, as the heaviest fish sets the time, and nothing else can go in until you've taken out the last Salt Cured fish.
-
-[h3]4. Hang it to dry[/h3]
-Choose Hang Salt Cured Fish to Dry on any drying station, load your cured fish and press Craft. See Drying stations below.
-
-[h3]5. Eat, cook or rehydrate[/h3]
-Salt Dried fish is very salty, but can go straight into soup, stew, rice or pasta. Rehydrate Fish uses 1 L of water and gives a milder fish that cooks like fresh, but spoils in days.
-
-[h2]Cold drying[/h2]
-
-[h3]1. Gut Fish[/h3]
-You need a raw whole fish and a sharp knife or meat cleaver (kept). Fillets can't be gutted. A Gutted Fish keeps like fresh fish and can still be cooked. A fish over 1.0 weight also gives a Fish Head.
-
-[h3]2. Split Fish (if needed)[/h3]
-A Gutted Fish over 2.5 weight can be cut into two Fish Halves, each with half the weight and food, to fit smaller stacks.
-
-[h3]3. Hang it to dry[/h3]
-Choose Hang Gutted Fish to Cold Dry on any drying station, load your fish and press Craft. Frozen fish is fine. The station must not be in a room: open air, or under an open roof (a porch or open shed) at three quarters of the speed.
-
-[h3]4. Rehydrate[/h3]
-Cold Dried fish is light but as hard as wood: you can't eat or cook it until it's soaked. Rehydrate Fish uses 1 L of water and gives a fish you can cook, which spoils in days. Stockfish matures in storage over 60 days, from Unripe to Ripe. Ripe, it cheers you up once rehydrated, and so does the stew it goes into.
-
-Changed your mind? A Gutted Fish or Fish Half can still be packed in salt.
 
 [h2]Drying stations[/h2]
-Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate and any spoilage. A stack is one kind (salted fish, gutted fish or meat), but one station can run all three. Weights are inventory weight, not kilograms.
-
-[h3]Fish Drying Frame[/h3]
-Carpentry 2, Fishing 2. Takes 6 long sticks, 3 nails, 4 twine and a hammer (kept). Holds 8 stacks of up to 2.5 weight each. The only station that can be built in a room.
-
-[h3]Fish Hanging Beam[/h3]
-Carpentry 4, Fishing 2. Takes 6 planks, 6 nails, 1 large hook and a hammer (kept). Holds 4 stacks of up to 15 weight each. Open air or under an open roof, not in a room.
-
-[h3]Fish Gantry[/h3]
-Carpentry 6, Fishing 2. Takes 2 logs, 2 planks, 8 nails, 2 large hooks and a hammer (kept). Holds 2 stacks of up to 50 weight each. Open air or under an open roof, not in a room.
-
-[h2]Weather and seasons[/h2]
-Drying usually takes 12 to 55 in-game days.
-
+Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate, smoke and any spoilage. Weights are inventory weight, not kilograms.
 [list]
-[*][b]Salt drying:[/b] 12 days at best, at 20 C or warmer. Cool weather slows it, but frost doesn't stop it, so a batch still finishes in about a month. Damp air slows it a little.
-[*][b]Cold drying:[/b] 32 days at best, between 0 C and 5 C in a good breeze. Frost, still air and mild weather slow it, and it pauses above 10 C. A batch hung November to January takes about 50 to 55 days.
-[*][b]Fresh fish is fragile:[/b] hard frost or rain in a cold stack's first days takes a little off how long it keeps.
-[*][b]Rain:[/b] pauses open stations until the fish has dried off. You lose time, not progress. Snow pauses salt drying but not cold drying.
+[*][b]Fish Drying Frame:[/b] Carpentry 2, Fishing 2. 6 long sticks, 3 nails, 4 twine, hammer kept. 8 stacks of 2.5 weight. The only station that can stand in a room.
+[*][b]Fish Hanging Beam:[/b] Carpentry 4, Fishing 2. 6 planks, 6 nails, 1 large hook, hammer kept. 4 stacks of 15. Open air or under an open roof.
+[*][b]Fish Gantry:[/b] Carpentry 6, Fishing 2. 2 logs, 2 planks, 8 nails, 2 large hooks, hammer kept. 2 stacks of 50. Open air or under an open roof.
+[*][b]Smokehouse:[/b] Carpentry 3. 14 planks, 20 nails, hammer kept. 6 stacks of 15. Two tiles; open air or under an open roof. Salt fish and meat only.
 [/list]
 
-[h3]Under an open roof, and indoors[/h3]
-[list]
-[*][b]Under an open roof[/b] (a porch, an open shed, no room round it): rain never reaches it. Salt fish dries at the open-air speed, in the shade. Cold fish dries at three quarters of the speed.
-[*][b]Indoors[/b] (a room, including one you build with walls all round and a full roof): salt drying runs at about two thirds of the speed, about 21 to 27 days. Cold drying stops, as it needs moving air.
-[*][b]Hot sun:[/b] above 25 C, salt fish in the open air that is less than half dry loses a little keeping time. Shade spares it.
-[*][b]A warm cure:[/b] if the season averages above 20 C while fish is in the tub, it sours by the spine and keeps less long.
-[*][b]Heating a room doesn't help:[/b] it goes by the outdoor temperature.
-[/list]
-
-[h2]Spoilage[/h2]
-Spoilage follows the average weather of about the last 10 days, so one warm afternoon in January won't hurt.
-
-[list]
-[*][b]Gutted fish and halves[/b] spoil once that average goes above 10 C. A stack rots in about 2 days, faster the warmer it gets, and comes off rotten.
-[*][b]Salt fish[/b] only suffers when that average is above 22 C and the air is muggy: a few days in high summer, if any.
-[/list]
-
-[h3]Through the year[/h3]
-On default weather: cold dry from November to mid-February (about 50 to 55 days). Late in February a batch can run into the spring; in October about 30% of cold batches rot, in March almost all, and from April to September all of them. Salt drying takes about 15 to 24 days in summer and a month in winter.
-
-[h2]Weights and keeping times[/h2]
-Weights are shares of the original whole fish. Days are fresh, then rotten.
-[list]
-[*][b]Salt Packed:[/b] 90%, 3 and 6 days
-[*][b]Salt Cured:[/b] 79 to 84%, 7 and 14 days
-[*][b]Salt Dried:[/b] about 37%, 120 and 180 days
-[*][b]Gutted Fish:[/b] 80% (90% for a fish too small to give a head), 3 and 6 days
-[*][b]Cold Dried:[/b] about 18%, 365 and 730 days
-[*][b]Rehydrated:[/b] about 53 to 66%, 2 and 4 days
-[/list]
-
-Rehydrating doesn't bring back calories lost to drying. Salt fish keeps about 90% and cold dried about 95%, less the 6% a Fish Head takes.
-
-[h2]Eating uncooked[/h2]
-[list]
-[*][b]Salt Packed:[/b] can't be eaten
-[*][b]Salt Cured, Gutted Fish and Fish Halves:[/b] raw, so cook them first or risk getting sick
-[*][b]Cold Dried and Charque:[/b] can't be eaten until rehydrated
-[*][b]Salt Dried and rehydrated fish:[/b] can be eaten without cooking
-[/list]
+[h2]Salt Dried fish[/h2]
+Hang Salt Cured Fish to Dry: 12 days at best, 20 C or warmer. Cool weather slows it, frost doesn't stop it. Salt Dried fish keeps 4 to 6 months, is very salty but safe, and goes straight into soup, stew, rice or pasta. Rehydrate Fish (1 L of water) for a mild fish that cooks like fresh.
 
 [h2]Charque[/h2]
+Hang Salt Cured Meat to Dry: 5 days in hot sun (25 C and up) and a breeze, about a week in a Kentucky summer under a roof. It slows in cooler weather and stops at freezing; rain on an open station takes back a tenth every 6 hours. Charque keeps 4 to 6 months at about half the raw weight. Rehydrate Charque (1 L of water) before eating, then cook it or put it in a stew.
+
+[h2]Stockfish[/h2]
+Gut Fish (a big one also gives a Fish Head), split it if it's over 2.5 weight, and Hang Gutted Fish to Cold Dry in the open or under an open roof. No salt, no tub. 32 days at best between 0 and 5 C in a good wind; about 50 to 55 days hung November to January. It rots once the season warms up. Stockfish keeps 1 to 2 years and weighs almost nothing, but it's as hard as wood: Rehydrate Fish before eating. It matures over 60 days in storage, faster on a Stockfish Pallet in a loft, and ripe stockfish cheers you up. Tie it into a Stockfish Bale to carry it.
+
+[h2]The Smokehouse and hot smoking[/h2]
 [list]
-[*][b]Pack Meat in Salt:[/b] a Beef, Steak, Mutton Chop or Venison as the butcher gives it, with 4 salt. No knife needed. Pork is left out: its fat goes rancid in the sun.
-[*][b]Cure Salted Meat[/b] in the Salting Tub: 1 to 2 days by the heaviest cut. A tub holds fish or meat, never both.
-[*][b]Hang Salt Cured Meat to Dry[/b] on any drying station: 5 days in hot sun (25 C and up) and a breeze, about a week in a Kentucky summer under a roof. It slows in cooler weather and stops at freezing. Rain on an open station takes back a tenth of the progress every 6 hours.
-[*][b]Charque[/b] keeps 4 to 6 months at about half the raw weight. Rehydrate Charque (1 L of water) before eating, then cook it or put it in a stew.
-[*]Optional: rinse the cured meat before it hangs. It keeps a little less long but rehydrates less salty.
+[*]Inside it's always indoors: no rain, no wind, about two thirds of the open drying speed. No stockfish: gutted fish need moving air. The tile in front of its door must stay clear.
+[*][b]Connect the Firebox[/b] (from TP Core) on a tile beside it: a clay pipe (2 Clay Pipe Segments, 1 Clay, mason's trowel kept) or a stone trench (3 Flat Stones, 2 Clay, shovel kept). Not at the door end, not with the Firebox's door towards the shed, one Firebox a shed, and only with the fire out. Disconnect gives the pipe or stones back.
+[*][b]Hot smoking:[/b] keep the joined Firebox stoked and each salt stack inside counts the hours in a row: 4 to 6 for fish, 6 to 8 for meat, by the heaviest piece. Then it comes out Hot Smoked: cooked, ready to eat, 1 to 2 weeks' keeping. Banking the fire for up to an hour doesn't break the run. Stop sooner and nothing is lost: the stack dries on as Salt Dried fish or Charque.
+[*]A smoked ham hangs by the door while finished stacks wait inside.
 [/list]
+
+[h2]Lard, Tallow and Cracklings[/h2]
+Put Pork Fat (or Suet) in a Pot, cook it an hour on any fire, Pour Off the melted fat, and Strain it through a cloth: a block of Lard or Tallow and a portion of Cracklings for every two pieces. Don't leave it on the heat too long. A Hearth's copper melts a whole pig's fat at once and never burns it.
 
 [h2]Potted Meat[/h2]
 [list]
-[*][b]Put Meat in Lard or Tallow:[/b] an empty pot, a block of Lard or Tallow, a cut and 1 salt. Or [b]Put Meat in the Melted Fat[/b] with the pot of half a litre of melted fat that Pour Off leaves.
-[*][b]Add Meat to the Pot:[/b] up to four cuts, as a block of fat covers four. Beef, Steak, Mutton Chop, Venison, Pork and Pork Chop.
-[*]Cook it two hours on any stove or fire. It can burn.
-[*][b]Pack Potted Meat[/b] into a Clay Jar, Glazed Clay Jar or Clay Pot: a Crock of Potted Meat, one portion a cut with its share of the fat. Eat it by the portion; the jar comes back with the last bite. Keeps by place: about 4 months in a fridge or the cold, 2 in a basement, in a pantry by the season (2 weeks in summer), and the first portion taken costs a third of what is left.
+[*][b]Put Meat in Lard or Tallow:[/b] an empty pot, a block of Lard or Tallow, a cut and 1 salt. Or [b]Put Meat in the Melted Fat[/b] straight from rendering.
+[*][b]Add Meat to the Pot:[/b] up to four cuts. Beef, Steak, Mutton Chop, Venison, Pork and Pork Chop.
+[*]Cook it two hours on any fire. It can burn.
+[*][b]Pack Potted Meat[/b] into a Clay Jar, Glazed Clay Jar or Clay Pot: a Crock of Potted Meat, one portion a cut. Eat it by the portion; the jar comes back with the last bite. About 4 months in a fridge or the winter cold, 2 in a basement, 2 weeks in a summer pantry, and the first portion taken costs a third of what's left.
 [/list]
 
-[h2]Smokehouse[/h2]
-Build menu, Furniture. Carpentry 3: 14 planks, 20 nails and a hammer (kept). Two tiles long; open air or under an open roof, not in a room.
+[h2]Fish Guts, heads and stock[/h2]
+A whole fish over 0.6 weight gives Fish Guts when gutted or packed. Gut Fish takes the head off a fish over 1.0 weight: a Fish Head for soups, stews or chum. [b]Fish Head Stock:[/b] a pot holding 1.5 L of water and a Fish Head make a stock that is already a stew, with the head taking no ingredient slot: add up to 6 stew ingredients plus seasonings. A fish big enough to fillet can still be sliced at any salted, dried or rehydrated stage.
+
+[h2]Weights and keeping times[/h2]
+Days are fresh, then rotten.
 [list]
-[*]Holds 6 stacks of up to 15 weight of Salt Cured fish or meat. Inside it is always indoors: no rain, no wind, about two thirds of the open drying speed. No stockfish: gutted fish need moving air.
-[*][b]Connect the Firebox[/b] (from TP Core) on a tile beside it: a clay pipe (2 Clay Pipe Segments, 1 Clay, mason's trowel kept) or a stone trench (3 Flat Stones, 2 Clay, shovel kept). Not at the door end, not with the Firebox's door towards the shed, one Firebox a shed, and only with the fire out. [b]Disconnect[/b] gives the pipe or stones back. Joined, neither can be picked up.
-[*]The tile in front of its door must stay clear.
-[*]For now the shed dries the same with or without a fire: joining lays the flue.
+[*][b]Salt Dried fish:[/b] about 37% of the fresh fish, 120 and 180 days
+[*][b]Stockfish:[/b] about 18%, 365 and 730 days
+[*][b]Charque:[/b] about 50% of the raw cut, 120 and 180 days
+[*][b]Hot Smoked fish / meat:[/b] about 63% / 70%, 7 and 14 days
+[*][b]Crock of Potted Meat:[/b] by where you keep it, 14 to 120 days fresh
+[*][b]Salt Packed / Salt Cured / Gutted / rehydrated:[/b] days, not weeks: cure, hang or cook them
 [/list]
 
-[h2]Fish Guts, heads and slicing[/h2]
-A whole fish over 0.6 weight gives one Fish Guts when gutted or packed, weighing 10% of the fish, and loses that weight. Small fish, fillets and salmon give none. A fish big enough to fillet can still be sliced at any salted, dried or rehydrated stage.
-
-Gut Fish also takes the head off. A fish over 1.0 weight gives a Fish Head: 10% of its weight and 6% of its food, for soups, stews or chum. Salted fish keep their heads.
-
-[b]Fish Head Stock:[/b] a pot holding 1.5 L of water and a Fish Head make a pot of stock that is already a stew, with the head taking no ingredient slot. Add up to 6 stew ingredients plus seasonings, and it starts with the same mood boost as a plain stew. Divide it into 4 or 2 bowls at a table, as with any stew.
+[h2]Eating[/h2]
+[list]
+[*][b]Packed, cured, gutted fish and halves, fresh fat:[/b] raw, so cook them first or risk getting sick
+[*][b]Stockfish and charque:[/b] can't be eaten until rehydrated
+[*][b]Salt Dried, Hot Smoked, rehydrated fish, Potted Meat:[/b] ready as they are
+[/list]
 
 [h2]A little history[/h2]
-Stockfish is unsalted cod hung on open racks through the cold northern Norwegian spring, traded across Europe since the Viking age. Salt cod (klippfisk, bacalhau) is salted, pressed and dried in mild air, and from the 1500s it fed sailors and Catholic fast days on both sides of the Atlantic. On the lower Volga around Astrakhan, large salted fish such as pike are hung from hooks to dry. In the charqueadas of southern Brazil, beef was salted in piles, washed and dried in the sun as charque. Turkish kavurma, French confit and the Balkan meso u masti are all meat cooked in fat and sealed in clay pots for the winter.
+The salt route is the lower Volga's: around Astrakhan, fish is salted in vats under a weighted lid, soaked, and dried in the shade, small fish whole and big ones split or hung from hooks. Stockfish is unsalted fish hung on open racks through the cold northern Norwegian spring and traded across Europe since the Viking age. In the charqueadas of southern Brazil, beef was salted in piles, washed and dried in the sun as charque. Turkish kavurma, French confit and the Balkan meso u masti are all meat cooked in fat and sealed in clay pots for the winter. The Smokehouse is the Kentucky farm smokehouse and the Bosnian pušnica, fed from a low firebox outside the wall.
 
 [h2]Works well with[/h2]
 [b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt: one batch (5 Evaporated Salt, 25 uses) packs a dozen panfish, or one 4 weight walleye with salt to spare. Traditional Preservation (Fish & Meat) needs no other mods besides Traditional Preservation (Core).
 
 [h2]Sandbox options[/h2]
-Set salt drying time, the slowest it can take, stockfish drying time, stockfish maturing time, the salt cure time and spoilage strictness. Turn butchering fat and charque on or off, and set charque drying time.
+Set salt drying time, the slowest it can take, stockfish drying and maturing times, the salt cure time and spoilage strictness. Turn butchering fat, charque and Potted Meat's keeping by place on or off, and set charque drying time.
 
 [h2]Known issues[/h2]
 [list]

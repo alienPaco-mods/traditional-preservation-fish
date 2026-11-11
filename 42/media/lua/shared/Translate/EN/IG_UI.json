@@ -99,7 +99,7 @@
   "IGUI_TraditionalPreservationFishMeat_FlueJoined": "Flue: joined to the Smokehouse (%1)",
   "IGUI_TraditionalPreservationFishMeat_FluePipe": "clay pipe",
   "IGUI_TraditionalPreservationFishMeat_FlueStones": "stone trench",
-  "IGUI_TraditionalPreservationFishMeat_FlueNoEffectYet": "Smoking comes in a later version: for now the shed dries as Sheltered",
+  "IGUI_TraditionalPreservationFishMeat_FlueSmokes": "Stoked for 4 to 8 hours in a row, it hot smokes the salt stacks in the shed; banked or out, they dry as Sheltered",
   "IGUI_TraditionalPreservationFishMeat_HotSmoked": "Hot Smoked",
   "IGUI_TraditionalPreservationFishMeat_HotSmoke": "Hot Smoke",
   "IGUI_TraditionalPreservationFishMeat_HotSmokeHours": "%1 of %2 h stoked in a row",
