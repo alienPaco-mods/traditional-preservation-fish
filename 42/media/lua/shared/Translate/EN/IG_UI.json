@@ -99,7 +99,7 @@
   "IGUI_TraditionalPreservationFishMeat_FlueJoined": "Flue: joined to the Smokehouse (%1)",
   "IGUI_TraditionalPreservationFishMeat_FluePipe": "clay pipe",
   "IGUI_TraditionalPreservationFishMeat_FlueStones": "stone trench",
-  "IGUI_TraditionalPreservationFishMeat_FlueSmokes": "Stoked for 4 to 8 hours in a row, it hot smokes the salt stacks in the shed. Burning, it dries them faster; on days of 20 C or less, smoke for a third of their time makes them Cold Smoked. Out, they dry as Sheltered",
+  "IGUI_TraditionalPreservationFishMeat_FlueSmokes": "Stoked for 4 to 8 hours in a row, it hot smokes the salt stacks in the shed. Burning, it warms the shed and dries them faster; on days of 15 C or less, smoke for a third of their time makes them Cold Smoked. Out, they dry as Sheltered",
   "IGUI_TraditionalPreservationFishMeat_HotSmoked": "Hot Smoked",
   "IGUI_TraditionalPreservationFishMeat_HotSmoke": "Hot Smoke",
   "IGUI_TraditionalPreservationFishMeat_HotSmokeHours": "%1 of %2 h stoked in a row",
@@ -110,5 +110,5 @@
   "IGUI_TraditionalPreservationFishMeat_AnimalMutton": "Mutton",
   "IGUI_TraditionalPreservationFishMeat_AnimalVenison": "Venison",
   "IGUI_TraditionalPreservationFishMeat_ColdSmokeNeed": "%1 h, %2 h needed so far (a third of the hours hung)",
-  "IGUI_TraditionalPreservationFishMeat_ColdSmokeTooWarm": "Too warm to count: over 20 C the smoke cooks rather than cures"
+  "IGUI_TraditionalPreservationFishMeat_ColdSmokeTooWarm": "Too warm to count: over 15 C the smoulder heats the shed past 30 C, and the smoke cooks rather than cures"
 }

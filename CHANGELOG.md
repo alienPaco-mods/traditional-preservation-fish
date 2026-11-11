@@ -1,5 +1,10 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.12
+- **Cold smoke counts on days of 15 C or less** (was 20 C; `F.COLD_SMOKE_MAX`). With the banked smoulder now lifting
+  the shed 15 C (0.4.11), a 20 C day read 35 C, past the 30 C where smoke cooks rather than cures (side-agent flag,
+  user's pick). Popup's "Too warm to count" says why; guide, README, Workshop and Balance follow.
+
 ## 0.4.11
 - **The smoulder's warmth** (ROADMAP §7): with the Firebox burning, a Smokehouse stack dries as if the shed were
   **15 C warmer banked, 20 C warmer stoked** than outdoors, and the warmed air drier (its humidity halved per 10 C);

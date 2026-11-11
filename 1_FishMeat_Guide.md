@@ -73,7 +73,7 @@ Fish and meat share one workshop. The same **Salting Tub** cures both, the same 
 | From | Any raw fish | Gutted whole fish, halves | Beef, Steak, Mutton Chop, Venison | Salt Cured fish or meat | Salt Cured fish or meat | Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop |
 | Salt | 4 per half weight | **None** | 4 a cut | (already salted) | (already salted) | 1 a pot |
 | Stations | Tub, then any drying station | Frame, Beam or Gantry, **outdoors or under an open roof** | Tub, then any drying station | Tub, then a **Smokehouse with a Firebox** | Tub, then a **Smokehouse with a Firebox** | **None**: a pot, a fire, a clay jar |
-| Best season | Any (fastest in summer) | **November to mid-February** | **May to September** | Any | **Days of 20 C or less** | Any |
+| Best season | Any (fastest in summer) | **November to mid-February** | **May to September** | Any | **Days of 15 C or less** | Any |
 | Time | 12 days at best | 32 days at best (50 to 55 in a Kentucky winter) | 5 days at best | 4 to 8 hours of fire | As salt drying, a little faster by the fire | 2 hours' cooking |
 | Keeps | 120 / 180 days | **365 / 730 days** | 120 / 180 days | 7 / 14 days | 120 / 180 days | By place: 14 to 120 days fresh |
 | Eat it | As it is (salty), or in soup | **Rehydrate first** | **Rehydrate first** | As it is | **As it is**, sliced thin | As it is, by the portion |
@@ -342,7 +342,7 @@ Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank 
 
 **Bank** the joined Firebox and let it smoulder. The stacks dry as they always do, in smoky air, and the smoke is counted.
 
-- **Smoke** = the hours the Firebox smouldered, plus any stoked run that broke off before it cooked the stack. Only hours on a day of **20 C or less** count, whichever way the fire burned: on a warmer day the smoulder heats the meat past 30 C, which cooks it rather than cures it.
+- **Smoke** = the hours the Firebox smouldered, plus any stoked run that broke off before it cooked the stack. Only hours on a day of **15 C or less** count, whichever way the fire burned: on a warmer day the smoulder heats the meat past 30 C, which cooks it rather than cures it.
 - **When the stack is dry**, it looks at its smoke. If smoke covered **a third of the hours it hung** in the shed or more, it comes out **Cold Smoked**; less, and it's plain Salt Dried fish or Charque, as before. A few hours of smoulder a day is plenty, and so is a fire banked the whole time.
 - **A fire warms the shed, and warm air dries.** Any hour with the Firebox burning, the stacks dry as if the shed were **15 C warmer** than outdoors when banked, **20 C warmer** when stoked, and the warmed air is drier too. So the smoulder speeds drying even in the cold months, from a little under freezing upward. Charque gains as much and keeps the outdoor wind. The popup's **Drying Rate** shows the rate while the fire burns.
 
@@ -354,7 +354,7 @@ Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank 
 | 5 C and up | 27 days | 12 days | 12 days |
 
 > 📏 *Days as if the fire burned every hour; a third of the time in smoke, the rest at the fire-out speed, lands in between.*
-- The popup's **Smoke** line reads *x h, y h needed so far (a third of the hours hung)*. Over 20 C it says **Too warm to count**.
+- The popup's **Smoke** line reads *x h, y h needed so far (a third of the hours hung)*. Over 15 C it says **Too warm to count**.
 - **Meat smoked this way is no longer charque.** Charque is the sun's and the wind's. Smoked, it comes out **Dry-Cured**, named by its animal: *Dry-Cured Beef (Cold Smoked)* from Beef or a Steak, *Dry-Cured Mutton*, *Dry-Cured Venison*.
 
 | | Cold Smoked Fish | Dry-Cured Meat (Cold Smoked) |
@@ -627,7 +627,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | No Hot Smoke line in the popup | The shed has no Firebox joined, or the stack is on a frame |
 | Hot Smoke went back to 0 | The fire was out or banked for over an hour: the run broke, and its hours went to Smoke. Stoke it and start again |
 | Wanted Salt Dried, got Hot Smoked | The Firebox was stoked long enough. Let it go out while salt stacks hang, or dry them on a frame |
-| Wanted Cold Smoked, got Salt Dried or Charque | Smoke was under a third of the hours the stack hung, or the days were over 20 C (the popup says *Too warm to count*). Bank the Firebox more of the time, in a cooler month |
+| Wanted Cold Smoked, got Salt Dried or Charque | Smoke was under a third of the hours the stack hung, or the days were over 15 C (the popup says *Too warm to count*). Bank the Firebox more of the time, in a cooler month |
 | Wanted Charque, got Dry-Cured | The shed's smoulder gave it a third of its time in smoke. For charque, let the fire go out or use a frame in the sun |
 | Drying Rate didn't rise with the fire | Below about -2 C outdoors a banked fire can't lift salt fish off its slowest rate (27 days); stoke it, which helps from about -7 C. Over about 5 C banked is already at full speed, so stoking adds nothing to drying |
 | Add Meat to the Pot is greyed out | The pot already has four cuts, or it has cooked: meat goes in raw |
@@ -702,7 +702,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | `TPFM.smokehouse()` | Each Smokehouse tile within 3 tiles: its facing, back or door tile, and each Firebox beside it with its flue and why it can't join (or "may join", "joined here") |
 | `TPFM.smoke()` | The joined Firebox's fire record (stoked, banked, the run now going) and each stack's heaviest piece, hot hours and smoke against Cold Smoked's need |
 | `TPFM.stoke(hours)` | Adds stoked hours to the run now going in those joined Fireboxes (stoke it first) |
-| `TPFM.bank(hours)` | Adds banked hours (default 6) to those joined Fireboxes: smoke for Cold Smoked, if today is 20 C or less |
+| `TPFM.bank(hours)` | Adds banked hours (default 6) to those joined Fireboxes: smoke for Cold Smoked, if today is 15 C or less |
 
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.
 

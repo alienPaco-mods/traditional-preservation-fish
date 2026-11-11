@@ -190,9 +190,10 @@ F.BALE_TIE_TICKS = 120
 F.BALE_UNTIE_TICKS = 60
 
 -- Cold smoke (5d, TraditionalPreservationFishMeatSmokehouse.lua): fire hours count only on a day at or under
--- COLD_SMOKE_MAX (the smoulder lifts the meat 10-15 C; over 30 C at the meat it cooks rather than smokes). Stacks in
+-- COLD_SMOKE_MAX (a banked smoulder lifts the shed BANKED_LIFT, 15 C; over 30 C at the meat it cooks rather than
+-- smokes; 20 C until 0.4.12, when the lift grew from 10 to 15). Stacks in
 -- a Smokehouse, by stackId, as the World last saw them (not saved); a finished one waits at SHED_WAIT until seen.
-F.COLD_SMOKE_MAX = 20
+F.COLD_SMOKE_MAX = 15
 -- The smoulder's warmth: while the Firebox burns, a Smokehouse stack dries as if the shed were this much warmer than
 -- outdoors, banked or stoked, and the warmed air holds the same water, so its humidity halves every 10 C (F.liftedRates).
 -- A stack's modData.burning holds the fire's mode, Core's Hearth.STOKED or BANKED.
