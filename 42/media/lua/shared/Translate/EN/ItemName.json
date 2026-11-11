@@ -15,5 +15,14 @@
   "TraditionalPreservationFishMeat.GuttedFishIngredient": "Gutted Fish",
   "TraditionalPreservationFishMeat.FishHalfIngredient": "Fish Half",
   "TraditionalPreservationFishMeat.SoakedColdFishIngredient": "Rehydrated Cold Dried Fish",
-  "TraditionalPreservationFishMeat.StockfishBale": "Stockfish Bale"
+  "TraditionalPreservationFishMeat.StockfishBale": "Stockfish Bale",
+  "TraditionalPreservationFishMeat.PorkFat": "Pork Fat",
+  "TraditionalPreservationFishMeat.BeefSuet": "Beef Suet",
+  "TraditionalPreservationFishMeat.MuttonFat": "Mutton Fat",
+  "TraditionalPreservationFishMeat.Tallow": "Tallow",
+  "TraditionalPreservationFishMeat.Cracklings": "Cracklings",
+  "TraditionalPreservationFishMeat.PotOfPorkFat": "Pot of Pork Fat",
+  "TraditionalPreservationFishMeat.PotForgedPorkFat": "Pot of Pork Fat",
+  "TraditionalPreservationFishMeat.PotOfSuet": "Pot of Suet",
+  "TraditionalPreservationFishMeat.PotForgedSuet": "Pot of Suet"
 }

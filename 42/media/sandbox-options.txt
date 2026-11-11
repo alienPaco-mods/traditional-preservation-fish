@@ -53,3 +53,10 @@ option TraditionalPreservationFishMeat.Spoilage {
     translation = TraditionalPreservationFishMeat_Spoilage,
     valueTranslation = TraditionalPreservationFishMeat_Spoilage,
 }
+
+option TraditionalPreservationFishMeat.ButcheringFat {
+    type = boolean,
+    default = true,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_ButcheringFat,
+}

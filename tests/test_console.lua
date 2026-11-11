@@ -24,6 +24,9 @@ local player = H.player()
 function getPlayer() return player end
 
 dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
+AnimalPartsDefinitions = { animals = { sowlandrace = { parts = {} } } }
+package.loaded["Definitions/animal/AnimalPartsDefinitions"] = true
+dofile("42/media/lua/shared/TraditionalPreservationFishMeatFat.lua")
 local F = TraditionalPreservationFishMeat
 local TPFM, run = H.checkConsole("42/media/lua/client/TraditionalPreservationFishMeatDev.lua", "TPFM")
 
@@ -60,6 +63,15 @@ check("heads, stock and salt land in the inventory", #player.given == 6
     and player.given[3] == "TraditionalPreservationFishMeat.FishHead"
     and player.given[5] == "TraditionalPreservationFishMeat.PotOfFishHeadStock" and player.given[6] == "Base.Salt")
 
+run("fat", 2)
+check("fat gives each raw fat", #player.given == 12 and player.given[7] == "TraditionalPreservationFishMeat.PorkFat"
+    and player.given[9] == "TraditionalPreservationFishMeat.BeefSuet" and player.given[11] == "TraditionalPreservationFishMeat.MuttonFat")
+check("fatRows says there are none before a world starts", run("fatRows"):find("sowlandrace: no row", 1, true) ~= nil)
+F.applyFatRows(true)
+local fatRows = run("fatRows")
+check("fatRows prints each animal's row, and the ones vanilla lacks", fatRows:find("sowlandrace: TraditionalPreservationFishMeat.PorkFat 2-3", 1, true) ~= nil
+    and fatRows:find("cowangus: not in vanilla's table", 1, true) ~= nil)
+
 local stamped = {}
 player:getInventory().AddItem = function(_, fullType)
     table.insert(player.given, fullType)
@@ -72,9 +84,17 @@ player:getInventory().AddItem = function(_, fullType)
     function fish:setName(name) self.name = name end
     function fish:setCustomName() end
     function fish:setTooltip(tooltip) self.tooltip = tooltip end
+    function fish:setCooked(cooked) self.cooked = cooked end
+    function fish:setBurnt(burnt) self.burnt = burnt end
     table.insert(stamped, fish)
     return fish
 end
+local pots = #stamped
+run("fatPot")
+run("fatPot", "burnt")
+check("fatPot gives a cooked pot, or a burnt one", #stamped == pots + 2 and stamped[pots + 1].cooked and not stamped[pots + 1].burnt
+    and stamped[pots + 2].burnt and stamped[pots + 1].fullType == "TraditionalPreservationFishMeat.PotOfPorkFat")
+stamped = {}
 H.installGetText()
 run("stockfish", 2)
 check("stockfish gives unripe Cold Dried fish", #stamped == 2 and stamped[1].fullType == "TraditionalPreservationFishMeat.ColdDriedFish"

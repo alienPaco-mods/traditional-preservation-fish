@@ -1,0 +1,359 @@
+module TraditionalPreservationFishMeat
+{
+    imports
+    {
+        Base,
+    }
+
+    /* Raw fat from butchering: TraditionalPreservationFishMeatFat.lua adds a row to vanilla's parts tables, so
+       pigs give Pork Fat, cattle Beef Suet and sheep Mutton Fat. Two of them render to one Lard or Tallow, and
+       the Calories here are half of that block's, with the Cracklings'. They have no ground model, so they lie
+       as their icons. */
+    item PorkFat
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.3,
+        Icon = PorkFat,
+        ScaleWorldIcon = 0.5,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -12.0,
+        UnhappyChange = 20,
+        Calories = 2170.0,
+        Carbohydrates = 0.0,
+        Lipids = 237.0,
+        Proteins = 6.0,
+        FoodType = NoExplicit,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        CookingSound = FryingFood,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PorkFat,
+    }
+
+    item BeefSuet
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.3,
+        Icon = BeefSuet,
+        ScaleWorldIcon = 0.5,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -12.0,
+        UnhappyChange = 20,
+        Calories = 2170.0,
+        Carbohydrates = 0.0,
+        Lipids = 237.0,
+        Proteins = 6.0,
+        FoodType = NoExplicit,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        CookingSound = FryingFood,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Suet,
+    }
+
+    item MuttonFat
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.3,
+        Icon = MuttonFat,
+        ScaleWorldIcon = 0.5,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -12.0,
+        UnhappyChange = 20,
+        Calories = 2170.0,
+        Carbohydrates = 0.0,
+        Lipids = 237.0,
+        Proteins = 6.0,
+        FoodType = NoExplicit,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        CookingSound = FryingFood,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Suet,
+    }
+
+    /* Rendered beef or mutton fat. Everything but the name and icon is vanilla's Lard, so it bakes and seasons
+       wherever Lard does (the base:bakingfat tag). */
+    item Tallow
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.3,
+        Icon = Tallow,
+        EvolvedRecipe = Sandwich:2;Stir fry:4;Pasta:4;Taco:2;Burrito:2;Toast:2;Soup:4;Stew:4,
+        FoodType = NoExplicit,
+        Spice = true,
+        Packaged = true,
+        HungerChange = -24.0,
+        UnhappyChange = 30,
+        Calories = 4095.0,
+        Carbohydrates = 0.0,
+        Lipids = 454.0,
+        Proteins = 0.0,
+        StaticModel = Lard_Ground,
+        WorldStaticModel = Lard_Ground,
+        Tags = base:bakingfat,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Tallow,
+    }
+
+    /* What is left in the pot when the fat is poured off. The icon and ground model are vanilla's Pork Rinds. */
+    item Cracklings
+    {
+        DisplayCategory = Food,
+        EatType = EatSmall,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = PorkRinds,
+        DaysFresh = 7,
+        DaysTotallyRotten = 14,
+        HungerChange = -8.0,
+        UnhappyChange = -5,
+        ThirstChange = 3.0,
+        Calories = 250.0,
+        Carbohydrates = 0.0,
+        Lipids = 20.0,
+        Proteins = 12.0,
+        FoodType = NoExplicit,
+        EvolvedRecipe = Sandwich:4;Salad:4;Soup:4;Stew:4;Stir fry:4,
+        CustomEatSound = EatingCrispy,
+        WorldStaticModel = PorkRinds,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Cracklings,
+    }
+
+    /* Two pieces of raw fat in a pot. It can't be eaten: it cooks on any stove or fire, and Pour Off Lard or
+       Pour Off Tallow then takes it once it is cooked. Burnt, only Scrape Out Burnt Fat gives the pot back.
+       One item for each vanilla pot and each rendered fat. */
+    item PotOfPorkFat
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 1.6,
+        Icon = PotOfFat,
+        CantEat = true,
+        BadInMicrowave = true,
+        CookingSound = FryingFood,
+        IsCookable = true,
+        MinutesToCook = 60,
+        MinutesToBurn = 150,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -24.0,
+        Calories = 4340.0,
+        Carbohydrates = 0.0,
+        Lipids = 474.0,
+        Proteins = 12.0,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PotOfFat,
+    }
+
+    item PotForgedPorkFat
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 1.6,
+        Icon = PotForgedFat,
+        CantEat = true,
+        BadInMicrowave = true,
+        CookingSound = FryingFood,
+        IsCookable = true,
+        MinutesToCook = 60,
+        MinutesToBurn = 150,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -24.0,
+        Calories = 4340.0,
+        Carbohydrates = 0.0,
+        Lipids = 474.0,
+        Proteins = 12.0,
+        StaticModel = CookingPotForged_StewGround,
+        WorldStaticModel = CookingPotForged_StewGround,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PotOfFat,
+    }
+
+    item PotOfSuet
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 1.6,
+        Icon = PotOfFat,
+        CantEat = true,
+        BadInMicrowave = true,
+        CookingSound = FryingFood,
+        IsCookable = true,
+        MinutesToCook = 60,
+        MinutesToBurn = 150,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -24.0,
+        Calories = 4340.0,
+        Carbohydrates = 0.0,
+        Lipids = 474.0,
+        Proteins = 12.0,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PotOfFat,
+    }
+
+    item PotForgedSuet
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 1.6,
+        Icon = PotForgedFat,
+        CantEat = true,
+        BadInMicrowave = true,
+        CookingSound = FryingFood,
+        IsCookable = true,
+        MinutesToCook = 60,
+        MinutesToBurn = 150,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -24.0,
+        Calories = 4340.0,
+        Carbohydrates = 0.0,
+        Lipids = 474.0,
+        Proteins = 12.0,
+        StaticModel = CookingPotForged_StewGround,
+        WorldStaticModel = CookingPotForged_StewGround,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PotOfFat,
+    }
+
+    /* Rendering takes no station: a pot, two pieces of raw fat, then any stove or fire. */
+    craftRecipe PutPorkFatInPot
+    {
+        timedAction = MixingBowl,
+        time = 50,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        inputs
+        {
+            item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition;IsEmpty] mappers[potType],
+            item 2 [TraditionalPreservationFishMeat.PorkFat] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            TraditionalPreservationFishMeat.PotOfPorkFat = Base.Pot,
+            TraditionalPreservationFishMeat.PotForgedPorkFat = Base.PotForged,
+        }
+    }
+
+    /* Beef Suet and Mutton Fat both make Tallow, so they share a pot, mixed or not. */
+    craftRecipe PutSuetInPot
+    {
+        timedAction = MixingBowl,
+        time = 50,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        inputs
+        {
+            item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition;IsEmpty] mappers[potType],
+            item 2 [TraditionalPreservationFishMeat.BeefSuet;TraditionalPreservationFishMeat.MuttonFat] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            TraditionalPreservationFishMeat.PotOfSuet = Base.Pot,
+            TraditionalPreservationFishMeat.PotForgedSuet = Base.PotForged,
+        }
+    }
+
+    /* IsCookedFoodItem lets burnt food through, so canPourOff refuses a burnt pot. */
+    craftRecipe PourOffLard
+    {
+        timedAction = MixingBowl,
+        time = 60,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Cooking:5,
+        OnTest = TraditionalPreservationFishMeat.canPourOff,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.PotOfPorkFat;TraditionalPreservationFishMeat.PotForgedPorkFat] mappers[potType] flags[InheritCondition;IsCookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 Base.Lard,
+            item 1 TraditionalPreservationFishMeat.Cracklings,
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            Base.Pot = TraditionalPreservationFishMeat.PotOfPorkFat,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedPorkFat,
+        }
+    }
+
+    craftRecipe PourOffTallow
+    {
+        timedAction = MixingBowl,
+        time = 60,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Cooking:5,
+        OnTest = TraditionalPreservationFishMeat.canPourOff,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.PotOfSuet;TraditionalPreservationFishMeat.PotForgedSuet] mappers[potType] flags[InheritCondition;IsCookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.Tallow,
+            item 1 TraditionalPreservationFishMeat.Cracklings,
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            Base.Pot = TraditionalPreservationFishMeat.PotOfSuet,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedSuet,
+        }
+    }
+
+    /* The only way to get the pot back from burnt fat (canScrape), rotten or not. */
+    craftRecipe ScrapeOutBurntFat
+    {
+        timedAction = MixingBowl,
+        time = 80,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnTest = TraditionalPreservationFishMeat.canScrape,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.PotOfPorkFat;TraditionalPreservationFishMeat.PotForgedPorkFat;TraditionalPreservationFishMeat.PotOfSuet;TraditionalPreservationFishMeat.PotForgedSuet] mappers[potType] flags[InheritCondition;AllowRottenItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            Base.Pot = TraditionalPreservationFishMeat.PotOfPorkFat,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfSuet,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedPorkFat,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedSuet,
+        }
+    }
+}

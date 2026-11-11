@@ -21,9 +21,14 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.heads(n)` | Spawns Fish Heads (default food values). |
 | `TPFM.stock()` | Spawns a Pot of Fish Head Stock (default values, no head listed). |
 | `TPFM.salt(n)` | Spawns vanilla Salt shakers. |
+| `TPFM.fat(n)` | Spawns `n` each of Pork Fat, Beef Suet and Mutton Fat (default food values). |
+| `TPFM.fatPot(state)` | Spawns a Pot of Pork Fat: `"cooked"` (the default, ready to pour off), `"burnt"` (only Scrape Out Burnt Fat takes it) or `"raw"`. |
+| `TPFM.fatRows()` | Says whether the sandbox has butchering fat on, and prints the fat row of each vanilla pig, cow and sheep's butchering table (base numbers: about x2.8 on a Butchering Hook, x0.6 on the ground). |
 
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up pressing. Use the game's own time controls for that.
 
 **Typical check of the whole salt route:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(5)` (each 4 weight walleye takes 16 salt, and a shaker holds 10), pack and press, then hang the fish and `TPFM.age(288)`.
+
+**Typical check of rendering:** `TPFM.fat(2)`, a Pot, Put Pork Fat in a Pot, cook it on any stove or fire (60 minutes), Pour Off Lard: one Lard, one Cracklings and the pot.
 
 **Typical check of heads:** `TPFM.fish("Walleye", 4)` and `TPFM.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.

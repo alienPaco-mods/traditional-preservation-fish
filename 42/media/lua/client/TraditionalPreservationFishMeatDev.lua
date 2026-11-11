@@ -30,6 +30,9 @@ function TPFM.help()
     say("TPFM.heads(n)              spawn n Fish Heads")
     say("TPFM.stock()               spawn a Pot of Fish Head Stock")
     say("TPFM.salt(n)               spawn n vanilla Salt shakers")
+    say("TPFM.fat(n)                spawn n each of Pork Fat, Beef Suet and Mutton Fat")
+    say("TPFM.fatPot(state)         spawn a Pot of Pork Fat: \"cooked\" (the default), \"burnt\" or \"raw\"")
+    say("TPFM.fatRows()             the fat each vanilla animal's butchering table gives now")
     say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up pressing.")
 end
 
@@ -178,6 +181,33 @@ end
 function TPFM.salt(count)
     give("Base.Salt", count)
     say("Gave " .. (count or 1) .. " Salt shaker(s).")
+end
+
+function TPFM.fat(count)
+    for _, row in ipairs(F.FAT_ROWS) do give(row.item, count) end
+    say("Gave " .. (count or 1) .. " each of Pork Fat, Beef Suet and Mutton Fat.")
+end
+
+function TPFM.fatPot(state)
+    local pot = give("TraditionalPreservationFishMeat.PotOfPorkFat")[1]
+    state = state or "cooked"
+    if state == "cooked" then pot:setCooked(true) end
+    if state == "burnt" then pot:setBurnt(true) end
+    say("Gave a Pot of Pork Fat (" .. state .. ").")
+end
+
+function TPFM.fatRows()
+    say("Butchering fat is " .. (F.fatEnabled() and "on" or "off") .. " in the sandbox.")
+    for _, row in ipairs(F.FAT_ROWS) do
+        for _, name in ipairs(row.animals) do
+            local found = "no row"
+            local animal = AnimalPartsDefinitions.animals[name]
+            for _, part in ipairs(animal and animal.parts or {}) do
+                if part.item == row.item then found = string.format("%s %d-%d", row.item, part.minNb, part.maxNb) end
+            end
+            say(name .. ": " .. (animal and found or "not in vanilla's table"))
+        end
+    end
 end
 
 function TPFM.stockfish(count)

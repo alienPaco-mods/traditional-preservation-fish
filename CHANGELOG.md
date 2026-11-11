@@ -1,5 +1,20 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.1
+- **Fat from butchering** (ROADMAP §7, phase 2). Pigs give **Pork Fat**, cattle **Beef Suet** and sheep **Mutton
+  Fat**: one row each in vanilla's butchering parts tables, added when a world starts, so vanilla's own rules scale
+  it (size, meat ratio, x2.8 on a Butchering Hook, x0.6 on the ground, skill, roadkill, an old carcass). A pig on
+  the Hook gives 5 to 7 pieces, a cow 8 to 10, a sheep 2 to 4; on the ground 1 or 2. Young animals and deer give none.
+- **Rendering** on any stove or fire, no station: Put Pork Fat in a Pot / Put Suet in a Pot (an empty Pot or Forged
+  Pot, 2 raw pieces), cook 60 minutes, then Pour Off Lard (vanilla's Lard) or Pour Off Tallow, each with
+  **Cracklings** and the pot back. Burnt fat gives nothing: Scrape Out Burnt Fat returns the pot.
+- New items: Pork Fat, Beef Suet, Mutton Fat (raw, 2 / 4 days), **Tallow** (vanilla Lard's values and baking tag),
+  Cracklings, and the four pots of fat. Icons from `tools/build_meat_icons.py`.
+- Sandbox: **Butchering gives fat** (on).
+- Console: `TPFM.fat(n)`, `TPFM.fatPot(state)`, `TPFM.fatRows()`.
+- Internal: meat has its own files (`TraditionalPreservationFishMeatFat.lua`, `..._Meat.txt`, `tests/test_fat.lua`);
+  fish code and goldens untouched. Butchering gives a little more Butchering XP, as each piece of fat counts as a part.
+
 ## 0.4.0
 - **Renamed to Traditional Preservation (Fish & Meat)**, ahead of the meat routes (ROADMAP §7, phase 1). Mod ID
   `TraditionalPreservationFishMeat` (was `TraditionalPreservationFish`), debug console `TPFM` (was `TPF`), timed

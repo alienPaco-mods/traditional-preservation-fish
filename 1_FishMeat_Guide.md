@@ -16,6 +16,7 @@
 8. The Fisherman's Almanac (Seasons)
 9. Secrets & Hidden Features
 9½. The Fisherman's Logbook
+9¾. The Butcher's Block: Fat, Lard and Tallow
 10. Tips from the Docks
 11. Troubleshooting
 12. Sandbox Settings
@@ -235,6 +236,41 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 ---
 
+## 9¾. The Butcher's Block: Fat, Lard and Tallow
+
+*The first page of the meat chapters. More follow.*
+
+In the base game a butchered animal gives no fat, and Lard is something you find in a kitchen. Here the fat comes off the carcass, as it does on any farm.
+
+| Animal | Raw fat | On a Butchering Hook | On the ground | Renders to |
+|---|---|---|---|---|
+| Pig (sow, boar) | Pork Fat | 5 to 7 | 1 | Lard |
+| Cattle (cow, bull) | Beef Suet | 8 to 10 | 1 or 2 | Tallow |
+| Sheep (ewe, ram) | Mutton Fat | 2 to 4 | 1 | Tallow |
+
+Numbers are for an average animal and an unskilled butcher. A bigger or meatier animal gives more, Butchering skill raises the top end, and roadkill or an old carcass gives less: the game's own butchering rules, the same as for the meat. Piglets, calves, lambs and deer are too lean to give any.
+
+**Rendering, step by step**
+
+1. **Put Pork Fat in a Pot** (or **Put Suet in a Pot**): an empty Cooking Pot or Forged Pot and **2 pieces** of raw fat. Beef Suet and Mutton Fat share a pot, mixed or not.
+2. **Cook it** on any stove, campfire or fireplace: about an hour. No station needed.
+3. **Pour Off Lard** (or **Pour Off Tallow**): one block of fat, one portion of **Cracklings**, and your pot back.
+
+| Item | Keeps (fresh / rotten) | Notes |
+|---|---|---|
+| Pork Fat, Beef Suet, Mutton Fat | 2 / 4 days | Raw, it will make you sick. Fry a piece if you must |
+| Lard | does not spoil | The base game's own Lard |
+| Tallow | does not spoil | Bakes and seasons wherever Lard does |
+| Cracklings | 7 / 14 days | A crisp snack; goes in salads, soups, stews and sandwiches |
+
+> 📝 **Margin note:** a pig on the hook gives 2 or 3 blocks of Lard, about as many calories as its meat. That is close to a real lard pig, and the reason the old breeds were kept.
+
+> 🔥 **Don't walk away.** Left on the heat for two and a half hours the fat burns. A burnt pot gives nothing: **Scrape Out Burnt Fat** gets you the pot back.
+
+> 📜 **Old names:** Balkan cooks call cracklings *čvarci* and make them every winter at the pig slaughter. In Britain, tallow lit the house and suet went into the pudding.
+
+---
+
 ## 10. Tips from the Docks
 
 - **Fillets don't cheat the salt.** A vanilla fillet weighs 5% of its fish but holds half its food, so salted it pays and weighs as half the gutted fish. Fillets cut from a cured fish weigh half of it.
@@ -275,6 +311,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Stockfish maturing time (days) | 60 | Ripening in storage. A pallet in a loft halves it, in a ground-floor room it takes two thirds |
 | Salt press time (days) | 2 | In the tub, for a batch with a big fish. Small fish take half as long |
 | Spoilage strictness | Normal | Off / Forgiving / Normal / Harsh |
+| Butchering gives fat | On | Off, butchering gives no fat and Lard is loot only, as in the base game |
 
 ---
 

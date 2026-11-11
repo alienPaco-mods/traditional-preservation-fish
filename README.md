@@ -1,4 +1,4 @@
-# Traditional Preservation (Fish & Meat) — Build 42 prototype (v0.4.0)
+# Traditional Preservation (Fish & Meat) — Build 42 prototype (v0.4.1)
 
 **Status: experimental.** The stations build, open and hang fish in the game, but a full year hasn't been played. Back up your save before enabling.
 
@@ -59,6 +59,14 @@ Fish keep their size and species through every stage, with the stage in brackets
 
 Percentages are of the whole fresh fish. They assume the fish was big enough to give guts (over 0.6 weight) and, on the cold route, a head (over 1.0). A fish too small for guts keeps that tenth of its weight at every stage. A cold-route fish of 1.0 weight or less keeps its head, so it's 90% when gutted, with all of its food. Pressing takes a random 7 to 12% of each fish's weight. Freshness carries over as a share of each stage's fresh days, so a fish half way to stale is still half way to stale when gutted or packed. The press starts the clock afresh, less what a warm cure took (see Seasons). Rehydrating carries the dried fish's share over, so an old dried fish gives a stale rehydrated one. A fillet vanilla cut counts as the food it holds once salted: it pays half its gutted fish's salt and comes out of the salt that heavy (9 times its raw weight).
 
+### Fat, Lard and Tallow (0.4.1)
+
+Vanilla butchering gives no fat and its Lard is loot only. `TraditionalPreservationFishMeatFat.lua` adds one row to vanilla's butchering parts tables (`AnimalPartsDefinitions`) when a world starts: **Pork Fat** for sows and boars (base 2-3), **Beef Suet** for cows and bulls (3-4), **Mutton Fat** for ewes and rams (1-2). Young animals and deer get none. Vanilla's own butchering code scales a row like any other part: times the animal's size and meat ratio, x2.8 on a Butchering Hook or x0.6 on the ground, a higher maximum with Butchering skill, half for roadkill, less for an old carcass, never under one. So a pig on the Hook gives 5 to 7 Pork Fat and one on the ground gives 1; a cow 8 to 10 and 1 or 2; a sheep 2 to 4 and 1.
+
+Rendering needs no station. **Put Pork Fat in a Pot** / **Put Suet in a Pot** takes an empty Pot or Forged Pot and 2 raw pieces (suet and mutton fat mix). The pot cooks on any stove or fire in 60 minutes and burns at 150. **Pour Off Lard** gives vanilla `Base.Lard`, **Pour Off Tallow** the new **Tallow** (vanilla Lard's values and its `base:bakingfat` tag), each with one **Cracklings** and the pot. A burnt pot only takes **Scrape Out Burnt Fat**, which returns the pot.
+
+The cap rule: two pieces make one block, so a pig's Lard (2 or 3 on the Hook) is worth about its meat and no more. A piece of raw fat has half the calories of a block and its cracklings (2170), keeps 2 / 4 days like raw meat, and is dangerous uncooked.
+
 ## Seasons
 
 You don't need to watch the forecast. Drying usually takes 12 to 55 days, and the time of year decides how a batch goes.
@@ -102,7 +110,7 @@ Humidity stays low in the game all year, mostly 20 to 45%, so it barely changes 
 
 ## Sandbox options
 
-Under Traditional Preservation (Fish & Meat) in the sandbox options: **Salt drying time** (12 days), **Slowest salt drying** (27 days), **Stockfish drying time** (32 days), **Stockfish maturing time** (60 days), **Salt press time** (2 days for a batch with a big fish; small fish half) and **Spoilage strictness** (Off, Forgiving, Normal, Harsh). The defaults are set from the season report: stockfish hung from late October to January dries outdoors in about 50-55 days, salt fish in 15-34. Before 0.3.7 stockfish drying followed salt drying at 8/3; it is its own option now.
+Under Traditional Preservation (Fish & Meat) in the sandbox options: **Salt drying time** (12 days), **Slowest salt drying** (27 days), **Stockfish drying time** (32 days), **Stockfish maturing time** (60 days), **Salt press time** (2 days for a batch with a big fish; small fish half) and **Spoilage strictness** (Off, Forgiving, Normal, Harsh). The defaults are set from the season report: stockfish hung from late October to January dries outdoors in about 50-55 days, salt fish in 15-34. Before 0.3.7 stockfish drying followed salt drying at 8/3; it is its own option now. **Butchering gives fat** (on): off, the fat rows are taken out again and Lard is loot only, as in vanilla.
 
 ## Tuning
 
@@ -111,6 +119,8 @@ Times, capacity, stage values, weather rates and spoilage limits are at the top 
 `tools/build_tileset.py` repaints the stations, hanging fish, icons, the mod list icon and model textures, tints the vanilla fish icons, and writes `42/media/scripts/TraditionalPreservationFishMeat_models.txt` (needs Pillow and the game files). `tools/build_model.py` writes the Stockfish Bale's ground model (`42/media/Models_X/StockfishBale.glb`), its texture and icon (needs Pillow, numpy and the game files). It also writes the generated `42/media/lua/shared/TraditionalPreservationFishMeat/Tiles.lua`, the tile numbers the Lua reads (don't edit it by hand), and `luajit tests/test_tiles.lua` checks the entity scripts against it. `luajit tests/test_curing.lua` checks the curing rules, `luajit tests/test_ui.lua` the station slots and popup, `luajit tests/test_world.lua` the station sprites and the weather record, `luajit tests/test_pallet.lua` the Stockfish Pallet and Bale, and `luajit tests/test_console.lua` the debug commands. The season table above is for the default settings. `luajit tools/season_report.lua` runs the rules against `tools/climate_year.csv`, about a year and a half of forecasts read from the game, so run it after changing any rates. `tools/climate_wind.csv` adds a year of the game's forecast wind (one world per start month), which the wind curve (`WIND_GOOD`) was scaled from.
 
 The shared Traditional Preservation core (season averages, station tracking, popups) is the required TP Core mod (`~/MODS/TraditionalPreservationCore`), loaded as `require "TraditionalPreservationCore/Weather"`. Edit it there. The drying and spoilage rates, wetness and the frame's stacks stay in this mod's own files.
+
+`tools/build_meat_icons.py` paints the fat icons from vanilla's loin, Lard and pot icons (needs Pillow and the game files). It is apart from `build_tileset.py`, so the fish art doesn't rebuild with it. The fat rows and their numbers are `F.FAT_ROWS` in `TraditionalPreservationFishMeatFat.lua`; the items and recipes are in `42/media/scripts/TraditionalPreservationFishMeat_Meat.txt`.
 
 ## Debug commands
 
