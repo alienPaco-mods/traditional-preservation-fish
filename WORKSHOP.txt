@@ -119,13 +119,13 @@ A whole fish over 0.6 weight gives one Fish Guts when gutted or packed, weighing
 
 Gut Fish also takes the head off. A fish over 1.0 weight gives a Fish Head: 10% of its weight and 6% of its food, for soups, stews or chum. Salted fish keep their heads.
 
-[b]Fish Head Stock:[/b] a pot holding 1.5 L of water and a Fish Head make a pot of stock that is already a stew, with the head taking no ingredient slot. Add up to 6 stew ingredients plus seasonings, and it starts out tastier than a plain stew. Divide it into 4 or 2 bowls at a table, as with any stew.
+[b]Fish Head Stock:[/b] a pot holding 1.5 L of water and a Fish Head make a pot of stock that is already a stew, with the head taking no ingredient slot. Add up to 6 stew ingredients plus seasonings, and it starts with the same mood boost as a plain stew. Divide it into 4 or 2 bowls at a table, as with any stew.
 
 [h2]A little history[/h2]
 Stockfish is unsalted cod hung on open racks through the cold northern Norwegian spring, traded across Europe since the Viking age. Salt cod (klippfisk, bacalhau) is salted, pressed and dried in mild air, and from the 1500s it fed sailors and Catholic fast days on both sides of the Atlantic. On the lower Volga around Astrakhan, large salted fish such as pike are hung from hooks to dry.
 
 [h2]Works well with[/h2]
-[b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt, with one batch packing about 12 fish. Traditional Preservation (Fish) needs no other mods besides Traditional Preservation (Core).
+[b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt: one batch (5 Evaporated Salt, 25 uses) packs a dozen panfish, or one 4 weight walleye with salt to spare. Traditional Preservation (Fish) needs no other mods besides Traditional Preservation (Core).
 
 [h2]Sandbox options[/h2]
 Set salt drying time, the slowest it can take and spoilage strictness.

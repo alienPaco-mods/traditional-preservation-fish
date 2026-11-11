@@ -1,6 +1,11 @@
 # Changelog: Traditional Preservation (Fish)
 
 ## 0.2.8
+- Docs (2026-11-11 pass against the code): the season tables in the README and guide match `tools/season_report.lua`
+  again (a day's difference in seven months; April's 3% of cold batches finish in 33 days); Fish Head Stock's
+  tooltip and the Workshop text say it starts as tasty as a plain stew (they said tastier, from before -20);
+  fillets no longer "stack deep" (a salted fillet weighs as the food it holds); the Workshop's "one batch packs
+  about 12 fish" and the DEVHELP salt check (`TPF.salt(5)`) follow salt by size. Tooltip text only: no change in play.
 - Balance (series pass, F3): Pack Fish in Salt takes salt by the fish's size, 2 for each started half weight of the
   packed fish (at least 2; past the first 2 it must be carried), part-used salt first; the Salt mod's empties come
   back for what it uses up. A fillet vanilla cut counts as the food it holds (half its gutted fish) for salt and

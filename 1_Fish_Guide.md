@@ -31,7 +31,7 @@ You catch more fish than you can eat. This mod turns that surplus into food that
 
 ## 2. Quick Start
 
-> **Requires TP Core** (Traditional Preservation Core), the series' shared mod. Enable it alongside this one; it loads first.
+> **Requires Traditional Preservation (Core)**, the series' shared mod (TP Core for short). Enable it alongside this one; it loads first.
 
 **Summer catch?** Pack it in salt → press it in a **Salting Tub** → hang it on a **Fish Drying Frame**.
 **Winter catch?** Gut it → hang it on the frame. No salt needed.
@@ -144,15 +144,15 @@ Drying runs on real weather, recorded every 10 minutes, **even while you're away
 
 | Month | Salt, outdoors | Salt, roofed | Cold drying | Cold batches that rotted |
 |---|---|---|---|---|
-| Jan | 28–32 d | 27 d | 21–23 d | 0% |
+| Jan | 28–33 d | 27 d | 21–23 d | 0% |
 | Feb | 29–33 d | 27 d | 21–25 d | 0% |
-| Mar | 28–33 d | 27 d | 24–36 d | 7% |
-| Apr | 22–30 d | 24–27 d | — | 97% |
-| May | 16–24 d | 22–24 d | — | 100% |
-| Jun | 15–20 d | 21–23 d | — | 100% |
+| Mar | 29–33 d | 27 d | 24–36 d | 7% |
+| Apr | 22–30 d | 24–27 d | 33 d | 97% |
+| May | 16–25 d | 22–25 d | — | 100% |
+| Jun | 16–20 d | 21–23 d | — | 100% |
 | Jul | 15–18 d | 21–23 d | — | 100% |
-| Aug | 17–24 d | 22–24 d | — | 100% |
-| Sep | 17–33 d | 23–27 d | — | 100% |
+| Aug | 17–24 d | 22–25 d | — | 100% |
+| Sep | 17–34 d | 23–27 d | — | 100% |
 | Oct | 30–34 d | 27 d | 23–30 d | 30% |
 | Nov | 29–30 d | 27 d | 21–23 d | 0% |
 | Dec | — | 27 d | 22 d | 0% |
@@ -268,6 +268,6 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 The Salting Tub runs on the game clock, not the weather, so `TPF.age` doesn't speed up pressing. Use the game's own time controls for that.
 
-**Typical check of the whole salt route:** `TPF.fish("Walleye", 4, 3)` and `TPF.salt(1)`, pack and press, then hang the fish and `TPF.age(288)`.
+**Typical check of the whole salt route:** `TPF.fish("Walleye", 4, 3)` and `TPF.salt(5)` (each 4 weight walleye takes 16 salt, and a shaker holds 10), pack and press, then hang the fish and `TPF.age(288)`.
 
 **Typical check of heads:** `TPF.fish("Walleye", 4)` and `TPF.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.

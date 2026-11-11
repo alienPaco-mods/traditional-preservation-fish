@@ -20,7 +20,7 @@ The salt route can be done in any season. The cold route needs no salt, keeps ab
 2. **Build a Salting Tub** (Carpentry 2, Fishing 2): 4 planks, 6 nails, 2 twine, a hammer and a saw (both kept).
 3. **Press**: load up to 50 weight of packed fish, 35 items at most, into the tub and press **Craft**. The board and stones go on for 12 in-game hours. The tub is closed from then until the last pressed fish is taken out, so nothing can be added. The clock keeps running while you are away.
 4. **Build a Fish Drying Frame** (Carpentry 2, Fishing 2): 6 long sticks, 3 nails, 4 twine and a hammer (kept).
-5. **Hang**: pick Hang Salt Pressed Fish to Dry in the frame's recipe list, load pressed fish and press **Craft**. Each press hangs one stack, which dries on its own timer. A stack holds 2.5 weight, so a full frame holds 20, and a fish heavier than 2.5 has to be filleted first or hung on a bigger station. Fillets weigh 5% of the fish they came from, so they stack deep. You can keep adding stacks while others dry, up to the 8 fixed spots, and finished stacks hold their spot until collected. Each sprite changes colour and thins down in five steps as its stack dries. Each stack picks its look at random when it starts, whatever is in it, so a frame doesn't look all alike. A salt stack is usually a whole fish and sometimes a headless or split one, and a cold stack is usually headless and sometimes split.
+5. **Hang**: pick Hang Salt Pressed Fish to Dry in the frame's recipe list, load pressed fish and press **Craft**. Each press hangs one stack, which dries on its own timer. A stack holds 2.5 weight, so a full frame holds 20, and a fish heavier than 2.5 has to be sliced first (Slice Fish, two fillets of half its weight each) or hung on a bigger station. You can keep adding stacks while others dry, up to the 8 fixed spots, and finished stacks hold their spot until collected. Each sprite changes colour and thins down in five steps as its stack dries. Each stack picks its look at random when it starts, whatever is in it, so a frame doesn't look all alike. A salt stack is usually a whole fish and sometimes a headless or split one, and a cold stack is usually headless and sometimes split.
 6. **Eat, cook or rehydrate**: Salt Dried fish keeps for about 4 to 6 months. It is very salty, but can go straight into soup, stew, rice or pasta. **Rehydrate Fish** uses 1 L of water and gives a mild, perishable fish that cooks like a fresh one and is safe without cooking, though it stays darker than fresh fish, as real soaked fish does. Packed and pressed fish aren't safe yet: only drying makes salt fish safe to eat uncooked.
 
 **Bigger fish**: two outdoor stations hang fish the same way as the frame, with the same recipes, rates and spoilage, but take far bigger stacks and show them larger on their hooks. They can only be built in the open, not under a roof, and one picked up can't be put down indoors either.
@@ -77,15 +77,15 @@ This is how a batch hung in each month went, on the game's own forecasts for def
 
 | Month | Mean C | Mean humidity | Salt, open frame | Salt, under a roof | Cold drying | Cold batches rotted |
 |---|---|---|---|---|---|---|
-| Jan | -4 | 0.24 | 28–32 days | 27 days | 21–23 days | 0% |
+| Jan | -4 | 0.24 | 28–33 days | 27 days | 21–23 days | 0% |
 | Feb | -1 | 0.22 | 29–33 days | 27 days | 21–25 days | 0% |
-| Mar | 3 | 0.25 | 28–33 days | 27 days | 24–36 days | 7% |
-| Apr | 8 | 0.30 | 22–30 days | 24–27 days | | 97% |
-| May | 15 | 0.34 | 16–24 days | 22–24 days | | 100% |
-| Jun | 19 | 0.35 | 15–20 days | 21–23 days | | 100% |
+| Mar | 3 | 0.25 | 29–33 days | 27 days | 24–36 days | 7% |
+| Apr | 8 | 0.30 | 22–30 days | 24–27 days | 33 days | 97% |
+| May | 15 | 0.34 | 16–25 days | 22–25 days | | 100% |
+| Jun | 19 | 0.35 | 16–20 days | 21–23 days | | 100% |
 | Jul | 21 | 0.45 | 15–18 days | 21–23 days | | 100% |
-| Aug | 18 | 0.35 | 17–24 days | 22–24 days | | 100% |
-| Sep | 15 | 0.33 | 17–33 days | 23–27 days | | 100% |
+| Aug | 18 | 0.35 | 17–24 days | 22–25 days | | 100% |
+| Sep | 15 | 0.33 | 17–34 days | 23–27 days | | 100% |
 | Oct | 8 | 0.27 | 30–34 days | 27 days | 23–30 days | 30% |
 | Nov | 0 | 0.24 | 29–30 days | 27 days | 21–23 days | 0% |
 | Dec | -4 | 0.19 | | 27 days | 22 days | 0% |
@@ -100,7 +100,7 @@ Under Traditional Preservation (Fish) in the sandbox options: **Salt drying time
 
 Times, capacity, stage values, weather rates and spoilage limits are at the top of `42/media/lua/shared/TraditionalPreservationFish.lua`. `PRESS_HOURS`, `DRY_HOURS` and `COLD_DRY_HOURS` set the recipe times when the game starts, so they are the only times to edit. Restart the game after changing them. Slot counts are set in the entity scripts and recipes. A station keeps the counts it was built with, even when picked up and placed again.
 
-`tools/build_tileset.py` repaints the stations, hanging fish, icons, the mod list icon and model textures, tints the vanilla fish icons, and writes `42/media/scripts/TraditionalPreservationFish_models.txt` (needs Pillow and the game files). It also writes the generated `42/media/lua/shared/TraditionalPreservationFish/Tiles.lua`, the tile numbers the Lua reads (don't edit it by hand), and `luajit tests/test_tiles.lua` checks the entity scripts against it. `luajit tests/test_curing.lua` checks the curing rules `luajit tests/test_ui.lua` the station slots and popup, and `luajit tests/test_world.lua` the station sprites and the weather record. The season table above is for the default settings. `luajit tools/season_report.lua` runs the rules against `tools/climate_year.csv`, about a year and a half of forecasts read from the game, so run it after changing any rates.
+`tools/build_tileset.py` repaints the stations, hanging fish, icons, the mod list icon and model textures, tints the vanilla fish icons, and writes `42/media/scripts/TraditionalPreservationFish_models.txt` (needs Pillow and the game files). It also writes the generated `42/media/lua/shared/TraditionalPreservationFish/Tiles.lua`, the tile numbers the Lua reads (don't edit it by hand), and `luajit tests/test_tiles.lua` checks the entity scripts against it. `luajit tests/test_curing.lua` checks the curing rules, `luajit tests/test_ui.lua` the station slots and popup, `luajit tests/test_world.lua` the station sprites and the weather record, and `luajit tests/test_console.lua` the debug commands. The season table above is for the default settings. `luajit tools/season_report.lua` runs the rules against `tools/climate_year.csv`, about a year and a half of forecasts read from the game, so run it after changing any rates.
 
 The shared Traditional Preservation core (season averages, station tracking, popups) is the required TP Core mod (`~/MODS/TraditionalPreservationCore`), loaded as `require "TraditionalPreservationCore/Weather"`. Edit it there. The drying and spoilage rates, wetness and the frame's stacks stay in this mod's own files.
 

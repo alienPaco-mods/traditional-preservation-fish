@@ -17,6 +17,6 @@ These console commands load only when the game runs in **debug mode** (launch op
 
 The Salting Tub runs on the game clock, not the weather, so `TPF.age` doesn't speed up pressing. Use the game's own time controls for that.
 
-**Typical check of the whole salt route:** `TPF.fish("Walleye", 4, 3)` and `TPF.salt(1)`, pack and press, then hang the fish and `TPF.age(288)`.
+**Typical check of the whole salt route:** `TPF.fish("Walleye", 4, 3)` and `TPF.salt(5)` (each 4 weight walleye takes 16 salt, and a shaker holds 10), pack and press, then hang the fish and `TPF.age(288)`.
 
 **Typical check of heads:** `TPF.fish("Walleye", 4)` and `TPF.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.
