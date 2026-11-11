@@ -101,7 +101,17 @@ local function drawStackTooltip(slot, tooltip, isCold)
     end)
 end
 
+-- The tub's recipe time is the longest press, so a lighter batch says its own time left.
+local function drawPressTooltip(slot, tooltip)
+    local status = F.pressStatus(slot.craftRecipeData:getModData(), getGameTime():getWorldAgeHours())
+    UI.drawTooltip(tooltip, function(layout)
+        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Progress", UI.percent(status.progress))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFish_TimeLeft", timeText(status.hoursLeft))
+    end)
+end
+
 UI.progressTooltips({
+    PressSaltedFish = drawPressTooltip,
     HangFishToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, false) end,
     HangFishToColdDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, true) end,
 })

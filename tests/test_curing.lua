@@ -132,15 +132,43 @@ T.advance(still, 5, MILD)
 check("no time passing changes nothing", still.open == 0)
 
 -- Pressing
+check("small fish press for a day", T.pressHours(0.3) == 24 and T.pressHours(T.PRESS_SMALL_WEIGHT) == 24)
+check("fish of about a kilo or more, two", T.pressHours(T.PRESS_BIG_WEIGHT) == 48 and T.pressHours(T.SALT_WHOLE_MAX) == 48)
+check("in between by weight", near(T.pressHours((T.PRESS_SMALL_WEIGHT + T.PRESS_BIG_WEIGHT) / 2), 36))
+
 local RECIPE_TIME = T.PRESS_HOURS * 3600
-local press = newRecipeData(RECIPE_TIME)
+local function pressed(weights)
+    local fish = {}
+    for i, weight in ipairs(weights) do fish[i] = newFood("TraditionalPreservationFish.SaltPackedFish", { ActualWeight = weight }) end
+    return newRecipeData(RECIPE_TIME, fish)
+end
+local press = pressed({ 0.4, 3, 0.6 })
 T.onPressStart(press)
+check("the heaviest fish sets the batch's hours", press.modData.pressHours == 48)
 hours = hours + T.PRESS_HOURS / 2
 T.onPressUpdate(press)
 check("half the hours is half the press", near(press.elapsed, RECIPE_TIME / 2))
 hours = hours + 100
 T.onPressUpdate(press)
 check("time away finishes the press, and no further", press.elapsed == RECIPE_TIME)
+
+local small = pressed({ 0.4, 0.8 })
+T.onPressStart(small)
+hours = hours + 12
+T.onPressUpdate(small)
+check("a batch of small fish is half done in 12 hours", near(small.elapsed, RECIPE_TIME / 2))
+hours = hours + 12
+T.onPressUpdate(small)
+check("and done in a day", near(small.elapsed, RECIPE_TIME))
+local status = T.pressStatus({ pressStartHour = 100, pressHours = 24 }, 106)
+check("the popup says a small batch's own time left", near(status.hoursLeft, 18) and near(status.progress, 0.25))
+check("a press from before has 12 hours", near(T.pressStatus({ pressStartHour = 100 }, 106).hoursLeft, 6))
+
+local old = newRecipeData(RECIPE_TIME)
+old.modData.pressStartHour = hours
+hours = hours + 12
+T.onPressUpdate(old)
+check("a press from before keeps its 12 hours", near(old.elapsed, RECIPE_TIME))
 
 press.elapsed = 0
 T.onPressStart(press)

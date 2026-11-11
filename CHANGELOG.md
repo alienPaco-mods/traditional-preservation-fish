@@ -1,5 +1,15 @@
 # Changelog: Traditional Preservation (Fish)
 
+## 0.3.1
+- Realism (ROADMAP §6, decision 9): the press follows the batch's heaviest fish, as the salt has to reach through the
+  thickest one. 1 day if every fish is up to 1.1 weight (about 0.5 kg, `PRESS_SMALL_WEIGHT`), 2 days with any fish of
+  2.2 weight (about 1 kg, `PRESS_BIG_WEIGHT`) or more, in between by weight (was 12 hours for any batch; Volga
+  practice, user: about 2 days at most). The recipe's time is the longest press (`PRESS_HOURS` 48); a lighter batch's
+  bar runs faster (new `pressHours` on the recipe data). A press already running from an older version keeps its
+  12 hours. Tooltip, guide, README and Workshop text updated.
+- The tub gets the mod's own hover popup on a running batch (Progress, Time Remaining from its own hours), as
+  vanilla's counts down from the recipe's 2 days (step 58: a small batch read 1d 23h at the start).
+
 ## 0.3.0
 - Realism (ROADMAP §6, cold-frame model): cold drying follows frost and wind. Full speed 0 to 5 C; 80% at -5 C
   and 60% below (`HARD_FROST`); wind from `ClimateManager:getWindIntensity()` gives 50% in still air up to 120% at

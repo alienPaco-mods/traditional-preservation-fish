@@ -31,7 +31,7 @@ You need a raw fish or fillet, salt and a sharp knife or meat cleaver (kept). Sa
 Carpentry 2, Fishing 2. Takes 4 planks, 6 nails, 2 twine, a hammer and a saw (both kept).
 
 [h3]3. Press[/h3]
-Load up to 50 weight of packed fish, 35 fish at most, and press Craft. It takes 12 in-game hours, and nothing else can go in until you've taken out the last pressed fish.
+Load up to 50 weight of packed fish, 35 fish at most, and press Craft. It takes 1 in-game day for small fish (up to 1.1 weight) and up to 2 days with a fish of 2.2 weight or more in the batch, as the heaviest fish sets the time, and nothing else can go in until you've taken out the last pressed fish.
 
 [h3]4. Hang it to dry[/h3]
 Choose Hang Salt Pressed Fish to Dry on any drying station, load your pressed fish and press Craft. See Drying stations below.

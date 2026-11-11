@@ -82,7 +82,7 @@ Raw fish or fillet + salt by its size + knife (kept) → **Salt Packed** fish.
 - Packed fish keeps only days. Get it in the tub.
 
 **Step 2. Press in the Salting Tub**
-Load up to **50 weight / 35 items**, press **Craft**. The board and stones go on for **12 in-game hours**. The tub stays closed until you've taken every pressed fish out.
+Load up to **50 weight / 35 items**, press **Craft**. The board and stones go on for **1 to 2 in-game days**: the **heaviest fish** sets the time, from 1 day (every fish up to 1.1 weight, about half a kilo) to 2 days (any fish of 2.2 weight, about a kilo, or more). Press small fish together and they come out a day sooner. The tub stays closed until you've taken every pressed fish out.
 
 **Step 3. Hang on the Fish Drying Frame**
 Pick **Hang Salt Pressed Fish to Dry**, load pressed fish, press **Craft**. Each press hangs **one stack** of up to 2.5 weight, which dries on its own timer. There are **8 stacks** per frame, so you can keep adding while others dry.
@@ -238,7 +238,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Cold stack came out rotten | It was hung in a warm season: the last 10 days averaged above 10 C |
 | Cold dried fish keeps less than a year | Hard frost or rain caught it in its first days on the frame |
 | Not drying | Rain on an open frame (cold fish too, until it dries off); or cold drying under a roof |
-| Time Remaining looks wrong in the window | The window shows the time in the best weather. Hover the stack for the real time left |
+| Time Remaining looks wrong in the window | The window shows the time in the best weather, or the longest press. Hover the stack or the pressing batch for the real time left |
 | Pack Fish in Salt won't take a fish | A whole or gutted fish over 4.5 weight must be split first; or you don't carry enough salt for its size |
 | No Fish Head from gutting | The fish was 1.0 weight or less, or it was packed in salt (salted fish keep their heads) |
 | Create Fish Head Stock missing | The pot needs the full 1.5 L of water |

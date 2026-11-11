@@ -8,10 +8,19 @@ local Tiles = require "TraditionalPreservationFish/Tiles"
 
 F.MOD_DATA_KEY = "TraditionalPreservationFish"
 
--- Hours in the tub, and hours on the frame at a drying rate of 1. These set the recipes' times.
-F.PRESS_HOURS = 12
+-- Hours in the tub at most, and hours on the frame at a drying rate of 1. These set the recipes' times.
+F.PRESS_HOURS = 48
 F.DRY_HOURS = 288
 F.COLD_DRY_HOURS = 768
+
+-- A batch is pressed when the salt has gone through its thickest fish, so the heaviest fish sets the time:
+-- PRESS_MIN_HOURS if every fish is up to PRESS_SMALL_WEIGHT (about 0.5 kg), PRESS_HOURS if any is
+-- PRESS_BIG_WEIGHT (about 1 kg) or more, and in between by weight.
+F.PRESS_MIN_HOURS = 24
+F.PRESS_SMALL_WEIGHT = 1.1
+F.PRESS_BIG_WEIGHT = 2.2
+-- A press started before the heaviest fish set the time took this long.
+local OLD_PRESS_HOURS = 12
 
 -- The most weight of fish a tub takes, with room for a few bigger fish.
 F.TUB_CAPACITY = 50
@@ -303,15 +312,38 @@ function F.getLedger()
     return data
 end
 
--- The press runs on the plain game clock (no weather), timed from here.
+-- Hours in the tub for a batch whose heaviest fish weighs this much.
+function F.pressHours(heaviest)
+    local share = (heaviest - F.PRESS_SMALL_WEIGHT) / (F.PRESS_BIG_WEIGHT - F.PRESS_SMALL_WEIGHT)
+    share = math.min(math.max(share, 0), 1)
+    return F.PRESS_MIN_HOURS + share * (F.PRESS_HOURS - F.PRESS_MIN_HOURS)
+end
+
+-- The press runs on the plain game clock (no weather), timed from here. The inputs are already
+-- taken in, so the batch's heaviest fish sets its hours.
 function F.onPressStart(craftRecipeData)
     Weather.startClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours())
+    local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
+    local heaviest = 0
+    for i = 0, fish:size() - 1 do
+        heaviest = math.max(heaviest, fish:get(i):getActualWeight())
+    end
+    craftRecipeData:getModData().pressHours = F.pressHours(heaviest)
+end
+
+-- How far a batch in the tub is, for its popup.
+function F.pressStatus(modData, now)
+    local hours = modData.pressHours or OLD_PRESS_HOURS
+    local done = math.max(now - (modData.pressStartHour or now), 0)
+    return { progress = math.min(done / hours, 1), hoursLeft = math.max(hours - done, 0) }
 end
 
 -- Craft timers tick at a fixed speed whatever Day Length says and stop when the area unloads,
--- so this replaces their count with the game clock.
+-- so this replaces their count with the game clock. The recipe's time is the longest press, so
+-- a lighter batch's bar runs faster to end on its own hours.
 function F.onPressUpdate(craftRecipeData)
-    Weather.showClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours())
+    local hours = craftRecipeData:getModData().pressHours or OLD_PRESS_HOURS
+    Weather.showClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours(), F.PRESS_HOURS / hours)
 end
 
 function F.hasRoom(capacity, storedWeight, weight)
