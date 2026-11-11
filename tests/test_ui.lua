@@ -116,6 +116,11 @@ end
 check("a tub takes a 35th fish", green(station(TUB, thirtyFour), fish(PACKED, 0.01)))
 check("but not a 36th, however light", not green(station(TUB, thirtyFive), fish(PACKED, 0.01)))
 check("not past its capacity", not green(station(TUB, { fish(PACKED, TraditionalPreservationFishMeat.TUB_CAPACITY - 0.5) }), fish(PACKED, 1)))
+local MEAT = "TraditionalPreservationFishMeat.SaltPackedMeat"
+check("an empty tub is green for packed meat", green(station(TUB), fish(MEAT, 0.5)))
+check("meat goes in with meat", green(station(TUB, { fish(MEAT, 0.3) }), fish(MEAT, 0.5)))
+check("not with fish", not green(station(TUB, { fish(PACKED, 1) }), fish(MEAT, 0.5)))
+check("nor fish with meat", not green(station(TUB, { fish(MEAT, 0.5) }), fish(PACKED, 1)))
 
 vanillaVerdict = false
 check("vanilla can still say no", not green(station(FRAME), fish(PRESSED, 0.5)))
@@ -170,6 +175,9 @@ ISCraftLogicPanel.ItemSlotAddItems("player", tubSlot.resource:getGameEntity(), t
 check("adding the wrong fish is refused", #entityList == 0 and halos[1] == "IGUI_TraditionalPreservationFishMeat_NeedsPacked")
 ISCraftLogicPanel.ItemSlotAddItems("player", tubSlot.resource:getGameEntity(), tubSlot, { fish(PACKED, 1), fish(PACKED, 1) }, tubSlot.resource:getGameEntity():getComponent())
 check("the right fish goes in", #entityList == 2)
+entityList, halos = {}, {}
+ISCraftLogicPanel.ItemSlotAddItems("player", tubSlot.resource:getGameEntity(), tubSlot, { fish(MEAT, 0.5), fish(PACKED, 1) }, tubSlot.resource:getGameEntity():getComponent())
+check("meat and fish dragged in together are refused at the fish", #entityList == 1 and halos[1] == "IGUI_TraditionalPreservationFishMeat_MixedTub")
 
 -- A hanging stack's popup
 local function stackLines(recipeName, modData, ledger)

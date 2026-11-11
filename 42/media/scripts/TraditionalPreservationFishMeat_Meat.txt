@@ -397,4 +397,105 @@ module TraditionalPreservationFishMeat
             Base.PotForged = TraditionalPreservationFishMeat.PotForgedSuet,
         }
     }
+
+    /* Charque, phase 3b: red meat salted in the Salting Tub. Pork waits for Country Ham (phase 6): its fat goes
+       rancid in the sun. The cuts go in as vanilla gives them. As with fish, nutrition, hunger and weight come from
+       the cut that went in (TraditionalPreservationFishMeat.onCreateCured), and the name from it too ("Steak (Salt
+       Cured)"). IconsForTexture and WorldStaticModelsByIndex are in MEAT_CUTS' order in TraditionalPreservationFishMeat.lua. */
+    item SaltPackedMeat
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.3,
+        Icon = SaltPacked_Beef,
+        IconsForTexture = SaltPacked_Beef;SaltPacked_Steak;SaltPacked_Mutton;SaltPacked_Venison,
+        CantEat = true,
+        DangerousUncooked = true,
+        DaysFresh = 3,
+        DaysTotallyRotten = 6,
+        HungerChange = -40.0,
+        Calories = 220.0,
+        Carbohydrates = 0.0,
+        Lipids = 9.35,
+        Proteins = 31.62,
+        FoodType = Beef,
+        StaticModel = Steak,
+        WorldStaticModel = Steak,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PackedMeat,
+    }
+
+    /* Cured but still damp, as Salt Pressed fish: it keeps a week or so until it is dried. */
+    item SaltCuredMeat
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.27,
+        Icon = SaltCured_Beef,
+        IconsForTexture = SaltCured_Beef;SaltCured_Steak;SaltCured_Mutton;SaltCured_Venison,
+        DaysFresh = 7,
+        DaysTotallyRotten = 14,
+        HungerChange = -40.0,
+        ThirstChange = 20.0,
+        UnhappyChange = 10,
+        Calories = 220.0,
+        Carbohydrates = 0.0,
+        Lipids = 9.35,
+        Proteins = 31.62,
+        FoodType = Beef,
+        IsCookable = true,
+        DangerousUncooked = true,
+        MinutesToCook = 25,
+        MinutesToBurn = 60,
+        GoodHot = true,
+        CookingSound = FryingFood,
+        StaticModel = Steak,
+        WorldStaticModel = Steak,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_CuredMeat,
+    }
+
+    /* Salt is rubbed into the cut as it is: no knife, nothing to gut. Fish's salt rule (canPack, onCreatePacked):
+       4 for each started half weight, so a Steak or a Beef takes 4 (about 15%, as charque). The recipe asks for
+       the first 2. */
+    craftRecipe PackMeatInSalt
+    {
+        timedAction = MixingBowl,
+        time = 80,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Cooking:3,
+        OnTest = TraditionalPreservationFishMeat.canPack,
+        OnCreate = TraditionalPreservationFishMeat.onCreatePacked,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PackMeat,
+        inputs
+        {
+            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 2 tags[base:salt],
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.SaltPackedMeat,
+        }
+    }
+
+    /* time is overwritten from PRESS_HOURS in TraditionalPreservationFishMeat.lua; the heaviest cut sets the
+       batch's own hours (meatPressHours). */
+    craftRecipe PressSaltedMeat
+    {
+        time = 43200,
+        Tags = SaltingTub,
+        category = Cooking,
+        OnStart = TraditionalPreservationFishMeat.onPressStart,
+        OnUpdate = TraditionalPreservationFishMeat.onPressUpdate,
+        OnCreate = TraditionalPreservationFishMeat.onCreatePressed,
+        inputs
+        {
+            item variable[1:35] [TraditionalPreservationFishMeat.SaltPackedMeat] flags[IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item variable[1:35] TraditionalPreservationFishMeat.SaltCuredMeat,
+        }
+    }
 }

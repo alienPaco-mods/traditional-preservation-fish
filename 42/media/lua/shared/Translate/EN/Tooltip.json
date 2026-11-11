@@ -35,5 +35,8 @@
   "Tooltip_TraditionalPreservationFishMeat_Suet": "Raw fat from butchered cattle or sheep. Put two in a pot and cook it on any stove or fire, pour off the Melted Tallow, then strain it. A Hearth's copper melts many pieces at once.",
   "Tooltip_TraditionalPreservationFishMeat_Tallow": "Rendered beef or mutton fat. Bakes and seasons like Lard.",
   "Tooltip_TraditionalPreservationFishMeat_Cracklings": "The crisp bits left in the pot after rendering fat.",
-  "Tooltip_TraditionalPreservationFishMeat_PotOfFat": "Cook it on any stove or fire. Once it is cooked, pour off the melted fat and strain it. Burnt fat is only good for scraping out."
+  "Tooltip_TraditionalPreservationFishMeat_PotOfFat": "Cook it on any stove or fire. Once it is cooked, pour off the melted fat and strain it. Burnt fat is only good for scraping out.",
+  "Tooltip_TraditionalPreservationFishMeat_PackMeat": "Beef, Steak, Mutton Chop or Venison, as it is. Takes 4 salt for each started half weight, about a seventh of its weight, as charque. Carry the salt yourself. Pork is not sun dried: its fat goes rancid.",
+  "Tooltip_TraditionalPreservationFishMeat_PackedMeat": "Salted, not yet cured. Press it in a Salting Tub, one to two days by the heaviest cut.",
+  "Tooltip_TraditionalPreservationFishMeat_CuredMeat": "Cured, but still damp: it keeps a week or two. Cook it, or wait for the Drying Frame to take it in the summer sun as Charque."
 }

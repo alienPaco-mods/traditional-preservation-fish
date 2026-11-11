@@ -39,6 +39,9 @@ local function refusal(slot, item, queued)
         if component:isRunning() then return "IGUI_TraditionalPreservationFishMeat_TubInUse" end
         -- This asks what is in the tub, because a tub keeps the slot counts it was built with.
         if TraditionalPreservationFishMeatWorld.busyStacks(entity) > 0 then return "IGUI_TraditionalPreservationFishMeat_TubNotEmpty" end
+        local first = resource:getStoredItems():size() > 0 and resource:getStoredItems():get(0) or queued[1]
+        local mixed = F.mixedTub(first and first:getFullType(), item:getFullType())
+        if mixed then return mixed end
         if resource:getStoredItems():size() + #queued >= F.TUB_MAX_ITEMS
                 or not F.hasRoom(F.TUB_CAPACITY, waiting, weight) then
             return "IGUI_TraditionalPreservationFishMeat_Full"
@@ -123,6 +126,7 @@ end
 
 UI.progressTooltips({
     PressSaltedFish = drawPressTooltip,
+    PressSaltedMeat = drawPressTooltip,
     HangFishToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, false) end,
     HangFishToColdDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, true) end,
 })

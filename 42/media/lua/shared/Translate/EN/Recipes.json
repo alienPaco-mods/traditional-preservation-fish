@@ -50,5 +50,9 @@
   "StrainLard": "Strain Lard",
   "TraditionalPreservationFishMeat.StrainLard": "Strain Lard",
   "StrainTallow": "Strain Tallow",
-  "TraditionalPreservationFishMeat.StrainTallow": "Strain Tallow"
+  "TraditionalPreservationFishMeat.StrainTallow": "Strain Tallow",
+  "PackMeatInSalt": "Pack Meat in Salt",
+  "TraditionalPreservationFishMeat.PackMeatInSalt": "Pack Meat in Salt",
+  "PressSaltedMeat": "Press Salted Meat",
+  "TraditionalPreservationFishMeat.PressSaltedMeat": "Press Salted Meat"
 }

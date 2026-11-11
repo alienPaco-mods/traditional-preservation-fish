@@ -31,6 +31,7 @@ function TPFM.help()
     say("TPFM.stock()               spawn a Pot of Fish Head Stock")
     say("TPFM.salt(n)               spawn n vanilla Salt shakers")
     say("TPFM.fat(n)                spawn n each of Pork Fat, Beef Suet and Mutton Fat")
+    say("TPFM.meat(n)               spawn n each of the cuts that go in the salt: Beef, Steak, Mutton Chop, Venison")
     say("TPFM.fatPot(state)         spawn a Pot of Pork Fat: \"cooked\" (the default), \"burnt\" or \"raw\"")
     say("TPFM.fatRows()             the fat each vanilla animal's butchering table gives now")
     say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up pressing.")
@@ -186,6 +187,11 @@ end
 function TPFM.fat(count)
     for _, row in ipairs(F.FAT_ROWS) do give(row.item, count) end
     say("Gave " .. (count or 1) .. " each of Pork Fat, Beef Suet and Mutton Fat.")
+end
+
+function TPFM.meat(count)
+    for _, cut in ipairs(F.MEAT_CUTS) do give(cut, count) end
+    say("Gave " .. (count or 1) .. " each of Beef, Steak, Mutton Chop and Venison.")
 end
 
 function TPFM.fatPot(state)

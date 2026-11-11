@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Paints the fat icons of Traditional Preservation (Fish & Meat) into 42/media/textures.
+"""Paints the fat and salted meat icons of Traditional Preservation (Fish & Meat) into 42/media/textures.
 
 Raw Pork Fat, Beef Suet and Mutton Fat are vanilla's loin icons pulled towards a fat colour, Tallow is vanilla's
 Lard block yellowed, and the pots of fat are vanilla's full pots with the soup recoloured. Cracklings use vanilla's
@@ -26,6 +26,10 @@ FATS = {
     "MuttonFat": ("Item_PorkLoin", (240, 238, 226), 0.9, True),
     "Tallow": ("Item_Lard", (246, 230, 170), 0.6, False),
 }
+# Charque's stages (phase 3b), one icon per cut in MEAT_CUTS' order: Salt Packed is the cut dusted towards salt,
+# Salt Cured darkened towards cured red-brown.
+CUTS = {"Beef": "Item_BeefLoin", "Steak": "Item_Steak", "Mutton": "Item_Mutton", "Venison": "Item_Venison"}
+SALTED = {"SaltPacked": ((236, 232, 224), 0.35), "SaltCured": ((128, 54, 44), 0.45)}
 # The pots of fat: vanilla's full pot, with the soup's reds turned to melting fat.
 POTS = {"PotOfFat": "Item_PotFull", "PotForgedFat": "Item_Pot_Forged_Stew"}
 FAT_IN_POT = (244, 232, 196)
@@ -84,11 +88,14 @@ def read_icons(game, wanted):
 def main():
     game = Path(sys.argv[1]) if len(sys.argv) > 1 else GAME
     folder = Path(__file__).resolve().parent.parent / "42" / "media" / "textures"
-    wanted = {source for source, _, _, _ in FATS.values()} | set(POTS.values())
+    wanted = {source for source, _, _, _ in FATS.values()} | set(POTS.values()) | set(CUTS.values())
     icons = read_icons(game, wanted)
     for name, (source, colour, amount, mirrored) in FATS.items():
         icon = ImageOps.mirror(icons[source]) if mirrored else icons[source]
         pull(icon, colour, amount).save(folder / f"Item_{name}.png")
+    for stage, (colour, amount) in SALTED.items():
+        for cut, source in CUTS.items():
+            pull(icons[source], colour, amount).save(folder / f"Item_{stage}_{cut}.png")
     for name, source in POTS.items():
         fat_pot(icons[source]).save(folder / f"Item_{name}.png")
 

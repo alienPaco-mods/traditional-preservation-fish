@@ -1,5 +1,16 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.3
+- **Meat in the Salting Tub** (ROADMAP §7, phase 3b, the first half of Charque). **Pack Meat in Salt** (in hand, no
+  knife) takes a Beef, Steak, Mutton Chop or Venison as vanilla gives it, with fish's salt rule: 4 for each started
+  half weight, about 15%, as charque. It gives **Salt Packed Meat**, named and drawn after its cut. Pork is left out
+  on purpose: its fat goes rancid in the sun, so it waits for Country Ham.
+- **Press Salted Meat** in the Salting Tub: 2 days for a 0.5 cut, less by weight (a Steak about 29 hours), never
+  under a day; the heaviest cut sets the batch. A warm season costs keeping as it does for fish. It gives **Salt
+  Cured Meat** ("Steak (Salt Cured)"), which keeps 7 / 14 days and cooks; the Drying Frame takes it in phase 3c.
+- A tub salts fish or meat, never both at once ("A tub salts fish or meat, not both at once").
+- Icons from `tools/build_meat_icons.py` (vanilla's cut icons, salted and cured). Dev: `TPFM.meat(n)`.
+
 ## 0.4.2
 - **Fat renders in the Hearth's copper** (ROADMAP §7, 2d), many pieces at once. **Put Fat in the Copper** on the
   Hearth's menu puts in every carried piece of one kind (Pork Fat, or Beef Suet and Mutton Fat together), 0.25 L a

@@ -51,7 +51,7 @@
   "IGUI_TraditionalPreservationFishMeat_Spoiled": "%1 spoiled",
   "IGUI_TraditionalPreservationFishMeat_TubInUse": "The tub is in use",
   "IGUI_TraditionalPreservationFishMeat_TubNotEmpty": "Take the pressed fish out first",
-  "IGUI_TraditionalPreservationFishMeat_NeedsPacked": "The tub takes Salt Packed fish",
+  "IGUI_TraditionalPreservationFishMeat_NeedsPacked": "The tub takes Salt Packed fish or meat",
   "IGUI_TraditionalPreservationFishMeat_NeedsPressed": "The frame takes Salt Pressed or gutted fish",
   "IGUI_TraditionalPreservationFishMeat_MixedStack": "A stack can't mix gutted and salted fish",
   "IGUI_TraditionalPreservationFishMeat_Full": "It can't take that much fish",
@@ -69,5 +69,7 @@
   "IGUI_TraditionalPreservationFishMeat_FatNoRoom": "The copper has no room for it, or holds something else. Empty it first.",
   "IGUI_TraditionalPreservationFishMeat_FatRendering": "Raw fat melts after %1 more of steaming over a lit fire. Left raw, it goes rancid in %2.",
   "IGUI_TraditionalPreservationFishMeat_FatMelted": "The fat has melted. Fill a pot, bucket or jar from the copper, then strain it through a cloth or a Strainer: half a litre makes a block and its Cracklings.",
-  "IGUI_TraditionalPreservationFishMeat_FatRancid": "The fat went rancid before it was rendered. Empty the copper."
+  "IGUI_TraditionalPreservationFishMeat_FatRancid": "The fat went rancid before it was rendered. Empty the copper.",
+  "IGUI_TraditionalPreservationFishMeat_Cured": "Salt Cured",
+  "IGUI_TraditionalPreservationFishMeat_MixedTub": "A tub salts fish or meat, not both at once"
 }

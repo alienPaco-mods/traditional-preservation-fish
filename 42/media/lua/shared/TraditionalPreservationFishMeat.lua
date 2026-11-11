@@ -65,6 +65,14 @@ F.HEAD_WEIGHT = 0.1
 F.HEAD_FOOD = 0.06
 -- Butchering XP for gutting a whole fish while packing it.
 F.PACK_GUTTING_XP = 5
+-- Charque (phase 3b): the red meat cuts that go in the salt as vanilla gives them, in the order of the meat
+-- stages' IconsForTexture. Pork waits for Country Ham: its fat goes rancid in the sun.
+F.MEAT_CUTS = { "Base.Beef", "Base.Steak", "Base.MuttonChop", "Base.Venison" }
+F.PACKED_FISH = "TraditionalPreservationFishMeat.SaltPackedFish"
+F.PACKED_MEAT = "TraditionalPreservationFishMeat.SaltPackedMeat"
+-- A cut is pressed when the salt has reached its middle: PRESS_HOURS for a MEAT_PRESS_WEIGHT cut (a Beef or a
+-- Venison), less by weight (a Steak about 29 hours), never under PRESS_MIN_HOURS. The heaviest cut sets the batch.
+F.MEAT_PRESS_WEIGHT = 0.5
 -- What a frame cold dries.
 F.COLD_FISH = { ["TraditionalPreservationFishMeat.GuttedFish"] = true, ["TraditionalPreservationFishMeat.FishHalf"] = true }
 
@@ -201,6 +209,8 @@ F.STAGES = {
     ["TraditionalPreservationFishMeat.FishHalf"] = { weight = 1, nutrition = 1, hunger = 1, prep = true },
     ["TraditionalPreservationFishMeat.ColdDriedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdDried", weight = 0.22, nutrition = 0.95, hunger = 0.7, matures = true },
     ["TraditionalPreservationFishMeat.SoakedColdFish"] = { name = "IGUI_TraditionalPreservationFishMeat_SoakedCold", weight = 3, nutrition = 1, hunger = 1 / 0.7, ripened = true },
+    ["TraditionalPreservationFishMeat.SaltPackedMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_Packed", weight = 1, nutrition = 1, hunger = 1 },
+    ["TraditionalPreservationFishMeat.SaltCuredMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_Cured", weight = 0.88, maxWeight = 0.93, nutrition = 1, hunger = 1 },
 }
 
 -- The low end of DryingCraftLogic's curve: nothing at freezing, 1 at 20 C. It stops there, so
@@ -392,17 +402,23 @@ function F.pressHours(heaviest)
     return F.PRESS_MIN_HOURS + share * (F.PRESS_HOURS - F.PRESS_MIN_HOURS)
 end
 
+-- Hours in the tub for a batch of meat whose heaviest cut weighs this much.
+function F.meatPressHours(heaviest)
+    return math.min(math.max(F.PRESS_HOURS * heaviest / F.MEAT_PRESS_WEIGHT, F.PRESS_MIN_HOURS), F.PRESS_HOURS)
+end
+
 -- The press runs on the plain game clock (no weather), timed from here. The inputs are already
--- taken in, so the batch's heaviest fish sets its hours.
+-- taken in, so the batch's heaviest fish or cut sets its hours.
 function F.onPressStart(craftRecipeData)
     Weather.startClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours())
     craftRecipeData:getModData().lastWarmCure = F.getLedger().warmCure
     local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
-    local heaviest = 0
+    local heaviest, meat = 0, false
     for i = 0, fish:size() - 1 do
         heaviest = math.max(heaviest, fish:get(i):getActualWeight())
+        meat = meat or fish:get(i):getFullType() == F.PACKED_MEAT
     end
-    craftRecipeData:getModData().pressHours = F.pressHours(heaviest)
+    craftRecipeData:getModData().pressHours = meat and F.meatPressHours(heaviest) or F.pressHours(heaviest)
 end
 
 -- The share of its keeping a batch has lost to a warm cure so far. A press started before this counts from now.
@@ -427,13 +443,19 @@ function F.onPressUpdate(craftRecipeData)
     Weather.showClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours(), F.PRESS_HOURS / hours)
 end
 
+-- A tub salts fish or meat, one batch at a time: what is waiting in it already sets the kind.
+function F.mixedTub(waitingType, fullType)
+    if waitingType and waitingType ~= fullType then return "IGUI_TraditionalPreservationFishMeat_MixedTub" end
+    return nil
+end
+
 function F.hasRoom(capacity, storedWeight, weight)
     return storedWeight + weight <= capacity
 end
 
 -- Vanilla slots take any item and leave Craft greyed out, so each station names its fish.
 function F.fishRefusal(isTub, fullType)
-    if isTub and fullType ~= "TraditionalPreservationFishMeat.SaltPackedFish" then return "IGUI_TraditionalPreservationFishMeat_NeedsPacked" end
+    if isTub and fullType ~= F.PACKED_FISH and fullType ~= F.PACKED_MEAT then return "IGUI_TraditionalPreservationFishMeat_NeedsPacked" end
     if not isTub and fullType ~= "TraditionalPreservationFishMeat.SaltPressedFish" and not F.COLD_FISH[fullType] then
         return "IGUI_TraditionalPreservationFishMeat_NeedsPressed"
     end
@@ -641,6 +663,9 @@ function F.iconIndex(source)
     if source:getModelIndex() >= 0 then return source:getModelIndex() end
     for index, fishType in ipairs(F.FISH_ICONS) do
         if fishType == fullType then return index - 1 end
+    end
+    for index, cutType in ipairs(F.MEAT_CUTS) do
+        if cutType == fullType then return index - 1 end
     end
     return -1
 end
@@ -1254,6 +1279,7 @@ end
 function F.applyRecipeTimes()
     F.applySandbox()
     applyRecipeTime("TraditionalPreservationFishMeat.PressSaltedFish", F.PRESS_HOURS)
+    applyRecipeTime("TraditionalPreservationFishMeat.PressSaltedMeat", F.PRESS_HOURS)
     applyRecipeTime("TraditionalPreservationFishMeat.HangFishToDry", F.DRY_HOURS)
     applyRecipeTime("TraditionalPreservationFishMeat.HangFishToColdDry", F.COLD_DRY_HOURS)
 end

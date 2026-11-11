@@ -14,6 +14,7 @@ local NAMES = {
     IGUI_TraditionalPreservationFishMeat_Packed = "Salt Packed",
     IGUI_TraditionalPreservationFishMeat_Pressed = "Salt Pressed",
     IGUI_TraditionalPreservationFishMeat_Dried = "Salt Dried",
+    IGUI_TraditionalPreservationFishMeat_Cured = "Salt Cured",
     IGUI_TraditionalPreservationFishMeat_Gutted = "Gutted %1",
     IGUI_TraditionalPreservationFishMeat_Half = "%1 Half",
     IGUI_TraditionalPreservationFishMeat_ColdDried = "Cold Dried",
@@ -87,7 +88,8 @@ local function newFood(fullType, values)
     function food:setModelIndex(value) self.modelIndex = value end
     function food:hasTag(tag)
         if tag == ItemTag.SALT then return self.salt == true end
-        return tag == ItemTag.UNCUT_FISH and self.fullType:sub(1, 5) == "Base." and self.fullType ~= "Base.FishFillet"
+        local meat = { ["Base.Beef"] = true, ["Base.Steak"] = true, ["Base.MuttonChop"] = true, ["Base.Venison"] = true }
+        return tag == ItemTag.UNCUT_FISH and self.fullType:sub(1, 5) == "Base." and self.fullType ~= "Base.FishFillet" and not meat[self.fullType]
     end
     function food:setWeight(value) self.weight = value end
     function food:getOffAge() return self.offAge or 120 end
@@ -1054,5 +1056,72 @@ local rinseRecipe = script:match("craftRecipe RinseSaltedFish(.-)\n    }\n")
 check("the recipe takes 0.15 L of clean water", rinseRecipe:find("-fluid " .. T.RINSE_LITRES .. " [Water]", 1, true) ~= nil)
 check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnTest = TraditionalPreservationFishMeat.canRinseInput", 1, true)
     and rinseRecipe:find("OnCreate = TraditionalPreservationFishMeat.onCreateRinsed", 1, true))
+
+-- Charque, phase 3b: red meat in the Salting Tub (a function of its own: the main chunk is at Lua's 200 locals)
+;(function()
+    check("a 0.5 cut presses for two days", T.meatPressHours(0.5) == 48)
+    check("a 0.3 cut, by weight", near(T.meatPressHours(0.3), 28.8))
+    check("never under a day, never over two", T.meatPressHours(0.1) == T.PRESS_MIN_HOURS and T.meatPressHours(2) == T.PRESS_HOURS)
+    local function meatPress(weights)
+        local cuts = {}
+        for i, weight in ipairs(weights) do cuts[i] = newFood(T.PACKED_MEAT, { ActualWeight = weight }) end
+        return newRecipeData(RECIPE_TIME, cuts)
+    end
+    local steaks = meatPress({ 0.3, 0.3 })
+    T.onPressStart(steaks)
+    check("a batch of steaks sets its own hours", near(steaks.modData.pressHours, 28.8))
+    local mixedCuts = meatPress({ 0.3, 0.5, 0.3 })
+    T.onPressStart(mixedCuts)
+    check("the heaviest cut sets the batch", mixedCuts.modData.pressHours == 48)
+    check("the press time is set for meat too", loaded["TraditionalPreservationFishMeat.PressSaltedMeat"] == "{ time = " .. T.PRESS_HOURS * 3600 .. ", }")
+
+    check("a tub takes packed meat", T.fishRefusal(true, T.PACKED_MEAT) == nil)
+    check("but not raw meat", T.fishRefusal(true, "Base.Steak") == "IGUI_TraditionalPreservationFishMeat_NeedsPacked")
+    check("a frame doesn't take meat yet", T.fishRefusal(false, T.PACKED_MEAT) and T.fishRefusal(false, "TraditionalPreservationFishMeat.SaltCuredMeat"))
+    check("an empty tub takes either", T.mixedTub(nil, T.PACKED_MEAT) == nil and T.mixedTub(nil, T.PACKED_FISH) == nil)
+    check("meat on meat is fine", T.mixedTub(T.PACKED_MEAT, T.PACKED_MEAT) == nil)
+    check("fish and meat never share a tub", T.mixedTub(T.PACKED_FISH, T.PACKED_MEAT) == "IGUI_TraditionalPreservationFishMeat_MixedTub"
+        and T.mixedTub(T.PACKED_MEAT, T.PACKED_FISH) == "IGUI_TraditionalPreservationFishMeat_MixedTub")
+
+    local steak = newFood("Base.Steak", { Calories = 220, Proteins = 31.62, Lipids = 9.35, BaseHunger = -0.4, HungChange = -0.4, ActualWeight = 0.3 })
+    steak.displayName = "Steak "
+    local packedSteak = through(steak, "SaltPackedMeat")
+    check("packing a cut keeps all of it", near(packedSteak.values.ActualWeight, 0.3) and packedSteak.values.Calories == 220)
+    check("its icon is the steak's", packedSteak.modelIndex == 1)
+    check("its name too", packedSteak.name == "Steak (Salt Packed)")
+    check("a cut has nothing to slice", not T.canSlice(packedSteak))
+    check("and no guts or head", not T.hasGuts(steak) and not T.hasHead(steak))
+    local curedSteak = through(packedSteak, "SaltCuredMeat")
+    check("curing takes 7 to 12 percent", near(curedSteak.values.ActualWeight, 0.3 * keptShare))
+    check("the cured cut keeps its food, icon and name", curedSteak.values.Calories == 220 and curedSteak.modelIndex == 1
+        and curedSteak.name == "Steak (Salt Cured)")
+    local venison = newFood("Base.Venison", { ActualWeight = 0.5 })
+    check("venison is the fourth icon", through(venison, "SaltPackedMeat").modelIndex == 3)
+    check("a Beef takes 4 salt, as a half-weight fish", T.saltFor(newFood("Base.Beef", { ActualWeight = 0.5 })) == 4
+        and T.saltFor(steak) == 4)
+    instanceof = function(_, name) return name == "Food" end
+    check("a cut is never too big to salt whole", T.canPack(newFood("Base.Beef", { ActualWeight = 5 }), nil))
+    instanceof = nil
+
+    local meatScript = io.open("42/media/scripts/TraditionalPreservationFishMeat_Meat.txt"):read("*a")
+    local cutList = meatScript:match("craftRecipe PackMeatInSalt.-item 1 %[([^%]]+)%]")
+    check("the pack recipe takes the cuts in MEAT_CUTS", cutList == table.concat(T.MEAT_CUTS, ";"))
+    check("pork waits for Country Ham", not cutList:find("Pork", 1, true))
+    for _, stage in ipairs({ "SaltPackedMeat", "SaltCuredMeat" }) do
+        local body = meatScript:match("item " .. stage .. "%s*{(.-)}")
+        local icons = body:match("IconsForTexture = ([^,]+),")
+        local count, missing = 0, {}
+        for icon in icons:gmatch("[^;]+") do
+            count = count + 1
+            local file = io.open("42/media/textures/Item_" .. icon .. ".png", "rb")
+            if file then file:close() else table.insert(missing, icon) end
+        end
+        check(stage .. " has an icon for each cut", count == #T.MEAT_CUTS and #missing == 0)
+        local models = body:match("WorldStaticModelsByIndex = ([^,]+),")
+        local modelCount = select(2, models:gsub("[^;]+", ""))
+        check(stage .. " has a model for each cut", modelCount == #T.MEAT_CUTS)
+    end
+    check("both press recipes are the tub's", meatScript:find("craftRecipe PressSaltedMeat%s*{%s*time = %d+,%s*Tags = SaltingTub") ~= nil)
+end)()
 
 H.done()
