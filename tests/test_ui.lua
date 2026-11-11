@@ -14,6 +14,7 @@ require = function(name)
     if name:find("^TraditionalPreservationFishMeat/") or name:find("^TraditionalPreservationCore/") then return realRequire(name) end
 end
 dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
+dofile("42/media/lua/shared/TraditionalPreservationFishMeatPotted.lua")
 
 local halos, vanillaVerdict, vanillaUps, addCalls = {}, true, 0, 0
 ResourceIO = { Input = "input", Output = "output" }

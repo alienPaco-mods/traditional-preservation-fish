@@ -21,5 +21,7 @@
   "Sandbox_TraditionalPreservationFishMeat_Charque": "Charque",
   "Sandbox_TraditionalPreservationFishMeat_Charque_tooltip": "Beef, steak, mutton and venison can be packed in the Salting Tub and sun dried on the drying stations as charque. Off, meat isn't salted.",
   "Sandbox_TraditionalPreservationFishMeat_CharqueDays": "Charque drying time (days)",
-  "Sandbox_TraditionalPreservationFishMeat_CharqueDays_tooltip": "Days to dry charque in hot sun (25 C and up) and a breeze. Kentucky's summer makes it about 7 to 11 under a roof; real charque takes 4 to 6."
+  "Sandbox_TraditionalPreservationFishMeat_CharqueDays_tooltip": "Days to dry charque in hot sun (25 C and up) and a breeze. Kentucky's summer makes it about 7 to 11 under a roof; real charque takes 4 to 6.",
+  "Sandbox_TraditionalPreservationFishMeat_PottedByPlace": "Potted Meat keeps by place",
+  "Sandbox_TraditionalPreservationFishMeat_PottedByPlace_tooltip": "A crock of Potted Meat keeps 120 days in a fridge or a cold month, 60 in a basement; a room follows the season, from as long as a fridge in winter to 14 days in summer; and the first portion taken costs a third of the time it has left. Off, it keeps 60 days anywhere, as plain food."
 }

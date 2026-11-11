@@ -76,3 +76,10 @@ option TraditionalPreservationFishMeat.CharqueDays {
     page = TraditionalPreservationFishMeat,
     translation = TraditionalPreservationFishMeat_CharqueDays,
 }
+
+option TraditionalPreservationFishMeat.PottedByPlace {
+    type = boolean,
+    default = true,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_PottedByPlace,
+}

@@ -6,6 +6,8 @@
 -- jar or pot back.
 TraditionalPreservationFishMeat = TraditionalPreservationFishMeat or {}
 local F = TraditionalPreservationFishMeat
+local Weather = require "TraditionalPreservationCore/Weather"
+local FluidAgeing = require "TraditionalPreservationCore/FluidAgeing"
 
 -- Pork joins the Salting Tub's cuts here: kept under fat and out of the sun, its own fat doesn't go rancid.
 F.POTTED_CUTS = {
@@ -210,12 +212,121 @@ function F.afterCrockUse(crock, container)
     return target and target:AddItem(crock:getModData().tpfmVessel or "Base.ClayJar")
 end
 
+-- Keeping by place (4c). The crock's script days (60 fresh, 90 to rotten) are a cellar's, so a day at the cellar's
+-- 15 C counts as a day of age; a fridge (4 C) or a cold month counts half (120 / 180), a warm room up to 60/14
+-- (14 / 21 at 25 C and up); a room goes by the season's mean (F.pottedTemperature). Modern advice is under 4 C and about three months; the cold figure follows cellar
+-- practice. A crock carries its own clock in modData tpfmKeep = { base = its age when the clock started, record = a
+-- FluidAgeing record (kind potted) on the mod's potted ledger }, so one left in a basement for a month catches up
+-- when it is next seen: its age is base plus the record's hours. A powered freezer stops it. Vanilla ages it between
+-- looks at its own rate; each look puts that right.
+F.POTTED_KEEPING = { { 4, 0.5 }, { 15, 1 }, { 25, 60 / 14 } }
+-- The first portion taken lets air under the fat: a third of the keeping left goes, once.
+F.POTTED_OPENED_LOSS = 1 / 3
+F.POTTED_LEDGER_KEY = "TraditionalPreservationFishMeatPotted"
+-- Vanilla's Food Spoilage sandbox steps (Food.getFoodRotSpeed: very fast to very slow).
+local ROT_SPEEDS = { 1.7, 1.4, 1, 0.7, 0.4 }
+
+local function keepRate(celsius)
+    return Weather.curve(F.POTTED_KEEPING, celsius)
+end
+local POTTED_KINDS = { potted = keepRate }
+F.POTTED_KEEP = {
+    kind = "potted", rate = keepRate,
+    speed = function() return ROT_SPEEDS[SandboxVars and SandboxVars.FoodRotSpeed] or 1 end,
+}
+
+-- The sandbox's "Potted Meat keeps by place"; off, a crock keeps its script days anywhere, as plain food.
+function F.pottedByPlace()
+    local options = SandboxVars and SandboxVars.TraditionalPreservationFishMeat
+    return not options or options.PottedByPlace ~= false
+end
+
+function F.newPottedLedger(now)
+    return Weather.newLedger(now, POTTED_KINDS)
+end
+
+function F.pottedLedger()
+    return Weather.getLedger(F.POTTED_LEDGER_KEY, F.newPottedLedger)
+end
+
+-- A crock's temperature at a Weather place. A room is the season's mean, not Weather's season plus ten: a pantry
+-- or a shed isn't heated, and the shared rule (made for the drying stations) would make every room above ground
+-- 25 C from spring to autumn (user, 2026-11-11). Outdoors and a basement as Weather has them.
+function F.pottedTemperature(ledger, place)
+    if place == "Sheltered" then return ledger.seasonTemperature or ledger.temperature or 0 end
+    return Weather.placeTemperature(ledger, place)
+end
+
+-- Adds a stretch of weather to the potted ledger (every ten minutes), as Weather.advance does but with
+-- F.pottedTemperature.
+function F.recordPotted(now, temperature)
+    local ledger = F.pottedLedger()
+    local hours = now - ledger.lastHour
+    if hours <= 0 then return end
+    ledger.lastHour = now
+    Weather.season(ledger, "seasonTemperature", temperature, hours)
+    ledger.temperature = temperature
+    for _, place in ipairs(Weather.PLACES) do
+        local rate = keepRate(F.pottedTemperature(ledger, place))
+        ledger["potted" .. place .. "Rate"] = rate
+        ledger["potted" .. place] = (ledger["potted" .. place] or 0) + rate * hours
+    end
+end
+
+-- How fast a crock keeps at a place now: FluidAgeing's place names (Fridge, Freezer, or a Weather place).
+function F.pottedRate(place, ledger)
+    if place == FluidAgeing.FREEZER then return 0 end
+    if place == FluidAgeing.FRIDGE then return keepRate(FluidAgeing.FRIDGE_C) end
+    return keepRate(F.pottedTemperature(ledger or F.pottedLedger(), place or "Sheltered"))
+end
+
+-- Brings a crock's age up to now at the place it was seen in last, and counts from where it is now (place, or
+-- where the crock is). The first look starts its clock. Returns its tpfmKeep, or nil with keeping by place off.
+function F.keepCrock(crock, now, place, ledger)
+    if not F.pottedByPlace() then return nil end
+    now = now or getGameTime():getWorldAgeHours()
+    ledger = ledger or F.pottedLedger()
+    local data = crock:getModData()
+    local keep = data.tpfmKeep
+    place = place or FluidAgeing.placeOfItem(crock) or (keep and keep.record.place) or "Sheltered"
+    if not keep then
+        keep = { base = crock:getAge(), record = FluidAgeing.newRecord(F.POTTED_KEEP, ledger, now, place) }
+        data.tpfmKeep = keep
+        return keep
+    end
+    FluidAgeing.advance(keep.record, F.POTTED_KEEP, ledger, now, place)
+    crock:setAge(keep.base + keep.record.age / 24)
+    return keep
+end
+
+-- Every crock in an item container (and the bags in it).
+function F.keepCrocksIn(container, now)
+    local crocks = container and container:getAllTypeRecurse(F.CROCK)
+    for i = 0, crocks and crocks:size() - 1 or -1 do F.keepCrock(crocks:get(i), now) end
+end
+
+-- The first portion taken: a third of what the crock has left until stale (or, stale already, until rotten) goes.
+function F.openCrock(crock)
+    local data = crock:getModData()
+    if data.tpfmOpened then return end
+    data.tpfmOpened = true
+    local keep = F.keepCrock(crock)
+    if not keep then return end
+    local age = crock:getAge()
+    local limit = age < crock:getOffAge() and crock:getOffAge() or crock:getOffAgeMax()
+    keep.record.age = keep.record.age + math.max(limit - age, 0) * F.POTTED_OPENED_LOSS * 24
+    crock:setAge(keep.base + keep.record.age / 24)
+end
+
 local function wrapEat(name)
     local original = ISEatFoodAction[name]
     ISEatFoodAction[name] = function(self, ...)
         local crock = self.item and self.item:getFullType() == F.CROCK and self.item
         local container = crock and crock:getContainer()
+        local before = crock and F.crockPortions(crock)
+        if crock then F.keepCrock(crock) end
         local result = original(self, ...)
+        if crock and F.crockPortions(crock) < before then F.openCrock(crock) end
         if crock then F.afterCrockUse(crock, container) end
         return result
     end

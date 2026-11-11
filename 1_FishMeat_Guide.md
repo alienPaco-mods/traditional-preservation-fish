@@ -363,12 +363,23 @@ Potted Meat is the road for any season and any red meat, pork too: cuts cooked s
 
 | | Pot of Meat in Fat | Crock of Potted Meat |
 |---|---|---|
-| Keeps | 2 / 4 days, as raw meat | **60 / 90 days** |
+| Keeps | 2 / 4 days, as raw meat | **by place: see below** |
 | Holds | 1 to 4 cuts | a portion a cut |
 | Food | the cuts, plus a quarter block of fat for each | the same, cold and ready to eat |
 | Eat it? | No: cook it, then pack it | Yes |
 
 **A portion** is the cut's own food plus a quarter of the fat, about 1,000 calories of it. A full crock of four is around **5,000 calories**: few foods carry more. Fewer than four cuts leave the rest of the block behind in the pot, so cook four at a time when you can.
+
+**Where you keep it.** The crock keeps by the temperature it sits in, and it remembers: one left a month in a basement has aged a basement's month when you next look.
+
+| Place | Fresh | Rotten |
+|---|---|---|
+| Powered fridge, or 4 C and colder outdoors | **120 days** | 180 days |
+| Basement (15 C all year) | **60 days** | 90 days |
+| A room, by the season | **120 to 14 days** | 180 to 21 days |
+| Powered freezer | stops | stops |
+
+A pantry, kitchen or shed is unheated: it follows the average of the last ten days outdoors, on any floor. A winter pantry keeps it like a fridge, a spring or autumn one about two months, a July one barely two weeks. **The first portion you take** lets air under the fat: a third of the time the crock has left goes at once, only that once. Open it when you mean to eat it out.
 
 **The fat counts.** A Lard that has been used in cooking only gives what is left of it: a tenth of a block covers one cut with a tenth of the fat, and the next cut gets none.
 
@@ -431,6 +442,7 @@ Potted Meat is the road for any season and any red meat, pork too: cuts cooked s
 | Butchering gives fat | On | Off, butchering gives no fat and Lard is loot only, as in the base game |
 | Charque | On | Off, meat can't be packed in salt or hung |
 | Charque drying time (days) | 5 | In hot sun and a breeze. Kentucky's summer makes it about 7 to 11 under a roof; the real charqueadas took 4 to 6 |
+| Potted Meat keeps by place | On | Off, a crock keeps 60 / 90 days anywhere, as plain food, and opening it costs nothing |
 
 ---
 
@@ -458,6 +470,8 @@ Potted Meat is the road for any season and any red meat, pork too: cuts cooked s
 | `TPFM.cured(n)` | Spawns `n` each of those cuts already Salt Cured, ready to hang. |
 | `TPFM.fatPot(state)` | Spawns a Pot of Pork Fat, cooked (the default), `"burnt"` or `"raw"`: Pour Off Lard gives the melted fat Potted Meat can use. |
 | `TPFM.potted()` | Spawns what Potted Meat takes: a Pot, Lard, Salt, a Steak, Beef, Pork Chop and Pork, and a Clay Jar, Glazed Clay Jar and Clay Pot. |
+| `TPFM.crocks()` | Each Crock of Potted Meat on you or within 4 tiles: where it is, how fast it keeps there, days until stale and rotten. |
+| `TPFM.keep(days)` | Ages those crocks by this many days at their place. |
 
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.
 

@@ -91,6 +91,7 @@ local function tick(times)
 end
 
 dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
+dofile("42/media/lua/shared/TraditionalPreservationFishMeatPotted.lua")
 dofile("42/media/lua/server/TraditionalPreservationFishMeatWorld.lua")
 local T, W = TraditionalPreservationFishMeat, TraditionalPreservationFishMeatWorld
 local PRESSED, GUTTED = "TraditionalPreservationFishMeat.SaltPressedFish", "TraditionalPreservationFishMeat.GuttedFish"

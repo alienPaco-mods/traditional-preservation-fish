@@ -1,5 +1,14 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.6
+- **Potted Meat keeps by place** (ROADMAP §7, phase 4c): a crock carries its own clock on a new weather ledger
+  (global ModData `TraditionalPreservationFishMeatPotted`, kind `potted`) and catches up when next seen, at the place
+  it was seen in last (Core's FluidAgeing record and place rules). A cellar's 15 C keeps the script's 60 / 90 days;
+  a powered fridge or 4 C and colder 120 / 180; 14 / 21 at 25 C and up; a room goes by the season's mean (not the drying stations' season + 10, which made every pantry 25 C from spring to autumn); a powered freezer stops it.
+  Vanilla's Food Spoilage setting scales it. **The first portion taken** costs a third of the days it has left,
+  once (`tpfmOpened`). Looked at every hour on the player, when a loot window shows it and as it is moved. Sandbox
+  **Potted Meat keeps by place** (on); off, a crock is plain food again. `TPFM.crocks()`, `TPFM.keep(days)`; tests.
+
 ## 0.4.5
 - **Potted Meat** (ROADMAP §7, phase 4b): **Put Meat in Lard or Tallow** (an empty Pot, a block of Lard or Tallow,
   a cut, Salt) or **Put Meat in the Melted Fat** (a pot of 0.5 L Melted Lard or Tallow, as Pour Off leaves it) gives

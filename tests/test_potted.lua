@@ -37,6 +37,10 @@ local function newFood(fullType, v)
     function item:isBurnt() return self.burnt == true end
     function item:isCooked() return self.cooked == true end
     function item:getContainer() return self.container end
+    function item:getOffAge() return v.offAge or 60 end
+    function item:getOffAgeMax() return v.offAgeMax or 90 end
+    function item:getOutermostContainer() return nil end
+    function item:getWorldItem() return nil end
     return item
 end
 
@@ -64,6 +68,9 @@ end } }
 getItemNameFromFullType = function() return "Crock of Potted Meat" end
 Perks = { Cooking = "Cooking" }
 local xp = 0
+H.installClock(0)
+local globalData = {}
+ModData = { getOrCreate = function(key) globalData[key] = globalData[key] or {} return globalData[key] end }
 addXp = function(_, perk, amount) if perk == Perks.Cooking then xp = xp + amount end end
 
 -- A stub eat action, wrapped by the mod as the game's is: it eats a share of the item's food.
@@ -146,6 +153,71 @@ ISEatFoodAction.complete({ item = crock, share = 2 / 3 })
 check("one portion reads singular", crock.name == "Crock of Potted Meat (1 portion)")
 ISEatFoodAction.serverStop({ item = crock, share = 1 })
 check("the last bite gives the glazed jar back", not container:contains(crock) and container.added == "Base.ClayJarGlazed")
+
+-- Keeping by place (4c): a day in a basement is a day of the crock's script age
+local ledger = F.pottedLedger()
+local function keptCrock()
+    local item = newFood(CROCK, {})
+    F.keepCrock(item, 0, "Basement", ledger)
+    return item
+end
+local cellar, cold, fridge, freezer, warm = keptCrock(), keptCrock(), keptCrock(), keptCrock(), keptCrock()
+for _, item in ipairs({ cold, fridge, freezer, warm }) do F.keepCrock(item, 0, "Open", ledger) end
+F.keepCrock(fridge, 0, "Fridge", ledger)
+F.keepCrock(freezer, 0, "Freezer", ledger)
+F.keepCrock(warm, 0, "Sheltered", ledger)
+-- A cold snap in a hot season: 0 C outdoors, a room at the season's mean, 25 C.
+for hour = 1, 240 do
+    ledger.seasonTemperature = 25
+    F.recordPotted(hour, 0)
+end
+for _, item in ipairs({ cellar, cold, fridge, freezer, warm }) do F.keepCrock(item, 240, nil, ledger) end
+check("ten days in a basement age it ten days", near(cellar.age, 10, 1e-6))
+check("ten days outdoors at 0 C age it five", near(cold.age, 5, 1e-6))
+check("ten days in a fridge age it five, by the clock", near(fridge.age, 5, 1e-6))
+check("a freezer stops it", near(freezer.age, 0))
+-- The ledger's season mean slips a little towards the 0 C days each hour, so a room reads a hair under 25 C.
+check("a room in a hot season (25 C) ages it about 60/14 as fast", near(warm.age, 10 * 60 / 14, 0.5))
+ledger.seasonTemperature = 25
+check("so a basement keeps it 60 days, the cold 120, a warm room 14",
+    near(F.pottedRate("Basement", ledger), 1) and near(F.pottedRate("Fridge", ledger), 0.5)
+    and near(60 / F.pottedRate("Sheltered", ledger), 14, 1e-6))
+ledger.seasonTemperature = 15
+check("a room in a 15 C season keeps it as a basement does, not as Weather's 25 C room", near(F.pottedRate("Sheltered", ledger), 1))
+ledger.seasonTemperature = 2
+check("and in a winter season as a fridge", near(F.pottedRate("Sheltered", ledger), 0.5))
+check("an unseen crock keeps counting where it was last seen", cellar.modData.tpfmKeep.record.place == "Basement")
+
+-- The first portion taken costs a third of the keeping left, once
+local opened = keptCrock()
+opened.modData.tpfmPortion = { hunger = -0.5 }
+opened.hunger = -2
+opened.age, opened.modData.tpfmKeep.base = 10, 10
+local box = { items = { [opened] = true } }
+function box:contains(item) return self.items[item] == true end
+function box:DoRemoveItem(item) self.items[item] = nil end
+function box:AddItem(fullType) return fullType end
+opened.container = box
+H.hours = 240
+ISEatFoodAction.complete({ item = opened, share = 0.25 })
+check("the first portion takes a third of the 50 days left", near(opened.age, 10 + 50 / 3, 1e-4) and opened.modData.tpfmOpened)
+local afterOpening = opened.age
+ISEatFoodAction.complete({ item = opened, share = 1 / 3 })
+check("the second takes nothing more", near(opened.age, afterOpening, 1e-6))
+local stale = keptCrock()
+stale.age, stale.modData.tpfmKeep.base = 75, 75
+F.openCrock(stale)
+check("a stale crock loses a third of its days to rotten", near(stale.age, 80, 1e-6))
+
+-- Keeping by place off: plain food
+SandboxVars = { TraditionalPreservationFishMeat = { PottedByPlace = false } }
+local plain = newFood(CROCK, { age = 4 })
+check("off, a crock gets no clock", F.keepCrock(plain, 240, "Sheltered", ledger) == nil and plain.modData.tpfmKeep == nil)
+F.openCrock(plain)
+check("and no opening loss", plain.age == 4)
+SandboxVars = { FoodRotSpeed = 1, TraditionalPreservationFishMeat = {} }
+check("vanilla's Very Fast food spoilage speeds it up", near(F.POTTED_KEEP.speed(), 1.7))
+SandboxVars = nil
 
 check("text checks", #H.textWarnings == 0)
 H.done()

@@ -4,6 +4,7 @@
 -- same rules decide the slot's green border, so it never promises what adding then refuses.
 require "Entity/ISUI/Components/Crafting/ISCraftLogicPanel"
 require "Entity/ISUI/Controls/ISItemSlot"
+require "TimedActions/ISInventoryTransferAction"
 local UI = require "TraditionalPreservationCore/UI"
 local Weather = require "TraditionalPreservationCore/Weather"
 local Tiles = require "TraditionalPreservationFishMeat/Tiles"
@@ -160,12 +161,14 @@ UI.notInRooms(Tiles.OUTDOOR)
 
 -- Fish names and the stockfish's ripeness follow the days: the player's own things every hour, and any
 -- container as soon as the inventory windows show it. Names from before the bracket names update the same way.
+-- Crocks of Potted Meat catch up on their keeping the same way (F.keepCrock).
 local function renameIn(container)
     if not container then return end
     for fullType in pairs(F.STAGES) do
         local items = container:getAllTypeRecurse(fullType)
         for i = 0, items:size() - 1 do F.rename(items:get(i)) end
     end
+    F.keepCrocksIn(container)
 end
 
 Events.EveryHours.Add(function()
@@ -179,6 +182,16 @@ Events.OnRefreshInventoryWindowContainers.Add(function(page, reason)
     if reason ~= "end" then return end
     for _, button in ipairs(page.backpacks or {}) do renameIn(button.inventory) end
 end)
+
+-- A crock is looked at as it is moved, while it is still where it was, so its time there counts at that place.
+-- Outside the game (tests) there is no transfer action.
+if ISInventoryTransferAction then
+    local vanillaTransferItem = ISInventoryTransferAction.transferItem
+    function ISInventoryTransferAction:transferItem(item)
+        if item and item:getFullType() == F.CROCK then F.keepCrock(item) end
+        return vanillaTransferItem(self, item)
+    end
+end
 
 -- Rinse at Sink: the Rinse recipe takes carried water, and this takes it from the nearest sink, bathtub, barrel or
 -- well of clean water, walking there. It goes in the fish's own submenu, beside the recipe, for every selected fish.

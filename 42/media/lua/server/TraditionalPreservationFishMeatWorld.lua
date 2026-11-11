@@ -149,6 +149,7 @@ Weather.record(function(now, climate)
         isSnow = climate:getPrecipitationIsSnow(),
         wind = climate:getWindIntensity(),
     })
+    F.recordPotted(now, climate:getTemperature())
 end)
 
 tracker.start()

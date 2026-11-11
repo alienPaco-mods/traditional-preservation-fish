@@ -37,6 +37,9 @@ function TPFM.help()
     say("TPFM.fatPot(state)         spawn a Pot of Pork Fat: \"cooked\" (the default), \"burnt\" or \"raw\"")
     say("TPFM.fatRows()             the fat each vanilla animal's butchering table gives now")
     say("TPFM.potted()              spawn a Pot, Lard, Salt, four cuts and the three clay vessels for Potted Meat")
+    say("TPFM.crock(count)          spawn full Crocks of Potted Meat (four Steaks in Lard each, in a Glazed Clay Jar)")
+    say("TPFM.crocks()              each Crock of Potted Meat on you or within 4 tiles: place, keeping rate, days left")
+    say("TPFM.keep(days)            age those crocks by this many days at their place's rate now")
     say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up curing.")
 end
 
@@ -237,6 +240,69 @@ function TPFM.potted()
         give(fullType)
     end
     say("Gave a Pot, Lard, Salt, Steak, Beef, Pork Chop, Pork and a Clay Jar, Glazed Clay Jar and Clay Pot.")
+end
+
+function TPFM.crock(count)
+    local batch = F.newPottedBatch(nil)
+    for _ = 1, F.POTTED_MAX do F.addPottedCut(batch, instanceItem("Base.Steak")) end
+    for _, crock in ipairs(give(F.CROCK, count)) do F.fillCrock(crock, batch, "Base.ClayJarGlazed") end
+    say(string.format("Gave %d full Crock(s) of Potted Meat.", count or 1))
+end
+
+-- Crocks carried, and in containers within CROCK_REACH tiles on the player's floor.
+local CROCK_REACH = 4
+local function nearbyCrocks()
+    local player, found = getPlayer(), {}
+    local function add(container)
+        local crocks = container and container:getAllTypeRecurse(F.CROCK)
+        for i = 0, crocks and crocks:size() - 1 or -1 do table.insert(found, crocks:get(i)) end
+    end
+    add(player:getInventory())
+    local cell, x, y, z = getCell(), player:getX(), player:getY(), player:getZ()
+    for dx = -CROCK_REACH, CROCK_REACH do
+        for dy = -CROCK_REACH, CROCK_REACH do
+            local square = cell:getGridSquare(x + dx, y + dy, z)
+            local objects = square and square:getObjects()
+            for i = 0, objects and objects:size() - 1 or -1 do
+                local object = objects:get(i)
+                for c = 0, object:getContainerCount() - 1 do add(object:getContainerByIndex(c)) end
+            end
+        end
+    end
+    return found
+end
+
+function TPFM.crocks()
+    if not F.pottedByPlace() then say("Potted Meat keeping by place is off in the sandbox.") end
+    local crocks, ledger = nearbyCrocks(), F.pottedLedger()
+    if #crocks == 0 then return say("No Crock of Potted Meat on you or within " .. CROCK_REACH .. " tiles.") end
+    for _, crock in ipairs(crocks) do
+        F.keepCrock(crock)
+        local keep = crock:getModData().tpfmKeep
+        local place = keep and keep.record.place or "?"
+        local rate = F.pottedRate(place, ledger) * F.POTTED_KEEP.speed()
+        local age = crock:getAge()
+        local function left(limit)
+            if age >= limit then return "past" end
+            return rate > 0 and string.format("%.0f d", (limit - age) / rate) or "never"
+        end
+        say(string.format("%s in %s: x%.2f (%.0f days fresh here), age %.1f d, stale in %s, rotten in %s%s",
+            crock:getDisplayName(), place, rate, rate > 0 and crock:getOffAge() / rate or 0, age,
+            left(crock:getOffAge()), left(crock:getOffAgeMax()), crock:getModData().tpfmOpened and ", opened" or ""))
+    end
+end
+
+function TPFM.keep(days)
+    days = days or 10
+    local crocks, ledger = nearbyCrocks(), F.pottedLedger()
+    for _, crock in ipairs(crocks) do
+        local keep = F.keepCrock(crock)
+        if keep then
+            keep.record.age = keep.record.age + days * 24 * F.pottedRate(keep.record.place, ledger) * F.POTTED_KEEP.speed()
+            crock:setAge(keep.base + keep.record.age / 24)
+        end
+    end
+    say(string.format("Kept %d crock(s) for %d days at their places. TPFM.crocks() to see them.", #crocks, days))
 end
 
 function TPFM.fatRows()
