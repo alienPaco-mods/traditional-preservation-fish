@@ -16,6 +16,7 @@ Preserve your catch and your kill the old way. Salt fish, cure it and hang it to
 [*]Gutting and packing give Fish Guts for chum, and gutting a big fish gives a Fish Head for the pot
 [*]Charque: beef, mutton and venison salted in the same tub and sun dried on the same stations, for months of keeping
 [*]Potted Meat: beef, mutton, venison or pork cooked in Lard or Tallow with salt and packed into a clay jar, eaten by the portion
+[*]A Smokehouse: a plank shed for salt fish and charque, out of the rain, that a stone Firebox can be joined to
 [*]Butchered pigs, cattle and sheep give fat: melt it in a pot on any fire, or a whole pig's worth in the Hearth's copper, and strain it for Lard, Tallow and Cracklings
 [/list]
 
@@ -136,6 +137,15 @@ Rehydrating doesn't bring back calories lost to drying. Salt fish keeps about 90
 [*][b]Add Meat to the Pot:[/b] up to four cuts, as a block of fat covers four. Beef, Steak, Mutton Chop, Venison, Pork and Pork Chop.
 [*]Cook it two hours on any stove or fire. It can burn.
 [*][b]Pack Potted Meat[/b] into a Clay Jar, Glazed Clay Jar or Clay Pot: a Crock of Potted Meat, one portion a cut with its share of the fat. Eat it by the portion; the jar comes back with the last bite. Keeps by place: about 4 months in a fridge or the cold, 2 in a basement, in a pantry by the season (2 weeks in summer), and the first portion taken costs a third of what is left.
+[/list]
+
+[h2]Smokehouse[/h2]
+Build menu, Furniture. Carpentry 3: 14 planks, 20 nails and a hammer (kept). Two tiles long; open air or under an open roof, not in a room.
+[list]
+[*]Holds 6 stacks of up to 15 weight of Salt Cured fish or meat. Inside it is always indoors: no rain, no wind, about two thirds of the open drying speed. No stockfish: gutted fish need moving air.
+[*][b]Connect the Firebox[/b] (from TP Core) on a tile beside it: a clay pipe (2 Clay Pipe Segments, 1 Clay, mason's trowel kept) or a stone trench (3 Flat Stones, 2 Clay, shovel kept). Not at the door end, not with the Firebox's door towards the shed, one Firebox a shed, and only with the fire out. [b]Disconnect[/b] gives the pipe or stones back. Joined, neither can be picked up.
+[*]The tile in front of its door must stay clear.
+[*]For now the shed dries the same with or without a fire: joining lays the flue.
 [/list]
 
 [h2]Fish Guts, heads and slicing[/h2]

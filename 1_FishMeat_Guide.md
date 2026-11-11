@@ -19,6 +19,7 @@
 9¾. The Butcher's Block: Fat, Lard and Tallow
 9⅞. Charque: Sun-Dried Beef
 10. Potted Meat: Meat Under Fat
+10½. The Smokehouse
 11. Tips from the Docks
 12. Troubleshooting
 13. Sandbox Settings
@@ -128,6 +129,7 @@ Pick **Hang Salt Cured Fish to Dry**, load cured fish, press **Craft**. Each pre
 | **Fish Drying Frame** | Carpentry 2, Fishing 2 | 6 long sticks, 3 nails, 4 twine | 8 stacks × 2.5 weight | Indoors or out |
 | **Fish Hanging Beam** | Carpentry 4, Fishing 2 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight | **Open air or under an open roof**, not in a room |
 | **Fish Gantry** | Carpentry 6, Fishing 2 | 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks × 50 weight | **Open air or under an open roof**, not in a room |
+| **Smokehouse** | Carpentry 3 | 14 planks, 20 nails | 6 stacks × 15 weight | **Open air or under an open roof**, not in a room; two tiles; its door needs the tile in front free |
 
 The Hanging Beam and Gantry work exactly like the frame, with bigger stacks. Use them for **big fish** that won't fit the frame's 2.5-weight stacks.
 
@@ -393,6 +395,46 @@ A pantry, kitchen or shed is unheated: it follows the average of the last ten da
 
 ---
 
+## 10½. The Smokehouse
+
+A plank shed two tiles long under one sloping roof, the door on the high end with a smoke slot under the eave. You hang salt fish and charque inside it, out of the rain and the sun.
+
+| | |
+|---|---|
+| Build | Carpentry 3: **14 planks, 20 nails**, hammer kept (Build menu, Furniture) |
+| Holds | **6 stacks** of up to **15 weight** |
+| Takes | **Hang Salt Cured Fish** and **Hang Salt Cured Meat** (charque) only |
+| Inside | always **Indoors**: no rain, no wind, wherever the shed stands |
+| Stands | in the open or under an open roof, not inside a room |
+
+1. **Build it** with the door facing where you'll walk up to it. The tile in front of the door must be clear, and nothing can be built there afterwards.
+2. **Click either tile**: one window, **Smokehouse**, with the frame's hanging recipes. Load Salt Cured fish or meat as on a frame.
+3. **It dries like a room.** Salt fish and charque both run at about **two thirds** of their open speed (see the Almanac and the Charque tables, *Indoors* column), but rain never stops them. Nothing hangs in sight: hover a stack in the window to see how far along it is.
+4. **No stockfish.** Gutted fish needs moving air, so the shed doesn't offer cold drying, and a gutted fish is refused at the slot.
+5. **Moving it:** empty, it picks up as one item and puts down again as both tiles.
+
+### Joining a Firebox
+
+The **Firebox** comes from *Traditional Preservation (Core)* (Masonry 2, 8 Clay Bricks, 2 Clay, trowel kept; see the Core Guide). Build one on a tile beside the shed, then lay its flue into the wall.
+
+| Way | Takes | Tool kept | Comes back on Disconnect |
+|---|---|---|---|
+| **With a Clay Pipe** | 2 Clay Pipe Segments, 1 Clay | Mason's Trowel | 2 Clay Pipe Segments |
+| **With a Stone Trench** | 3 Flat Stones, 2 Clay | Shovel, Spade or Entrenching Tool | 3 Flat Stones |
+
+- **Connect the Firebox** is on the Firebox's own menu and on the shed's right-click. No skill; about half an hour of work and a little Masonry experience. The clay is lost when you take the flue up.
+- **Where it may stand:** beside either long side of the shed, or behind its back end. Not at the door end (that tile stays free), and **not with the Firebox's own door towards the shed**: its flue leaves from its back or a flank.
+- **One Firebox to a shed**, and the fire must be **out** (not lit, not banked) to connect or disconnect.
+- **Joined, neither moves:** the Firebox and the shed can't be picked up until you **Disconnect the Firebox**.
+- **What you see:** the clay pipe climbs from the Firebox's top and runs into the wall through a collar of clay; a trench runs from its foot under flat stones. **Firebox Info** says where its flue goes.
+- **For now the shed dries the same with or without a fire.** Joining the Firebox lays the flue and nothing more yet.
+
+> ✏ **Margin note:** the low firebox outside the wall is how many a Bosnian *pušnica* is fed today: the fire stays outside where it can be tended and kept small, and only its smoke goes in. A long trench under flat stones cools the smoke on its way to the meat.
+
+> 📝 **Margin note:** why may nothing stand in front of a door? The same rule holds for the Hearth's open mouth and the Firebox's door: you have to be able to reach the fire and the hooks. It also keeps a Firebox from being built against the shed's door.
+
+---
+
 ## 11. Tips from the Docks
 
 - **Fillets don't cheat the salt.** A vanilla fillet weighs 5% of its fish but holds half its food, so salted it pays and weighs as half the gutted fish. Fillets cut from a cured fish weigh half of it.
@@ -425,6 +467,10 @@ A pantry, kitchen or shed is unheated: it follows the average of the last ten da
 | Pack Fish in Salt won't take a fish | A whole or gutted fish over 4.5 weight must be split first; or you don't carry enough salt for its size |
 | No Fish Head from gutting | The fish was 1.0 weight or less, or it was packed in salt (salted fish keep their heads) |
 | Create Fish Head Stock missing | The pot needs the full 1.5 L of water |
+| Smokehouse or Firebox won't build there | Something stands in front of its door (or of a Hearth's or Firebox's door next to it), or a wall is on that edge. Turn it, or clear the tile |
+| Connect the Firebox is greyed out | It stands at the shed's door end, its own door faces the shed, the shed already has a Firebox, or the fire is lit or banked. Hover it for the reason |
+| Can't pick up the Firebox or the Smokehouse | They're joined: Disconnect the Firebox first |
+| Smokehouse refuses gutted fish | It has no moving air. Cold drying needs the open or an open roof |
 | Can't divide the stock into bowls | Like vanilla stew, it needs a table or counter nearby, and enough bowls |
 
 ---
@@ -473,6 +519,8 @@ A pantry, kitchen or shed is unheated: it follows the average of the last ten da
 | `TPFM.crock(n)` | Spawns full Crocks of Potted Meat: four Steaks in Lard each, in a Glazed Clay Jar. |
 | `TPFM.crocks()` | Each Crock of Potted Meat on you or within 4 tiles: where it is, how fast it keeps there, days until stale and rotten. |
 | `TPFM.keep(days)` | Ages those crocks by this many days at their place. |
+| `TPFM.flueKit()` | Spawns both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel. With Core's `TPC.fireboxKit()` you can build and join a Firebox. |
+| `TPFM.smokehouse()` | Each Smokehouse tile within 3 tiles: its facing, back or door tile, and each Firebox beside it with its flue and why it can't join (or "may join", "joined here"). |
 
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.
 
@@ -481,5 +529,7 @@ The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't s
 **Typical check of charque:** `TPFM.cured(2)`, hang them on a frame, `TPFM.age(120)`, take them down and rehydrate one.
 
 **Typical check of Potted Meat:** `TPFM.potted()`, Put Meat in Lard or Tallow with the Steak, Add Meat to the Pot three times, cook it two hours, Pack Potted Meat into the Glazed Clay Jar, then eat a quarter.
+
+**Typical check of the Smokehouse:** build one, `TPC.fireboxKit()` and `TPFM.flueKit()`, build a Firebox by a long side with its door turned away, Connect the Firebox With a Clay Pipe, then `TPFM.smokehouse()`: "joined here". `TPFM.cured(2)` and hang them inside.
 
 **Typical check of heads:** `TPFM.fish("Walleye", 4)` and `TPFM.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.
