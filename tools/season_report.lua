@@ -51,26 +51,27 @@ local function weatherAt(day, hour)
     return { temperature = temperature, humidity = day.humidity, precipitation = raining and 0.5 or 0, isSnow = temperature <= 0, wind = wind }
 end
 
--- Hangs a stack on the given day and runs it until it is done or rotted.
-local function runStack(days, start, field, needed, spoilField, spoilHours, sheltered, snapshots)
+-- Each stack goes through the mod's own step every hour, as its spoilage depends on how far it has dried.
+-- place is nil (open), "covered" (a roof, no room) or "sheltered" (indoors).
+local function runSaltStack(start, snapshots, place)
     local first = snapshots[start]
-    local dried, spoiled = 0, 0
-    for index = start, #days * 24 do
-        local now = snapshots[index]
-        if not now then break end
-        dried = now[field] - first[field]
-        spoiled = (now[spoilField] - first[spoilField]) / spoilHours
-        if spoiled >= 1 then return (index - start) / 24, spoiled end
-        if dried >= needed then return (index - start) / 24, spoiled end
+    local modData = { dried = 0, spoiled = 0, lastOpen = first.open, lastSheltered = first.sheltered, lastCovered = first.covered,
+        lastSaltSpoil = first.saltSpoil, lastHeat = first.heat }
+    if place then modData[place] = true end
+    local index = start
+    while snapshots[index + 1] do
+        index = index + 1
+        T.saltStep(modData, snapshots[index])
+        if modData.spoiled >= 1 or modData.dried >= T.DRY_HOURS then return (index - start) / 24, modData.spoiled end
     end
     return nil
 end
 
--- A cold stack goes through the mod's own step every hour, as its spoilage depends on how far it has dried.
-local function runColdStack(start, snapshots)
+local function runColdStack(start, snapshots, place)
     local first = snapshots[start]
-    local modData = { dried = 0, spoiled = 0, lastCold = first.cold, lastRawSpoil = first.rawSpoil,
+    local modData = { dried = 0, spoiled = 0, lastCold = first.cold, lastColdCovered = first.coldCovered, lastRawSpoil = first.rawSpoil,
         lastHardFrost = first.hardFrost, lastColdWet = first.coldWet }
+    if place then modData[place] = true end
     local index = start
     while snapshots[index + 1] do
         index = index + 1
@@ -81,7 +82,7 @@ local function runColdStack(start, snapshots)
 end
 
 local function report(worlds)
-    print("month  temp(mean) humidity(mean) rainy%  | salt days (open/roof) salt shelf-life lost | cold days, rotted%, shelf-life lost")
+    print("month  temp(mean) humidity(mean) rainy%  | salt days (open/covered/indoors) shelf-life lost (open/covered) | cold days (open/covered), rotted%, shelf-life lost | 2-day press lost")
     local rows = {}
     for _, days in pairs(worlds) do
         local ledger = T.newLedger(0)
@@ -90,23 +91,36 @@ local function report(worlds)
             for hour = 0, 23 do
                 local now = (index - 1) * 24 + hour + 1
                 T.advance(ledger, now, weatherAt(day, hour))
-                snapshots[now] = { open = ledger.open, sheltered = ledger.sheltered, cold = ledger.cold, rawSpoil = ledger.rawSpoil, saltSpoil = ledger.saltSpoil,
-                    hardFrost = ledger.hardFrost, coldWet = ledger.coldWet }
+                snapshots[now] = { open = ledger.open, sheltered = ledger.sheltered, covered = ledger.covered, cold = ledger.cold,
+                    coldCovered = ledger.coldCovered, rawSpoil = ledger.rawSpoil, saltSpoil = ledger.saltSpoil,
+                    hardFrost = ledger.hardFrost, coldWet = ledger.coldWet, heat = ledger.heat, warmCure = ledger.warmCure }
             end
         end
         for index, day in ipairs(days) do
-            local row = rows[day.month] or { n = 0, t = 0, h = 0, rain = 0, open = {}, roof = {}, lost = 0, salts = 0, cold = {}, rotted = 0, stacks = 0, coldLost = 0 }
+            local row = rows[day.month] or { n = 0, t = 0, h = 0, rain = 0, open = {}, covered = {}, roof = {}, lost = 0, coveredLost = 0, salts = 0,
+                coveredSalts = 0, cold = {}, coldCovered = {}, rotted = 0, stacks = 0, coldLost = 0, cure = 0, cures = 0 }
             rows[day.month] = row
             row.n, row.t, row.h = row.n + 1, row.t + (day.min + day.max) / 2, row.h + day.humidity
             row.rain = row.rain + (day.rainy and 1 or 0)
             local start = (index - 1) * 24 + 1
-            local openDays, saltSpoiled = runStack(days, start, "open", T.DRY_HOURS, "saltSpoil", T.SALT_SPOIL_HOURS, false, snapshots)
-            local roofDays = runStack(days, start, "sheltered", T.DRY_HOURS, "saltSpoil", T.SALT_SPOIL_HOURS, true, snapshots)
+            local openDays, saltSpoiled = runSaltStack(start, snapshots)
+            local coveredDays, coveredSpoiled = runSaltStack(start, snapshots, "covered")
+            local roofDays = runSaltStack(start, snapshots, "sheltered")
             if openDays then
                 table.insert(row.open, openDays)
                 row.lost, row.salts = row.lost + saltSpoiled, row.salts + 1
             end
+            if coveredDays then
+                table.insert(row.covered, coveredDays)
+                row.coveredLost, row.coveredSalts = row.coveredLost + coveredSpoiled, row.coveredSalts + 1
+            end
             if roofDays then table.insert(row.roof, roofDays) end
+            local pressEnd = snapshots[start + T.PRESS_HOURS]
+            if pressEnd then
+                row.cure, row.cures = row.cure + T.cureSpoiled({ lastWarmCure = snapshots[start].warmCure }, pressEnd), row.cures + 1
+            end
+            local shedDays, shedSpoiled = runColdStack(start, snapshots, "covered")
+            if shedDays and shedSpoiled < 1 then table.insert(row.coldCovered, shedDays) end
             local coldDays, coldSpoiled = runColdStack(start, snapshots)
             if coldDays then
                 row.stacks = row.stacks + 1
@@ -128,9 +142,11 @@ local function report(worlds)
     for month = 1, 12 do
         local r = rows[month]
         if r then
-            print(string.format("%-5s %6.1f %8.2f %8.0f%%  | %7s / %-7s %5.0f%%  | %7s %5.0f%% %5.0f%%", MONTHS[month], r.t / r.n, r.h / r.n, r.rain / r.n * 100,
-                span(r.open), span(r.roof), r.salts > 0 and r.lost / r.salts * 100 or 0, span(r.cold), r.stacks > 0 and r.rotted / r.stacks * 100 or 0,
-                #r.cold > 0 and r.coldLost / #r.cold * 100 or 0))
+            local function share(total, count) return count > 0 and total / count * 100 or 0 end
+            print(string.format("%-5s %6.1f %8.2f %8.0f%%  | %7s / %-7s / %-7s %4.0f%% / %3.0f%%  | %7s / %-7s %5.0f%% %5.0f%%  | %4.0f%%", MONTHS[month],
+                r.t / r.n, r.h / r.n, r.rain / r.n * 100, span(r.open), span(r.covered), span(r.roof), share(r.lost, r.salts),
+                share(r.coveredLost, r.coveredSalts), span(r.cold), span(r.coldCovered), share(r.rotted, r.stacks), share(r.coldLost, #r.cold),
+                share(r.cure, r.cures)))
         end
     end
 end

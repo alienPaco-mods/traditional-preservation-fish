@@ -58,10 +58,12 @@ function TraditionalPreservationFishWorld.tubSprite(waiting, batches, finished)
     return nil
 end
 
-local function readBatches(logic, uiLogic, sheltered)
+-- place is the station's: indoors is sheltered, a roof with no room round it covered.
+local function readBatches(logic, uiLogic, place)
     local batches = {}
     for craftData, _ in pairs(uiLogic:getItemsInProgress()) do
-        craftData:getModData().sheltered = sheltered
+        craftData:getModData().sheltered = place ~= "Open" and place ~= "Covered"
+        craftData:getModData().covered = place == "Covered"
         table.insert(batches, { progress = logic:getProgress(craftData), style = craftData:getModData().style or F.STYLE_SALT })
     end
     return batches
@@ -98,7 +100,7 @@ local function refresh(station, entry)
 
     local waiting, _, waitingStyles = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
     local _, finishedStacks, finishedStyles = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output)
-    local batches = readBatches(logic, uiLogic, Weather.placeOf(station) ~= "Open")
+    local batches = readBatches(logic, uiLogic, Weather.placeOf(station, true))
     entry.busyStacks = finishedStacks + #batches
     entry.show(station, entry, entry.faceIndex, waiting, waitingStyles[1], batches, finishedStyles)
 end

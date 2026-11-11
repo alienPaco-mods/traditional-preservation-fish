@@ -32,7 +32,7 @@ module TraditionalPreservationFish
         component SpriteConfig
         {
             isThumpable = false,
-            OnIsValid = TraditionalPreservationFish.isOutdoors,
+            OnIsValid = TraditionalPreservationFish.notInRoom,
             face S
             {
                 layer

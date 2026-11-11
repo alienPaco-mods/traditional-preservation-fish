@@ -1,5 +1,25 @@
 # Changelog: Traditional Preservation (Fish)
 
+## 0.3.2
+- Realism (ROADMAP §6, decision 16, user 2026-11-11): salt per fish doubled to 4 uses per started half weight
+  (`SALT_PER_STEP`), about 15% of the fish's weight, the Volga figure (was about 7%).
+- A warm cure: while the season averages above 20 C (`WARM_CURE_ABOVE`), a tub batch picks up spoilage at a quarter
+  of raw fish's rate (`WARM_CURE_SHARE`), plus as much again per 10 degrees over (a day at 21 C ~14%, two at 25 C
+  ~38%). The press's OnCreate is now `onCreatePressed`: each pressed fish carries `cureSpoiled` and is aged by it, and
+  a frame stack starts from its fish's share by weight. The tub's popup shows it. Presses from before count from now.
+- Hot sun: above 25 C (`HEAT_ABOVE`, live temperature), an open salt stack under half dried (`SALT_FRESH_UNTIL`)
+  takes 0.05 per 24 h (`HEAT_DAMAGE`, `HEAT_DAMAGE_HOURS`, scaled by the Spoilage option) times how wet it still is,
+  within `DAMAGE_CAP`. Salt stacks now go through `F.saltStep`. Popup: "Too hot in the sun" and "Spoiling (Hot sun)".
+- Covered (user 2026-11-11): a roof with no room round it (porch, open shed; Core `Weather.placeOf(station, true)`)
+  is its own place. Salt fish dries at the open rate there, never rained on, in the shade; cold fish at 75%
+  (`COVERED_COLD_RATE`), never rained on, no wet damage. A room (map or player-built: walled all round and fully
+  roofed, the engine's `isInARoom`) is indoors as before: salt 65%, cold stops. New stack key `covered`; new ledger
+  totals `covered`, `coldCovered`, `warmCure`, `heat` (older saves gain them at 0). Popup shows the Place.
+- The Fish Hanging Beam and Gantry may stand under an open roof; only a room refuses them (`F.notInRoom`, Core
+  `UI.notInRooms`; was outdoors only).
+- Season report runs salt stacks through `saltStep` in all three places and adds covered cold drying and a 2-day
+  press column; golden updated. README, guide, Workshop text and tooltips updated.
+
 ## 0.3.1
 - Realism (ROADMAP §6, decision 9): the press follows the batch's heaviest fish, as the salt has to reach through the
   thickest one. 1 day if every fish is up to 1.1 weight (about 0.5 kg, `PRESS_SMALL_WEIGHT`), 2 days with any fish of

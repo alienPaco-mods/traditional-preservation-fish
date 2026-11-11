@@ -20,6 +20,8 @@ function TPF.help()
     say("TPF.age(hours)            give every hanging stack this many hours of perfect drying weather")
     say("TPF.spoil(hours)          add this many hours of spoiling weather, to test rotting stacks")
     say("TPF.frost(hours)          add this many hours of hard frost, to test early frost on fresh cold stacks")
+    say("TPF.heat(hours)           add this many hours of hot sun, to test it on fresh open salt stacks")
+    say("TPF.warmCure(hours)       add this many hours of a warm cure at 25 C, to test souring in a running tub")
     say("TPF.dry()                 clear the wetness, so open and cold frames start drying again at once")
     say("TPF.fish(name, weight, n) spawn n whole fish, e.g. TPF.fish(\"Walleye\", 4, 2). TPF.fish() lists the names")
     say("TPF.heads(n)              spawn n Fish Heads")
@@ -34,11 +36,15 @@ function TPF.weather()
     say("Temperature now " .. n(ledger.temperature) .. " C, season (10-day average) " .. n(ledger.seasonTemperature)
         .. " C, humidity " .. n(ledger.seasonHumidity) .. ", wetness " .. n(ledger.wetness) .. " (cold frames " .. n(ledger.coldWetness) .. ")"
         .. ", wind " .. n(ledger.wind))
-    say("Drying speed now: open " .. n(ledger.openRate) .. ", under a roof " .. n(ledger.shelteredRate) .. ", cold " .. n(ledger.coldRate))
-    say("Spoiling now: unsalted " .. tostring(ledger.rawSpoiling == true) .. ", salted " .. tostring(ledger.saltSpoiling == true))
-    say("Totals (hours at full speed): open " .. n(ledger.open) .. ", roof " .. n(ledger.sheltered) .. ", cold " .. n(ledger.cold)
+    say("Drying speed now: open " .. n(ledger.openRate) .. ", covered " .. n(ledger.coveredRate) .. ", indoors " .. n(ledger.shelteredRate)
+        .. ", cold " .. n(ledger.coldRate) .. ", cold covered " .. n(ledger.coldCoveredRate))
+    say("Spoiling now: unsalted " .. tostring(ledger.rawSpoiling == true) .. ", salted " .. tostring(ledger.saltSpoiling == true)
+        .. ", warm cure " .. tostring(ledger.warmCuring == true) .. ", hot sun " .. tostring((ledger.temperature or 0) > F.HEAT_ABOVE))
+    say("Totals (hours at full speed): open " .. n(ledger.open) .. ", covered " .. n(ledger.covered) .. ", indoors " .. n(ledger.sheltered)
+        .. ", cold " .. n(ledger.cold) .. ", cold covered " .. n(ledger.coldCovered)
         .. ", raw spoil " .. n(ledger.rawSpoil) .. ", salt spoil " .. n(ledger.saltSpoil)
-        .. ", hard frost " .. n(ledger.hardFrost) .. ", cold fish wet " .. n(ledger.coldWet))
+        .. ", hard frost " .. n(ledger.hardFrost) .. ", cold fish wet " .. n(ledger.coldWet) .. ", warm cure " .. n(ledger.warmCure)
+        .. ", hot sun " .. n(ledger.heat))
     say(string.format("A stack needs %d hours to salt dry and %d to cold dry.", F.DRY_HOURS, F.COLD_DRY_HOURS))
 end
 
@@ -77,6 +83,7 @@ function TPF.age(hours)
     hours = hours or 24
     local ledger = F.getLedger()
     ledger.open, ledger.sheltered, ledger.cold = ledger.open + hours, ledger.sheltered + hours, ledger.cold + hours
+    ledger.covered, ledger.coldCovered = ledger.covered + hours, ledger.coldCovered + hours
     say(string.format("Added %.0f hours of perfect drying weather. Stacks update within a few seconds.", hours))
 end
 
@@ -93,6 +100,23 @@ function TPF.frost(hours)
     ledger.hardFrost = ledger.hardFrost + hours
     say(string.format("Added %.0f hours of hard frost. A fresh cold stack loses %.0f%% of its keeping per %d hours, at most %.0f%%.",
         hours, F.FREEZE_DAMAGE * 100, F.FREEZE_DAMAGE_HOURS, F.DAMAGE_CAP * 100))
+end
+
+function TPF.heat(hours)
+    hours = hours or 24
+    local ledger = F.getLedger()
+    ledger.heat = ledger.heat + hours
+    say(string.format("Added %.0f hours of hot sun. A fresh open salt stack loses %.0f%% of its keeping per %d hours, at most %.0f%%.",
+        hours, F.HEAT_DAMAGE * 100, F.HEAT_DAMAGE_HOURS, F.DAMAGE_CAP * 100))
+end
+
+-- At 25 C a warm cure runs at 1.5 times its 20 C rate.
+function TPF.warmCure(hours)
+    hours = hours or 24
+    local ledger = F.getLedger()
+    ledger.warmCure = ledger.warmCure + hours * 1.5
+    say(string.format("Added %.0f hours of a warm cure at 25 C: about %.0f%% off a batch in the tub now.",
+        hours, hours * 1.5 * F.WARM_CURE_SHARE / F.RAW_SPOIL_HOURS * 100))
 end
 
 function TPF.dry()

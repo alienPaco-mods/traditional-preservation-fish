@@ -41,6 +41,11 @@ run("age", 10)
 check("age adds drying hours", ledger.open == open + 10 and ledger.cold ~= nil)
 run("spoil")
 check("spoil adds a day of spoiling weather", ledger.rawSpoil == rawSpoil + 24)
+local covered, heat, warmCure = ledger.covered, ledger.heat, ledger.warmCure
+run("age", 10)
+run("heat", 5)
+run("warmCure", 24)
+check("age feeds covered frames, heat and warmCure their totals", ledger.covered == covered + 10 and ledger.heat == heat + 5 and ledger.warmCure == warmCure + 36)
 ledger.wetness = 3
 run("dry")
 check("dry clears the wetness", ledger.wetness == 0)

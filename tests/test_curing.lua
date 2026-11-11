@@ -160,9 +160,34 @@ check("a batch of small fish is half done in 12 hours", near(small.elapsed, RECI
 hours = hours + 12
 T.onPressUpdate(small)
 check("and done in a day", near(small.elapsed, RECIPE_TIME))
-local status = T.pressStatus({ pressStartHour = 100, pressHours = 24 }, 106)
+local status = T.pressStatus({ pressStartHour = 100, pressHours = 24 }, 106, T.newLedger(0))
 check("the popup says a small batch's own time left", near(status.hoursLeft, 18) and near(status.progress, 0.25))
-check("a press from before has 12 hours", near(T.pressStatus({ pressStartHour = 100 }, 106).hoursLeft, 6))
+check("a press from before has 12 hours", near(T.pressStatus({ pressStartHour = 100 }, 106, T.newLedger(0)).hoursLeft, 6))
+
+-- A warm cure: above 20 C a quarter of raw fish's rate at 10 C, and as much again for each 10 degrees more
+local function warmCure(season, cureHours)
+    local ledger = T.newLedger(0)
+    ledger.seasonTemperature = season
+    T.advance(ledger, cureHours, { temperature = season, humidity = 0.4, precipitation = 0 })
+    return T.cureSpoiled({ lastWarmCure = 0 }, ledger), ledger
+end
+check("a cool cure loses nothing", warmCure(18, 48) == 0)
+check("21 C for a day costs about 14%", near(warmCure(21, 24), 1.1 * 24 * T.WARM_CURE_SHARE / T.RAW_SPOIL_HOURS))
+local hotCure, hotLedger = warmCure(25, 48)
+check("25 C for two days, 37.5%", near(hotCure, 0.375) and hotLedger.warmCuring)
+check("the tub's popup shows it", near(T.pressStatus({ pressStartHour = 0, pressHours = 48, lastWarmCure = 0 }, 48, hotLedger).spoiled, 0.375))
+check("a press from before counts from now", T.cureSpoiled({}, hotLedger) == 0)
+local hotPress = newRecipeData(RECIPE_TIME, { newFood("TraditionalPreservationFish.SaltPackedFish", { ActualWeight = 1 }) },
+    { newFood("TraditionalPreservationFish.SaltPressedFish", {}) })
+hotPress.modData.lastWarmCure = 0
+ModData.tables[T.MOD_DATA_KEY] = hotLedger
+T.onCreatePressed(hotPress)
+local hotFish = hotPress:getAllCreatedItems():get(0)
+check("pressed fish carries what the warm cure took", near(hotFish:getModData().cureSpoiled, 0.375) and hotFish.age > 0)
+local mixed = list({ newFood("TraditionalPreservationFish.SaltPressedFish", { ActualWeight = 3 }), newFood("TraditionalPreservationFish.SaltPressedFish", { ActualWeight = 1 }) })
+mixed:get(0):getModData().cureSpoiled = 0.4
+check("a stack starts with its fish's share, by weight", near(T.stackCureSpoiled(mixed), 0.3))
+ModData.tables = {}
 
 local old = newRecipeData(RECIPE_TIME)
 old.modData.pressStartHour = hours
@@ -196,12 +221,12 @@ check("eight stacks fill the frame", T.frameRefusal(T.HANGERS[6], 7, 0, 0.1) == 
 check("a full frame is 20 weight", T.STACK_WEIGHT * T.MAX_STACKS == 20)
 check("every station finds its hanger, either way round", T.hangerFor(7) == T.HANGERS[6] and T.hangerFor(409) == T.HANGERS[408] and T.hangerFor(410) == T.HANGERS[410])
 check("a tub has none", T.hangerFor(0) == nil and T.hangerFor(5) == nil)
-local function square(outside) return { square = { isOutside = function() return outside end } } end
-check("the big beams go up outdoors", T.isOutdoors(square(true)))
-check("not indoors", not T.isOutdoors(square(false)))
+local function square(inRoom) return { square = { isInARoom = function() return inRoom end } } end
+check("the big beams go up outdoors or under an open roof", T.notInRoom(square(false)))
+check("not in a room", not T.notInRoom(square(true)))
 for _, name in ipairs({ "Medium", "Large" }) do
     local entity = io.open("42/media/scripts/entities/entity_Drying_Beam_" .. name .. ".txt"):read("*a")
-    check(name .. " beam is outdoors only", entity:find("OnIsValid = TraditionalPreservationFish.isOutdoors", 1, true) ~= nil)
+    check(name .. " beam stays out of rooms", entity:find("OnIsValid = TraditionalPreservationFish.notInRoom", 1, true) ~= nil)
 end
 check("the frame isn't", not io.open("42/media/scripts/entities/entity_Drying_Frame.txt"):read("*a"):find("OnIsValid", 1, true))
 check("sprites below the first sheet's end are on it", T.spriteName(407) == "traditionalpreservationfish_01_407")
@@ -243,7 +268,14 @@ local afterRoof = dry.modData.dried
 T.onDryUpdate(dry)
 check("a roofed frame gets the sheltered rate", near(dry.modData.dried - afterRoof, T.SHELTERED_RATE))
 
-dry.modData.sheltered = nil
+dry.modData.sheltered, dry.modData.covered = nil, true
+hours = hours + 1
+T.advance(shared, hours, MILD)
+local afterCover = dry.modData.dried
+T.onDryUpdate(dry)
+check("an open shed dries as the open air", near(dry.modData.dried - afterCover, 1))
+
+dry.modData.covered = nil
 hours = hours + 1000
 T.advance(shared, hours, MILD)
 T.onDryUpdate(dry)
@@ -253,7 +285,7 @@ local reused = newRecipeData(DRY_TIME)
 reused.modData = { dried = 90, sheltered = true }
 T.onDryStart(reused)
 T.onDryUpdate(reused)
-check("a reused object starts from nothing", reused.elapsed == 0 and reused.modData.sheltered == nil)
+check("a reused object starts from nothing", reused.elapsed == 0 and reused.modData.sheltered == nil and reused.modData.spoiled == 0)
 
 local stacked = newRecipeData(DRY_TIME, { newFood("TraditionalPreservationFish.SaltPressedFish", {}) }, { newFood("TraditionalPreservationFish.SaltDriedFish", {}) })
 T.onDryStart(stacked)
@@ -284,16 +316,25 @@ local coldNow = T.stackStatus(true, { dried = 192 }, readings)
 check("cold fish dries at full rate in the cold", coldNow.rate == 1 and near(coldNow.hoursLeft, 576) and near(coldNow.progress, 0.25))
 local saltNow = T.stackStatus(false, { dried = 144 }, readings)
 check("salt fish goes by its own rate", near(saltNow.rate, T.MIN_DRY_RATE) and near(saltNow.hoursLeft, 144 / T.MIN_DRY_RATE))
-check("a roof stops cold drying but not salt", T.stackStatus(true, { sheltered = true }, readings).reason == "Roof" and T.stackStatus(false, { sheltered = true }, readings).reason == nil)
+check("indoors stops cold drying but not salt", T.stackStatus(true, { sheltered = true }, readings).reason == "Roof" and T.stackStatus(false, { sheltered = true }, readings).reason == nil)
 local rained = T.newLedger(0)
 T.advance(rained, 1, { temperature = 3, humidity = 0.3, precipitation = 1 })
 check("rain pauses both", T.stackStatus(true, {}, rained).reason == "Rain" and T.stackStatus(false, {}, rained).reason == "Rain" and T.stackStatus(true, {}, rained).hoursLeft == nil)
+local shedCold, shedSalt = T.stackStatus(true, { covered = true }, rained), T.stackStatus(false, { covered = true }, rained)
+check("an open shed keeps the rain off both", shedCold.reason == nil and near(shedCold.rate, T.coldRate(3) * T.windRate(nil) * T.COVERED_COLD_RATE)
+    and shedSalt.reason == nil and shedSalt.rate > 0)
 local hot = T.newLedger(0)
 hot.seasonTemperature, hot.seasonHumidity = 25, 0.6
 T.advance(hot, 1, { temperature = 25, humidity = 0.6, precipitation = 0 })
 check("a warm season stops cold drying and warns", T.stackStatus(true, {}, hot).reason == "TooWarm" and T.stackStatus(true, {}, hot).spoiling)
 check("a muggy one warns for salt fish", T.stackStatus(false, {}, hot).spoiling)
 check("a fresh ledger is safe to read", T.stackStatus(false, {}, T.newLedger(0)).rate == 0)
+local heatWave = T.newLedger(0)
+T.advance(heatWave, 1, { temperature = 30, humidity = 0.3, precipitation = 0 })
+check("hot sun warns for fresh salt fish in the open", T.stackStatus(false, { dried = 0 }, heatWave).scorching)
+check("not in the shade, nor once it is half dry", not T.stackStatus(false, { dried = 0, covered = true }, heatWave).scorching
+    and not T.stackStatus(false, { dried = 0, sheltered = true }, heatWave).scorching and not T.stackStatus(false, { dried = T.DRY_HOURS / 2 }, heatWave).scorching)
+check("the popup says too hot only in the open", T.temperatureWord(false, 30, true) == "IGUI_TraditionalPreservationFish_TempHot" and T.temperatureWord(false, 30, false) == "IGUI_TraditionalPreservationFish_TempGoodWarm")
 check("frost words for cold fish", T.temperatureWord(true, -2) == "IGUI_TraditionalPreservationFish_TempFrost" and T.temperatureWord(true, -8) == "IGUI_TraditionalPreservationFish_TempHardFrost")
 check("the words fit the method", T.temperatureWord(true, 2) == "IGUI_TraditionalPreservationFish_TempGoodCold" and T.temperatureWord(false, 25) == "IGUI_TraditionalPreservationFish_TempGoodWarm" and T.temperatureWord(true, 25) == "IGUI_TraditionalPreservationFish_TempTooWarm")
 
@@ -375,12 +416,20 @@ roofedStack.modData.sheltered = true
 hours = 10
 T.advance(roofed, hours, WINTER)
 T.onColdDryUpdate(roofedStack)
-check("a roof stops cold drying", roofedStack.modData.dried == 0)
+check("indoors stops cold drying", roofedStack.modData.dried == 0)
+
+local shedStack, shedLedger = coldStack()
+shedLedger.seasonTemperature = 0
+shedStack.modData.covered = true
+hours = 10
+T.advance(shedLedger, hours, WINTER)
+T.onColdDryUpdate(shedStack)
+check("an open shed dries cold fish at three quarters", near(shedStack.modData.dried, shedLedger.cold * T.COVERED_COLD_RATE) and shedStack.modData.dried > 0)
 
 -- Early frost and wet add to the spoilage, the more the wetter the fish
-local function coldStep(dried, totals, sheltered)
+local function coldStep(dried, totals, sheltered, covered)
     local ledger = T.newLedger(0)
-    local modData = { dried = dried, spoiled = 0, lastCold = 0, lastRawSpoil = 0, lastHardFrost = 0, lastColdWet = 0, sheltered = sheltered }
+    local modData = { dried = dried, spoiled = 0, lastCold = 0, lastRawSpoil = 0, lastHardFrost = 0, lastColdWet = 0, sheltered = sheltered, covered = covered }
     for key, value in pairs(totals) do ledger[key] = value end
     T.coldStep(modData, ledger)
     return modData
@@ -391,7 +440,7 @@ check("none once it is under way", coldStep(T.COLD_DRY_HOURS * 0.3, { hardFrost 
 check("frost alone never rots it", coldStep(0, { hardFrost = 1000 }).spoiled == T.DAMAGE_CAP)
 check("lying wet early harms it", near(coldStep(0, { coldWet = 48 }).spoiled, T.WET_DAMAGE))
 check("but not once it has a dry skin", coldStep(T.COLD_DRY_HOURS * 0.3, { coldWet = 48 }).spoiled == 0)
-check("a roof keeps the rain off", coldStep(0, { coldWet = 48 }, true).spoiled == 0)
+check("a roof keeps the rain off", coldStep(0, { coldWet = 48 }, true).spoiled == 0 and coldStep(0, { coldWet = 48 }, nil, true).spoiled == 0)
 check("frost and wet together stop at the cap", coldStep(0, { hardFrost = 150, coldWet = 150 }).spoiled == T.DAMAGE_CAP)
 check("rot weighs by how wet it still is", near(coldStep(T.COLD_DRY_HOURS * 0.9, { rawSpoil = T.RAW_SPOIL_HOURS }).spoiled, 0.1))
 check("and still rots a fresh stack", near(coldStep(0, { rawSpoil = T.RAW_SPOIL_HOURS }).spoiled, 1))
@@ -401,12 +450,13 @@ olderLedger.hardFrost, olderLedger.coldWet = 500, 500
 T.coldStep(older, olderLedger)
 check("a cold stack from an older version starts counting frost and wet now", older.spoiled == 0 and older.lastHardFrost == 500)
 
--- Salt fish in summer
+-- Salt fish in summer, in the shade (hot sun has its own checks below)
 local function saltStack(season, humidity)
     ModData.tables = {}
     hours = 0
     local stack = newRecipeData(T.DRY_HOURS * 3600)
     T.onDryStart(stack)
+    stack.modData.covered = true
     local ledger = T.getLedger()
     ledger.seasonTemperature, ledger.seasonHumidity = season, humidity
     hours = T.SALT_SPOIL_HOURS / 2
@@ -418,15 +468,35 @@ check("a cool season leaves salt fish alone", saltStack(15, 0.6).modData.spoiled
 check("so does a hot dry one", saltStack(28, 0.2).modData.spoiled == 0)
 check("a hot muggy one takes half its keeping", near(saltStack(28, 0.6).modData.spoiled, 0.5))
 
+-- Hot sun on fresh salt fish
+local function saltStep(dried, heat, place)
+    local ledger = T.newLedger(0)
+    ledger.heat = heat
+    local modData = { dried = dried, spoiled = 0, lastOpen = 0, lastSheltered = 0, lastCovered = 0, lastSaltSpoil = 0, lastHeat = 0 }
+    if place then modData[place] = true end
+    T.saltStep(modData, ledger)
+    return modData
+end
+check("a day of hot sun on a fresh stack", near(saltStep(0, 24).spoiled, T.HEAT_DAMAGE))
+check("less once it has dried a little", near(saltStep(T.DRY_HOURS * 0.4, 24).spoiled, T.HEAT_DAMAGE * 0.6))
+check("none once it is half dry", saltStep(T.DRY_HOURS * 0.5, 24).spoiled == 0)
+check("none in the shade", saltStep(0, 24, "covered").spoiled == 0 and saltStep(0, 24, "sheltered").spoiled == 0)
+check("heat alone stops at the cap", saltStep(0, 10000).spoiled == T.DAMAGE_CAP)
+local heatLedger = T.newLedger(0)
+T.advance(heatLedger, 5, { temperature = 30, humidity = 0.3, precipitation = 0 })
+T.advance(heatLedger, 10, { temperature = 24, humidity = 0.3, precipitation = 0 })
+check("the ledger counts hours above 25 C", heatLedger.heat == 5)
+
 local oldSave = newRecipeData(T.DRY_HOURS * 3600)
 oldSave.modData = { dried = 10, lastOpen = 0, lastSheltered = 0 }
 T.onDryUpdate(oldSave)
-check("a stack from an older version carries on", oldSave.modData.spoiled == 0)
+check("a stack from an older version carries on", oldSave.modData.spoiled == 0 and oldSave.modData.lastHeat ~= nil)
 
 ModData.tables = { [T.MOD_DATA_KEY] = { lastHour = 5, wetness = 0, open = 3, sheltered = 2 } }
 local upgraded = T.getLedger()
 check("an older ledger gains the new totals", upgraded.open == 3 and upgraded.cold == 0 and upgraded.rawSpoil == 0
-    and upgraded.hardFrost == 0 and upgraded.coldWet == 0 and upgraded.coldWetness == 0)
+    and upgraded.hardFrost == 0 and upgraded.coldWet == 0 and upgraded.coldWetness == 0
+    and upgraded.covered == 0 and upgraded.coldCovered == 0 and upgraded.warmCure == 0 and upgraded.heat == 0)
 ModData.tables = {}
 
 -- What the season took shows on the finished fish
@@ -760,12 +830,13 @@ check("nor does a fish too small to gut", #xpGiven == 0)
 -- Salt by the packed fish's weight (C11)
 local cutFillet = newFood("Base.FishFillet", { ActualWeight = 0.5 })
 cutFillet.customWeight = true
-check("a fish too small to gut takes the recipe's 2", T.saltFor(newFood("Base.Bluegill", { ActualWeight = 0.5 })) == 2)
-check("a whole fish pays for what is left once gutted", T.saltFor(newFood("Base.Walleye", { ActualWeight = 4 })) == 16)
-check("a whole half weight pays no extra step", T.saltFor(newFood("TraditionalPreservationFish.GuttedFish", { ActualWeight = 1 })) == 4)
-check("a gutted fish or a half by its weight", T.saltFor(gutted) == 14)
-check("a fillet vanilla cut pays for its food, half the gutted fish", T.saltFor(cutFillet) == 18)
-check("a loot fillet, by its own weight", T.saltFor(newFood("Base.FishFillet", { ActualWeight = 0.2 })) == 2)
+check("a fish too small to gut takes one step, 4", T.saltFor(newFood("Base.Bluegill", { ActualWeight = 0.5 })) == 4)
+check("a whole fish pays for what is left once gutted", T.saltFor(newFood("Base.Walleye", { ActualWeight = 4 })) == 32)
+check("a whole half weight pays no extra step", T.saltFor(newFood("TraditionalPreservationFish.GuttedFish", { ActualWeight = 1 })) == 8)
+check("a gutted fish or a half by its weight", T.saltFor(gutted) == 28)
+check("a fillet vanilla cut pays for its food, half the gutted fish", T.saltFor(cutFillet) == 36)
+check("a loot fillet, by its own weight", T.saltFor(newFood("Base.FishFillet", { ActualWeight = 0.2 })) == 4)
+check("about 15% of the fish's weight, a use weighing 0.02", near(T.SALT_PER_STEP / T.SALT_STEP * 0.02, 0.16))
 local packedCut = through(cutFillet, "SaltPackedFish")
 check("and comes out of the salt that heavy (C26)", near(packedCut.values.ActualWeight, 4.5))
 
@@ -792,12 +863,12 @@ local function carry(...)
     for _, item in ipairs(carried) do function item:getContainer() return container end end
 end
 local walleye4 = newFood("Base.Walleye", { ActualWeight = 4 })
-carry(saltItem("Base.Salt", 10), saltItem("TraditionalPreservationSalt.LooseSalt", 5))
-check("15 salt carried can't pack a fish that takes 16", not T.canPack(walleye4, salter))
+carry(saltItem("Base.Salt", 10), saltItem("TraditionalPreservationSalt.LooseSalt", 5), saltItem("TraditionalPreservationSalt.BagOfSalt", 16))
+check("31 salt carried can't pack a fish that takes 32", not T.canPack(walleye4, salter))
 check("the knife, the salt and a test without a character pass", T.canPack(newFood("Base.HuntingKnife", {}), salter) and T.canPack(carried[1], salter) and T.canPack(walleye4, nil))
-local shaker, loose, bag, spent = saltItem("Base.Salt", 10), saltItem("TraditionalPreservationSalt.LooseSalt", 5), saltItem("TraditionalPreservationSalt.BagOfSalt", 3), saltItem("Base.Salt", 0)
+local shaker, loose, bag, spent = saltItem("Base.Salt", 10), saltItem("TraditionalPreservationSalt.LooseSalt", 5), saltItem("TraditionalPreservationSalt.BagOfSalt", 20), saltItem("Base.Salt", 0)
 carry(shaker, loose, bag, spent)
-check("18 can, and a used-up shaker doesn't count", T.canPack(walleye4, salter) and T.saltCarried(salter) == 18)
+check("35 can, and a used-up shaker doesn't count", T.canPack(walleye4, salter) and T.saltCarried(salter) == 35)
 check("a whole fish over 4.5 weight is too thick to salt whole",
     not T.canPack(newFood("Base.Walleye", { ActualWeight = 4.6 }), salter)
     and not T.canPack(newFood("Base.Walleye", { ActualWeight = 4.6 }), nil)
@@ -808,21 +879,21 @@ check("so is a gutted one; a half of any size packs",
 local returned
 TraditionalPreservationSalt = { returnEmpties = function(character, emptied) returned = { character = character, emptied = emptied } end }
 T.chargeSalt(walleye4, salter)
-check("packing takes the other 14, part-used salt first", bag.uses == 0 and loose.uses == 0 and shaker.uses == 4 and spent.uses == 0)
-check("what it empties leaves the inventory", #removed == 2 and removed[1] == bag and removed[2] == loose)
+check("packing takes the other 30, part-used salt first", loose.uses == 0 and shaker.uses == 0 and bag.uses == 5 and spent.uses == 0)
+check("what it empties leaves the inventory", #removed == 2 and removed[1] == loose and removed[2] == shaker)
 check("and the Salt mod gives its empties back", returned and returned.character == salter and returned.emptied:size() == 2)
 TraditionalPreservationSalt, returned = nil, nil
 carry(saltItem("Base.Salt", 10))
 T.chargeSalt(newFood("Base.Bluegill", { ActualWeight = 0.5 }), salter)
-check("a small fish takes nothing past the recipe's 2", carried[1].uses == 10 and #removed == 0)
+check("a small fish takes 2 past the recipe's 2", carried[1].uses == 8 and #removed == 0)
 T.chargeSalt(walleye4, salter)
 check("without the Salt mod, an emptied shaker just goes", carried[1].uses == 0 and #removed == 1 and returned == nil)
 local packer = { getInventory = salter.getInventory }
-carry(saltItem("Base.Salt", 10))
+carry(saltItem("Base.Salt", 20))
 local packData = newRecipeData(0, { newFood("Base.Walleye", { ActualWeight = 2 }) }, { newFood("TraditionalPreservationFish.SaltPackedFish", {}) })
 function packData:getCharacter() return packer end
 T.onCreatePacked(packData)
-check("both pack recipes charge in onCreatePacked, finding the packer", carried[1].uses == 4)
+check("both pack recipes charge in onCreatePacked, finding the packer", carried[1].uses == 6)
 instanceof = nil
 
 -- How a stack looks on the frame

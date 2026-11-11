@@ -220,12 +220,12 @@ check("other recipes are left alone", stackLines("DryCorn", {}, winter) == nil)
 local translations = io.open("42/media/lua/shared/Translate/EN/IG_UI.json"):read("*a")
 check("translations have no bare percent signs", not translations:find("%%%D"))
 
--- Picked-up beams can't be put down indoors
-local function placing(spriteName, outside)
-    return ISMoveableSpriteProps.canPlaceMoveable({ spriteName = spriteName }, nil, { isOutside = function() return outside end }, nil)
+-- Picked-up beams can't be put down in a room
+local function placing(spriteName, inRoom)
+    return ISMoveableSpriteProps.canPlaceMoveable({ spriteName = spriteName }, nil, { isInARoom = function() return inRoom end }, nil)
 end
-check("a beam can't be put down indoors", not placing("traditionalpreservationfish_02_0", false) and not placing("traditionalpreservationfish_02_3", false))
-check("but can outdoors", placing("traditionalpreservationfish_02_2", true))
-check("and the frame can go anywhere", placing("traditionalpreservationfish_01_0", false))
+check("a beam can't be put down in a room", not placing("traditionalpreservationfish_02_0", true) and not placing("traditionalpreservationfish_02_3", true))
+check("but can outdoors or under an open roof", placing("traditionalpreservationfish_02_2", false))
+check("and the frame can go anywhere", placing("traditionalpreservationfish_01_0", true))
 
 H.done()

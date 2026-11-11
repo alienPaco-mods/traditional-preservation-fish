@@ -80,6 +80,7 @@ local function station(spriteName, x, outside, waiting, batches, finished)
     function object:getObjectIndex() return 0 end
     function object:isOutside() return outside end
     function object.square:isOutside() return outside end
+    function object.square:isInARoom() return not outside and not object.porch end
     function object:clearAttachedAnimSprite() self.sprites = {} self.clears = self.clears + 1 end
     function object:addAttachedAnimSpriteByName(name) table.insert(self.sprites, name) end
     return object
@@ -116,7 +117,15 @@ local outdoors = recipeData(0.1, T.STYLE_SALT)
 local yard = station("traditionalpreservationfish_01_7", 2, true, {}, { outdoors }, {})
 W.track(yard)
 tick(30)
-check("an open frame is open", outdoors.modData.sheltered == false and yard.sprites[1] == "traditionalpreservationfish_01_9")
+check("an open frame is open", outdoors.modData.sheltered == false and outdoors.modData.covered == false and yard.sprites[1] == "traditionalpreservationfish_01_9")
+check("a frame in a room is indoors", running.modData.covered == false)
+
+local porched = recipeData(0.1, T.STYLE_SALT)
+local porch = station("traditionalpreservationfish_01_7", 4, false, {}, { porched }, {})
+porch.porch = true
+W.track(porch)
+W.refresh(porch)
+check("a frame under an open roof is covered", porched.modData.covered == true and porched.modData.sheltered == false)
 
 -- Tubs
 local tub = station("traditionalpreservationfish_01_1", 3, true, {}, { recipeData(0.3) }, {})

@@ -39,7 +39,7 @@ You catch more fish than you can eat. This mod turns that surplus into food that
 | You need | For |
 |---|---|
 | Sharp knife or meat cleaver (kept) | Packing, gutting, splitting, slicing |
-| 2 salt per half weight of fish | Salt route only |
+| 4 salt per half weight of fish | Salt route only |
 | Carpentry 2, Fishing 2 | Tub and frame |
 | 1 L water per fish | Rehydrating to cook |
 
@@ -50,7 +50,7 @@ You catch more fish than you can eat. This mod turns that surplus into food that
 | | **Salt route** | **Cold route** |
 |---|---|---|
 | Season | Any (best in summer) | **Winter only** (about -10 to 5 C) |
-| Salt | 2 per half weight of fish | None |
+| Salt | 4 per half weight of fish | None |
 | Keeps | About 4–6 months | About 1–2 years |
 | Eating | Straight into soup, stew, rice or pasta (salty) | Must be rehydrated first |
 | Weight | About 37% of the fresh fish | About 18%, the lightest food you can carry |
@@ -65,24 +65,25 @@ You catch more fish than you can eat. This mod turns that surplus into food that
 Raw fish or fillet + salt by its size + knife (kept) → **Salt Packed** fish.
 - Fresh, stale, even **part-eaten** fish works. Rotten, frozen or cooked doesn't.
 - **Big fish get split first:** a whole or gutted fish over **4.5 weight** (about 2 kg) is too thick to salt whole. **Gut Fish**, then **Split Fish**, and pack the halves. Bream-sized fish and smaller go in whole, heads on.
-- **Salt goes by weight:** 2 for each started half weight of the packed fish, at least 2. Carry it: only the first 2 can come from a container nearby.
+- **Salt goes by weight:** 4 for each started half weight of the packed fish, about 15% of its weight. Carry it: only the first 2 can come from a container nearby.
 
 | Fish | Packed weight | Salt |
 |---|---|---|
-| Bluegill, 0.5 | 0.5 | 2 |
-| Walleye, 4.0 | 3.6 | 16 |
-| Walleye, 4.5 (the most salted whole) | 4.05 | 18 |
-| Catfish, 10.0: too big, gut and split | each half 4.0 | 16 a half |
-| Vanilla fillet of that catfish, 0.5 | 4.5 | 18 |
+| Bluegill, 0.5 | 0.5 | 4 |
+| Walleye, 4.0 | 3.6 | 32 |
+| Walleye, 4.5 (the most salted whole) | 4.05 | 36 |
+| Catfish, 10.0: too big, gut and split | each half 4.0 | 32 a half |
+| Vanilla fillet of that catfish, 0.5 | 4.5 | 36 |
 
 - Any salt works: a vanilla shaker holds **10**, the Salt mod's Evaporated Salt **5** and a Bag of Salt **50**. Part-used salt goes first.
 
-> ✏ *Margin note:* real salters reckoned a fifth to a third of the fish's weight in salt. A catfish costs you most of a bag, which is why the Salt mod's lick is worth the walk.
+> ✏ *Margin note:* on the Volga a salter reckons 1 to 1.5 kg of salt for 10 kg of vobla; salt cod took up to a third of its weight. The mod charges about 15%. A split catfish costs you more than a whole Bag of Salt, which is why the Salt mod's lick is worth the walk.
 - A whole fish over 0.6 weight also gives **Fish Guts** (see Secrets).
 - Packed fish keeps only days. Get it in the tub.
 
 **Step 2. Press in the Salting Tub**
 Load up to **50 weight / 35 items**, press **Craft**. The board and stones go on for **1 to 2 in-game days**: the **heaviest fish** sets the time, from 1 day (every fish up to 1.1 weight, about half a kilo) to 2 days (any fish of 2.2 weight, about a kilo, or more). Press small fish together and they come out a day sooner. The tub stays closed until you've taken every pressed fish out.
+- **Mind a warm spell.** When the last ten days average above 20 C, fish in the tub sours by the spine before the salt reaches it, and the finished fish keeps less long: about a seventh off for a day at 21 C, over a third for two days at 25 C. Hover the batch to see it. Salt in spring and autumn, or press small fish.
 
 **Step 3. Hang on the Fish Drying Frame**
 Pick **Hang Salt Pressed Fish to Dry**, load pressed fish, press **Craft**. Each press hangs **one stack** of up to 2.5 weight, which dries on its own timer. There are **8 stacks** per frame, so you can keep adding while others dry.
@@ -111,8 +112,8 @@ Pick **Hang Salt Pressed Fish to Dry**, load pressed fish, press **Craft**. Each
 |---|---|---|---|---|
 | **Salting Tub** | Carpentry 2, Fishing 2 | 4 planks, 6 nails, 2 twine; saw kept | 50 weight / 35 items | Anywhere |
 | **Fish Drying Frame** | Carpentry 2, Fishing 2 | 6 long sticks, 3 nails, 4 twine | 8 stacks × 2.5 weight | Indoors or out |
-| **Fish Hanging Beam** | Carpentry 4, Fishing 2 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight | **Outdoors only** |
-| **Fish Gantry** | Carpentry 6, Fishing 2 | 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks × 50 weight | **Outdoors only** |
+| **Fish Hanging Beam** | Carpentry 4, Fishing 2 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight | **Open air or under an open roof**, not in a room |
+| **Fish Gantry** | Carpentry 6, Fishing 2 | 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks × 50 weight | **Open air or under an open roof**, not in a room |
 
 The Hanging Beam and Gantry work exactly like the frame, with bigger stacks. Use them for **big fish** that won't fit the frame's 2.5-weight stacks.
 
@@ -143,24 +144,28 @@ Drying runs on real weather, recorded every 10 minutes, **even while you're away
 - **Cold drying**: 32 days at full speed, between 0 and 5 C with a good wind. Slower in frost (four fifths at -5 C, three fifths below), slower from 5 to 10 C, and it stops above 10 C. **Wind** matters as much: still air halves the speed, a good breeze (the popup's *Good drying wind*) adds a fifth. A Kentucky winter's wind is mostly light, so a batch hung November to January takes about 50 to 55 days. Hang by mid-February at the latest.
 - **Fresh fish is fragile.** Until a cold stack is about 30% dried it has no dry skin: hard frost (below -5 C) and lying wet above freezing each take a little off how long the finished fish keeps, a quarter at most. Rot from a warm season also hits a fresh stack hardest and a nearly dry one hardly at all.
 - **Rain** pauses open stations until the fish dries off. Progress is **paused, never lost**. Snow pauses salt fish but not cold fish, and cold fish has to dry off after rain too.
-- **Under a roof**: rain can't reach it, but salt drying runs at about two thirds of the speed. Cold drying **stops** under a roof, as it needs moving air. Any roof overhead counts, walls or not: a porch roof or a floor laid on the level above is enough. Walls with no roof are still the open air.
+- **Where it hangs** (the popup's *Place*):
+  - **Open air**: no roof overhead. Walls with no roof are still the open air.
+  - **Under an open roof**: a porch, an open shed, a floor laid on the level above. Rain never reaches it. Salt fish dries as fast as in the open, **in the shade**. Cold fish dries at three quarters of the speed, as the roof breaks some of the wind, but never waits out the rain.
+  - **Indoors**: inside a room, including one you built yourself with walls all round and a full roof. Salt drying runs at about two thirds of the speed; cold drying **stops**, as the air is still.
+- **Hot sun**: above 25 C, salt fish in the open air that is less than half dry takes a little off how long it keeps (the popup says *Too hot in the sun*). A few percent in a Kentucky summer; hang it under an open roof and it's spared.
 
-| Month | Salt, outdoors | Salt, roofed | Cold drying | Cold batches that rotted | Cold keeping lost |
-|---|---|---|---|---|---|
-| Jan | 28–33 d | 27 d | 51–55 d | 0% | 20% |
-| Feb | 29–33 d | 27 d | 52–93 d | 3% | 16% |
-| Mar | 29–33 d | 27 d | 74 d | 97% | 18% |
-| Apr | 22–30 d | 24–27 d | — | 100% | — |
-| May | 16–25 d | 22–25 d | — | 100% | — |
-| Jun | 16–20 d | 21–23 d | — | 100% | — |
-| Jul | 15–18 d | 21–23 d | — | 100% | — |
-| Aug | 17–24 d | 22–25 d | — | 100% | — |
-| Sep | 17–34 d | 23–27 d | — | 100% | — |
-| Oct | 30–34 d | 27 d | 52–57 d | 30% | 15% |
-| Nov | 29–30 d | 27 d | 50–52 d | 0% | 10% |
-| Dec | — | 27 d | — | — | — |
+| Month | Salt, open | Salt, covered | Salt, indoors | Cold, open | Cold, covered | Cold batches that rotted | Cold keeping lost | 2-day press lost |
+|---|---|---|---|---|---|---|---|---|
+| Jan | 28–33 d | 27 d | 27 d | 51–55 d | 60–65 d | 0% | 20% | 0% |
+| Feb | 29–33 d | 27 d | 27 d | 52–93 d | 63–101 d | 3% | 16% | 0% |
+| Mar | 29–33 d | 26–27 d | 27 d | 74 d | — | 97% | 18% | 0% |
+| Apr | 22–30 d | 20–26 d | 24–27 d | — | — | 100% | — | 0% |
+| May | 16–25 d | 15–20 d | 22–25 d | — | — | 100% | — | 0% |
+| Jun | 16–20 d | 14–17 d | 21–23 d | — | — | 100% | — | 0% |
+| Jul | 15–18 d | 14–17 d | 21–23 d | — | — | 100% | — | 17% |
+| Aug | 17–24 d | 14–20 d | 22–25 d | — | — | 100% | — | 5% |
+| Sep | 17–34 d | 16–26 d | 23–27 d | — | — | 100% | — | 0% |
+| Oct | 30–34 d | 26–27 d | 27 d | 52–57 d | 65–69 d | 30% | 15% | 0% |
+| Nov | 29–30 d | 27 d | 27 d | 50–52 d | — | 0% | 10% | 0% |
+| Dec | — | 27 d | 27 d | — | — | — | — | 0% |
 
-December batches run past the end of the recorded forecasts, so they have no figure; expect about what January gives. *Keeping lost* is how much of a finished cold batch's keeping time early frost, early wet and a warm spell took, on average.
+December batches run past the end of the recorded forecasts, so they have no figure; expect about what January gives. *Keeping lost* is how much of a finished cold batch's keeping time early frost, early wet and a warm spell took, on average. *2-day press lost* is what a warm cure takes from a batch of big fish pressed that month.
 
 ---
 
@@ -205,7 +210,8 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 - **Why does salt dry fish?** Salt draws water out through the flesh (osmosis), and bacteria can't live in what's left. That's why packed fish keeps only days, pressed fish a week or two, and fully dried fish for months.
 - **Why press it?** The board and stones squeeze out the brine the salt has pulled from the fish, so drying starts from a firmer, drier fish. Norwegian and Portuguese salt cod makers stacked their fish under weights for the same reason.
-- **Why does cold drying need a roofless frame?** Stockfish dries in moving air at around freezing: cold enough that nothing rots, dry and windy enough that the water leaves. Under a roof the air goes still.
+- **Why does cold drying stop indoors?** Stockfish dries in moving air at around freezing: cold enough that nothing rots, dry and windy enough that the water leaves. In a room the air goes still; under an open roof some wind still gets through.
+- **Why dry salt fish in the shade?** In full summer sun the skin dries hard before the inside does, trapping the wet, and the fat turns rusty. Volga salters hang their vobla under awnings and in open sheds.
 - **Why do warm stacks rot?** Unsalted fish has nothing protecting it but the cold. Once the season averages above 10 C, it spoils faster than it dries.
 - **Why gut it first?** The guts spoil first and fastest. Stockfish makers gutted and headed every fish before it went on the rack.
 
@@ -222,7 +228,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 - **Fillets don't cheat the salt.** A vanilla fillet weighs 5% of its fish but holds half its food, so salted it pays and weighs as half the gutted fish. Fillets cut from a cured fish weigh half of it.
 - **Big catch?** A fish heavier than a stack's limit won't fit. Split it in two, or hang it on the Beam or Gantry.
-- **Keep a roofed frame for rainy spells.** It's slower, but rain never stops it.
+- **An open shed beats a room.** A frame under a porch or lean-to roof dries salt fish at full speed, rain or shine, in the shade. Keep the room for when you have nowhere else.
 - **Winter is stockfish season.** Gut everything you catch in December and January. The lightest, longest-keeping food in the game. Turn the heads into stock the same day, as they spoil like fresh fish.
 - **Rehydrate only what you'll cook today.** Rehydrated fish keeps just 2 days.
 - With the **Salt mod**, a salt lick keeps you packing forever. See the Collection Guide.
@@ -237,7 +243,8 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Frame refuses a fish | It takes only Salt Pressed fish, or Gutted Fish and halves. Raw, frozen salted, rotten and cooked fish are refused, and a frame stack holds 2.5 weight at most |
 | Cold stack came out rotten | It was hung in a warm season: the last 10 days averaged above 10 C |
 | Cold dried fish keeps less than a year | Hard frost or rain caught it in its first days on the frame |
-| Not drying | Rain on an open frame (cold fish too, until it dries off); or cold drying under a roof |
+| Not drying | Rain on an open frame (cold fish too, until it dries off); or cold drying indoors |
+| Salt fish keeps less than it should | A warm cure (the season was above 20 C while it pressed) or hot sun on an open frame before it was half dry |
 | Time Remaining looks wrong in the window | The window shows the time in the best weather, or the longest press. Hover the stack or the pressing batch for the real time left |
 | Pack Fish in Salt won't take a fish | A whole or gutted fish over 4.5 weight must be split first; or you don't carry enough salt for its size |
 | No Fish Head from gutting | The fish was 1.0 weight or less, or it was packed in salt (salted fish keep their heads) |
@@ -264,10 +271,12 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 | Command | What it does |
 |---|---|
-| `TPF.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness, the wind, the drying speed open, under a roof and cold, whether unsalted and salted fish are spoiling, and the running totals. |
+| `TPF.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness, the wind, the drying speed open, under an open roof, indoors and cold, whether unsalted and salted fish are spoiling, and the running totals. |
 | `TPF.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPF.age(288)` finishes a salt stack, `TPF.age(768)` a cold one. |
 | `TPF.spoil(hours)` | Adds spoiling weather, to test rotting. A fresh cold stack rots after 48. |
 | `TPF.frost(hours)` | Adds hours of hard frost, to test early frost on a fresh cold stack (72 hours take a tenth of its keeping). |
+| `TPF.heat(hours)` | Adds hours of hot sun, to test it on a fresh open salt stack (24 hours take a twentieth of its keeping). |
+| `TPF.warmCure(hours)` | Adds hours of a warm cure at 25 C, to test souring in a running tub (24 hours take about a fifth). |
 | `TPF.dry()` | Clears the wetness, so open and cold frames start drying again at once after rain. |
 | `TPF.fish(name, weight, n)` | Spawns `n` whole fish at that weight, with food scaled to match, e.g. `TPF.fish("Walleye", 4, 2)`. `TPF.fish()` lists the names. |
 | `TPF.heads(n)` | Spawns Fish Heads (default food values). |
@@ -276,6 +285,6 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 The Salting Tub runs on the game clock, not the weather, so `TPF.age` doesn't speed up pressing. Use the game's own time controls for that.
 
-**Typical check of the whole salt route:** `TPF.fish("Walleye", 4, 3)` and `TPF.salt(5)` (each 4 weight walleye takes 16 salt, and a shaker holds 10), pack and press, then hang the fish and `TPF.age(288)`.
+**Typical check of the whole salt route:** `TPF.fish("Walleye", 4, 3)` and `TPF.salt(10)` (each 4 weight walleye takes 32 salt, and a shaker holds 10), pack and press, then hang the fish and `TPF.age(288)`.
 
 **Typical check of heads:** `TPF.fish("Walleye", 4)` and `TPF.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.

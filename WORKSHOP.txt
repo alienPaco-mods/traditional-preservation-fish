@@ -25,7 +25,7 @@ Preserve your catch the old way. Salt it, press it and hang it to dry, or gut it
 [h2]Salt drying[/h2]
 
 [h3]1. Pack Fish in Salt[/h3]
-You need a raw fish or fillet, salt and a sharp knife or meat cleaver (kept). Salt goes by size: 2 for each started half weight of the packed fish, at least 2, so a bluegill takes 2 and a 4.5 weight walleye 18. A vanilla shaker holds 10. A fish over 4.5 weight (about 2 kg) is too thick to salt whole: gut and split it, then pack the halves. Rotten, frozen and cooked fish can't be packed. Salt Packed fish only keeps for days.
+You need a raw fish or fillet, salt and a sharp knife or meat cleaver (kept). Salt goes by size: 4 for each started half weight of the packed fish (about 15% of its weight, as on the Volga), so a bluegill takes 4 and a 4.5 weight walleye 36. A vanilla shaker holds 10. A fish over 4.5 weight (about 2 kg) is too thick to salt whole: gut and split it, then pack the halves. Rotten, frozen and cooked fish can't be packed. Salt Packed fish only keeps for days.
 
 [h3]2. Build a Salting Tub[/h3]
 Carpentry 2, Fishing 2. Takes 4 planks, 6 nails, 2 twine, a hammer and a saw (both kept).
@@ -48,7 +48,7 @@ You need a raw whole fish and a sharp knife or meat cleaver (kept). Fillets can'
 A Gutted Fish over 2.5 weight can be cut into two Fish Halves, each with half the weight and food, to fit smaller stacks.
 
 [h3]3. Hang it to dry[/h3]
-Choose Hang Gutted Fish to Cold Dry on any drying station, load your fish and press Craft. Frozen fish is fine. The station must be outdoors, not under a roof.
+Choose Hang Gutted Fish to Cold Dry on any drying station, load your fish and press Craft. Frozen fish is fine. The station must not be in a room: open air, or under an open roof (a porch or open shed) at three quarters of the speed.
 
 [h3]4. Rehydrate[/h3]
 Cold Dried fish is light but too hard to cook with. Rehydrate Fish uses 1 L of water and gives a fish you can cook, which spoils in days.
@@ -59,13 +59,13 @@ Changed your mind? A Gutted Fish or Fish Half can still be packed in salt.
 Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate and any spoilage. A stack can't mix salted and gutted fish. Weights are inventory weight, not kilograms.
 
 [h3]Fish Drying Frame[/h3]
-Carpentry 2, Fishing 2. Takes 6 long sticks, 3 nails, 4 twine and a hammer (kept). Holds 8 stacks of up to 2.5 weight each. The only station that can be built indoors.
+Carpentry 2, Fishing 2. Takes 6 long sticks, 3 nails, 4 twine and a hammer (kept). Holds 8 stacks of up to 2.5 weight each. The only station that can be built in a room.
 
 [h3]Fish Hanging Beam[/h3]
-Carpentry 4, Fishing 2. Takes 6 planks, 6 nails, 1 large hook and a hammer (kept). Holds 4 stacks of up to 15 weight each. Outdoors only.
+Carpentry 4, Fishing 2. Takes 6 planks, 6 nails, 1 large hook and a hammer (kept). Holds 4 stacks of up to 15 weight each. Open air or under an open roof, not in a room.
 
 [h3]Fish Gantry[/h3]
-Carpentry 6, Fishing 2. Takes 2 logs, 2 planks, 8 nails, 2 large hooks and a hammer (kept). Holds 2 stacks of up to 50 weight each. Outdoors only.
+Carpentry 6, Fishing 2. Takes 2 logs, 2 planks, 8 nails, 2 large hooks and a hammer (kept). Holds 2 stacks of up to 50 weight each. Open air or under an open roof, not in a room.
 
 [h2]Weather and seasons[/h2]
 Drying usually takes 12 to 55 in-game days.
@@ -77,10 +77,12 @@ Drying usually takes 12 to 55 in-game days.
 [*][b]Rain:[/b] pauses open stations until the fish has dried off. You lose time, not progress. Snow pauses salt drying but not cold drying.
 [/list]
 
-[h3]Indoors and under a roof[/h3]
+[h3]Under an open roof, and indoors[/h3]
 [list]
-[*][b]Salt drying[/b] keeps going through rain at about two thirds of the speed, taking about 21 to 27 days.
-[*][b]Cold drying[/b] stops, as it needs moving air.
+[*][b]Under an open roof[/b] (a porch, an open shed, no room round it): rain never reaches it. Salt fish dries at the open-air speed, in the shade. Cold fish dries at three quarters of the speed.
+[*][b]Indoors[/b] (a room, including one you build with walls all round and a full roof): salt drying runs at about two thirds of the speed, about 21 to 27 days. Cold drying stops, as it needs moving air.
+[*][b]Hot sun:[/b] above 25 C, salt fish in the open air that is less than half dry loses a little keeping time. Shade spares it.
+[*][b]A warm cure:[/b] if the season averages above 20 C while fish is in the tub, it sours by the spine and keeps less long.
 [*][b]Heating a room doesn't help:[/b] it goes by the outdoor temperature.
 [/list]
 

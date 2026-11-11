@@ -86,7 +86,10 @@ local function drawStackTooltip(slot, tooltip, isCold)
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_Method", getText(isCold and "IGUI_TraditionalPreservationFish_MethodCold" or "IGUI_TraditionalPreservationFish_MethodSalt"))
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_Progress", UI.percent(status.progress))
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_TimeLeft", timeText(status.hoursLeft))
-        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Temperature", getText(F.temperatureWord(isCold, ledger.temperature or 0)))
+        local modData = slot.craftRecipeData:getModData()
+        local place = modData.sheltered and "Indoors" or modData.covered and "Covered" or "Open"
+        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Place", getText("IGUI_TraditionalPreservationFish_Place" .. place))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFish_Temperature", getText(F.temperatureWord(isCold, ledger.temperature or 0, place == "Open")))
         if isCold then UI.addLine(layout, "IGUI_TraditionalPreservationFish_Wind", getText(F.windWord(ledger.wind))) end
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_Wetness", UI.percent(isCold and ledger.coldWetness or ledger.wetness))
         if status.reason then
@@ -94,19 +97,26 @@ local function drawStackTooltip(slot, tooltip, isCold)
         else
             UI.addLine(layout, "IGUI_TraditionalPreservationFish_Rate", UI.percent(status.rate))
         end
-        if status.spoiling or status.spoiled > 0 then
-            local warning = status.spoiling and (isCold and "IGUI_TraditionalPreservationFish_SpoilingWarm" or "IGUI_TraditionalPreservationFish_SpoilingMuggy") or "IGUI_TraditionalPreservationFish_Spoiled"
+        if status.spoiling or status.scorching or status.spoiled > 0 then
+            local warning = "IGUI_TraditionalPreservationFish_Spoiled"
+            if status.scorching then warning = "IGUI_TraditionalPreservationFish_SpoilingSun" end
+            if status.spoiling then warning = isCold and "IGUI_TraditionalPreservationFish_SpoilingWarm" or "IGUI_TraditionalPreservationFish_SpoilingMuggy" end
             UI.addLine(layout, "IGUI_TraditionalPreservationFish_Spoilage", UI.say(warning, UI.percent(status.spoiled)), UI.WARNING_COLOUR)
         end
     end)
 end
 
--- The tub's recipe time is the longest press, so a lighter batch says its own time left.
+-- The tub's recipe time is the longest press, so a lighter batch says its own time left, and what a warm
+-- season is taking from it.
 local function drawPressTooltip(slot, tooltip)
-    local status = F.pressStatus(slot.craftRecipeData:getModData(), getGameTime():getWorldAgeHours())
+    local status = F.pressStatus(slot.craftRecipeData:getModData(), getGameTime():getWorldAgeHours(), F.getLedger())
     UI.drawTooltip(tooltip, function(layout)
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_Progress", UI.percent(status.progress))
         UI.addLine(layout, "IGUI_TraditionalPreservationFish_TimeLeft", timeText(status.hoursLeft))
+        if status.spoiling or status.spoiled > 0 then
+            local warning = status.spoiling and "IGUI_TraditionalPreservationFish_SpoilingWarmCure" or "IGUI_TraditionalPreservationFish_Spoiled"
+            UI.addLine(layout, "IGUI_TraditionalPreservationFish_Spoilage", UI.say(warning, UI.percent(status.spoiled)), UI.WARNING_COLOUR)
+        end
     end)
 end
 
@@ -134,5 +144,5 @@ UI.onProgressSlot(function(slot, name)
     end
 end)
 
--- The Fish Hanging Beam and Gantry each stands in the open.
-UI.outdoorOnly(Tiles.OUTDOOR)
+-- The Fish Hanging Beam and Gantry each stands in the open or under an open roof, not in a room.
+UI.notInRooms(Tiles.OUTDOOR)

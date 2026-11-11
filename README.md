@@ -16,14 +16,14 @@ The salt route can be done in any season. The cold route needs no salt, keeps ab
 
 **Salt route**
 
-1. **Pack Fish in Salt**: a raw fish or fillet, salt by its size and a sharp knife or meat cleaver (kept). Any fish works, fresh or stale and even part-eaten, but not rotten, frozen or cooked. It takes 2 salt for each started half weight of the packed fish, and never less than 2: a bluegill takes 2, a 4 weight walleye 16, a 4.5 weight walleye 18 (packed weight is after the guts come out). A whole or gutted fish over 4.5 weight (about 2 kg) is too thick to salt whole, as on the Volga: gut it, split it and pack the halves (a 10 weight catfish gives two halves of 4.0, 16 salt each). Salt in a container in reach covers the first 2; the rest must be in your inventory (bags count). Any salt works: a vanilla shaker holds 10, an Evaporated Salt from Traditional Preservation (Salt) 5 and a Bag of Salt 50, and part-used salt goes first. Gives one Salt Packed fish, which keeps for days, not weeks, and Fish Guts if the fish has any (see below). The same limits apply when loading the tub and the frame. A Gutted Fish or Fish Half can be packed too, and goes through the salt route the same way, so you can gut a fish and still salt it.
+1. **Pack Fish in Salt**: a raw fish or fillet, salt by its size and a sharp knife or meat cleaver (kept). Any fish works, fresh or stale and even part-eaten, but not rotten, frozen or cooked. It takes 4 salt for each started half weight of the packed fish, about 15% of its weight (Volga salters use 10 to 15%): a bluegill takes 4, a 4 weight walleye 32, a 4.5 weight walleye 36 (packed weight is after the guts come out). A whole or gutted fish over 4.5 weight (about 2 kg) is too thick to salt whole, as on the Volga: gut it, split it and pack the halves (a 10 weight catfish gives two halves of 4.0, 32 salt each). Salt in a container in reach covers the first 2; the rest must be in your inventory (bags count). Any salt works: a vanilla shaker holds 10, an Evaporated Salt from Traditional Preservation (Salt) 5 and a Bag of Salt 50, and part-used salt goes first. Gives one Salt Packed fish, which keeps for days, not weeks, and Fish Guts if the fish has any (see below). The same limits apply when loading the tub and the frame. A Gutted Fish or Fish Half can be packed too, and goes through the salt route the same way, so you can gut a fish and still salt it.
 2. **Build a Salting Tub** (Carpentry 2, Fishing 2): 4 planks, 6 nails, 2 twine, a hammer and a saw (both kept).
 3. **Press**: load up to 50 weight of packed fish, 35 items at most, into the tub and press **Craft**. The board and stones go on until the salt has gone through the thickest fish, so the heaviest fish sets the time: 1 in-game day if every fish is up to 1.1 weight (about 0.5 kg), 2 days with any fish of 2.2 weight (about 1 kg) or more, and in between by weight. Big fish are split before salting (over 4.5 weight), so 2 days is the longest. The tub is closed from then until the last pressed fish is taken out, so nothing can be added. The clock keeps running while you are away.
 4. **Build a Fish Drying Frame** (Carpentry 2, Fishing 2): 6 long sticks, 3 nails, 4 twine and a hammer (kept).
 5. **Hang**: pick Hang Salt Pressed Fish to Dry in the frame's recipe list, load pressed fish and press **Craft**. Each press hangs one stack, which dries on its own timer. A stack holds 2.5 weight, so a full frame holds 20, and a fish heavier than 2.5 has to be sliced first (Slice Fish, two fillets of half its weight each) or hung on a bigger station. You can keep adding stacks while others dry, up to the 8 fixed spots, and finished stacks hold their spot until collected. Each sprite changes colour and thins down in five steps as its stack dries. Each stack picks its look at random when it starts, whatever is in it, so a frame doesn't look all alike. A salt stack is usually a whole fish and sometimes a headless or split one, and a cold stack is usually headless and sometimes split.
 6. **Eat, cook or rehydrate**: Salt Dried fish keeps for about 4 to 6 months. It is very salty, but can go straight into soup, stew, rice or pasta. **Rehydrate Fish** uses 1 L of water and gives a mild, perishable fish that cooks like a fresh one and is safe without cooking, though it stays darker than fresh fish, as real soaked fish does. Packed and pressed fish aren't safe yet: only drying makes salt fish safe to eat uncooked.
 
-**Bigger fish**: two outdoor stations hang fish the same way as the frame, with the same recipes, rates and spoilage, but take far bigger stacks and show them larger on their hooks. They can only be built in the open, not under a roof, and one picked up can't be put down indoors either.
+**Bigger fish**: two outdoor stations hang fish the same way as the frame, with the same recipes, rates and spoilage, but take far bigger stacks and show them larger on their hooks. They can be built in the open or under a roof with no room round it (a porch, an open shed), not in a room, and one picked up can't be put down in a room either.
 
 - **Fish Hanging Beam** (Carpentry 4, Fishing 2): 6 planks, 6 nails, 1 large hook and a hammer (kept). 4 stacks of up to 15 weight each.
 - **Fish Gantry** (Carpentry 6, Fishing 2): 2 logs, 2 planks, 8 nails, 2 large hooks and a hammer (kept). 2 stacks of up to 50 weight each.
@@ -55,7 +55,7 @@ Fish keep their size and species through every stage, for example Salt Pressed S
 | Cold Dried | about 18% | 89% | 66% | 365 / 730 |
 | Rehydrated (cold) | about 53% | 89% | 94% | 2 / 4 |
 
-Percentages are of the whole fresh fish. They assume the fish was big enough to give guts (over 0.6 weight) and, on the cold route, a head (over 1.0). A fish too small for guts keeps that tenth of its weight at every stage. A cold-route fish of 1.0 weight or less keeps its head, so it's 90% when gutted, with all of its food. Pressing takes a random 7 to 12% of each fish's weight. Freshness carries over as a share of each stage's fresh days, so a fish half way to stale is still half way to stale when gutted or packed. The press starts the clock afresh. Rehydrating carries the dried fish's share over, so an old dried fish gives a stale rehydrated one. A fillet vanilla cut counts as the food it holds once salted: it pays half its gutted fish's salt and comes out of the salt that heavy (9 times its raw weight).
+Percentages are of the whole fresh fish. They assume the fish was big enough to give guts (over 0.6 weight) and, on the cold route, a head (over 1.0). A fish too small for guts keeps that tenth of its weight at every stage. A cold-route fish of 1.0 weight or less keeps its head, so it's 90% when gutted, with all of its food. Pressing takes a random 7 to 12% of each fish's weight. Freshness carries over as a share of each stage's fresh days, so a fish half way to stale is still half way to stale when gutted or packed. The press starts the clock afresh, less what a warm cure took (see Seasons). Rehydrating carries the dried fish's share over, so an old dried fish gives a stale rehydrated one. A fillet vanilla cut counts as the food it holds once salted: it pays half its gutted fish's salt and comes out of the salt that heavy (9 times its raw weight).
 
 ## Seasons
 
@@ -65,33 +65,38 @@ You don't need to watch the forecast. Drying usually takes 12 to 55 days, and th
 - **Cold drying** takes 32 days at full speed: 0 to 5 C in a good breeze. Frost slows it (80% at -5 C, 60% below: ice leaves as vapour), so does warmth toward 10 C (67%), and it stops above 10 C. Wind sets the rest: 50% in still air, up to 120% at a wind intensity of 0.25 (`WIND_GOOD`). Live wind in a dry spell averages about 0.11, so a batch hung November to January takes about 50 to 55 days (a gameplay compromise: real stockfish hangs about three months).
 - **Fresh fish is fragile**: until a cold stack is 30% dried (`FRESH_UNTIL`), hard frost below -5 C (a tenth of its keeping per 72 hours) and lying wet above 0 C (0.05 per 48 hours) add to its spoilage, scaled by how wet it still is, together never past a quarter (`DAMAGE_CAP`). Rot from a warm season is scaled the same way, so a nearly dry stack caught by an April warm spell loses little and a fresh one rots.
 - **Rain**: open stations stop until it ends and the wet has dried off. Progress is paused, not lost. Snow counts as rain for salt fish but doesn't bother cold drying. Rain wets cold fish too, and it waits to dry off (its own wetness, `coldWetness`).
-- **Under a roof**: rain can't reach it, but it runs at 65% speed. Fish was traditionally dried indoors with the windows open, so salt fish takes about 21 to 27 days. Cold drying needs moving air, so it stops under a roof.
+- **Three places.** Core's `Weather.placeOf(station, true)` reads the station's square:
+  - **Open**: no roof overhead.
+  - **Covered**: a roof overhead but not a room (a porch, an open shed, a floor above with no walls round it). Rain can't reach it. Salt fish dries at the open-air rate in the shade, and the sun can't scorch it. Cold drying runs at 75% (`COVERED_COLD_RATE`): the roof breaks some of the wind, but rain never pauses it and wet never harms it.
+  - **Indoors**: a room, either a map building's or a space you built with walls all round and every square roofed (the engine's `isInARoom`). Salt fish runs at 65%, as when fish was dried indoors with the windows open, about 21 to 27 days. Cold drying needs moving air, so it stops indoors.
 
 Spoilage goes by the season, not the day: it follows the average temperature of the last 10 days or so, so a warm afternoon in January does nothing.
 
 - **Gutted fish** spoils once that average is above 10 C. It rots on the frame after 2 days at 10 C, sooner the warmer it gets, and the stack comes out rotten straight away.
 - **Salt fish** only suffers when the average is above 22 C and the humidity above 40%. Each day of that takes a twentieth of the finished fish's keeping time. In practice that's a few days in a hot July.
+- **Hot sun** (above 25 C, `HEAT_ABOVE`) on an open salt stack under half dried (`SALT_FRESH_UNTIL`) hardens the skin over wet flesh and rusts the fat: each 24 hours of it takes 5% (`HEAT_DAMAGE`) off the keeping, scaled by how wet it still is, within the same quarter (`DAMAGE_CAP`). A covered or indoor frame is in the shade. On the forecasts that costs an open stack 2 to 6% from May to August.
+- **A warm cure**: while the season averages above 20 C (`WARM_CURE_ABOVE`), fish in the tub sours by the spine before the salt reaches it. It picks up spoilage at a quarter of raw fish's rate (`WARM_CURE_SHARE`), plus as much again for each 10 degrees over: a day at 21 C costs about 14% of its keeping, two days at 25 C about 38%. The pressed fish carries that share onto the frame (by weight, for a stack of mixed fish), and the tub's popup shows it while pressing. A 2-day press lost 17% in July and 5% in August here.
 
 Weather is recorded every 10 in-game minutes for the whole world, so frames keep drying while you are away.
 
 This is how a batch hung in each month went, on the game's own forecasts for default weather. Rain timing is estimated, so treat the days as approximate. `tools/season_report.lua` prints this table.
 
-| Month | Mean C | Mean humidity | Salt, open frame | Salt, under a roof | Cold drying | Cold batches rotted | Cold keeping lost |
-|---|---|---|---|---|---|---|---|
-| Jan | -4 | 0.24 | 28–33 days | 27 days | 51–55 days | 0% | 20% |
-| Feb | -1 | 0.22 | 29–33 days | 27 days | 52–93 days | 3% | 16% |
-| Mar | 3 | 0.25 | 29–33 days | 27 days | 74 days | 97% | 18% |
-| Apr | 8 | 0.30 | 22–30 days | 24–27 days |  | 100% |  |
-| May | 15 | 0.34 | 16–25 days | 22–25 days |  | 100% |  |
-| Jun | 19 | 0.35 | 16–20 days | 21–23 days |  | 100% |  |
-| Jul | 21 | 0.45 | 15–18 days | 21–23 days |  | 100% |  |
-| Aug | 18 | 0.35 | 17–24 days | 22–25 days |  | 100% |  |
-| Sep | 15 | 0.33 | 17–34 days | 23–27 days |  | 100% |  |
-| Oct | 8 | 0.27 | 30–34 days | 27 days | 52–57 days | 30% | 15% |
-| Nov | 0 | 0.24 | 29–30 days | 27 days | 50–52 days | 0% | 10% |
-| Dec | -4 | 0.19 |  | 27 days |  |  |  |
+| Month | Mean C | Mean humidity | Salt, open | Salt, covered | Salt, indoors | Salt keeping lost (open / covered) | Cold, open | Cold, covered | Cold batches rotted | Cold keeping lost | 2-day press lost |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Jan | -4 | 0.24 | 28–33 d | 27 d | 27 d | 0% / 0% | 51–55 d | 60–65 d | 0% | 20% | 0% |
+| Feb | -1 | 0.22 | 29–33 d | 27 d | 27 d | 0% / 0% | 52–93 d | 63–101 d | 3% | 16% | 0% |
+| Mar | 3 | 0.25 | 29–33 d | 26–27 d | 27 d | 0% / 0% | 74 d | — | 97% | 18% | 0% |
+| Apr | 8 | 0.30 | 22–30 d | 20–26 d | 24–27 d | 0% / 0% | — | — | 100% | — | 0% |
+| May | 15 | 0.34 | 16–25 d | 15–20 d | 22–25 d | 2% / 0% | — | — | 100% | — | 0% |
+| Jun | 19 | 0.35 | 16–20 d | 14–17 d | 21–23 d | 4% / 0% | — | — | 100% | — | 0% |
+| Jul | 21 | 0.45 | 15–18 d | 14–17 d | 21–23 d | 6% / 1% | — | — | 100% | — | 17% |
+| Aug | 18 | 0.35 | 17–24 d | 14–20 d | 22–25 d | 2% / 0% | — | — | 100% | — | 5% |
+| Sep | 15 | 0.33 | 17–34 d | 16–26 d | 23–27 d | 1% / 0% | — | — | 100% | — | 0% |
+| Oct | 8 | 0.27 | 30–34 d | 26–27 d | 27 d | 0% / 0% | 52–57 d | 65–69 d | 30% | 15% | 0% |
+| Nov | 0 | 0.24 | 29–30 d | 27 d | 27 d | 0% / 0% | 50–52 d | — | 0% | 10% | 0% |
+| Dec | -4 | 0.19 | — | 27 d | 27 d | 0% / 0% | — | — | — | — | 0% |
 
-Humidity stays low in the game all year, mostly 20 to 45%, so it barely changes drying. That is why it only matters for salt fish in high summer. Salt fish lost about 1% of its keeping time at worst here. Blanks mean no batch hung that month finished inside the forecast data.
+Humidity stays low in the game all year, mostly 20 to 45%, so it barely changes drying. That is why it only matters for salt fish in high summer. Salt fish under a roof lost about 1% of its keeping time at worst here; in the open, the summer sun takes a few percent more. Blanks mean no batch hung that month finished inside the forecast data.
 
 ## Sandbox options
 
@@ -115,7 +120,7 @@ In debug mode, `TPF.help()` in the Lua console lists commands for testing this m
 - A pressing batch's hover popup is the mod's own too: the tub's recipe time is the longest press, so vanilla's
   would count a small batch down from 2 days.
 - A hanging stack's hover popup is the mod's own, built from the same weather rules as drying. Its Time Remaining assumes the weather holds. The window's Time Required line above the slots stays at the recipe's base time, and the popup's layout is copied from vanilla, so compare the two after a game update.
-- A sheltered frame uses the outdoor temperature, so heating the room doesn't speed it up.
+- A covered or indoor frame uses the outdoor temperature, so heating the room doesn't speed it up.
 - A stack that rots shows its finished sprite until collected.
 - Vanilla's cutting can also give a roe sac in season. Gutting and packing only give guts, and gutting a head.
 - Vanilla's Divide Food into Bowls only knows vanilla's pots, so the stock has its own two copies of it. Compare them with vanilla's after a game update.
@@ -141,7 +146,7 @@ Already passed: the curing rules (offline), a simulated year on the game's forec
 5. Pressing takes 1 day for a batch of small fish and 2 days with a fish of 2.2 weight or more, at your Day Length, and finishes while you are away. Save and reload mid-press keeps the progress.
 6. A mixed batch comes out with each fish's own name, weight and calories, including after a save and reload mid-press. Cancelling returns the same fish.
 7. Each press of Craft hangs one stack with one sprite, which steps through all five looks as its progress rises. A finished stack keeps its sprite until its last fish is taken. Going over 2.5 in a stack or 8 stacks stops with a message, and a stack added later dries on its own clock. Check that a full 25-item stack and several stacks at once run and finish correctly.
-8. Rain pauses an open frame and not a roofed one, snow doesn't pause cold drying, and the Wetness readout appears. Drying continues after leaving the area and coming back.
+8. Rain pauses an open frame and not a covered or indoor one, snow doesn't pause cold drying, and the Wetness readout appears. Drying continues after leaving the area and coming back.
 9. Slice Fish appears for a fish that could be cut and not for a too-small fish or a fillet, at every stage, and gives 2 fillets that keep their age. Salt Dried fish goes into a soup. Rehydrate Fish uses 1 L of water and keeps the container.
 10. Hovering a stack in progress shows its method, progress, time left, temperature, wetness and real drying rate, and a spoilage warning in a bad season, and the popup fits. Vanilla racks keep their usual popup. The frame's recipe list shows both hanging recipes, and each starts only with the right fish. A salted and a gutted stack can run on one frame at once, each on its own clock, and a mixed drop says why it was refused.
 11. Gut Fish and Pack Fish in Salt each give one Fish Guts for a whole fish over 0.6 weight, at 10% of its weight, and none for a small fish, a fillet or salmon. The guts work in chum.
@@ -149,5 +154,5 @@ Already passed: the curing rules (offline), a simulated year on the game's forec
 13. Create Fish Head Stock takes a pot with 1.5 L of water and a head, in a cooking pot and a forged pot. The tooltip lists Fish Head as an ingredient. The Fish Head Stock submenu offers stew ingredients and seasonings, allows 6 ingredients on top of the head, and seasonings as vanilla does, and the unhappiness starts at a vanilla stew's -20. It cooks, and eating it all gives the pot back. Divide Food into 4 Bowls and into 2 Bowls both appear for a cooked pot, give Stew Bowls named after the stock with its ingredients, and give the pot back.
 14. Gutted Fish keeps its name and icon and can be cooked. A half shows its fish's own Half icon, including after a save and reload. Dropped on the ground, every stage shows that species' model with the right paint: tinted when salted, dried or rehydrated, pink belly and red-flecked head when gutted, a red fillet edged with that species' skin when halved. Split Fish appears only for one over 2.5 weight, and gives 2 halves. A Gutted Fish and a half can both be packed in salt, with no more guts.
 15. Cold drying finishes a winter stack as Cold Dried fish. Cold stacks hang headless or split, fading to grey, and salt stacks whole, headless or split, fading to brown, on both facings. A stack keeps its look through running, finishing and a save and reload. A stack hung in a warm season comes out rotten in a few days. Frozen gutted fish hangs, and the frame takes no raw fish or fillets. Rehydrate Fish uses 1 L of water.
-16. The Fish Hanging Beam and Fish Gantry appear in the build menu at the right Carpentry level, consume the listed materials and work on both facings. Neither can be placed indoors or under a roof, and the frame still can. Each takes its stack limit and number of stacks and stops with a message past that. Fish hang from the hooks, which go about a third of the way into each fish, clear of the beam, larger on the Gantry than the Beam, and both recipes work on both.
+16. The Fish Hanging Beam and Fish Gantry appear in the build menu at the right Carpentry level, consume the listed materials and work on both facings. Neither can be placed in a room (a map building, or a space built with walls all round and a full roof); both can go under a porch or open-shed roof; the frame can go anywhere. Each takes its stack limit and number of stacks and stops with a message past that. Fish hang from the hooks, which go about a third of the way into each fish, clear of the beam, larger on the Gantry than the Beam, and both recipes work on both.
 17. `console.txt` shows no repeating Lua errors after an hour of play.

@@ -645,7 +645,7 @@ module TraditionalPreservationFish
         category = Cooking,
         OnStart = TraditionalPreservationFish.onPressStart,
         OnUpdate = TraditionalPreservationFish.onPressUpdate,
-        OnCreate = TraditionalPreservationFish.onCreateCured,
+        OnCreate = TraditionalPreservationFish.onCreatePressed,
         inputs
         {
             item variable[1:35] [TraditionalPreservationFish.SaltPackedFish] flags[IsUncookedFoodItem;ItemCount] mode:destroy,

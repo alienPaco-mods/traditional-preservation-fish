@@ -53,7 +53,7 @@ F.FILLET_FOOD_WEIGHT = (1 - F.GUTS_WEIGHT) * 0.5 / F.FILLET_WEIGHT
 -- Packing takes SALT_PER_STEP salt for each started SALT_STEP of the packed fish's weight, and never less
 -- than the SALT_MIN the recipe itself asks for.
 F.SALT_STEP = 0.5
-F.SALT_PER_STEP = 2
+F.SALT_PER_STEP = 4
 F.SALT_MIN = 2
 -- A fish over this weight is too thick to salt whole, as on the Volga: gut and split it first. Halves always pack.
 F.SALT_WHOLE_MAX = 4.5
@@ -85,8 +85,9 @@ F.DAMP_AIR_RATE = 0.4
 -- Weather can slow a frame this far and no further, so a batch takes MAX_DRY_DAYS at most, plus rain.
 F.MAX_DRY_DAYS = 27
 F.MIN_DRY_RATE = F.DRY_HOURS / (F.MAX_DRY_DAYS * 24)
--- Under a roof the fish stays dry and the air moves less. People dried fish indoors with the
--- windows open, so it's slower but a fair choice.
+-- Indoors the fish stays dry and the air moves less. People dried fish indoors with the
+-- windows open, so it's slower but a fair choice. Under a roof with no room round it (a porch, an
+-- open shed) salt fish dries as in the open air, in the shade and out of the rain.
 F.SHELTERED_RATE = 0.65
 
 -- Cold drying runs at full rate from 0 C to COLD_BEST, slows to COLD_MIN_RATE at COLD_LIMIT and stops
@@ -103,6 +104,8 @@ F.HARD_FROST_RATE = 0.6
 F.WIND_GOOD = 0.25
 F.CALM_RATE = 0.5
 F.WINDY_RATE = 1.2
+-- An open shed's roof breaks some of the wind, so cold drying there runs at this share, rain or not.
+F.COVERED_COLD_RATE = 0.75
 -- Fresh fish suffers most. Until it is FRESH_UNTIL dried and has formed a dry skin, hard frost breaks
 -- the flesh and lying wet above freezing starts it going off. Each adds a little to its spoilage,
 -- scaled by how wet the fish still is: FREEZE_DAMAGE_HOURS of hard frost on a fresh stack add
@@ -126,6 +129,18 @@ F.RAW_SPOIL_HOURS = 48
 F.SALT_SPOIL_ABOVE = 22
 F.SALT_SPOIL_HUMIDITY = 0.4
 F.SALT_SPOIL_HOURS = 480
+-- A tub in a warm season: the flesh by the spine sours before the salt reaches it. Above WARM_CURE_ABOVE
+-- (the season's mean) the batch picks up spoilage at WARM_CURE_SHARE of RAW_SPOIL_HOURS' rate, and each
+-- 10 degrees more adds as much again. The pressed fish carries it onto the frame.
+F.WARM_CURE_ABOVE = 20
+F.WARM_CURE_SHARE = 0.25
+-- Salt fish hangs in the shade. In open sun above HEAT_ABOVE (the temperature now), until it is
+-- SALT_FRESH_UNTIL dried, the skin hardens over wet flesh and the fat rusts: HEAT_DAMAGE_HOURS of that on
+-- a fresh stack add HEAT_DAMAGE to its spoilage, scaled by how wet it still is, within DAMAGE_CAP.
+F.HEAT_ABOVE = 25
+F.SALT_FRESH_UNTIL = 0.5
+F.HEAT_DAMAGE_HOURS = 24
+F.HEAT_DAMAGE = 0.05
 
 -- From DryingCraftLogic, so the frame's wetness readout tells the truth.
 local RAIN_WETTING = 0.001  -- per game second, at full intensity
@@ -190,12 +205,13 @@ function F.airRate(humidity)
     return 1 - dampness * (1 - F.DAMP_AIR_RATE)
 end
 
--- The weather totals: hours of drying done open, sheltered and cold, hours of spoiling raw and salted,
--- hours of hard frost and of cold fish lying wet above freezing, and the wetness rain left on open
--- frames and on cold ones.
+-- The weather totals: hours of drying done open, sheltered (indoors), covered (a roof, no room), cold and cold
+-- covered, hours of spoiling raw and salted,
+-- hours of hard frost and of cold fish lying wet above freezing, of a warm cure and of heat, and the
+-- wetness rain left on open frames and on cold ones.
 function F.newLedger(now)
-    return { lastHour = now, wetness = 0, coldWetness = 0, open = 0, sheltered = 0, cold = 0, rawSpoil = 0, saltSpoil = 0,
-        hardFrost = 0, coldWet = 0 }
+    return { lastHour = now, wetness = 0, coldWetness = 0, open = 0, sheltered = 0, covered = 0, cold = 0, coldCovered = 0, rawSpoil = 0, saltSpoil = 0,
+        hardFrost = 0, coldWet = 0, warmCure = 0, heat = 0 }
 end
 
 -- Adds one stretch of weather to the totals. Open frames dry nothing until the rain has gone
@@ -225,14 +241,20 @@ function F.advance(ledger, now, weather)
     local rate = temperatureRate * F.airRate(weather.humidity)
     ledger.openRate = ledger.wetness <= 0 and math.max(rate, minRate) or 0
     ledger.shelteredRate = math.max(rate * F.SHELTERED_RATE, minRate)
-    ledger.coldRate = ledger.coldWetness <= 0 and F.coldRate(weather.temperature) * F.windRate(weather.wind) or 0
+    ledger.coveredRate = math.max(rate, minRate)
+    local coldRate = F.coldRate(weather.temperature) * F.windRate(weather.wind)
+    ledger.coldRate = ledger.coldWetness <= 0 and coldRate or 0
+    ledger.coldCoveredRate = coldRate * F.COVERED_COLD_RATE
     ledger.temperature = weather.temperature
     ledger.wind = weather.wind
     ledger.open = ledger.open + ledger.openRate * hours
     ledger.sheltered = ledger.sheltered + ledger.shelteredRate * hours
+    ledger.covered = ledger.covered + ledger.coveredRate * hours
     ledger.cold = ledger.cold + ledger.coldRate * hours
+    ledger.coldCovered = ledger.coldCovered + ledger.coldCoveredRate * hours
     if weather.temperature < F.HARD_FROST then ledger.hardFrost = ledger.hardFrost + hours end
     if ledger.coldWetness > 0 and weather.temperature > 0 then ledger.coldWet = ledger.coldWet + hours end
+    if weather.temperature > F.HEAT_ABOVE then ledger.heat = ledger.heat + hours end
 
     Weather.season(ledger, "seasonTemperature", weather.temperature, hours)
     Weather.season(ledger, "seasonHumidity", weather.humidity, hours)
@@ -241,10 +263,21 @@ function F.advance(ledger, now, weather)
     if ledger.rawSpoiling then
         ledger.rawSpoil = ledger.rawSpoil + (1 + warmth / 10) * hours
     end
+    local cureWarmth = ledger.seasonTemperature - F.WARM_CURE_ABOVE
+    ledger.warmCuring = cureWarmth > 0
+    if ledger.warmCuring then
+        ledger.warmCure = ledger.warmCure + (1 + cureWarmth / 10) * hours
+    end
     ledger.saltSpoiling = ledger.seasonTemperature > F.SALT_SPOIL_ABOVE and ledger.seasonHumidity > F.SALT_SPOIL_HUMIDITY
     if ledger.saltSpoiling then
         ledger.saltSpoil = ledger.saltSpoil + hours
     end
+end
+
+-- Whether a fresh salt stack is in open sun in a heat wave.
+function F.scorching(modData, temperature)
+    return not modData.sheltered and not modData.covered and temperature > F.HEAT_ABOVE
+        and (modData.dried or 0) < F.SALT_FRESH_UNTIL * F.DRY_HOURS
 end
 
 -- How a hanging stack is doing right now, for its popup. reason says why it isn't drying, and
@@ -257,11 +290,15 @@ function F.stackStatus(isCold, modData, ledger)
         rate, reason = 0, "Roof"
     elseif isCold and temperature > F.COLD_LIMIT then
         rate, reason = 0, "TooWarm"
+    elseif isCold and modData.covered then
+        rate = ledger.coldCoveredRate or 0
     elseif isCold then
         rate = ledger.coldRate or 0
         if rate <= 0 then reason = "Rain" end
     elseif modData.sheltered then
         rate = ledger.shelteredRate or 0
+    elseif modData.covered then
+        rate = ledger.coveredRate or 0
     else
         rate = ledger.openRate or 0
         if rate <= 0 then reason = "Rain" end
@@ -274,11 +311,13 @@ function F.stackStatus(isCold, modData, ledger)
         hoursLeft = rate > 0 and math.max(hours - dried, 0) / rate or nil,
         spoiled = math.min(modData.spoiled or 0, 1),
         spoiling = (isCold and ledger.rawSpoiling or not isCold and ledger.saltSpoiling) == true,
+        scorching = not isCold and F.scorching(modData, temperature),
     }
 end
 
--- The popup's word for the temperature, a translation key: good, cool, mild, too warm, frost or hard frost.
-function F.temperatureWord(isCold, celsius)
+-- The popup's word for the temperature, a translation key: good, cool, mild, too warm, frost or hard frost,
+-- or for salt fish in the sun, too hot (exposed: no roof over it).
+function F.temperatureWord(isCold, celsius, exposed)
     if isCold then
         if celsius > F.COLD_LIMIT then return "IGUI_TraditionalPreservationFish_TempTooWarm" end
         if celsius > F.COLD_BEST then return "IGUI_TraditionalPreservationFish_TempMild" end
@@ -286,6 +325,7 @@ function F.temperatureWord(isCold, celsius)
         if celsius >= F.HARD_FROST then return "IGUI_TraditionalPreservationFish_TempFrost" end
         return "IGUI_TraditionalPreservationFish_TempHardFrost"
     end
+    if exposed and celsius > F.HEAT_ABOVE then return "IGUI_TraditionalPreservationFish_TempHot" end
     if celsius >= 20 then return "IGUI_TraditionalPreservationFish_TempGoodWarm" end
     if celsius > 0 then return "IGUI_TraditionalPreservationFish_TempCool" end
     return "IGUI_TraditionalPreservationFish_TempFrost"
@@ -302,8 +342,8 @@ end
 -- The ledger is the mod's global ModData table itself, so its keys are the ones in every save.
 function F.getLedger()
     local data = ModData.getOrCreate(F.MOD_DATA_KEY)
-    -- cold and hardFrost came after the first release, so a save can have the rest without them.
-    if not data.hardFrost then
+    -- cold, hardFrost, covered, warmCure and heat came after the first release, so a save can have the rest without them.
+    if not data.heat then
         local ledger = F.newLedger(getGameTime():getWorldAgeHours())
         for key, value in pairs(ledger) do
             if data[key] == nil then data[key] = value end
@@ -323,6 +363,7 @@ end
 -- taken in, so the batch's heaviest fish sets its hours.
 function F.onPressStart(craftRecipeData)
     Weather.startClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours())
+    craftRecipeData:getModData().lastWarmCure = F.getLedger().warmCure
     local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
     local heaviest = 0
     for i = 0, fish:size() - 1 do
@@ -331,11 +372,18 @@ function F.onPressStart(craftRecipeData)
     craftRecipeData:getModData().pressHours = F.pressHours(heaviest)
 end
 
+-- The share of its keeping a batch has lost to a warm cure so far. A press started before this counts from now.
+function F.cureSpoiled(modData, ledger)
+    local warm = ledger.warmCure - (modData.lastWarmCure or ledger.warmCure)
+    return math.min(warm * F.WARM_CURE_SHARE / F.RAW_SPOIL_HOURS, 1)
+end
+
 -- How far a batch in the tub is, for its popup.
-function F.pressStatus(modData, now)
+function F.pressStatus(modData, now, ledger)
     local hours = modData.pressHours or OLD_PRESS_HOURS
     local done = math.max(now - (modData.pressStartHour or now), 0)
-    return { progress = math.min(done / hours, 1), hoursLeft = math.max(hours - done, 0) }
+    return { progress = math.min(done / hours, 1), hoursLeft = math.max(hours - done, 0),
+        spoiled = F.cureSpoiled(modData, ledger), spoiling = ledger.warmCuring == true }
 end
 
 -- Craft timers tick at a fixed speed whatever Day Length says and stop when the area unloads,
@@ -386,9 +434,9 @@ function F.stationIndex(object)
     return name and STATION_INDEX[name]
 end
 
--- The big beams stand in the open, unlike the frame.
-function F.isOutdoors(params)
-    return params.square:isOutside()
+-- The big beams stand in the open or under an open roof, not in a room, unlike the frame.
+function F.notInRoom(params)
+    return not params.square:isInARoom()
 end
 
 -- The hanger a station's sprite belongs to, whichever way it faces, or nil for a tub.
@@ -428,20 +476,35 @@ function F.dryingStage(progress)
     return math.min(math.floor(progress * running), running - 1)
 end
 
+-- What a warm cure took from a stack's fish, by weight.
+function F.stackCureSpoiled(fish)
+    local weight, spoiled = 0, 0
+    for i = 0, fish:size() - 1 do
+        local item = fish:get(i)
+        weight = weight + item:getActualWeight()
+        spoiled = spoiled + item:getActualWeight() * (item:getModData().cureSpoiled or 0)
+    end
+    return weight > 0 and spoiled / weight or 0
+end
+
 local function startStack(craftRecipeData)
     local ledger = F.getLedger()
     local modData = craftRecipeData:getModData()
     modData.dried = 0
-    modData.spoiled = 0
+    modData.spoiled = F.stackCureSpoiled(craftRecipeData:getAllInputItemsWithFlag("ItemCount"))
     modData.stackId = getGameTime():getWorldAgeHours()
     modData.lastOpen = ledger.open
     modData.lastSheltered = ledger.sheltered
+    modData.lastCovered = ledger.covered
     modData.lastCold = ledger.cold
+    modData.lastColdCovered = ledger.coldCovered
     modData.lastRawSpoil = ledger.rawSpoil
     modData.lastSaltSpoil = ledger.saltSpoil
     modData.lastHardFrost = ledger.hardFrost
     modData.lastColdWet = ledger.coldWet
+    modData.lastHeat = ledger.heat
     modData.sheltered = nil
+    modData.covered = nil
 end
 
 -- Shows a stack's progress, and ends it early if it has rotted.
@@ -457,23 +520,39 @@ function F.onDryStart(craftRecipeData)
     craftRecipeData:getModData().style = F.pickStyle(F.SALT_STYLES)
 end
 
--- Adds what the weather has given since the last update. It goes by the frame's shelter now,
--- so a roof built over a running frame counts from then on.
-function F.onDryUpdate(craftRecipeData)
-    local ledger = F.getLedger()
-    local modData = craftRecipeData:getModData()
-    if not modData.dried then return end
-
+-- Adds what the weather has done to a salt stack since it was last looked at. It goes by the frame's
+-- place now, so a roof built over a running frame counts from then on. Heat in open sun harms a stack
+-- under SALT_FRESH_UNTIL dried, weighed by how wet it still is, as cold frames weigh frost.
+function F.saltStep(modData, ledger)
+    -- Stacks from before spoilage, the covered total and heat have no starting point, so they count from now.
+    local heat = ledger.heat - (modData.lastHeat or ledger.heat)
+    local exposed = not modData.sheltered and not modData.covered
+    local vulnerability = 1 - math.min(modData.dried / F.DRY_HOURS, 1)
+    local damage = 0
+    if exposed and vulnerability > 1 - F.SALT_FRESH_UNTIL then
+        damage = heat / F.HEAT_DAMAGE_HOURS * F.HEAT_DAMAGE * vulnerability
+    end
     if modData.sheltered then
         modData.dried = modData.dried + ledger.sheltered - modData.lastSheltered
+    elseif modData.covered then
+        modData.dried = modData.dried + ledger.covered - (modData.lastCovered or ledger.covered)
     else
         modData.dried = modData.dried + ledger.open - modData.lastOpen
     end
-    -- A stack from before spoilage has no starting point, so it counts from now.
-    modData.spoiled = (modData.spoiled or 0) + (ledger.saltSpoil - (modData.lastSaltSpoil or ledger.saltSpoil)) / F.SALT_SPOIL_HOURS
+    local spoiled = (modData.spoiled or 0) + (ledger.saltSpoil - (modData.lastSaltSpoil or ledger.saltSpoil)) / F.SALT_SPOIL_HOURS
+    if damage > 0 and spoiled < F.DAMAGE_CAP then spoiled = math.min(spoiled + damage, F.DAMAGE_CAP) end
+    modData.spoiled = spoiled
     modData.lastOpen = ledger.open
     modData.lastSheltered = ledger.sheltered
+    modData.lastCovered = ledger.covered
     modData.lastSaltSpoil = ledger.saltSpoil
+    modData.lastHeat = ledger.heat
+end
+
+function F.onDryUpdate(craftRecipeData)
+    local modData = craftRecipeData:getModData()
+    if not modData.dried then return end
+    F.saltStep(modData, F.getLedger())
     showProgress(craftRecipeData, modData, F.DRY_HOURS)
 end
 
@@ -483,8 +562,9 @@ function F.onColdDryStart(craftRecipeData)
     craftRecipeData:getModData().style = F.pickStyle(F.COLD_STYLES)
 end
 
--- Adds what the weather has done to a cold stack since it was last looked at. A roof keeps the wind
--- off, so unsalted fish under one doesn't dry; it can still spoil. Rot, early hard frost and wet weigh
+-- Adds what the weather has done to a cold stack since it was last looked at. Indoors the air is
+-- still, so unsalted fish doesn't dry there; it can still spoil. An open shed's roof keeps the rain
+-- off and some of the wind. Rot, early hard frost and wet weigh
 -- by how wet the fish still is, taken at this update (a stack catching up after its chunk was
 -- unloaded uses its progress from then).
 function F.coldStep(modData, ledger)
@@ -495,15 +575,18 @@ function F.coldStep(modData, ledger)
     local damage = 0
     if vulnerability > 1 - F.FRESH_UNTIL then
         damage = frost / F.FREEZE_DAMAGE_HOURS * F.FREEZE_DAMAGE
-        if not modData.sheltered then damage = damage + wet / F.WET_DAMAGE_HOURS * F.WET_DAMAGE end
+        if not modData.sheltered and not modData.covered then damage = damage + wet / F.WET_DAMAGE_HOURS * F.WET_DAMAGE end
     end
-    if not modData.sheltered then
+    if modData.covered then
+        modData.dried = modData.dried + ledger.coldCovered - (modData.lastColdCovered or ledger.coldCovered)
+    elseif not modData.sheltered then
         modData.dried = modData.dried + ledger.cold - modData.lastCold
     end
     local spoiled = modData.spoiled + (ledger.rawSpoil - modData.lastRawSpoil) / F.RAW_SPOIL_HOURS * vulnerability
     if spoiled < F.DAMAGE_CAP then spoiled = math.min(spoiled + damage * vulnerability, F.DAMAGE_CAP) end
     modData.spoiled = spoiled
     modData.lastCold = ledger.cold
+    modData.lastColdCovered = ledger.coldCovered
     modData.lastRawSpoil = ledger.rawSpoil
     modData.lastHardFrost = ledger.hardFrost
     modData.lastColdWet = ledger.coldWet
@@ -676,6 +759,20 @@ function F.onCreateCured(craftRecipeData)
     end
 end
 
+-- The press's OnCreate: a warm cure has taken its share off each fish's keeping, and the fish carries
+-- that share onto the frame.
+function F.onCreatePressed(craftRecipeData)
+    F.onCreateCured(craftRecipeData)
+    local spoiled = F.cureSpoiled(craftRecipeData:getModData(), F.getLedger())
+    if spoiled <= 0 then return end
+    local created = craftRecipeData:getAllCreatedItems()
+    for i = 0, created:size() - 1 do
+        local fish = created:get(i)
+        fish:getModData().cureSpoiled = spoiled
+        fish:setAge(spoiled >= 1 and fish:getOffAgeMax() or fish:getOffAge() * spoiled)
+    end
+end
+
 -- A part cut from a fish, scaled to it as vanilla's guts are.
 local function cutFrom(fish, fullType, weightShare, foodShare)
     local part = instanceItem(fullType)
@@ -817,7 +914,7 @@ end
 -- What the sandbox's spoilage setting does to the limits: off, forgiving, normal and harsh.
 local SPOILAGE_SCALES = { math.huge, 2, 1, 0.5 }
 local RAW_SPOIL_HOURS, SALT_SPOIL_HOURS = F.RAW_SPOIL_HOURS, F.SALT_SPOIL_HOURS
-local FREEZE_DAMAGE_HOURS, WET_DAMAGE_HOURS = F.FREEZE_DAMAGE_HOURS, F.WET_DAMAGE_HOURS
+local FREEZE_DAMAGE_HOURS, WET_DAMAGE_HOURS, HEAT_DAMAGE_HOURS = F.FREEZE_DAMAGE_HOURS, F.WET_DAMAGE_HOURS, F.HEAT_DAMAGE_HOURS
 local BASE_DRY_HOURS, BASE_COLD_DRY_HOURS = F.DRY_HOURS, F.COLD_DRY_HOURS
 
 -- Reads the sandbox options into the drying times and spoilage limits.
@@ -835,6 +932,7 @@ function F.applySandbox()
     F.SALT_SPOIL_HOURS = SALT_SPOIL_HOURS * scale
     F.FREEZE_DAMAGE_HOURS = FREEZE_DAMAGE_HOURS * scale
     F.WET_DAMAGE_HOURS = WET_DAMAGE_HOURS * scale
+    F.HEAT_DAMAGE_HOURS = HEAT_DAMAGE_HOURS * scale
 end
 
 local function applyRecipeTime(name, hours)
