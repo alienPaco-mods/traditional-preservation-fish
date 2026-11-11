@@ -161,7 +161,7 @@ Drying runs on real weather, recorded every 10 minutes, **even while you're away
 - **Where it hangs** (the popup's *Place*):
   - **Open air**: no roof overhead. Walls with no roof are still the open air.
   - **Under an open roof**: a porch, an open shed, a floor laid on the level above. Rain never reaches it. Salt fish dries as fast as in the open, **in the shade**. Cold fish dries at three quarters of the speed, as the roof breaks some of the wind, but never waits out the rain.
-  - **Indoors**: inside a room, including one you built yourself with walls all round and a full roof. Salt drying runs at about two thirds of the speed; cold drying **stops**, as the air is still.
+  - **Indoors**: inside a room, including one you built yourself with walls all round and a full roof. Salt drying runs at about two thirds of the speed; a station there **refuses gutted fish** for cold drying, as the air is still (a stack hung before 0.4.7 stays, stopped).
 - **Hot sun**: above 25 C, salt fish in the open air that is less than half dry takes a little off how long it keeps (the popup says *Too hot in the sun*). A few percent in a Kentucky summer; hang it under an open roof and it's spared.
 
 | Month | Salt, open | Salt, covered | Salt, indoors | Cold, open | Cold, covered | Cold batches that rotted | Cold keeping lost | 2-day cure lost |
@@ -225,7 +225,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 - **Why does salt dry fish?** Salt draws water out through the flesh (osmosis), and bacteria can't live in what's left. That's why packed fish keeps only days, cured fish a week or two, and fully dried fish for months.
 - **Why press it?** The board and stones squeeze out the brine the salt has pulled from the fish, so drying starts from a firmer, drier fish. Norwegian and Portuguese salt cod makers stacked their fish under weights for the same reason.
-- **Why does cold drying stop indoors?** Stockfish dries in moving air at around freezing: cold enough that nothing rots, dry and windy enough that the water leaves. In a room the air goes still; under an open roof some wind still gets through.
+- **Why won't a station indoors take gutted fish?** Stockfish dries in moving air at around freezing: cold enough that nothing rots, dry and windy enough that the water leaves. In a room the air goes still; under an open roof some wind still gets through.
 - **Why dry salt fish in the shade?** In full summer sun the skin dries hard before the inside does, trapping the wet, and the fat turns rusty. Volga salters hang their vobla under awnings and in open sheds.
 - **Why do warm stacks rot?** Unsalted fish has nothing protecting it but the cold. Once the season averages above 10 C, it spoils faster than it dries.
 - **Why gut it first?** The guts spoil first and fastest. Stockfish makers gutted and headed every fish before it went on the rack.
@@ -414,7 +414,7 @@ A pantry, kitchen or shed is unheated: it follows the average of the last ten da
 | Frame refuses meat | The stack waiting to start is fish: one stack is one kind. Craft it first, then load the meat |
 | Cold stack came out rotten | It was hung in a warm season: the last 10 days averaged above 10 C |
 | Cold dried fish keeps less than a year | Hard frost or rain caught it in its first days on the frame |
-| Not drying | Rain on an open frame (cold fish too, until it dries off); cold drying indoors; or charque at or below freezing |
+| Not drying | Rain on an open frame (cold fish too, until it dries off); an old cold stack indoors; or charque at or below freezing |
 | Charque lost progress | It was rained on, on an open frame: a tenth for every 6 hours of rain |
 | Add Meat to the Pot is greyed out | The pot already has four cuts, or it has cooked: meat goes in raw |
 | Pack Potted Meat is greyed out | The pot isn't cooked yet, or it burnt (Scrape Out Burnt Fat). The jar must be empty |
