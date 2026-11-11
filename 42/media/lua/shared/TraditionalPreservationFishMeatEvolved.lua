@@ -13,6 +13,7 @@ F.INGREDIENT_STANDINS = {
     ["TraditionalPreservationFishMeat.GuttedFish"] = "TraditionalPreservationFishMeat.GuttedFishIngredient",
     ["TraditionalPreservationFishMeat.FishHalf"] = "TraditionalPreservationFishMeat.FishHalfIngredient",
     ["TraditionalPreservationFishMeat.SoakedColdFish"] = "TraditionalPreservationFishMeat.SoakedColdFishIngredient",
+    ["TraditionalPreservationFishMeat.SoakedCharque"] = "TraditionalPreservationFishMeat.SoakedCharqueIngredient",
 }
 
 -- Swaps every fish stage in a dish's list for its stand-in.

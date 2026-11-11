@@ -80,12 +80,19 @@ local function refreshTub(tub, entry, faceIndex, waiting, _, batches, finishedSt
     showSprites(tub, entry, tostring(sprite), sprite and { sprite + faceIndex } or {})
 end
 
--- The same numbering as fish_index in tools/build_tileset.py.
+-- The same numbering as fish_index in tools/build_tileset.py. Meat has its own run of tiles, one per stage.
+function TraditionalPreservationFishMeatWorld.hangingSprite(hanger, state, slot, faceIndex)
+    local first = hanger.fishSprite
+    local meatState = F.STYLE_MEAT * F.DRYING_STAGES
+    if state >= meatState then first, state = hanger.meatSprite, state - meatState end
+    return first + (state * hanger.stacks + slot - 1) * FACE_COUNT + faceIndex
+end
+
 local function refreshFrame(frame, entry, faceIndex, _, waitingStyle, batches, finishedStyles)
     local states = TraditionalPreservationFishMeatWorld.fishStates(waitingStyle, batches, finishedStyles)
     local sprites = {}
     for slot, state in ipairs(states) do
-        table.insert(sprites, entry.hanger.fishSprite + (state * entry.hanger.stacks + slot - 1) * FACE_COUNT + faceIndex)
+        table.insert(sprites, TraditionalPreservationFishMeatWorld.hangingSprite(entry.hanger, state, slot, faceIndex))
     end
     showSprites(frame, entry, table.concat(states, ","), sprites)
 end

@@ -7,10 +7,10 @@
   "TraditionalPreservationFishMeat.GutFish": "Gut Fish",
   "SplitFish": "Split Fish",
   "TraditionalPreservationFishMeat.SplitFish": "Split Fish",
-  "PressSaltedFish": "Press Salted Fish",
-  "TraditionalPreservationFishMeat.PressSaltedFish": "Press Salted Fish",
-  "HangFishToDry": "Hang Salt Pressed Fish to Dry",
-  "TraditionalPreservationFishMeat.HangFishToDry": "Hang Salt Pressed Fish to Dry",
+  "PressSaltedFish": "Cure Salted Fish",
+  "TraditionalPreservationFishMeat.PressSaltedFish": "Cure Salted Fish",
+  "HangFishToDry": "Hang Salt Cured Fish to Dry",
+  "TraditionalPreservationFishMeat.HangFishToDry": "Hang Salt Cured Fish to Dry",
   "HangFishToColdDry": "Hang Gutted Fish to Cold Dry",
   "TraditionalPreservationFishMeat.HangFishToColdDry": "Hang Gutted Fish to Cold Dry",
   "SliceSaltedFish": "Slice Fish",
@@ -53,6 +53,10 @@
   "TraditionalPreservationFishMeat.StrainTallow": "Strain Tallow",
   "PackMeatInSalt": "Pack Meat in Salt",
   "TraditionalPreservationFishMeat.PackMeatInSalt": "Pack Meat in Salt",
-  "PressSaltedMeat": "Press Salted Meat",
-  "TraditionalPreservationFishMeat.PressSaltedMeat": "Press Salted Meat"
+  "PressSaltedMeat": "Cure Salted Meat",
+  "TraditionalPreservationFishMeat.PressSaltedMeat": "Cure Salted Meat",
+  "HangMeatToDry": "Hang Salt Cured Meat to Dry",
+  "TraditionalPreservationFishMeat.HangMeatToDry": "Hang Salt Cured Meat to Dry",
+  "SoakCharque": "Rehydrate Charque",
+  "TraditionalPreservationFishMeat.SoakCharque": "Rehydrate Charque"
 }

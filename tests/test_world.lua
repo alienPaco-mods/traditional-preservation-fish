@@ -127,6 +127,18 @@ W.track(porch)
 W.refresh(porch)
 check("a frame under an open roof is covered", porched.modData.covered == true and porched.modData.sheltered == false)
 
+-- Charque: a meat stack halfway and Salt Cured meat waiting, from the meat's own tiles at the end of sheet 2.
+local charque = recipeData(0.5, T.STYLE_MEAT)
+local rack = station("traditionalpreservationfishmeat_01_6", 5, true, { fish(T.CURED_MEAT) }, { charque }, {})
+W.track(rack)
+W.refresh(rack)
+-- Meat stage 2 in slot 0 (716 + 32 = 748), fresh in slot 1 (718).
+check("charque hangs from the meat tiles", table.concat(rack.sprites, " ") ==
+    "traditionalpreservationfishmeat_02_340 traditionalpreservationfishmeat_02_310")
+check("a beam's charque is its own run too", W.hangingSprite(T.HANGERS[408], T.STYLE_MEAT * T.DRYING_STAGES, 1, 1) == 797
+    and W.hangingSprite(T.HANGERS[410], T.STYLE_MEAT * T.DRYING_STAGES + 4, 2, 0) == 836 + (4 * 2 + 1) * 2)
+check("fish keep theirs", W.hangingSprite(T.HANGERS[6], 4, 1, 0) == 8 + 4 * 8 * 2)
+
 -- Tubs
 local tub = station("traditionalpreservationfishmeat_01_1", 3, true, {}, { recipeData(0.3) }, {})
 W.track(tub)

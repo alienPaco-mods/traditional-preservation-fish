@@ -88,6 +88,11 @@ check("not for a fillet", not green(station(FRAME), fish("Base.FishFillet", 0.5)
 check("not for gutted fish on a salted stack", not green(station(FRAME, { fish(PRESSED, 0.5) }), fish(GUTTED, 0.5)))
 check("not for salted fish on a gutted stack", not green(station(FRAME, { fish(GUTTED, 0.5) }), fish(PRESSED, 0.5)))
 check("gutted fish and halves share a stack", green(station(FRAME, { fish(GUTTED, 0.5) }), fish(HALF, 0.5)))
+local CURED = "TraditionalPreservationFishMeat.SaltCuredMeat"
+check("a frame is green for Salt Cured meat", green(station(FRAME), fish(CURED, 0.3)))
+check("not for meat on a fish stack, nor fish on a meat one", not green(station(FRAME, { fish(PRESSED, 0.5) }), fish(CURED, 0.3))
+    and not green(station(FRAME, { fish(CURED, 0.3) }), fish(GUTTED, 0.5)))
+check("meat stacks with meat", green(station(FRAME, { fish(CURED, 0.3) }), fish(CURED, 0.5)))
 check("a half over the limit is refused", not green(station(FRAME), fish(HALF, 3)))
 local MEDIUM, LARGE = "traditionalpreservationfishmeat_02_0", "traditionalpreservationfishmeat_02_3"
 check("a medium beam takes a fish too heavy for a frame", green(station(MEDIUM), fish(PRESSED, 12)))
@@ -264,7 +269,7 @@ dofile("42/media/lua/shared/TimedActions/TPFMRinse.lua")
 local function rinsable(fullType, name)
     local modData = {}
     return { class = "InventoryItem", getFullType = function() return fullType end, getModData = function() return modData end,
-        getDisplayName = function() return name or "Walleye (Salt Pressed)" end, getTexture = function() return "fish icon" end }
+        getDisplayName = function() return name or "Walleye (Salt Cured)" end, getTexture = function() return "fish icon" end }
 end
 local sink
 local person = {
@@ -287,19 +292,19 @@ end
 local function rinseOption(menu)
     return menu:getOptionFromName("ContextMenu_TraditionalPreservationFishMeat_RinseAtSink")
 end
-local pressedOne, pressedTwo = rinsable(F.RINSE_TYPE), rinsable(F.RINSE_TYPE)
+local pressedOne, pressedTwo = rinsable("TraditionalPreservationFishMeat.SaltPressedFish"), rinsable("TraditionalPreservationFishMeat.SaltPressedFish")
 local stack = { items = { pressedOne, pressedOne, pressedTwo } }
 check("no sink, no option: the Rinse recipe covers carried water", #rinseMenu({ stack }).options == 0)
 sink = {
     hasWater = function() return true end, isTaintedWater = function() return false end,
     getFluidAmount = function() return 10 end, getSquare = function() return "sink square" end,
 }
-check("no option on a fish that isn't Salt Pressed", #rinseMenu({ rinsable("TraditionalPreservationFishMeat.SaltDriedFish") }).options == 0)
+check("no option on a fish that isn't Salt Cured", #rinseMenu({ rinsable("TraditionalPreservationFishMeat.SaltDriedFish") }).options == 0)
 
 -- Vanilla's recipe submenu for the fish already there: the option joins it.
 local withSub = H.menu()
 local vanillaSub = withSub:getNew()
-withSub:addSubMenu(withSub:addOption("Walleye (Salt Pressed)"), vanillaSub)
+withSub:addSubMenu(withSub:addOption("Walleye (Salt Cured)"), vanillaSub)
 vanillaSub:addOption("Slice")
 rinseMenu({ stack }, withSub)
 local atSink = rinseOption(vanillaSub)
@@ -316,7 +321,7 @@ local slice = lone:addOption("Slice", pressedOne, ISInventoryPaneContextMenu.OnN
 slice.iconTexture = "slice icon"
 rinseMenu({ stack }, lone)
 local parent = lone.options[2]
-check("a lone recipe becomes the fish's submenu in its place", #lone.options == 2 and parent.name == "Walleye (Salt Pressed)" and parent.onSelect == nil)
+check("a lone recipe becomes the fish's submenu in its place", #lone.options == 2 and parent.name == "Walleye (Salt Cured)" and parent.onSelect == nil)
 local moved = parent.subOption.options[1]
 check("holding the recipe as it was, then Rinse at Sink", moved.name == "Slice" and moved.target == pressedOne
     and moved.onSelect == ISInventoryPaneContextMenu.OnNewCraft and moved.iconTexture == "slice icon" and rinseOption(parent.subOption) ~= nil)

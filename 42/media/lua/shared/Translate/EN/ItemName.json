@@ -1,6 +1,6 @@
 {
   "TraditionalPreservationFishMeat.SaltPackedFish": "Salt Packed Fish",
-  "TraditionalPreservationFishMeat.SaltPressedFish": "Salt Pressed Fish",
+  "TraditionalPreservationFishMeat.SaltPressedFish": "Salt Cured Fish",
   "TraditionalPreservationFishMeat.SaltDriedFish": "Salt Dried Fish",
   "TraditionalPreservationFishMeat.SoakedSaltFish": "Rehydrated Salt Dried Fish",
   "TraditionalPreservationFishMeat.GuttedFish": "Gutted Fish",
@@ -26,5 +26,8 @@
   "TraditionalPreservationFishMeat.PotOfSuet": "Pot of Suet",
   "TraditionalPreservationFishMeat.PotForgedSuet": "Pot of Suet",
   "TraditionalPreservationFishMeat.SaltPackedMeat": "Salt Packed Meat",
-  "TraditionalPreservationFishMeat.SaltCuredMeat": "Salt Cured Meat"
+  "TraditionalPreservationFishMeat.SaltCuredMeat": "Salt Cured Meat",
+  "TraditionalPreservationFishMeat.Charque": "Charque",
+  "TraditionalPreservationFishMeat.SoakedCharque": "Rehydrated Charque",
+  "TraditionalPreservationFishMeat.SoakedCharqueIngredient": "Rehydrated Charque"
 }

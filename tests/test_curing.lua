@@ -12,7 +12,7 @@ function getGameTime()
 end
 local NAMES = {
     IGUI_TraditionalPreservationFishMeat_Packed = "Salt Packed",
-    IGUI_TraditionalPreservationFishMeat_Pressed = "Salt Pressed",
+    IGUI_TraditionalPreservationFishMeat_Pressed = "Salt Cured",
     IGUI_TraditionalPreservationFishMeat_Dried = "Salt Dried",
     IGUI_TraditionalPreservationFishMeat_Cured = "Salt Cured",
     IGUI_TraditionalPreservationFishMeat_Gutted = "Gutted %1",
@@ -26,6 +26,8 @@ local NAMES = {
     IGUI_TraditionalPreservationFishMeat_Unripe = "Unripe",
     IGUI_TraditionalPreservationFishMeat_Head = "%1 Head",
     IGUI_TraditionalPreservationFishMeat_Rinsed = "Rinsed",
+    IGUI_TraditionalPreservationFishMeat_Charque = "Charque",
+    IGUI_TraditionalPreservationFishMeat_SoakedCharque = "Rehydrated, Charque",
 }
 local keptShare
 function ZombRandFloat(low, high)
@@ -562,7 +564,7 @@ for _, stage in ipairs({ "SaltPackedFish", "SaltPressedFish", "SaltDriedFish", "
     item = nextItem
     if stage == "SaltPressedFish" then
         check("pressed fish keeps the walleye's icon", item.modelIndex == 6)
-        check("the name follows the fish", item.name == "Medium Walleye (Salt Pressed)")
+        check("the name follows the fish", item.name == "Medium Walleye (Salt Cured)")
         check("pressing takes 7 to 12 percent", keptShare >= 0.88 and keptShare <= 0.93 and near(item.values.ActualWeight, 8 * 0.9 * keptShare))
     end
 end
@@ -607,7 +609,7 @@ check("the knife passes", T.canSlice(newFood("Base.HuntingKnife", {})))
 local one, two = slice(pressedBass, "SaltPressedFish")
 check("each fillet gets half the food", near(one.values.Calories, 400) and near(two.values.Proteins, 20) and near(one.values.HungChange, -0.3))
 check("and half the weight, as a cured fish has no guts to lose", near(one.values.ActualWeight, pressedBass.values.ActualWeight / 2))
-check("it stays at its stage", one.name == "Fish Fillet (Salt Pressed)" and one.customName)
+check("it stays at its stage", one.name == "Fish Fillet (Salt Cured)" and one.customName)
 check("it shows the fillet icon", one.modelIndex == 0)
 check("it can't be cut again", not T.canSlice(one))
 check("and carries on through the stages", through(one, "SaltDriedFish").name == "Fish Fillet (Salt Dried)")
@@ -785,6 +787,8 @@ local extras = { size = function() return #listed end, get = function(_, i) retu
 T.useStandins({ getExtraItems = function() return extras end })
 check("fish stages in a dish become stand-ins", listed[3] == "TraditionalPreservationFishMeat.GuttedFishIngredient" and listed[4] == "TraditionalPreservationFishMeat.SoakedColdFishIngredient")
 check("everything else stays", listed[1] == "TraditionalPreservationFishMeat.FishHead" and listed[2] == "Base.Carrots")
+-- Both item scripts: the meat stages are in their own file.
+local bothScripts = script .. io.open("42/media/scripts/TraditionalPreservationFishMeat_Meat.txt"):read("*a")
 -- In a fixed order, so the output is the same on every run.
 local standinTypes = {}
 for fullType in pairs(T.INGREDIENT_STANDINS) do table.insert(standinTypes, fullType) end
@@ -792,8 +796,8 @@ table.sort(standinTypes)
 for _, fullType in ipairs(standinTypes) do
     local standin = T.INGREDIENT_STANDINS[fullType]
     local stage, name = fullType:match("%.(.+)$"), standin:match("%.(.+)$")
-    local body = script:match("item " .. stage .. "\n    {(.-)\n    }")
-    local standinBody = script:match("item " .. name .. "\n    {(.-)\n    }")
+    local body = bothScripts:match("item " .. stage .. "\n    {(.-)\n    }")
+    local standinBody = bothScripts:match("item " .. name .. "\n    {(.-)\n    }")
     check(name .. " exists with its stage's icon", standinBody and standinBody:find("Icon = " .. stage .. ",", 1, true) ~= nil)
     check(name .. " can't go into a dish itself", not standinBody:find("EvolvedRecipe =", 1, true))
     check(stage .. " goes into dishes", body:find("EvolvedRecipe =", 1, true) ~= nil)
@@ -1019,11 +1023,11 @@ local unrinsed = through(through(packedBass, "SaltPressedFish"), "SaltDriedFish"
 unrinsed.thirst = 0.3
 local toRinse = through(packedBass, "SaltPressedFish")
 toRinse.thirst = 0.2
-check("a Salt Pressed fish can be rinsed", T.canRinse(toRinse))
+check("a Salt Cured fish can be rinsed", T.canRinse(toRinse))
 check("other stages can't", not T.canRinse(packedBass) and not T.canRinse(unrinsed) and not T.canRinse(fresh))
 check("rinsing works once", T.rinse(toRinse) and not T.canRinse(toRinse) and not T.rinse(toRinse))
 check("a rinsed pressed fish is less salty and keeps a tenth less", near(toRinse.thirst, 0.2 * T.RINSED_THIRST) and toRinse.offAge == 108 and toRinse.offAgeMax == 162)
-check("and says so", toRinse.name == "Medium Walleye (Salt Pressed, Rinsed)")
+check("and says so", toRinse.name == "Medium Walleye (Salt Cured, Rinsed)")
 local rinsedDried = newFood("TraditionalPreservationFishMeat.SaltDriedFish", {})
 rinsedDried.thirst = 0.3
 rinsedDried.unhappy = 3
@@ -1050,7 +1054,7 @@ check("the rinsed fish is the same fish: food, weight, age, data", fromRecipe.va
     and fromRecipe.values.ActualWeight == beforeRecipe.values.ActualWeight and fromRecipe.age == 4
     and fromRecipe:getModData().stackId == 7 and fromRecipe:getModData().fishName == beforeRecipe:getModData().fishName)
 check("only rinsed", fromRecipe:getModData().rinsed and near(fromRecipe.thirst, 0.2 * T.RINSED_THIRST) and fromRecipe.offAge == 108)
-check("named so", fromRecipe.name == "Medium Walleye (Salt Pressed, Rinsed)")
+check("named so", fromRecipe.name == "Medium Walleye (Salt Cured, Rinsed)")
 check("and the test turns it down a second time", not T.canRinseInput(fromRecipe))
 local rinseRecipe = script:match("craftRecipe RinseSaltedFish(.-)\n    }\n")
 check("the recipe takes 0.15 L of clean water", rinseRecipe:find("-fluid " .. T.RINSE_LITRES .. " [Water]", 1, true) ~= nil)
@@ -1077,7 +1081,7 @@ check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnT
 
     check("a tub takes packed meat", T.fishRefusal(true, T.PACKED_MEAT) == nil)
     check("but not raw meat", T.fishRefusal(true, "Base.Steak") == "IGUI_TraditionalPreservationFishMeat_NeedsPacked")
-    check("a frame doesn't take meat yet", T.fishRefusal(false, T.PACKED_MEAT) and T.fishRefusal(false, "TraditionalPreservationFishMeat.SaltCuredMeat"))
+    check("a frame takes cured meat, not packed", T.fishRefusal(false, T.PACKED_MEAT) and T.fishRefusal(false, T.CURED_MEAT) == nil)
     check("an empty tub takes either", T.mixedTub(nil, T.PACKED_MEAT) == nil and T.mixedTub(nil, T.PACKED_FISH) == nil)
     check("meat on meat is fine", T.mixedTub(T.PACKED_MEAT, T.PACKED_MEAT) == nil)
     check("fish and meat never share a tub", T.mixedTub(T.PACKED_FISH, T.PACKED_MEAT) == "IGUI_TraditionalPreservationFishMeat_MixedTub"
@@ -1122,6 +1126,118 @@ check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnT
         check(stage .. " has a model for each cut", modelCount == #T.MEAT_CUTS)
     end
     check("both press recipes are the tub's", meatScript:find("craftRecipe PressSaltedMeat%s*{%s*time = %d+,%s*Tags = SaltingTub") ~= nil)
+end)()
+
+-- Charque, phase 3c: Salt Cured meat sun dried on the frames
+;(function()
+    check("nothing at freezing, full from 25 C", T.charqueWarmRate(0) == 0 and T.charqueWarmRate(-5) == 0
+        and T.charqueWarmRate(25) == 1 and T.charqueWarmRate(35) == 1 and near(T.charqueWarmRate(10), 0.4))
+    check("still air dries at 0.65, a good breeze at 1.2", near(T.charqueWindRate(0), 0.65) and near(T.charqueWindRate(T.WIND_GOOD), 1.2)
+        and near(T.charqueWindRate(1), 1.2) and T.charqueWindRate(nil) == 1)
+    local HOT = { temperature = 30, humidity = 0.4, precipitation = 0, wind = T.WIND_GOOD }
+    local sun = T.newLedger(0)
+    T.advance(sun, 10, HOT)
+    check("hot sun and a breeze dry charque at 1.2", near(sun.charque, 12) and near(sun.charqueCovered, 12))
+    check("indoors at 0.65 with no wind", near(sun.charqueSheltered, 6.5))
+    local winter = T.newLedger(0)
+    T.advance(winter, 10, { temperature = -3, humidity = 0.4, precipitation = 0 })
+    check("winter dries no charque", winter.charque == 0 and winter.charqueCovered == 0 and winter.charqueSheltered == 0)
+    T.advance(sun, 16, { temperature = 30, humidity = 0.4, precipitation = 1, wind = 0.5 })
+    check("rain counts its hours and stops the open frame", near(sun.charqueRain, 6) and near(sun.charque, 12) and sun.charqueCovered > 12)
+    local snow = T.newLedger(0)
+    T.advance(snow, 5, { temperature = -2, humidity = 0.4, precipitation = 1, isSnow = true })
+    check("snow isn't rain", snow.charqueRain == 0)
+
+    local function stack(place)
+        local cured = newFood(T.CURED_MEAT, {})
+        local data = newRecipeData(T.CHARQUE_HOURS * 3600, { cured })
+        T.onCharqueStart(data)
+        data.modData.sheltered = place == "indoors" or nil
+        data.modData.covered = place == "covered" or nil
+        return data
+    end
+    local shared = T.getLedger()
+    local open, covered, indoors = stack("open"), stack("covered"), stack("indoors")
+    check("a meat stack hangs as meat", open.modData.style == T.STYLE_MEAT and open.modData.dried == 0)
+    shared.charque, shared.charqueCovered, shared.charqueSheltered = shared.charque + 60, shared.charqueCovered + 60, shared.charqueSheltered + 30
+    for _, data in ipairs({ open, covered, indoors }) do T.onCharqueUpdate(data) end
+    check("each place reads its own total", open.modData.dried == 60 and covered.modData.dried == 60 and indoors.modData.dried == 30)
+    check("half way is half the bar", near(open.elapsed, T.CHARQUE_HOURS * 3600 / 2))
+    shared.charqueRain = shared.charqueRain + T.CHARQUE_RAIN_HOURS
+    for _, data in ipairs({ open, covered }) do T.onCharqueUpdate(data) end
+    check("a day's rain takes a tenth back on an open frame", near(open.modData.dried, 54))
+    check("not under a roof", covered.modData.dried == 60)
+    shared.saltSpoil = shared.saltSpoil + T.SALT_SPOIL_HOURS / 4
+    T.onCharqueUpdate(covered)
+    check("a muggy season spoils it as salt fish", near(covered.modData.spoiled, 0.25))
+    shared.charqueCovered = shared.charqueCovered + 100
+    T.onCharqueUpdate(covered)
+    check("done stops at the end", covered.elapsed == T.CHARQUE_HOURS * 3600)
+
+    local status = T.charqueStatus({ dried = 60 }, { charqueRate = 1.2, wetness = 0 })
+    check("the popup's time left goes by the rate", near(status.progress, 0.5) and near(status.hoursLeft, 50))
+    check("wet open charque says rain", T.charqueStatus({}, { charqueRate = 0, wetness = 0.5 }).reason == "Rain")
+    check("frozen says too cold", T.charqueStatus({ covered = true }, { charqueCoveredRate = 0, wetness = 0 }).reason == "TooCold")
+    check("hot sun is the best word", T.charqueTemperatureWord(30) == "IGUI_TraditionalPreservationFishMeat_TempHotGood"
+        and T.charqueTemperatureWord(-1) == "IGUI_TraditionalPreservationFishMeat_TempTooCold")
+
+    check("one stack is one kind", T.hangKind(T.CURED_MEAT) == "meat" and T.hangKind("TraditionalPreservationFishMeat.SaltPressedFish") == "salt"
+        and T.hangKind("TraditionalPreservationFishMeat.GuttedFish") == "cold")
+    check("cured meat waiting shows as meat", T.fishStyle(newFood(T.CURED_MEAT, {})) == T.STYLE_MEAT)
+
+    local steak = newFood("Base.Steak", { Calories = 220, Proteins = 31.62, Lipids = 9.35, BaseHunger = -0.4, HungChange = -0.4, ActualWeight = 0.3 })
+    steak.displayName = "Steak "
+    local cured = through(through(steak, "SaltPackedMeat"), "SaltCuredMeat")
+    local charque = newFood("TraditionalPreservationFishMeat.Charque", {})
+    T.onCreateDried(newRecipeData(0, { cured }, { charque }))
+    check("charque is named for its cut", charque.name == "Steak (Charque)" and charque.modelIndex == 1)
+    check("about half the raw weight", near(charque.values.ActualWeight, 0.3 * keptShare * 0.55))
+    check("it keeps 90% of the food, 70% of the bulk", near(charque.values.Calories, 198) and near(charque.values.HungChange, -0.28))
+    local soaked = through(charque, "SoakedCharque")
+    check("soaking gives the bulk back", near(soaked.values.HungChange, -0.4) and soaked.name == "Steak (Rehydrated, Charque)")
+
+    check("cured meat can be rinsed", T.canRinse(cured))
+    local rinsedCured = newFood(T.CURED_MEAT, {})
+    rinsedCured.displayName = "Steak "
+    T.carry(through(steak, "SaltPackedMeat"), rinsedCured)
+    rinsedCured.thirst = 20
+    T.rinse(rinsedCured)
+    check("and is named so", rinsedCured.name == "Steak (Salt Cured, Rinsed)" and near(rinsedCured.thirst, 20 * T.RINSED_THIRST))
+    local rinsedCharque = newFood("TraditionalPreservationFishMeat.Charque", {})
+    T.carry(rinsedCured, rinsedCharque)
+    local rinsedSoaked = newFood("TraditionalPreservationFishMeat.SoakedCharque", {})
+    rinsedSoaked.thirst = 10
+    T.carry(rinsedCharque, rinsedSoaked)
+    check("rinsed meat soaks less salty", near(rinsedSoaked.thirst, 10 * T.RINSED_THIRST) and rinsedSoaked:getModData().rinsed)
+
+    T.CHARQUE_ON = false
+    instanceof = function(_, name) return name == "Food" end
+    check("off, the frame refuses meat and the tub too", T.fishRefusal(false, T.CURED_MEAT) == "IGUI_TraditionalPreservationFishMeat_CharqueOff"
+        and T.fishRefusal(true, T.PACKED_MEAT) == "IGUI_TraditionalPreservationFishMeat_CharqueOff"
+        and not T.canPack(newFood("Base.Beef", { ActualWeight = 0.5 }), nil))
+    check("fish is untouched", T.fishRefusal(false, "TraditionalPreservationFishMeat.SaltPressedFish") == nil
+        and T.canPack(newFood("Base.Walleye", { ActualWeight = 1 }), nil))
+    instanceof = nil
+    T.CHARQUE_ON = true
+
+    local meatScript = io.open("42/media/scripts/TraditionalPreservationFishMeat_Meat.txt"):read("*a")
+    local fishScript = io.open("42/media/scripts/TraditionalPreservationFishMeat.txt"):read("*a")
+    check("charque hangs on every drying station", meatScript:find("craftRecipe HangMeatToDry%s*{[^}]-Tags = DryingFrame") ~= nil)
+    check("its time is set from CHARQUE_HOURS", loaded["TraditionalPreservationFishMeat.HangMeatToDry"] == "{ time = " .. T.CHARQUE_HOURS * 3600 .. ", }")
+    for _, stage in ipairs({ "Charque", "SoakedCharque" }) do
+        local body = meatScript:match("item " .. stage .. "%s*{(.-)}")
+        local count, missing = 0, {}
+        for icon in body:match("IconsForTexture = ([^,]+),"):gmatch("[^;]+") do
+            count = count + 1
+            local file = io.open("42/media/textures/Item_" .. icon .. ".png", "rb")
+            if file then file:close() else table.insert(missing, icon) end
+        end
+        check(stage .. " has an icon for each cut", count == #T.MEAT_CUTS and #missing == 0)
+    end
+    check("charque can't be eaten unsoaked", meatScript:match("item Charque%s*{(.-)}"):find("CantEat = true", 1, true) ~= nil)
+    check("nor can stockfish", fishScript:match("item ColdDriedFish%s*{(.-)}"):find("CantEat = true", 1, true) ~= nil)
+    check("Salt Dried fish still can", not fishScript:match("item SaltDriedFish%s*{(.-)}"):find("CantEat", 1, true))
+    check("the rinse gives back what went in", fishScript:find("TraditionalPreservationFishMeat.SaltCuredMeat = TraditionalPreservationFishMeat.SaltCuredMeat", 1, true) ~= nil)
 end)()
 
 H.done()

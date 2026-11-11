@@ -60,3 +60,19 @@ option TraditionalPreservationFishMeat.ButcheringFat {
     page = TraditionalPreservationFishMeat,
     translation = TraditionalPreservationFishMeat_ButcheringFat,
 }
+
+option TraditionalPreservationFishMeat.Charque {
+    type = boolean,
+    default = true,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_Charque,
+}
+
+option TraditionalPreservationFishMeat.CharqueDays {
+    type = double,
+    min = 2.0,
+    max = 30.0,
+    default = 5.0,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_CharqueDays,
+}

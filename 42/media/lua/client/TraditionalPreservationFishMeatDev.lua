@@ -32,9 +32,11 @@ function TPFM.help()
     say("TPFM.salt(n)               spawn n vanilla Salt shakers")
     say("TPFM.fat(n)                spawn n each of Pork Fat, Beef Suet and Mutton Fat")
     say("TPFM.meat(n)               spawn n each of the cuts that go in the salt: Beef, Steak, Mutton Chop, Venison")
+    say("TPFM.cured(n)              spawn n each of those cuts already Salt Cured, ready for the frame as charque")
+    say("TPFM.rain(hours)           add this many hours of rain and wet the open frames, to test rain on open charque")
     say("TPFM.fatPot(state)         spawn a Pot of Pork Fat: \"cooked\" (the default), \"burnt\" or \"raw\"")
     say("TPFM.fatRows()             the fat each vanilla animal's butchering table gives now")
-    say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up pressing.")
+    say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up curing.")
 end
 
 function TPFM.weather()
@@ -44,15 +46,17 @@ function TPFM.weather()
         .. " C, humidity " .. n(ledger.seasonHumidity) .. ", wetness " .. n(ledger.wetness) .. " (cold frames " .. n(ledger.coldWetness) .. ")"
         .. ", wind " .. n(ledger.wind))
     say("Drying speed now: open " .. n(ledger.openRate) .. ", covered " .. n(ledger.coveredRate) .. ", indoors " .. n(ledger.shelteredRate)
-        .. ", cold " .. n(ledger.coldRate) .. ", cold covered " .. n(ledger.coldCoveredRate))
+        .. ", cold " .. n(ledger.coldRate) .. ", cold covered " .. n(ledger.coldCoveredRate)
+        .. ", charque " .. n(ledger.charqueRate) .. ", charque covered " .. n(ledger.charqueCoveredRate) .. ", charque indoors " .. n(ledger.charqueShelteredRate))
     say("Spoiling now: unsalted " .. tostring(ledger.rawSpoiling == true) .. ", salted " .. tostring(ledger.saltSpoiling == true)
         .. ", warm cure " .. tostring(ledger.warmCuring == true) .. ", hot sun " .. tostring((ledger.temperature or 0) > F.HEAT_ABOVE))
     say("Totals (hours at full speed): open " .. n(ledger.open) .. ", covered " .. n(ledger.covered) .. ", indoors " .. n(ledger.sheltered)
         .. ", cold " .. n(ledger.cold) .. ", cold covered " .. n(ledger.coldCovered)
         .. ", raw spoil " .. n(ledger.rawSpoil) .. ", salt spoil " .. n(ledger.saltSpoil)
         .. ", hard frost " .. n(ledger.hardFrost) .. ", cold fish wet " .. n(ledger.coldWet) .. ", warm cure " .. n(ledger.warmCure)
-        .. ", hot sun " .. n(ledger.heat))
-    say(string.format("A stack needs %d hours to salt dry and %d to cold dry.", F.DRY_HOURS, F.COLD_DRY_HOURS))
+        .. ", hot sun " .. n(ledger.heat) .. ", charque " .. n(ledger.charque) .. ", charque covered " .. n(ledger.charqueCovered)
+        .. ", charque indoors " .. n(ledger.charqueSheltered) .. ", rain " .. n(ledger.charqueRain))
+    say(string.format("A stack needs %d hours to salt dry, %d to cold dry and %d to dry as charque.", F.DRY_HOURS, F.COLD_DRY_HOURS, F.CHARQUE_HOURS))
 end
 
 -- Wind probe for the cold-drying wind curve: live wind every 10 minutes against the day's forecast.
@@ -91,6 +95,7 @@ function TPFM.age(hours)
     local ledger = F.getLedger()
     ledger.open, ledger.sheltered, ledger.cold = ledger.open + hours, ledger.sheltered + hours, ledger.cold + hours
     ledger.covered, ledger.coldCovered = ledger.covered + hours, ledger.coldCovered + hours
+    ledger.charque, ledger.charqueCovered, ledger.charqueSheltered = ledger.charque + hours, ledger.charqueCovered + hours, ledger.charqueSheltered + hours
     say(string.format("Added %.0f hours of perfect drying weather. Stacks update within a few seconds.", hours))
 end
 
@@ -115,6 +120,16 @@ function TPFM.heat(hours)
     ledger.heat = ledger.heat + hours
     say(string.format("Added %.0f hours of hot sun. A fresh open salt stack loses %.0f%% of its keeping per %d hours, at most %.0f%%.",
         hours, F.HEAT_DAMAGE * 100, F.HEAT_DAMAGE_HOURS, F.DAMAGE_CAP * 100))
+end
+
+-- Rain on an open charque frame takes back CHARQUE_REWET of its progress each CHARQUE_RAIN_HOURS, and leaves it wet.
+function TPFM.rain(hours)
+    hours = hours or F.CHARQUE_RAIN_HOURS
+    local ledger = F.getLedger()
+    ledger.charqueRain = ledger.charqueRain + hours
+    ledger.wetness = 1
+    say(string.format("Added %.0f hours of rain: an open charque stack keeps %.0f%% of its progress, and waits for the frame to dry off (TPFM.dry()).",
+        hours, (1 - F.CHARQUE_REWET) ^ (hours / F.CHARQUE_RAIN_HOURS) * 100))
 end
 
 -- At 25 C a warm cure runs at 1.5 times its 20 C rate.
@@ -192,6 +207,18 @@ end
 function TPFM.meat(count)
     for _, cut in ipairs(F.MEAT_CUTS) do give(cut, count) end
     say("Gave " .. (count or 1) .. " each of Beef, Steak, Mutton Chop and Venison.")
+end
+
+-- Each cut as the tub gives it, named for the cut ("Steak (Salt Cured)").
+function TPFM.cured(count)
+    local inventory = getPlayer():getInventory()
+    for _, cut in ipairs(F.MEAT_CUTS) do
+        for _ = 1, count or 1 do
+            local raw = instanceItem(cut)
+            F.carry(raw, inventory:AddItem(F.CURED_MEAT))
+        end
+    end
+    say("Gave " .. (count or 1) .. " each of Beef, Steak, Mutton Chop and Venison, Salt Cured.")
 end
 
 function TPFM.fatPot(state)

@@ -1,5 +1,29 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.4
+- **"Salt Pressed" is now "Salt Cured"** for fish as for meat, and the tub recipes are **Cure Salted Fish** and
+  **Cure Salted Meat** (were Press Salted ...); **Hang Salt Cured Fish to Dry**; sandbox "Salt cure time". Display
+  names only: item and recipe IDs (`SaltPressedFish`, `PressSaltedFish`, `PressSaltedMeat`) and the `PressDays`
+  option keep their names, so saves are unchanged.
+- **Charque** (ROADMAP §7, phase 3c, the second half). **Hang Salt Cured Meat to Dry** on the Fish Drying Frame,
+  the Fish Hanging Beam or the Fish Gantry: the summer sun dries it in 5 days at full rate. Full speed from 25 C up,
+  nothing at 0 C or below, slowed by damp air; still air 0.65, a good breeze 1.2; under an open roof as in the open
+  without the rain, indoors 0.65 with no wind. On an open frame it waits while wet, and each 6 hours of rain take
+  back a tenth of what it had. No heat damage; only salt fish's hot and muggy season spoils it. Kentucky: about
+  7-11 days in summer under a roof, weeks in spring and autumn, nearly nothing in winter (tools/charque_report.lua).
+- **Charque** ("Steak (Charque)") keeps 120 / 180 days at about half the raw weight with 90% of the food, and
+  **can't be eaten until soaked**: **Rehydrate Charque** (1 L of water) gives **Rehydrated Charque**, cookable, a
+  little salty (thirst 10), spoils as fresh meat and goes into dishes.
+- **Cold Dried fish can't be eaten until soaked either**, as Lofoten stockfish always is. Salt Dried fish stays
+  edible as it is.
+- **Salt Cured meat can be rinsed** (Rinse Off Salt, Rinse at Sink), as the charqueadas washed it before the sun:
+  it keeps a tenth less long, and the rehydrated charque is less salty (thirst about 7).
+- A stack is one kind: salted fish, gutted fish or meat ("A stack is one kind: ..."); one frame can hold all three.
+- Sandbox: **Charque** (on/off: off, meat isn't packed in salt nor hung) and **Charque drying time** (5 days).
+- Hanging charque: 140 new tiles at the end of the second sheet (vanilla's loin, steak and venison icons, cured red
+  to deep brown); no station tile moved. Icons for Charque and Rehydrated Charque from build_meat_icons.py.
+- Dev: `TPFM.cured(n)` (Salt Cured cuts), `TPFM.rain(hours)`; `TPFM.age` and `TPFM.weather` cover charque.
+
 ## 0.4.3
 - **Meat in the Salting Tub** (ROADMAP §7, phase 3b, the first half of Charque). **Pack Meat in Salt** (in hand, no
   knife) takes a Beef, Steak, Mutton Chop or Venison as vanilla gives it, with fish's salt rule: 4 for each started

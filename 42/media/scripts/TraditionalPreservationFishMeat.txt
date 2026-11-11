@@ -66,7 +66,7 @@ module TraditionalPreservationFishMeat
     /* The nutrition, hunger and weight below are for a fillet. Real ones come from the fish that
        went in, through TraditionalPreservationFishMeat.onCreateCured. IconsForTexture is the order of
        FISH_ICONS in TraditionalPreservationFishMeat.lua, and the icon for the fish saves with the item. Salt
-       Pressed and Salt Dried use tinted copies from tools/build_tileset.py. Icon is for fish from other mods. */
+       Cured and Salt Dried use tinted copies from tools/build_tileset.py. Icon is for fish from other mods. */
     item SaltPackedFish
     {
         DisplayCategory = Food,
@@ -145,7 +145,8 @@ module TraditionalPreservationFishMeat
         Tooltip = Tooltip_TraditionalPreservationFishMeat_Dried,
     }
 
-    /* No salt, so it keeps longer than Salt Dried but is too hard to use until soaked. */
+    /* No salt, so it keeps longer than Salt Dried, but it is as hard as wood: it can't be eaten until soaked, as
+       Lofoten stockfish always is. */
     item ColdDriedFish
     {
         DisplayCategory = Food,
@@ -153,6 +154,7 @@ module TraditionalPreservationFishMeat
         Weight = 0.08,
         Icon = ColdDriedFish,
         IconsForTexture = Cold_FishFillet;Cold_Salmon;Cold_Fish_BassLargemouth;Cold_Fish_BassSmallmouth;Cold_Fish_BassSpotted;Cold_Fish_BassStriped;Cold_Fish_Walleye;Cold_Fish_Sauger;Cold_Fish_CrappieBlack;Cold_Fish_CrappieWhite;Cold_Fish_Bluegill;Cold_Fish_SunfishRedear;Cold_Fish_SunfishGreen;Cold_Fish_CatfishBlue;Cold_Fish_CatfishChannel;Cold_Fish_CatfishFlathead;Cold_Fish_Muskellunge;Cold_Fish_BassWhite;Cold_Fish_PerchYellow;Cold_Fish_DrumFreshwater;Cold_Fish_GarAlligator;Cold_Fish_Paddlefish;ColdGutted_FishFillet;ColdGutted_Salmon;ColdGutted_Fish_BassLargemouth;ColdGutted_Fish_BassSmallmouth;ColdGutted_Fish_BassSpotted;ColdGutted_Fish_BassStriped;ColdGutted_Fish_Walleye;ColdGutted_Fish_Sauger;ColdGutted_Fish_CrappieBlack;ColdGutted_Fish_CrappieWhite;ColdGutted_Fish_Bluegill;ColdGutted_Fish_SunfishRedear;ColdGutted_Fish_SunfishGreen;ColdGutted_Fish_CatfishBlue;ColdGutted_Fish_CatfishChannel;ColdGutted_Fish_CatfishFlathead;ColdGutted_Fish_Muskellunge;ColdGutted_Fish_BassWhite;ColdGutted_Fish_PerchYellow;ColdGutted_Fish_DrumFreshwater;ColdGutted_Fish_GarAlligator;ColdGutted_Fish_Paddlefish;ColdHalf_FishFillet;ColdHalf_Salmon;ColdHalf_Fish_BassLargemouth;ColdHalf_Fish_BassSmallmouth;ColdHalf_Fish_BassSpotted;ColdHalf_Fish_BassStriped;ColdHalf_Fish_Walleye;ColdHalf_Fish_Sauger;ColdHalf_Fish_CrappieBlack;ColdHalf_Fish_CrappieWhite;ColdHalf_Fish_Bluegill;ColdHalf_Fish_SunfishRedear;ColdHalf_Fish_SunfishGreen;ColdHalf_Fish_CatfishBlue;ColdHalf_Fish_CatfishChannel;ColdHalf_Fish_CatfishFlathead;ColdHalf_Fish_Muskellunge;ColdHalf_Fish_BassWhite;ColdHalf_Fish_PerchYellow;ColdHalf_Fish_DrumFreshwater;ColdHalf_Fish_GarAlligator;ColdHalf_Fish_Paddlefish,
+        CantEat = true,
         DaysFresh = 365,
         DaysTotallyRotten = 730,
         HungerChange = -18.0,
@@ -752,9 +754,9 @@ module TraditionalPreservationFishMeat
         }
     }
 
-    /* Optional: soaks the excess salt off a Salt Pressed fish before it hangs (Volga practice). The fish comes out
-       the same, marked rinsed (onCreateRinsed). Carried clean water only; a sink or bathtub is the right-click
-       Rinse at Sink (TPFMRinse). */
+    /* Optional: soaks the excess salt off a Salt Cured fish or cut of meat before it hangs (Volga practice, and
+       the charqueadas' washing). It comes out the same, marked rinsed (onCreateRinsed). Carried clean water only; a
+       sink or bathtub is the right-click Rinse at Sink (TPFMRinse). */
     craftRecipe RinseSaltedFish
     {
         timedAction = Making,
@@ -766,13 +768,18 @@ module TraditionalPreservationFishMeat
         OnCreate = TraditionalPreservationFishMeat.onCreateRinsed,
         inputs
         {
-            item 1 [TraditionalPreservationFishMeat.SaltPressedFish] flags[ItemCount] mode:destroy,
+            item 1 [TraditionalPreservationFishMeat.SaltPressedFish;TraditionalPreservationFishMeat.SaltCuredMeat] flags[ItemCount] mode:destroy mappers[sameItem],
             item 1 [*],
             -fluid 0.15 [Water],
         }
         outputs
         {
-            item 1 TraditionalPreservationFishMeat.SaltPressedFish,
+            item 1 mapper:sameItem,
+        }
+        itemMapper sameItem
+        {
+            TraditionalPreservationFishMeat.SaltPressedFish = TraditionalPreservationFishMeat.SaltPressedFish,
+            TraditionalPreservationFishMeat.SaltCuredMeat = TraditionalPreservationFishMeat.SaltCuredMeat,
         }
     }
 

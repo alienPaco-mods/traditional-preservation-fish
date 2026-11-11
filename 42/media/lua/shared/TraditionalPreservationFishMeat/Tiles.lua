@@ -8,7 +8,7 @@ return {
         },
         {
             prefix = "traditionalpreservationfishmeat_02_",
-            tiles = 312,
+            tiles = 448,
         },
     },
     FIRST_SHEET_SIZE = 408,
@@ -28,16 +28,19 @@ return {
         frame = {
             base = 6,
             fishSprite = 8,
+            meatSprite = 716,
             stacks = 8,
         },
         medium = {
             base = 408,
             fishSprite = 412,
+            meatSprite = 796,
             stacks = 4,
         },
         large = {
             base = 410,
             fishSprite = 612,
+            meatSprite = 836,
             stacks = 2,
         },
     },
@@ -50,5 +53,6 @@ return {
         HALF = 2,
         SALT_GUTTED = 3,
         SALT_HALF = 4,
+        MEAT = 5,
     },
 }

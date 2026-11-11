@@ -26,10 +26,12 @@ FATS = {
     "MuttonFat": ("Item_PorkLoin", (240, 238, 226), 0.9, True),
     "Tallow": ("Item_Lard", (246, 230, 170), 0.6, False),
 }
-# Charque's stages (phase 3b), one icon per cut in MEAT_CUTS' order: Salt Packed is the cut dusted towards salt,
-# Salt Cured darkened towards cured red-brown.
+# Charque's stages (phases 3b and 3c), one icon per cut in MEAT_CUTS' order: Salt Packed is the cut dusted towards
+# salt, Salt Cured darkened towards cured red-brown.
 CUTS = {"Beef": "Item_BeefLoin", "Steak": "Item_Steak", "Mutton": "Item_Mutton", "Venison": "Item_Venison"}
-SALTED = {"SaltPacked": ((236, 232, 224), 0.35), "SaltCured": ((128, 54, 44), 0.45)}
+SALTED = {"SaltPacked": ((236, 232, 224), 0.35), "SaltCured": ((128, 54, 44), 0.45),
+          # Charque (phase 3c) dark and dry, as its last hanging stage; soaked it is paler but never red again.
+          "Charque": ((78, 40, 26), 0.85), "SoakedCharque": ((138, 82, 64), 0.6)}
 # The pots of fat: vanilla's full pot, with the soup's reds turned to melting fat.
 POTS = {"PotOfFat": "Item_PotFull", "PotForgedFat": "Item_Pot_Forged_Stew"}
 FAT_IN_POT = (244, 232, 196)
@@ -96,6 +98,8 @@ def main():
     for stage, (colour, amount) in SALTED.items():
         for cut, source in CUTS.items():
             pull(icons[source], colour, amount).save(folder / f"Item_{stage}_{cut}.png")
+    # A dish lists Soaked Charque by its stand-in, which needs the stage's own icon (the beef's).
+    pull(icons[CUTS["Beef"]], *SALTED["SoakedCharque"]).save(folder / "Item_SoakedCharque.png")
     for name, source in POTS.items():
         fat_pot(icons[source]).save(folder / f"Item_{name}.png")
 

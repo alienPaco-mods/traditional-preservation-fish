@@ -49,8 +49,7 @@ local function refusal(slot, item, queued)
         return nil
     end
     local stored = resource:getStoredItems()
-    local isCold = F.COLD_FISH[item:getFullType()]
-    if stored:size() > 0 and F.COLD_FISH[stored:get(0):getFullType()] ~= isCold then
+    if stored:size() > 0 and F.hangKind(stored:get(0):getFullType()) ~= F.hangKind(item:getFullType()) then
         return "IGUI_TraditionalPreservationFishMeat_MixedStack"
     end
     local hanger = F.hangerFor(spriteIndex(entity))
@@ -81,20 +80,26 @@ local function timeText(hours)
     return UI.timeText(hours, "IGUI_TraditionalPreservationFishMeat_Time")
 end
 
+local METHODS = { salt = "IGUI_TraditionalPreservationFishMeat_MethodSalt", cold = "IGUI_TraditionalPreservationFishMeat_MethodCold",
+    meat = "IGUI_TraditionalPreservationFishMeat_MethodCharque" }
+
 -- Vanilla's popup goes by its own temperature curve and the recipe's time, so hanging stacks get
--- this instead.
-local function drawStackTooltip(slot, tooltip, isCold)
+-- this instead. kind is F.hangKind's.
+local function drawStackTooltip(slot, tooltip, kind)
     local ledger = F.getLedger()
-    local status = F.stackStatus(isCold, slot.craftRecipeData:getModData(), ledger)
+    local isCold, isMeat = kind == "cold", kind == "meat"
+    local status = isMeat and F.charqueStatus(slot.craftRecipeData:getModData(), ledger)
+        or F.stackStatus(isCold, slot.craftRecipeData:getModData(), ledger)
     UI.drawTooltip(tooltip, function(layout)
-        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Method", getText(isCold and "IGUI_TraditionalPreservationFishMeat_MethodCold" or "IGUI_TraditionalPreservationFishMeat_MethodSalt"))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Method", getText(METHODS[kind]))
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Progress", UI.percent(status.progress))
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_TimeLeft", timeText(status.hoursLeft))
         local modData = slot.craftRecipeData:getModData()
         local place = modData.sheltered and "Indoors" or modData.covered and "Covered" or "Open"
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Place", getText("IGUI_TraditionalPreservationFishMeat_Place" .. place))
-        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Temperature", getText(F.temperatureWord(isCold, ledger.temperature or 0, place == "Open")))
-        if isCold then UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wind", getText(F.windWord(ledger.wind))) end
+        local word = isMeat and F.charqueTemperatureWord(ledger.temperature or 0) or F.temperatureWord(isCold, ledger.temperature or 0, place == "Open")
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Temperature", getText(word))
+        if isCold or isMeat and not modData.sheltered then UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wind", getText(F.windWord(ledger.wind))) end
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wetness", UI.percent(isCold and ledger.coldWetness or ledger.wetness))
         if status.reason then
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Rate", getText("IGUI_TraditionalPreservationFishMeat_Stopped" .. status.reason), UI.SLOW_COLOUR)
@@ -127,8 +132,9 @@ end
 UI.progressTooltips({
     PressSaltedFish = drawPressTooltip,
     PressSaltedMeat = drawPressTooltip,
-    HangFishToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, false) end,
-    HangFishToColdDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, true) end,
+    HangFishToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "salt") end,
+    HangFishToColdDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "cold") end,
+    HangMeatToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "meat") end,
 })
 
 -- A little salt in the bottom left corner tells salt stacks from cold ones at a glance.

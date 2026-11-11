@@ -1,6 +1,6 @@
--- Phase 3a: how Charque (tub-salted beef) would dry on the frame through the year, before any constant goes into the mod.
+-- How Charque (tub-salted beef) dries on the frames through the year (phase 3a's numbers, now the mod's own).
 -- Run from the mod folder: luajit tools/charque_report.lua [path/to/climate.csv] [path/to/wind.csv]
--- Same weather as tools/season_report.lua (its forecasts, rain hours and wind factors); the curve below is a draft.
+-- Same weather as tools/season_report.lua (its forecasts, rain hours and wind factors).
 dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua").useModPaths()
 ModData = { getOrCreate = function() return {} end }
 Events = { OnInitGlobalModData = { Add = function() end } }
@@ -8,30 +8,17 @@ dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
 local T = TraditionalPreservationFishMeat
 
 local MONTHS = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
-local RAIN_HOURS = 6
+local RAIN_HOURS = T.CHARQUE_RAIN_HOURS
 local DRY_WIND, WET_WIND = 0.65, 1.3
 
--- Draft constants.
+-- The mod's constants (3c put the 3a drafts into it), so the report shows what the game does.
 local B = {
-    HOURS = 120,          -- hours at full rate: 5 days of hot sun in a good breeze (user, 2026-11-11)
-    WARM_FROM = 0,        -- no drying at or below this
-    WARM_FULL = 25,       -- full rate from here up: charque is dried in the summer sun
-    CALM = 0.65, WINDY = 1.2, WIND_GOOD = 0.25,  -- still air dries as indoors; breeze as stockfish
+    HOURS = T.CHARQUE_HOURS, WARM_FULL = T.CHARQUE_FULL_HEAT,
     COVERED_WIND = 1,     -- shade and no rain, as salt fish
-    INDOORS = 0.65,       -- still air, windows open (salt fish's SHELTERED_RATE), no wind term
-    REWET = 0.1,          -- share of progress a rainy day (RAIN_HOURS of rain) takes back on an open frame
-    -- Heavy salt: only salt fish's rule (hot and muggy season, T.SALT_SPOIL_ABOVE / _HUMIDITY / _HOURS), no heat damage.
+    INDOORS = T.CHARQUE_INDOORS_RATE,
+    REWET = T.CHARQUE_REWET,
 }
-
-local function warmRate(celsius)
-    if celsius <= B.WARM_FROM then return 0 end
-    return math.min((celsius - B.WARM_FROM) / (B.WARM_FULL - B.WARM_FROM), 1)
-end
-
-local function windRate(wind)
-    if not wind then return 1 end
-    return B.CALM + math.min(math.max(wind, 0) / B.WIND_GOOD, 1) * (B.WINDY - B.CALM)
-end
+local warmRate, windRate = T.charqueWarmRate, T.charqueWindRate
 
 local function readWind(path)
     local wind = {}
@@ -83,7 +70,7 @@ local function runStack(start, hours, place)
         end
         if place == "open" and h.wetness > 0 then
             if h.raining then
-                local back = dried * B.REWET / RAIN_HOURS
+                local back = dried * (1 - (1 - B.REWET) ^ (1 / RAIN_HOURS))
                 dried, lost = dried - back, lost + back
             end
             rate = 0

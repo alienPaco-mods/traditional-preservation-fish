@@ -36,7 +36,7 @@ F.MAX_STACKS = Tiles.HANGERS.frame.stacks
 local STACK_WEIGHTS = { frame = F.STACK_WEIGHT, medium = 15, large = 50 }
 F.HANGERS = {}
 for name, hanger in pairs(Tiles.HANGERS) do
-    F.HANGERS[hanger.base] = { fishSprite = hanger.fishSprite, stacks = hanger.stacks, stackWeight = STACK_WEIGHTS[name] }
+    F.HANGERS[hanger.base] = { fishSprite = hanger.fishSprite, meatSprite = hanger.meatSprite, stacks = hanger.stacks, stackWeight = STACK_WEIGHTS[name] }
 end
 
 -- Vanilla's rules for cutting a fish: over this weight, into two fillets of this share of its
@@ -73,6 +73,7 @@ F.PACKED_MEAT = "TraditionalPreservationFishMeat.SaltPackedMeat"
 -- A cut is pressed when the salt has reached its middle: PRESS_HOURS for a MEAT_PRESS_WEIGHT cut (a Beef or a
 -- Venison), less by weight (a Steak about 29 hours), never under PRESS_MIN_HOURS. The heaviest cut sets the batch.
 F.MEAT_PRESS_WEIGHT = 0.5
+F.CURED_MEAT = "TraditionalPreservationFishMeat.SaltCuredMeat"
 -- What a frame cold dries.
 F.COLD_FISH = { ["TraditionalPreservationFishMeat.GuttedFish"] = true, ["TraditionalPreservationFishMeat.FishHalf"] = true }
 
@@ -86,6 +87,7 @@ F.STYLE_SALT_GUTTED = Tiles.STYLES.SALT_GUTTED
 F.STYLE_SALT_HALF = Tiles.STYLES.SALT_HALF
 F.SALT_STYLES = { 0, 0, 3, 4 }
 F.COLD_STYLES = { 1, 1, 2 }
+F.STYLE_MEAT = Tiles.STYLES.MEAT
 
 -- Air above DRY_AIR_HUMIDITY slows drying, down to DAMP_AIR_RATE in saturated air.
 F.DRY_AIR_HUMIDITY = 0.5
@@ -154,7 +156,7 @@ F.HEAT_DAMAGE = 0.05
 -- fresh-off-the-frame one lowers it as much; halfway is neither. A dish takes on the share it gets.
 F.MATURE_DAYS = 60
 F.MATURE_UNHAPPY = 10
--- Rinsing salt pressed fish, as on the Volga: the excess salt soaked off before it hangs. Optional. It takes
+-- Rinsing Salt Cured fish, as on the Volga: the excess salt soaked off before it hangs. Optional. It takes
 -- RINSE_LITRES of water a fish, leaves RINSED_THIRST of the thirst, and the fish keeps RINSED_KEEPING as long
 -- (less salt, less protection). A Salt Dried fish from it loses its sour note too (unhappiness 3 to 0).
 F.RINSE_LITRES = 0.15
@@ -181,6 +183,22 @@ F.BALE_CORDS = {
 }
 F.BALE_TIE_TICKS = 120
 F.BALE_UNTIE_TICKS = 60
+
+-- Charque (phase 3c): Salt Cured meat dried in the summer sun, as in Brazil's charqueadas. CHARQUE_HOURS at a rate of
+-- 1, which takes CHARQUE_FULL_HEAT and up (heat helps, and does no harm), nothing at 0 C or below, in between by
+-- the temperature; damp air slows it as salt fish (airRate). Still air dries at CHARQUE_CALM_RATE, a breeze of
+-- WIND_GOOD at CHARQUE_WINDY_RATE. Under an open roof it dries as in the open without the rain; indoors at
+-- CHARQUE_INDOORS_RATE with no wind. On an open frame, CHARQUE_RAIN_HOURS of rain take back CHARQUE_REWET of the
+-- progress. Spoilage is salt fish's hot and muggy rule only. Numbers from tools/charque_report.lua.
+F.CHARQUE_HOURS = 120
+F.CHARQUE_FULL_HEAT = 25
+F.CHARQUE_CALM_RATE = 0.65
+F.CHARQUE_WINDY_RATE = 1.2
+F.CHARQUE_INDOORS_RATE = 0.65
+F.CHARQUE_REWET = 0.1
+F.CHARQUE_RAIN_HOURS = 6
+-- The sandbox's Charque switch: off, meat can't be packed in salt nor hung.
+F.CHARQUE_ON = true
 
 -- From DryingCraftLogic, so the frame's wetness readout tells the truth.
 local RAIN_WETTING = 0.001  -- per game second, at full intensity
@@ -210,7 +228,10 @@ F.STAGES = {
     ["TraditionalPreservationFishMeat.ColdDriedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdDried", weight = 0.22, nutrition = 0.95, hunger = 0.7, matures = true },
     ["TraditionalPreservationFishMeat.SoakedColdFish"] = { name = "IGUI_TraditionalPreservationFishMeat_SoakedCold", weight = 3, nutrition = 1, hunger = 1 / 0.7, ripened = true },
     ["TraditionalPreservationFishMeat.SaltPackedMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_Packed", weight = 1, nutrition = 1, hunger = 1 },
-    ["TraditionalPreservationFishMeat.SaltCuredMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_Cured", weight = 0.88, maxWeight = 0.93, nutrition = 1, hunger = 1 },
+    ["TraditionalPreservationFishMeat.SaltCuredMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_Cured", weight = 0.88, maxWeight = 0.93, nutrition = 1, hunger = 1, salty = true },
+    -- About half the raw cut's weight (0.55 of the cured), as salt fish keeps its food. Soaked, it gets back about as much.
+    ["TraditionalPreservationFishMeat.Charque"] = { name = "IGUI_TraditionalPreservationFishMeat_Charque", weight = 0.55, nutrition = 0.9, hunger = 0.7, salty = true },
+    ["TraditionalPreservationFishMeat.SoakedCharque"] = { name = "IGUI_TraditionalPreservationFishMeat_SoakedCharque", weight = 1.6, nutrition = 1, hunger = 1 / 0.7, salty = true },
 }
 
 -- The low end of DryingCraftLogic's curve: nothing at freezing, 1 at 20 C. It stops there, so
@@ -248,13 +269,25 @@ function F.airRate(humidity)
     return 1 - dampness * (1 - F.DAMP_AIR_RATE)
 end
 
+-- Charque's rate by temperature: nothing at 0 C or below, full from CHARQUE_FULL_HEAT.
+function F.charqueWarmRate(celsius)
+    return math.max(0, math.min(celsius / F.CHARQUE_FULL_HEAT, 1))
+end
+
+-- What the wind does to charque: CHARQUE_CALM_RATE in still air, rising to CHARQUE_WINDY_RATE at WIND_GOOD.
+function F.charqueWindRate(wind)
+    if not wind then return 1 end
+    local breeze = math.min(math.max(wind, 0) / F.WIND_GOOD, 1)
+    return F.CHARQUE_CALM_RATE + breeze * (F.CHARQUE_WINDY_RATE - F.CHARQUE_CALM_RATE)
+end
+
 -- The weather totals: hours of drying done open, sheltered (indoors), covered (a roof, no room), cold and cold
--- covered, hours of spoiling raw and salted,
--- hours of hard frost and of cold fish lying wet above freezing, of a warm cure and of heat, and the
+-- covered, charque open, covered and sheltered, hours of spoiling raw and salted,
+-- hours of hard frost and of cold fish lying wet above freezing, of a warm cure, of heat and of rain, and the
 -- wetness rain left on open frames and on cold ones.
 function F.newLedger(now)
     return { lastHour = now, wetness = 0, coldWetness = 0, open = 0, sheltered = 0, covered = 0, cold = 0, coldCovered = 0, rawSpoil = 0, saltSpoil = 0,
-        hardFrost = 0, coldWet = 0, warmCure = 0, heat = 0 }
+        hardFrost = 0, coldWet = 0, warmCure = 0, heat = 0, charque = 0, charqueCovered = 0, charqueSheltered = 0, charqueRain = 0 }
 end
 
 -- Adds one stretch of weather to the totals. Open frames dry nothing until the rain has gone
@@ -288,6 +321,14 @@ function F.advance(ledger, now, weather)
     local coldRate = F.coldRate(weather.temperature) * F.windRate(weather.wind)
     ledger.coldRate = ledger.coldWetness <= 0 and coldRate or 0
     ledger.coldCoveredRate = coldRate * F.COVERED_COLD_RATE
+    local charqueRate = F.charqueWarmRate(weather.temperature) * F.airRate(weather.humidity)
+    ledger.charqueCoveredRate = charqueRate * F.charqueWindRate(weather.wind)
+    ledger.charqueRate = ledger.wetness <= 0 and ledger.charqueCoveredRate or 0
+    ledger.charqueShelteredRate = charqueRate * F.CHARQUE_INDOORS_RATE
+    ledger.charque = ledger.charque + ledger.charqueRate * hours
+    ledger.charqueCovered = ledger.charqueCovered + ledger.charqueCoveredRate * hours
+    ledger.charqueSheltered = ledger.charqueSheltered + ledger.charqueShelteredRate * hours
+    if raining then ledger.charqueRain = ledger.charqueRain + hours end
     ledger.temperature = weather.temperature
     ledger.wind = weather.wind
     ledger.open = ledger.open + ledger.openRate * hours
@@ -374,6 +415,38 @@ function F.temperatureWord(isCold, celsius, exposed)
     return "IGUI_TraditionalPreservationFishMeat_TempFrost"
 end
 
+-- How a hanging charque stack is doing right now, for its popup, as stackStatus.
+function F.charqueStatus(modData, ledger)
+    local rate, reason
+    if modData.sheltered then
+        rate = ledger.charqueShelteredRate or 0
+    elseif modData.covered then
+        rate = ledger.charqueCoveredRate or 0
+    else
+        rate = ledger.charqueRate or 0
+        if rate <= 0 and (ledger.wetness or 0) > 0 then reason = "Rain" end
+    end
+    if rate <= 0 and not reason then reason = "TooCold" end
+    local dried = modData.dried or 0
+    return {
+        progress = math.min(dried / F.CHARQUE_HOURS, 1),
+        rate = rate,
+        reason = reason,
+        hoursLeft = rate > 0 and math.max(F.CHARQUE_HOURS - dried, 0) / rate or nil,
+        spoiled = math.min(modData.spoiled or 0, 1),
+        spoiling = ledger.saltSpoiling == true,
+        scorching = false,
+    }
+end
+
+-- The popup's word for the temperature on a charque stack: hot sun is good, then warm, cool and too cold.
+function F.charqueTemperatureWord(celsius)
+    if celsius >= F.CHARQUE_FULL_HEAT then return "IGUI_TraditionalPreservationFishMeat_TempHotGood" end
+    if celsius >= 15 then return "IGUI_TraditionalPreservationFishMeat_TempGoodWarm" end
+    if celsius > 0 then return "IGUI_TraditionalPreservationFishMeat_TempCool" end
+    return "IGUI_TraditionalPreservationFishMeat_TempTooCold"
+end
+
 -- The popup's word for the wind on a cold frame: calm, a light breeze or a good drying wind.
 function F.windWord(wind)
     wind = wind or 0
@@ -385,8 +458,9 @@ end
 -- The ledger is the mod's global ModData table itself, so its keys are the ones in every save.
 function F.getLedger()
     local data = ModData.getOrCreate(F.MOD_DATA_KEY)
-    -- cold, hardFrost, covered, warmCure and heat came after the first release, so a save can have the rest without them.
-    if not data.heat then
+    -- cold, hardFrost, covered, warmCure, heat and the charque totals came after the first release, so a save can
+    -- have the rest without them.
+    if not data.charqueRain then
         local ledger = F.newLedger(getGameTime():getWorldAgeHours())
         for key, value in pairs(ledger) do
             if data[key] == nil then data[key] = value end
@@ -456,10 +530,20 @@ end
 -- Vanilla slots take any item and leave Craft greyed out, so each station names its fish.
 function F.fishRefusal(isTub, fullType)
     if isTub and fullType ~= F.PACKED_FISH and fullType ~= F.PACKED_MEAT then return "IGUI_TraditionalPreservationFishMeat_NeedsPacked" end
-    if not isTub and fullType ~= "TraditionalPreservationFishMeat.SaltPressedFish" and not F.COLD_FISH[fullType] then
+    if not isTub and fullType ~= "TraditionalPreservationFishMeat.SaltPressedFish" and not F.COLD_FISH[fullType] and fullType ~= F.CURED_MEAT then
         return "IGUI_TraditionalPreservationFishMeat_NeedsPressed"
     end
+    if fullType == F.PACKED_MEAT or fullType == F.CURED_MEAT then
+        if not F.CHARQUE_ON then return "IGUI_TraditionalPreservationFishMeat_CharqueOff" end
+    end
     return nil
+end
+
+-- What hangs in a stack: "salt" fish, "cold" fish or "meat". One stack is one kind.
+function F.hangKind(fullType)
+    if F.COLD_FISH[fullType] then return "cold" end
+    if fullType == F.CURED_MEAT then return "meat" end
+    return "salt"
 end
 
 -- A tileset can't hold more than 512 tiles, so everything from FIRST_SHEET_SIZE on is in a second
@@ -522,6 +606,7 @@ function F.fishStyle(item)
     local fullType = item:getFullType()
     if fullType == "TraditionalPreservationFishMeat.FishHalf" then return F.STYLE_HALF end
     if fullType == "TraditionalPreservationFishMeat.GuttedFish" or fullType == "TraditionalPreservationFishMeat.ColdDriedFish" then return F.STYLE_GUTTED end
+    if fullType == F.CURED_MEAT or fullType == "TraditionalPreservationFishMeat.Charque" then return F.STYLE_MEAT end
     return F.STYLE_SALT
 end
 
@@ -558,6 +643,10 @@ local function startStack(craftRecipeData)
     modData.lastHardFrost = ledger.hardFrost
     modData.lastColdWet = ledger.coldWet
     modData.lastHeat = ledger.heat
+    modData.lastCharque = ledger.charque
+    modData.lastCharqueCovered = ledger.charqueCovered
+    modData.lastCharqueSheltered = ledger.charqueSheltered
+    modData.lastCharqueRain = ledger.charqueRain
     modData.sheltered = nil
     modData.covered = nil
 end
@@ -654,6 +743,39 @@ function F.onColdDryUpdate(craftRecipeData)
     showProgress(craftRecipeData, modData, F.COLD_DRY_HOURS)
 end
 
+-- OnStart for Salt Cured meat on a frame: charque.
+function F.onCharqueStart(craftRecipeData)
+    startStack(craftRecipeData)
+    craftRecipeData:getModData().style = F.STYLE_MEAT
+end
+
+-- Adds what the weather has done to a charque stack since it was last looked at, by the frame's place now. Rain on
+-- an open frame takes back a share of what it had first; it doesn't dry while wet anyway.
+function F.charqueStep(modData, ledger)
+    local rain = ledger.charqueRain - (modData.lastCharqueRain or ledger.charqueRain)
+    if modData.sheltered then
+        modData.dried = modData.dried + ledger.charqueSheltered - modData.lastCharqueSheltered
+    elseif modData.covered then
+        modData.dried = modData.dried + ledger.charqueCovered - modData.lastCharqueCovered
+    else
+        if rain > 0 then modData.dried = modData.dried * (1 - F.CHARQUE_REWET) ^ (rain / F.CHARQUE_RAIN_HOURS) end
+        modData.dried = modData.dried + ledger.charque - modData.lastCharque
+    end
+    modData.spoiled = (modData.spoiled or 0) + (ledger.saltSpoil - modData.lastSaltSpoil) / F.SALT_SPOIL_HOURS
+    modData.lastCharque = ledger.charque
+    modData.lastCharqueCovered = ledger.charqueCovered
+    modData.lastCharqueSheltered = ledger.charqueSheltered
+    modData.lastCharqueRain = ledger.charqueRain
+    modData.lastSaltSpoil = ledger.saltSpoil
+end
+
+function F.onCharqueUpdate(craftRecipeData)
+    local modData = craftRecipeData:getModData()
+    if not modData.dried then return end
+    F.charqueStep(modData, F.getLedger())
+    showProgress(craftRecipeData, modData, F.CHARQUE_HOURS)
+end
+
 -- A fish from another mod isn't in the list, and keeps the stage's own icon.
 function F.iconIndex(source)
     local fullType = source:getFullType()
@@ -725,11 +847,19 @@ function F.saltCarried(character)
     return uses
 end
 
+function F.isMeatCut(fullType)
+    for _, cut in ipairs(F.MEAT_CUTS) do
+        if cut == fullType then return true end
+    end
+    return false
+end
+
 -- OnTest sees every input, so the knife and the salt pass here too. The recipe finds its first SALT_MIN
 -- anywhere in reach; the rest must be on you.
 function F.canPack(item, character)
     if item:hasTag(ItemTag.SALT) or not instanceof(item, "Food") then return true end
     if F.tooBigToSaltWhole(item) then return false end
+    if not F.CHARQUE_ON and F.isMeatCut(item:getFullType()) then return false end
     if not character then return true end
     return F.saltCarried(character) >= F.saltFor(item)
 end
@@ -810,11 +940,12 @@ function F.carry(source, target)
     F.rename(target)
 end
 
-F.RINSE_TYPE = "TraditionalPreservationFishMeat.SaltPressedFish"
+-- Salt Cured fish, and Salt Cured meat as the charqueadas washed it before the sun.
+F.RINSE_TYPES = { ["TraditionalPreservationFishMeat.SaltPressedFish"] = true, [F.CURED_MEAT] = true }
 
--- Only a Salt Pressed fish not rinsed yet: a dried one has lost the water that lets the salt out.
+-- Only Salt Cured fish or meat not rinsed yet: a dried one has lost the water that lets the salt out.
 function F.canRinse(item)
-    return item:getFullType() == F.RINSE_TYPE and not item:getModData().rinsed
+    return F.RINSE_TYPES[item:getFullType()] == true and not item:getModData().rinsed
 end
 
 -- What rinsing does to a salty stage, from its script values: less thirst, a little less keeping. A stage
@@ -838,7 +969,7 @@ end
 
 -- The Rinse recipe's OnTest, which runs for every input: only the fish is checked.
 function F.canRinseInput(item)
-    if item:getFullType() ~= F.RINSE_TYPE then return true end
+    if not F.RINSE_TYPES[item:getFullType()] then return true end
     return F.canRinse(item)
 end
 
@@ -1261,6 +1392,8 @@ function F.applySandbox()
         F.PRESS_HOURS = options.PressDays * 24
         F.PRESS_MIN_HOURS = F.PRESS_HOURS * PRESS_MIN_SHARE
     end
+    if options.CharqueDays then F.CHARQUE_HOURS = options.CharqueDays * 24 end
+    if options.Charque ~= nil then F.CHARQUE_ON = options.Charque end
     if options.MaxDryDays then F.MAX_DRY_DAYS = math.max(options.MaxDryDays, F.DRY_HOURS / 24) end
     F.MIN_DRY_RATE = F.DRY_HOURS / (F.MAX_DRY_DAYS * 24)
     local scale = SPOILAGE_SCALES[options.Spoilage] or 1
@@ -1282,6 +1415,7 @@ function F.applyRecipeTimes()
     applyRecipeTime("TraditionalPreservationFishMeat.PressSaltedMeat", F.PRESS_HOURS)
     applyRecipeTime("TraditionalPreservationFishMeat.HangFishToDry", F.DRY_HOURS)
     applyRecipeTime("TraditionalPreservationFishMeat.HangFishToColdDry", F.COLD_DRY_HOURS)
+    applyRecipeTime("TraditionalPreservationFishMeat.HangMeatToDry", F.CHARQUE_HOURS)
 end
 
 Events.OnInitGlobalModData.Add(F.applyRecipeTimes)

@@ -425,7 +425,7 @@ module TraditionalPreservationFishMeat
         Tooltip = Tooltip_TraditionalPreservationFishMeat_PackedMeat,
     }
 
-    /* Cured but still damp, as Salt Pressed fish: it keeps a week or so until it is dried. */
+    /* Cured but still damp, as Salt Cured fish: it keeps a week or so until it is dried. */
     item SaltCuredMeat
     {
         DisplayCategory = Food,
@@ -496,6 +496,115 @@ module TraditionalPreservationFishMeat
         outputs
         {
             item variable[1:35] TraditionalPreservationFishMeat.SaltCuredMeat,
+        }
+    }
+
+    /* Charque, phase 3c: Salt Cured meat sun dried on any drying station (HangMeatToDry). Like Salt Dried fish it
+       keeps for months and takes its food and name from the cut (onCreateDried: "Steak (Charque)"), but it is
+       never eaten as it is: real charque is always desalted first (SoakCharque). */
+    item Charque
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.15,
+        Icon = Charque_Beef,
+        IconsForTexture = Charque_Beef;Charque_Steak;Charque_Mutton;Charque_Venison,
+        CantEat = true,
+        DaysFresh = 120,
+        DaysTotallyRotten = 180,
+        HungerChange = -28.0,
+        ThirstChange = 30.0,
+        Calories = 198.0,
+        Carbohydrates = 0.0,
+        Lipids = 8.4,
+        Proteins = 28.5,
+        FoodType = Beef,
+        StaticModel = Steak,
+        WorldStaticModel = Steak,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Charque,
+    }
+
+    /* Water back in and most of the salt out, so it spoils like fresh meat again. A little salt stays (ThirstChange),
+       less if the meat was rinsed before it hung (applyRinse). */
+    item SoakedCharque
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.25,
+        Icon = SoakedCharque,
+        IconsForTexture = SoakedCharque_Beef;SoakedCharque_Steak;SoakedCharque_Mutton;SoakedCharque_Venison,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -40.0,
+        ThirstChange = 10.0,
+        Calories = 220.0,
+        Carbohydrates = 0.0,
+        Lipids = 9.35,
+        Proteins = 31.62,
+        FoodType = Beef,
+        IsCookable = true,
+        DangerousUncooked = true,
+        MinutesToCook = 40,
+        MinutesToBurn = 80,
+        GoodHot = true,
+        CookingSound = FryingFood,
+        EvolvedRecipe = Soup:15;Stew:15;Pie:15;Stir fry:15;Sandwich:5|Cooked;Burger:10|Cooked;Salad:10|Cooked;Rice:15;Pasta:15;Taco:10|Cooked;Burrito:15|Cooked,
+        EvolvedRecipeName = Beef,
+        StaticModel = Steak,
+        WorldStaticModel = Steak,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_SoakedCharque,
+    }
+
+    /* The single-icon stand-in a dish lists for Soaked Charque (TraditionalPreservationFishMeatEvolved.lua). */
+    item SoakedCharqueIngredient
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.25,
+        Icon = SoakedCharque,
+        FoodType = Beef,
+        EvolvedRecipeName = Beef,
+    }
+
+    /* time is overwritten from CHARQUE_HOURS in TraditionalPreservationFishMeat.lua. OnUpdate sets the progress from
+       the weather (charqueStep), so Time Remaining is what it would take in hot sun and a breeze. */
+    craftRecipe HangMeatToDry
+    {
+        Tooltip = Tooltip_craft_hangMeatToDry,
+        time = 432000,
+        Tags = DryingFrame,
+        category = Cooking,
+        OnStart = TraditionalPreservationFishMeat.onCharqueStart,
+        OnUpdate = TraditionalPreservationFishMeat.onCharqueUpdate,
+        OnCreate = TraditionalPreservationFishMeat.onCreateDried,
+        inputs
+        {
+            item variable[1:25] [TraditionalPreservationFishMeat.SaltCuredMeat] flags[IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item variable[1:25] TraditionalPreservationFishMeat.Charque,
+        }
+    }
+
+    craftRecipe SoakCharque
+    {
+        timedAction = Making,
+        time = 100,
+        Tags = InHandCraft;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationFishMeat.onCreateCured,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.Charque] flags[InheritFoodAge;ItemCount] mode:destroy,
+            item 1 [*],
+            -fluid 1.0 [Water],
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.SoakedCharque,
         }
     }
 }

@@ -1,4 +1,4 @@
--- Traditional Preservation (Fish & Meat): Rinse at Sink, rinsing the excess salt off one Salt Pressed fish with
+-- Traditional Preservation (Fish & Meat): Rinse at Sink, rinsing the excess salt off one Salt Cured fish or cut of meat with
 -- RINSE_LITRES from a sink, bathtub, barrel or well of clean water. With carried water it is the Rinse recipe.
 require "TimedActions/ISBaseTimedAction"
 require "TraditionalPreservationFishMeat"

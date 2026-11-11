@@ -7,7 +7,7 @@ fish icons, which TraditionalPreservationFishMeatWorld.lua layers on top. In eve
 Workstations need their own sprite: the game refuses to load a world if two entities share one.
 
 It also writes the item icons and the fish model textures to 42/media/textures. The model textures are vanilla's
-fish fillet recoloured and the Salt Pressed, Salt Dried and Cold Dried icons are vanilla's fish icons tinted, and the Half icons are those fish split open, so they read the game's files.
+fish fillet recoloured and the Salt Cured (SaltPressedFish), Salt Dried and Cold Dried icons are vanilla's fish icons tinted, and the Half icons are those fish split open, so they read the game's files.
 
 Usage: python3 tools/build_tileset.py [path/to/ProjectZomboid/projectzomboid]
 Needs Pillow. Rerun after editing the colours or sizes below.
@@ -31,7 +31,7 @@ NAME = "traditionalpreservationfishmeat"
 # station with it. Tiles are numbered straight through both. The Lua reads these numbers from the generated Tiles.lua.
 TILESETS = [NAME + "_01", NAME + "_02"]
 COLUMNS = 8
-SHEET_ROWS = [51, 39]
+SHEET_ROWS = [51, 56]
 FIRST_SHEET_SIZE = COLUMNS * SHEET_ROWS[0]
 NAME_TITLE = "TraditionalPreservationFishMeat"
 PAGE_SIZE = 2048
@@ -47,6 +47,9 @@ MEDIUM_HOOKS, LARGE_HOOKS = 4, 2
 FACES = ["S", "E"]
 # The Stockfish Pallet (one face, like vanilla's crates) and its stack of stockfish at a third, two thirds and full.
 PALLET, PALLET_STACK = 712, 713
+# Charque hanging on each station (phase 3c), after the pallet so no station's tile number moves: one run of
+# stages per spot and face, numbered as the fish (fish_index with the meat's first tile).
+FRAME_MEAT, MEDIUM_MEAT, LARGE_MEAT = 716, 796, 836
 PALLET_LEVELS = [3, 6, 10]  # layers of fish
 PALLET_SPRITE = "construction_01_5"  # vanilla's Empty Pallet, in Tiles2x.pack
 PALLET_TOP_Z = 16  # its boards, in pixels above the floor
@@ -134,6 +137,14 @@ FRESH_FISH = dict(colour=(226, 224, 212), strength=0.42, grains=5)
 DONE_FISH = dict(colour=(120, 76, 40), strength=0.62, grains=3)
 FRESH_COLD_FISH = dict(colour=(222, 200, 188), strength=0.2, grains=0)
 DONE_COLD_FISH = dict(colour=(170, 164, 146), strength=0.65, grains=0)
+# Charque darkens from cured red, with a little salt, to deep brown.
+FRESH_MEAT = dict(colour=(140, 58, 46), strength=0.6, grains=3)
+DONE_MEAT = dict(colour=(78, 40, 26), strength=0.9, grains=0)
+# The style number the Lua gives a meat stack. It has its own tiles, so it isn't counted in FISH_STYLES.
+MEAT_STYLE = FISH_STYLES
+# The vanilla meat icons hung as charque, picked at random for each spot like the fish.
+HANGING_MEAT = [("BeefLoin", 0), ("Steak", 0), ("Venison", 0)]
+MEAT_SCALE = 0.75
 # The vanilla icons hung on a frame, picked at random for each spot, and which way to turn each.
 HANGING_FISH = [("Fish_Walleye", 0), ("Fish_PerchYellow", 0), ("Fish_Sauger", 0)]  # bass icons are too curved to hang
 HANGING_SCALE = 0.74
@@ -173,6 +184,7 @@ FISH_ICONS = ["FishFillet", "Salmon", "Fish_BassLargemouth", "Fish_BassSmallmout
               "Fish_SunfishGreen", "Fish_CatfishBlue", "Fish_CatfishChannel", "Fish_CatfishFlathead", "Fish_Muskellunge",
               "Fish_BassWhite", "Fish_PerchYellow", "Fish_DrumFreshwater", "Fish_GarAlligator", "Fish_Paddlefish"]
 OLD_PACK_ICONS = {"Salmon"}
+OLD_PACK_MEAT = {"Steak"}
 # Copies of those icons for five stages: prefix, tint colour, tint strength, salt grains.
 FLESH, SPINE, HEAD_RED = (232, 176, 164, 255), (120, 44, 48, 255), (150, 30, 34, 255)
 HALF_FLESH, HALF_FLESH_WIDTH, HALF_FLESH_HEIGHT = (214, 96, 92), 0.3, 0.32
@@ -252,6 +264,10 @@ for face_index, face in enumerate(FACES):
     for first, hooks in ((MEDIUM_FISH, MEDIUM_HOOKS), (LARGE_FISH, LARGE_HOOKS)):
         for slot in range(hooks):
             for stage in range(FISH_STAGES * FISH_STYLES):
+                TILE_PROPS[fish_index(face_index, slot, stage, first, hooks)] = [("Facing", face)]
+    for first, hooks in ((FRAME_MEAT, len(SLOTS)), (MEDIUM_MEAT, MEDIUM_HOOKS), (LARGE_MEAT, LARGE_HOOKS)):
+        for slot in range(hooks):
+            for stage in range(FISH_STAGES):
                 TILE_PROPS[fish_index(face_index, slot, stage, first, hooks)] = [("Facing", face)]
 
 
@@ -639,8 +655,17 @@ def paint_fish_tile(icons, face, slot, stage):
     return weather(tile, slot * 5 + stage + 90, FISH_WEATHER)
 
 
+def hanging_meat(icons, face, slot, stage, scale=1.0):
+    """A cut of charque for a spot, at one drying stage."""
+    name, turn = random.Random(f"meat{face}{slot}").choice(HANGING_MEAT)
+    colour, strength, grains = fish_stage(stage, FRESH_MEAT, DONE_MEAT)
+    return stage_icon(hanging_icon(icons[f"Item_{name}"], turn, scale * MEAT_SCALE), colour, strength, grains, slot * 5 + stage)
+
+
 def hanging_fish(icons, face, slot, stage, scale=1.0, choices=HANGING_FISH):
-    """A fish for a spot. stage carries its style, as in the tile numbers."""
+    """A fish for a spot. stage carries its style, as in the tile numbers; the meat style has a stage only."""
+    if stage >= FISH_STAGES * FISH_STYLES:
+        return hanging_meat(icons, face, slot, stage - FISH_STAGES * FISH_STYLES, scale)
     name, turn = random.Random(f"{face}{slot}").choice(choices)
     style, stage = divmod(stage, FISH_STAGES)
     icon = icons[f"Item_{name}"]
@@ -955,6 +980,9 @@ def read_icons(game):
     icons = pzart.extract_sprites(packs / "UI2.pack", {f"Item_{icon}" for icon in FISH_ICONS if icon not in OLD_PACK_ICONS} | {"Item_Boulder"})
     for icon in OLD_PACK_ICONS:
         icons[f"Item_{icon}"] = pzart.extract_old_sprite(packs / "UI.pack", f"Item_{icon}")
+    icons.update(pzart.extract_sprites(packs / "UI2.pack", {f"Item_{name}" for name, _ in HANGING_MEAT if name not in OLD_PACK_MEAT}))
+    for name in OLD_PACK_MEAT:
+        icons[f"Item_{name}"] = pzart.extract_old_sprite(packs / "UI.pack", f"Item_{name}")
     return icons
 
 
@@ -1061,6 +1089,9 @@ def build_tiles(game=GAME):
         for slot in range(len(SLOTS)):
             for stage in range(FISH_STAGES * FISH_STYLES):
                 tiles[fish_index(index, slot, stage)] = paint_fish_tile(icons, face, slot, stage)
+            for stage in range(FISH_STAGES):
+                meat = FISH_STAGES * FISH_STYLES + stage
+                tiles[fish_index(index, slot, stage, FRAME_MEAT)] = paint_fish_tile(icons, face, slot, meat)
         tiles[MEDIUM_BEAM + index] = paint_medium_beam(face)
         tiles[LARGE_BEAM + index] = paint_large_beam(face)
         medium_mask = front_post_mask(face, MEDIUM_HALF_LENGTH, MEDIUM_BEAM_Z, POST_RADIUS)
@@ -1069,6 +1100,12 @@ def build_tiles(game=GAME):
             for slot, point in enumerate(hooks):
                 for stage in range(FISH_STAGES * FISH_STYLES):
                     tiles[fish_index(index, slot, stage, first, len(hooks))] = paint_hook_fish_tile(icons, face, slot, stage, point, size, scale, mask)
+        for first, meat_first, hooks, size, scale, mask in ((MEDIUM_FISH, MEDIUM_MEAT, medium_hooks(face), MEDIUM_HOOK_SIZE, MEDIUM_FISH_SCALE, medium_mask),
+                                                            (LARGE_FISH, LARGE_MEAT, large_hooks(face), LARGE_HOOK_SIZE, LARGE_FISH_SCALE, large_mask)):
+            for slot, point in enumerate(hooks):
+                for stage in range(FISH_STAGES):
+                    meat = FISH_STAGES * FISH_STYLES + stage
+                    tiles[fish_index(index, slot, stage, meat_first, len(hooks))] = paint_hook_fish_tile(icons, face, slot, meat, point, size, scale, mask)
     tiles[PALLET] = pzart.extract_sprites(game / "media/texturepacks/Tiles2x.pack", {PALLET_SPRITE})[PALLET_SPRITE]
     for level, layers in enumerate(PALLET_LEVELS):
         tiles[PALLET_STACK + level] = paint_pallet_stack(icons, layers)
@@ -1090,14 +1127,14 @@ def lua_tiles():
         "FRAME": FRAME,
         # Every station that hangs fish: its first sprite, its first hanging fish sprite and its stacks.
         "HANGERS": {
-            "frame": {"base": FRAME, "fishSprite": FISH, "stacks": len(SLOTS)},
-            "medium": {"base": MEDIUM_BEAM, "fishSprite": MEDIUM_FISH, "stacks": MEDIUM_HOOKS},
-            "large": {"base": LARGE_BEAM, "fishSprite": LARGE_FISH, "stacks": LARGE_HOOKS},
+            "frame": {"base": FRAME, "fishSprite": FISH, "meatSprite": FRAME_MEAT, "stacks": len(SLOTS)},
+            "medium": {"base": MEDIUM_BEAM, "fishSprite": MEDIUM_FISH, "meatSprite": MEDIUM_MEAT, "stacks": MEDIUM_HOOKS},
+            "large": {"base": LARGE_BEAM, "fishSprite": LARGE_FISH, "meatSprite": LARGE_MEAT, "stacks": LARGE_HOOKS},
         },
         "PALLET": tile_name(PALLET),
         "PALLET_STACKS": [tile_name(PALLET_STACK + level) for level in range(len(PALLET_LEVELS))],
         "DRYING_STAGES": FISH_STAGES,
-        "STYLES": {name: style for style, name in enumerate(STYLE_NAMES)},
+        "STYLES": dict({name: style for style, name in enumerate(STYLE_NAMES)}, MEAT=MEAT_STYLE),
     }
 
 
