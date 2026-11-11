@@ -76,7 +76,7 @@ local function station(spriteName, x, outside, waiting, batches, finished)
     local resources = {}
     function resources:getResourcesFromGroup(group)
         local items = group == "in" and waiting or finished
-        return list({ { getStoredItems = function() return list(items) end } })
+        return list({ { getStoredItems = function() return list(items) end, storedSize = function() return #items end } })
     end
     local object = { square = square(x, 0), sprites = {}, clears = 0 }
     function object:getComponent(kind) return kind == "Resources" and resources or logic end
@@ -158,6 +158,10 @@ check("a Smokehouse in the open is sheltered inside", smoked.modData.sheltered =
 check("and shows no hanging stacks", #smokehouse.sprites == 0)
 check("it counts its busy stacks", W.busyStacks(smokehouse) == 1)
 check("one built before its own recipe tag gets it", smokehouse:getComponent("DryingCraftLogic").tag == "Smokehouse")
+local done = station("traditionalpreservationfishmeat_02_449", 8, true, {}, {}, { fish(T.HOT_MEAT) })
+W.track(done)
+W.refresh(done)
+check("a finished stack waiting hangs a ham by the door (tile 868)", table.concat(done.sprites, " ") == "traditionalpreservationfishmeat_02_460")
 check("a frame keeps the frame's", rack:getComponent("DryingCraftLogic").tag == "DryingFrame")
 
 -- Tubs

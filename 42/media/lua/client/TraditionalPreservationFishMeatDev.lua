@@ -33,6 +33,7 @@ function TPFM.help()
     say("TPFM.fat(n)                spawn n each of Pork Fat, Beef Suet and Mutton Fat")
     say("TPFM.meat(n)               spawn n each of the cuts that go in the salt: Beef, Steak, Mutton Chop, Venison")
     say("TPFM.cured(n)              spawn n each of those cuts already Salt Cured, ready for the frame as charque")
+    say("TPFM.curedFish(name, n)    spawn n fish (default Walleye) already Salt Cured, ready for the frame or Smokehouse")
     say("TPFM.rain(hours)           add this many hours of rain and wet the open frames, to test rain on open charque")
     say("TPFM.fatPot(state)         spawn a Pot of Pork Fat: \"cooked\" (the default), \"burnt\" or \"raw\"")
     say("TPFM.fatRows()             the fat each vanilla animal's butchering table gives now")
@@ -42,6 +43,8 @@ function TPFM.help()
     say("TPFM.keep(days)            age those crocks by this many days at their place's rate now")
     say("TPFM.flueKit()             spawn both flue kits: 2 Clay Pipe Segments, 3 Flat Stones, 3 Clay, a trowel and a shovel")
     say("TPFM.smokehouse()          each Smokehouse tile within 3 tiles: facing, part, the Fireboxes beside it and why each can't join")
+    say("TPFM.smoke()               the joined Firebox's fire record and each stack's hot and smoke hours, Smokehouses within 3 tiles")
+    say("TPFM.stoke(hours)          add stoked hours to the running session of those joined Fireboxes (stoke it first)")
     say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up curing.")
 end
 
@@ -227,6 +230,18 @@ function TPFM.cured(count)
     say("Gave " .. (count or 1) .. " each of Beef, Steak, Mutton Chop and Venison, Salt Cured.")
 end
 
+-- A vanilla fish packed and cured as the tub would, ready for the frame or the Smokehouse ("Walleye (Salt Cured)").
+function TPFM.curedFish(name, count)
+    local inventory = getPlayer():getInventory()
+    local fullType = "Base." .. (name or "Walleye")
+    for _ = 1, count or 1 do
+        local packed = instanceItem(F.PACKED_FISH)
+        F.carry(instanceItem(fullType), packed)
+        F.carry(packed, inventory:AddItem("TraditionalPreservationFishMeat.SaltPressedFish"))
+    end
+    say("Gave " .. (count or 1) .. " " .. fullType .. ", Salt Cured.")
+end
+
 function TPFM.fatPot(state)
     local pot = give("TraditionalPreservationFishMeat.PotOfPorkFat")[1]
     state = state or "cooked"
@@ -392,6 +407,55 @@ function TPFM.smokehouse()
         end
     end
     if seen == 0 then say("No Smokehouse within 3 tiles on this floor.") end
+end
+
+-- The chamber tiles holding slots within 3 tiles, each with its joined Firebox (or nil).
+local function smokehouses()
+    local player, found = getPlayer(), {}
+    local cell, x, y, z = getCell(), math.floor(player:getX()), math.floor(player:getY()), player:getZ()
+    for dx = -3, 3 do
+        for dy = -3, 3 do
+            local tile = F.chamberOn(cell:getGridSquare(x + dx, y + dy, z))
+            if tile and tile:getComponent(ComponentType.DryingCraftLogic) then
+                table.insert(found, { tile = tile, firebox = F.joinedFirebox(tile) })
+            end
+        end
+    end
+    return found
+end
+
+function TPFM.smoke()
+    local Hearth = require "TraditionalPreservationCore/Hearth"
+    local found = smokehouses()
+    for _, shed in ipairs(found) do
+        local fire = shed.firebox and Hearth.stateOf(shed.firebox:getModData())
+        say(string.format("Smokehouse at %d,%d: %s", shed.tile:getX(), shed.tile:getY(), fire and string.format(
+            "fire %s, stoked %.1f h, banked %.1f h, session %s (%.1f h)", tostring(fire.fireMode), fire.stokedHours or 0,
+            fire.bankedHours or 0, fire.session and string.format("%.2f", fire.session) or "none", Hearth.sessionHours(fire))
+            or "no Firebox joined"))
+        local logic = shed.tile:getComponent(ComponentType.DryingCraftLogic)
+        local items = CraftLogicUILogic.new(getPlayer(), shed.tile, logic):getItemsInProgress()
+        for craftData, _ in pairs(items) do
+            local modData = craftData:getModData()
+            say(string.format("  stack %s: hot %.1f of %s h, smoke %.1f h, dried %.0f h%s", tostring(modData.stackId), modData.hot or 0,
+                modData.hotNeed and string.format("%.0f", modData.hotNeed) or "-", modData.cold or 0, modData.dried or 0,
+                F.hotStations[modData.stackId] and ", cook done" or ""))
+        end
+    end
+    if #found == 0 then say("No Smokehouse within 3 tiles on this floor.") end
+end
+
+function TPFM.stoke(hours)
+    local Hearth = require "TraditionalPreservationCore/Hearth"
+    for _, shed in ipairs(smokehouses()) do
+        local fire = shed.firebox and Hearth.stateOf(shed.firebox:getModData())
+        if fire and fire.session then
+            fire.stokedHours = (fire.stokedHours or 0) + (hours or 1)
+            say(string.format("Session now %.1f h", Hearth.sessionHours(fire)))
+        else
+            say("No stoked session running: join a Firebox and stoke it first.")
+        end
+    end
 end
 
 say("Debug commands loaded. Type TPFM.help() in the Lua console.")

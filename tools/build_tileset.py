@@ -75,6 +75,14 @@ FLUE_R = 4.5
 FLUE_CLAY = (172, 96, 64)
 FLUE_DAUB = (150, 124, 98)
 TRENCH_W = 0.07
+# A ham hung by the door while finished stacks wait in the chamber (5c, user's idea): one overlay per face, on the
+# door's tile, on the door's end wall beside the door.
+CHAMBER_HAM = 868
+HAM_A = 0.33              # across the end wall, right of the door
+HAM_TOP = 92              # px up to the bone's knob; the nail is above it
+HAM_COLOUR = (100, 52, 28)  # a shade under the Hot Smoked meat icons' mahogany: it hangs in the shade of the eave
+HAM_CORD = (196, 176, 136)
+HAM_BONE = (232, 222, 196)
 JOIN = 0.02               # the back tile runs this far under the front one, so no seam shows
 PALLET_LEVELS = [3, 6, 10]  # layers of fish
 PALLET_SPRITE = "construction_01_5"  # vanilla's Empty Pallet, in Tiles2x.pack
@@ -298,6 +306,8 @@ for kind in FLUE_KINDS:
     for face_index, face in enumerate(FACES):
         for part in range(2):
             TILE_PROPS[chamber_entry_index(kind, face_index, part)] = [("Facing", face)]
+for face_index, face in enumerate(FACES):
+    TILE_PROPS[CHAMBER_HAM + face_index] = [("Facing", face)]
 for face_index, face in enumerate(FACES):
     TILE_PROPS[TUB + face_index] = station_props("Tub", "Salting", face, "100")
     TILE_PROPS[FRAME + face_index] = station_props("Frame", "Drying", face, "100")
@@ -1275,6 +1285,33 @@ def paint_chamber_entry(kind, face, part):
     return pzart.hard_edges(shrink(layer).convert("RGBA"))
 
 
+def paint_chamber_ham(face):
+    """A smoked ham on a cord from a nail on the door's end wall: the shank up, the round of it at the bottom, a lighter
+    face where the light falls and the bone's knob at the top."""
+    layer = new_layer()
+    draw = ImageDraw.Draw(layer)
+    h, a = CHAMBER_HALF, HAM_A
+    light = 1.0 if face == "S" else 0.72
+
+    def px(da, z, out=0.012):
+        return chamber_px(face, 1, a + da, h + out, z)
+
+    nail = HAM_TOP + 9
+    draw.line([px(0, nail), px(0, HAM_TOP)], fill=tint(HAM_CORD, light), width=SS)
+    draw.ellipse([px(0, nail)[0] - 1.2 * SS, px(0, nail)[1] - 1.2 * SS, px(0, nail)[0] + 1.2 * SS, px(0, nail)[1] + 1.2 * SS],
+                 fill=tint(IRON, 1.0))
+    # Half-widths (in tiles) down the ham, from the shank to the round bottom.
+    zs = [HAM_TOP - 2 - 5 * i for i in range(9)] + [HAM_TOP - 44]
+    ws = [0.02, 0.026, 0.042, 0.07, 0.092, 0.102, 0.1, 0.088, 0.06, 0.028]
+    outline = [px(-w, z) for z, w in zip(zs, ws)] + [px(w, z) for z, w in reversed(list(zip(zs, ws)))]
+    draw.polygon(outline, fill=tint(HAM_COLOUR, light * 0.78))
+    inner = [px(-w * 0.7 - 0.006, z) for z, w in zip(zs[2:-1], ws[2:-1])] + [px(w * 0.45, z) for z, w in reversed(list(zip(zs[2:-1], ws[2:-1])))]
+    draw.polygon(inner, fill=tint(HAM_COLOUR, light * 1.08))
+    knob = px(0, HAM_TOP)
+    draw.ellipse([knob[0] - 2 * SS, knob[1] - 1.6 * SS, knob[0] + 2 * SS, knob[1] + 1.6 * SS], fill=tint(HAM_BONE, light))
+    return pzart.hard_edges(shrink(layer).convert("RGBA"))
+
+
 def chamber_icon(tiles, face_index=0):
     """Both halves of the chamber as they stand, the back one drawn first, for the build menu."""
     face = FACES[face_index]
@@ -1320,6 +1357,7 @@ def build_tiles(game=GAME):
             tiles[chamber_index(face_index, part)] = paint_chamber(face, part)
             for kind in FLUE_KINDS:
                 tiles[chamber_entry_index(kind, face_index, part)] = paint_chamber_entry(kind, face, part)
+        tiles[CHAMBER_HAM + face_index] = paint_chamber_ham(face)
     tiles[PALLET] = pzart.extract_sprites(game / "media/texturepacks/Tiles2x.pack", {PALLET_SPRITE})[PALLET_SPRITE]
     for level, layers in enumerate(PALLET_LEVELS):
         tiles[PALLET_STACK + level] = paint_pallet_stack(icons, layers)
@@ -1351,6 +1389,8 @@ def lua_tiles():
         },
         # Where a joined Firebox's flue enters the chamber: Pipe then Stones, each face, each part.
         "CHAMBER_ENTRY": CHAMBER_ENTRY,
+        # The ham by the door while finished stacks wait inside: one per face, on the door's tile.
+        "CHAMBER_HAM": CHAMBER_HAM,
         "PALLET": tile_name(PALLET),
         "PALLET_STACKS": [tile_name(PALLET_STACK + level) for level in range(len(PALLET_LEVELS))],
         "DRYING_STAGES": FISH_STAGES,

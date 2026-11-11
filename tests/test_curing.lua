@@ -698,7 +698,7 @@ for list in script:gmatch("IconsForTexture = ([^,]+),") do
     end
     check("the list covers every fish, once or three times", position == #T.FISH_ICONS or position == #T.FISH_ICONS * 3)
 end
-check("all eight stages have the list", lists == 8)
+check("all nine stages have the list (Hot Smoked, 5c)", lists == 9)
 
 -- Each model list runs in the same order as the icons, and every model exists.
 local models = io.open("42/media/scripts/TraditionalPreservationFishMeat_models.txt"):read("*a")
@@ -722,7 +722,7 @@ for list in script:gmatch("WorldStaticModelsByIndex = ([^,]+),") do
     end
     check("the model list covers every fish, once or three times", position == #T.FISH_ICONS or position == #T.FISH_ICONS * 3)
 end
-check("all eight stages have models", modelLists == 8)
+check("all nine stages have models (Hot Smoked, 5c)", modelLists == 9)
 
 local headBody = script:match("item FishHead\n    {(.-)\n    }")
 check("a head spoils like fresh fish", headBody:find("DaysFresh = 3,", 1, true) and headBody:find("DaysTotallyRotten = 6,", 1, true))

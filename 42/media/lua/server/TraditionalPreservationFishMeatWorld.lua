@@ -6,6 +6,7 @@ if isClient() then return end
 TraditionalPreservationFishMeatWorld = TraditionalPreservationFishMeatWorld or {}
 local Station = require "TraditionalPreservationCore/Station"
 local Weather = require "TraditionalPreservationCore/Weather"
+local Hearth = require "TraditionalPreservationCore/Hearth"
 local Tiles = require "TraditionalPreservationFishMeat/Tiles"
 local F = TraditionalPreservationFishMeat
 
@@ -59,11 +60,21 @@ function TraditionalPreservationFishMeatWorld.tubSprite(waiting, batches, finish
 end
 
 -- place is the station's: indoors (and inside the Smokehouse) is sheltered, a roof with no room round it covered.
-local function readBatches(logic, uiLogic, place)
+-- In the Smokehouse each stack also counts the joined Firebox's fire (F.smokeStep); a done cook is noted for its
+-- OnUpdate to finish.
+local function readBatches(station, entry, logic, uiLogic, place)
     local batches = {}
+    local smoking = entry.hanger and entry.hanger.closed
+    local firebox = smoking and F.joinedFirebox(station)
+    local fire = firebox and Hearth.stateOf(firebox:getModData())
     for craftData, _ in pairs(uiLogic:getItemsInProgress()) do
-        craftData:getModData().sheltered = place ~= "Open" and place ~= "Covered"
-        craftData:getModData().covered = place == "Covered"
+        local modData = craftData:getModData()
+        modData.sheltered = place ~= "Open" and place ~= "Covered"
+        modData.covered = place == "Covered"
+        if smoking then
+            F.smokeStep(modData, fire)
+            if F.hotDone(modData) then F.hotStations[modData.stackId] = station end
+        end
         table.insert(batches, { progress = logic:getProgress(craftData), style = craftData:getModData().style or F.STYLE_SALT })
     end
     return batches
@@ -97,11 +108,28 @@ local function refreshFrame(frame, entry, faceIndex, _, waitingStyle, batches, f
     showSprites(frame, entry, table.concat(states, ","), sprites)
 end
 
--- The Smokehouse chamber is closed: nothing hangs in sight. Each of its tiles shows only where a joined Firebox's flue
--- enters it, master or not (the other tile has no slots).
+-- Whether either tile of the shed holds finished stacks not yet taken out (the slots are on one of them).
+local function hasFinished(station)
+    for _, found in ipairs(F.chamberTiles(station)) do
+        local resources = found[1]:getComponent(ComponentType.Resources)
+        local logic = found[1]:getComponent(ComponentType.DryingCraftLogic)
+        if resources and logic and Station.countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output) > 0 then
+            return true
+        end
+    end
+    return false
+end
+
+-- The Smokehouse chamber is closed: nothing hangs in sight. Each of its tiles shows where a joined Firebox's flue
+-- enters it, master or not (the other tile has no slots), and the door's tile a ham while finished stacks wait.
 local function showEntry(station, entry)
-    local sprite = F.chamberEntry(station)
-    showSprites(station, entry, tostring(sprite), sprite and { sprite } or {})
+    local sprites = {}
+    local face, part = F.chamberTile(F.stationIndex(station))
+    local flue = F.chamberEntry(station)
+    local ham = F.hamSprite(face, part, part == 1 and hasFinished(station))
+    if flue then table.insert(sprites, flue) end
+    if ham then table.insert(sprites, ham) end
+    showSprites(station, entry, table.concat(sprites, ","), sprites)
 end
 
 local function refresh(station, entry)
@@ -115,7 +143,7 @@ local function refresh(station, entry)
 
     local waiting, _, waitingStyles = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
     local _, finishedStacks, finishedStyles = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output)
-    local batches = readBatches(logic, uiLogic, entry.place or Weather.placeOf(station, true))
+    local batches = readBatches(station, entry, logic, uiLogic, entry.place or Weather.placeOf(station, true))
     entry.busyStacks = finishedStacks + #batches
     entry.show(station, entry, entry.faceIndex, waiting, waitingStyles[1], batches, finishedStyles)
 end

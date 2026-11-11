@@ -68,4 +68,66 @@ for _, kind in ipairs(F.FLUE_KINDS) do
     check(kind .. ": what comes back is part of the kit, and a tool is named", gives and kit.tool ~= nil)
 end
 
+-- Hot smoking (5c): the cook's hours by the heaviest piece, and the two counters against the Firebox's record.
+local Hearth = require "TraditionalPreservationCore/Hearth"
+local near = H.near
+check("small fish need 4 stoked hours", F.hotHours(false, 0.8) == 4 and F.hotHours(false, 1.1) == 4)
+check("big fish 6, between them in step", F.hotHours(false, 2.2) == 6 and near(F.hotHours(false, 1.65), 5))
+check("a 0.3 meat cut 6, a 0.5 cut 8", near(F.hotHours(true, 0.3), 6) and near(F.hotHours(true, 0.5), 8))
+check("never past 12", F.hotHours(false, 9) == F.HOT_MAX_HOURS and F.hotHours(true, 2) == F.HOT_MAX_HOURS)
+
+local function pieces(...)
+    local list = {}
+    for _, weight in ipairs({ ... }) do table.insert(list, { getActualWeight = function() return weight end }) end
+    return { size = function() return #list end, get = function(_, i) return list[i + 1] end }
+end
+local stack = {}
+F.startSmoke(stack, pieces(0.3, 0.5, 0.4), true)
+check("the heaviest cut sets the stack's need", near(stack.hotNeed, 8) and stack.hot == 0 and stack.cold == 0)
+
+local fire = {}
+Hearth.logFire(fire, 100, nil, nil)
+F.smokeStep(stack, fire)
+check("joining takes the fire's record as it stands", stack.smokeFrom == fire.fireId and stack.lastStoked == 0)
+Hearth.logFire(fire, 101, Hearth.STOKED, 120)
+Hearth.logFire(fire, 104, Hearth.STOKED, 120)
+F.smokeStep(stack, fire)
+check("stoked hours in the session are hot", near(stack.hot, 3) and not F.hotDone(stack))
+Hearth.logFire(fire, 104.5, nil, nil)
+Hearth.logFire(fire, 105, Hearth.STOKED, 120)
+Hearth.logFire(fire, 110, Hearth.STOKED, 120)
+F.smokeStep(stack, fire)
+check("a short gap keeps the cook going", near(stack.hot, 8.5) and F.hotDone(stack))
+
+local fish = {}
+F.startSmoke(fish, pieces(1.1), false)
+F.smokeStep(fish, fire)
+Hearth.logFire(fire, 112, Hearth.STOKED, 113)
+Hearth.logFire(fire, 120, nil, nil)
+F.smokeStep(fish, fire)
+check("a fire that burnt out while away counts to its end", near(fish.hot, 0) and near(fish.cold, 3))
+Hearth.logFire(fire, 121, Hearth.STOKED, 140)
+Hearth.logFire(fire, 123, Hearth.BANKED, 160)
+Hearth.logFire(fire, 127, Hearth.BANKED, 160)
+F.smokeStep(fish, fire)
+check("a broken session's hours and banked hours are smoke", near(fish.hot, 0) and near(fish.cold, 3 + 2 + 4))
+Hearth.logFire(fire, 128, Hearth.STOKED, 140)
+Hearth.logFire(fire, 132, Hearth.STOKED, 140)
+F.smokeStep(fish, fire)
+check("a new session cooks from its own start", near(fish.hot, 4) and F.hotDone(fish) and near(fish.cold, 3 + 2 + 5))
+
+local moved = { hotNeed = 4, hot = 2, cold = 1, smokeFrom = fire.fireId, lastStoked = fire.stokedHours, lastBanked = fire.bankedHours }
+F.smokeStep(moved, nil)
+check("disconnected, the hot hours become smoke", moved.hot == 0 and near(moved.cold, 3) and moved.smokeFrom == nil)
+local rebuilt = {}
+Hearth.logFire(rebuilt, 200, nil, nil)
+local before = { hotNeed = 4, hot = 1, cold = 0, smokeFrom = fire.fireId, lastStoked = 50, lastBanked = 0 }
+F.smokeStep(before, rebuilt)
+check("a rebuilt Firebox starts the count again", before.hot == 0 and near(before.cold, 1) and before.smokeFrom == 200)
+local frame = {}
+F.smokeStep(frame, fire)
+check("a stack from before 5c has no need and never counts", frame.hot == nil and not F.hotDone(frame))
+-- The ham by the door (user's idea): the door's tile, by facing, only with finished stacks.
+check("the ham hangs on the door's tile while stacks wait", F.hamSprite(0, 1, true) == Tiles.CHAMBER_HAM and F.hamSprite(1, 1, true) == Tiles.CHAMBER_HAM + 1)
+check("never on the back tile, nor with nothing finished", F.hamSprite(0, 0, true) == nil and F.hamSprite(0, 1, false) == nil)
 H.done()

@@ -527,6 +527,43 @@ module TraditionalPreservationFishMeat
         Tooltip = Tooltip_TraditionalPreservationFishMeat_Charque,
     }
 
+    /* Hot smoked in the Smokehouse (5c): salt cured meat cooked through over a stoked Firebox, smoked jerky's cousin.
+       Ready to eat; keeps a week or two. Food from the cut (carry); the values here are placeholders. */
+    item HotSmokedMeat
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.2,
+        Icon = HotSmokedMeat,
+        IconsForTexture = HotSmoked_Beef;HotSmoked_Steak;HotSmoked_Mutton;HotSmoked_Venison,
+        DaysFresh = 7,
+        DaysTotallyRotten = 14,
+        HungerChange = -28.0,
+        ThirstChange = 15.0,
+        UnhappyChange = -5,
+        Calories = 198.0,
+        Carbohydrates = 0.0,
+        Lipids = 8.4,
+        Proteins = 28.5,
+        FoodType = Beef,
+        EvolvedRecipe = Soup:15;Stew:15;Pie:15;Sandwich:5;Salad:10;Rice:15;Pasta:15;Taco:10;Burrito:15,
+        EvolvedRecipeName = Beef,
+        StaticModel = Steak,
+        WorldStaticModel = Steak,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_HotSmoked,
+    }
+
+    item HotSmokedMeatIngredient
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.2,
+        Icon = HotSmokedMeat,
+        FoodType = Beef,
+        EvolvedRecipeName = Beef,
+    }
+
     /* Water back in and most of the salt out, so it spoils like fresh meat again. A little salt stays (ThirstChange),
        less if the meat was rinsed before it hung (applyRinse). */
     item SoakedCharque

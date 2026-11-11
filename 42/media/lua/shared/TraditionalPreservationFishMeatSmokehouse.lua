@@ -8,6 +8,7 @@ TraditionalPreservationFishMeat = TraditionalPreservationFishMeat or {}
 local F = TraditionalPreservationFishMeat
 local Hearth = require "TraditionalPreservationCore/Hearth"
 local Doors = require "TraditionalPreservationCore/Doors"
+local Station = require "TraditionalPreservationCore/Station"
 local Tiles = require "TraditionalPreservationFishMeat/Tiles"
 
 F.CONNECT_TICKS = 400
@@ -205,4 +206,111 @@ function F.chamberEntry(tile)
     local firebox = fireboxOn(squareAt(tile:getSquare(), step[1], step[2]))
     if not firebox or F.joinedChamber(firebox) ~= tile then return nil end
     return F.entrySprite(F.flueOf(firebox), face, part, step[1], step[2])
+end
+
+-- The ham hung by the door while finished stacks wait in the shed (user's idea): on the door's tile only, by facing.
+function F.hamSprite(face, part, finished)
+    if part ~= 1 or not finished or not Tiles.CHAMBER_HAM then return nil end
+    return Tiles.CHAMBER_HAM + face
+end
+
+-- Hot smoking (ROADMAP §7, 5c). A salt stack (Salt Cured fish, or charque) in a chamber joined to a Firebox counts the
+-- Firebox's fire on two counters: hot, the hours of the stoked session now running (TP Core's Hearth.logFire), and
+-- cold, banked hours and the hours of stoked sessions that broke off. Hot reaching the stack's need finishes it at
+-- once as Hot Smoked; short of that it dries on as the Smokehouse always does, and keeps cold for Cold Smoked (5d).
+-- The need goes by the heaviest piece, as the press does: a cook is one unbroken run (real hot-smoked fish must reach
+-- 63 C inside and hold it).
+F.HOT_FISH_HOURS = { { 1.1, 4 }, { 2.2, 6 } }
+F.HOT_MEAT_HOURS = { { 0.3, 6 }, { 0.5, 8 } }
+F.HOT_MIN_HOURS = 4
+F.HOT_MAX_HOURS = 12
+F.HOT_FISH = "TraditionalPreservationFishMeat.HotSmokedFish"
+F.HOT_MEAT = "TraditionalPreservationFishMeat.HotSmokedMeat"
+
+-- The stoked hours a stack needs, by its heaviest piece: straight between the two points, on past them, clamped.
+function F.hotHours(isMeat, heaviest)
+    local points = isMeat and F.HOT_MEAT_HOURS or F.HOT_FISH_HOURS
+    local low, high = points[1], points[2]
+    local hours = low[2] + (heaviest - low[1]) * (high[2] - low[2]) / (high[1] - low[1])
+    return math.max(F.HOT_MIN_HOURS, math.min(hours, F.HOT_MAX_HOURS))
+end
+
+-- Sets a new stack's counters and need from its pieces (an ArrayList of items).
+function F.startSmoke(modData, items, isMeat)
+    local heaviest = 0
+    for i = 0, items:size() - 1 do heaviest = math.max(heaviest, items:get(i):getActualWeight()) end
+    modData.hotNeed = F.hotHours(isMeat, heaviest)
+    modData.hot, modData.cold = 0, 0
+    modData.smokeFrom, modData.smokeSession, modData.lastStoked, modData.lastBanked = nil, nil, nil, nil
+end
+
+-- Brings a stack's counters up to the fire's record (a Firebox's Hearth state), or none (not joined). A new or
+-- rebuilt Firebox starts from what it has now; whatever hot the stack had becomes cold, as it does when the session
+-- it counted in ends. Of the stoked hours since the last look, those in a session that has since begun are hot.
+function F.smokeStep(modData, fire)
+    if not modData.hotNeed then return end
+    if not fire or fire.fireId ~= modData.smokeFrom or (fire.stokedHours or 0) < (modData.lastStoked or 0) then
+        modData.cold = (modData.cold or 0) + (modData.hot or 0)
+        modData.hot = 0
+        if fire and fire.fireId then
+            modData.smokeFrom, modData.smokeSession = fire.fireId, fire.session
+            modData.lastStoked, modData.lastBanked = fire.stokedHours or 0, fire.bankedHours or 0
+        else
+            modData.smokeFrom, modData.smokeSession = nil, nil
+        end
+        return
+    end
+    local stoked = (fire.stokedHours or 0) - modData.lastStoked
+    local banked = (fire.bankedHours or 0) - (modData.lastBanked or 0)
+    -- No session running now: whatever was stoked since belonged to one that has ended (even one that began and
+    -- ended between two looks, while away).
+    if not fire.session or fire.session ~= modData.smokeSession then
+        local inNew = fire.session and math.min(stoked, (fire.stokedHours or 0) - fire.sessionBase) or 0
+        modData.cold = modData.cold + modData.hot + stoked - inNew
+        modData.hot = inNew
+        modData.smokeSession = fire.session
+    else
+        modData.hot = modData.hot + stoked
+    end
+    modData.cold = modData.cold + math.max(banked, 0)
+    modData.lastStoked, modData.lastBanked = fire.stokedHours or 0, fire.bankedHours or 0
+end
+
+-- Whether a stack's hot counter has done its cook.
+function F.hotDone(modData)
+    return modData.hotNeed ~= nil and (modData.hot or 0) >= modData.hotNeed
+end
+
+-- Stacks whose cook is done, by stackId, with their chamber: the World sets them, the stack's OnUpdate finishes it,
+-- its OnCreate swaps the outputs in the chamber's slots. Not saved: the World's next look after a load sets it again.
+F.hotStations = {}
+
+-- Swaps a finished stack's outputs, already in the chamber's slots (the engine makes them before OnCreate), for
+-- Hot Smoked ones made from its inputs.
+function F.hotSmokeOutputs(craftRecipeData, station)
+    local modData = craftRecipeData:getModData()
+    local inputs = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
+    local created = craftRecipeData:getAllCreatedItems()
+    local logic = station:getComponent(ComponentType.DryingCraftLogic)
+    local resources = station:getComponent(ComponentType.Resources)
+    if not logic or not resources then return false end
+    local slots = Station.itemSlots(resources, logic:getOutputsGroupName(), ResourceIO.Output)
+    local spoiled = modData.spoiled or 0
+    for i = 0, math.min(inputs:size(), created:size()) - 1 do
+        local input, made = inputs:get(i), created:get(i)
+        local hot = instanceItem(input:getFullType() == F.CURED_MEAT and F.HOT_MEAT or F.HOT_FISH)
+        F.carry(input, hot)
+        hot:getModData().stackId = modData.stackId
+        hot:getModData().style = modData.style
+        hot:setAge(spoiled >= 1 and hot:getOffAgeMax() or hot:getOffAge() * spoiled)
+        for j = 0, slots:size() - 1 do
+            local slot = slots:get(j)
+            if slot:containsItem(made) then
+                slot:removeItem(made)
+                slot:offerItem(hot, true)
+                break
+            end
+        end
+    end
+    return true
 end

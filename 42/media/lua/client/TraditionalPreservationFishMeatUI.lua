@@ -114,6 +114,15 @@ local function drawStackTooltip(slot, tooltip, kind)
         else
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Rate", UI.percent(status.rate))
         end
+        -- In a Smokehouse joined to a Firebox: the stoked session's hours against the cook, and the smoke so far.
+        if modData.smokeFrom and modData.hotNeed then
+            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_HotSmoke", getText("IGUI_TraditionalPreservationFishMeat_HotSmokeHours",
+                string.format("%.1f", modData.hot or 0), string.format("%.0f", modData.hotNeed)))
+        end
+        if (modData.cold or 0) > 0 then
+            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_ColdSmoke", getText("IGUI_TraditionalPreservationFishMeat_ColdSmokeHours",
+                string.format("%.1f", modData.cold)))
+        end
         if status.spoiling or status.scorching or status.spoiled > 0 then
             local warning = "IGUI_TraditionalPreservationFishMeat_Spoiled"
             if status.scorching then warning = "IGUI_TraditionalPreservationFishMeat_SpoilingSun" end

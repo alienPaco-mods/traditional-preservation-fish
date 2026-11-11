@@ -32,5 +32,9 @@
   "TraditionalPreservationFishMeat.SoakedCharqueIngredient": "Rehydrated Charque",
   "TraditionalPreservationFishMeat.PotOfMeatInFat": "Pot of Meat in Fat",
   "TraditionalPreservationFishMeat.PotForgedMeatInFat": "Pot of Meat in Fat",
-  "TraditionalPreservationFishMeat.CrockOfPottedMeat": "Crock of Potted Meat"
+  "TraditionalPreservationFishMeat.CrockOfPottedMeat": "Crock of Potted Meat",
+  "TraditionalPreservationFishMeat.HotSmokedFish": "Hot Smoked Fish",
+  "TraditionalPreservationFishMeat.HotSmokedFishIngredient": "Hot Smoked Fish",
+  "TraditionalPreservationFishMeat.HotSmokedMeat": "Hot Smoked Meat",
+  "TraditionalPreservationFishMeat.HotSmokedMeatIngredient": "Hot Smoked Meat"
 }

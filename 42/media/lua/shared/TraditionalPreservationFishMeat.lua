@@ -235,6 +235,9 @@ F.STAGES = {
     ["TraditionalPreservationFishMeat.SaltCuredMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_Cured", weight = 0.88, maxWeight = 0.93, nutrition = 1, hunger = 1, salty = true },
     -- About half the raw cut's weight (0.55 of the cured), as salt fish keeps its food. Soaked, it gets back about as much.
     ["TraditionalPreservationFishMeat.Charque"] = { name = "IGUI_TraditionalPreservationFishMeat_Charque", weight = 0.55, nutrition = 0.9, hunger = 0.7, salty = true },
+    -- Hot smoked (the Smokehouse, 5c): cooked, still moist, about 70% of the raw weight (0.78 of the cured).
+    ["TraditionalPreservationFishMeat.HotSmokedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_HotSmoked", weight = 0.78, nutrition = 1, hunger = 1, salty = true },
+    ["TraditionalPreservationFishMeat.HotSmokedMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_HotSmoked", weight = 0.78, nutrition = 1, hunger = 1, salty = true },
     ["TraditionalPreservationFishMeat.SoakedCharque"] = { name = "IGUI_TraditionalPreservationFishMeat_SoakedCharque", weight = 1.6, nutrition = 1, hunger = 1 / 0.7, salty = true },
 }
 
@@ -669,16 +672,17 @@ local function startStack(craftRecipeData)
     modData.covered = nil
 end
 
--- Shows a stack's progress, and ends it early if it has rotted.
+-- Shows a stack's progress, and ends it early if it has rotted or its hot smoking is done (the Smokehouse).
 local function showProgress(craftRecipeData, modData, hours)
     local time = craftRecipeData:getRecipe():getTime()
-    local progress = modData.spoiled >= 1 and 1 or math.min(modData.dried / hours, 1)
+    local progress = (modData.spoiled >= 1 or F.hotStations[modData.stackId]) and 1 or math.min(modData.dried / hours, 1)
     craftRecipeData:setElapsedTime(progress * time)
 end
 
 -- OnStart for salted fish on a frame: marks the ledger and picks a look.
 function F.onDryStart(craftRecipeData)
     startStack(craftRecipeData)
+    F.startSmoke(craftRecipeData:getModData(), craftRecipeData:getAllInputItemsWithFlag("ItemCount"), false)
     craftRecipeData:getModData().style = F.pickStyle(F.SALT_STYLES)
 end
 
@@ -764,6 +768,7 @@ end
 -- OnStart for Salt Cured meat on a frame: charque.
 function F.onCharqueStart(craftRecipeData)
     startStack(craftRecipeData)
+    F.startSmoke(craftRecipeData:getModData(), craftRecipeData:getAllInputItemsWithFlag("ItemCount"), true)
     craftRecipeData:getModData().style = F.STYLE_MEAT
 end
 
@@ -1373,10 +1378,15 @@ function F.onCreateSliced(craftRecipeData)
 end
 
 -- Marks the fish of a stack, so a frame can tell its finished stacks apart, and ages it by what
--- the season took out of it.
+-- the season took out of it. A stack hot smoked in the Smokehouse comes out Hot Smoked instead.
 function F.onCreateDried(craftRecipeData)
-    F.onCreateCured(craftRecipeData)
     local modData = craftRecipeData:getModData()
+    local station = F.hotStations[modData.stackId]
+    if station then
+        F.hotStations[modData.stackId] = nil
+        if F.hotSmokeOutputs(craftRecipeData, station) then return end
+    end
+    F.onCreateCured(craftRecipeData)
     local spoiled = modData.spoiled or 0
     local created = craftRecipeData:getAllCreatedItems()
     for i = 0, created:size() - 1 do

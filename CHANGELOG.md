@@ -1,5 +1,25 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.9
+- **Hot smoking** (ROADMAP §7, phase 5c): a salt stack in the Smokehouse (Salt Cured fish, or charque from Salt Cured
+  meat) joined to a Firebox counts the fire on two counters. **Hot** = the Firebox's stoked session now running
+  (TP Core's `Hearth.logFire`: unbroken stoking, up to 1 h without it allowed). Reaching the stack's need finishes it at
+  once as **Hot Smoked Fish / Hot Smoked Meat**: fish 4 h (to 1.1 weight) to 6 h (2.2 and up), meat 6 h (a 0.3 cut) to
+  8 h (0.5), by the heaviest piece, 4 to 12 h. **Cold** (smoke) = banked hours plus stoked sessions that broke off; it is
+  kept for Cold Smoked (5d) and changes nothing yet. Short of a cook, a stack dries on as Sheltered, as before.
+  Hours come from Core's record, so a fire that burns out while you're away counts only to when its wood ran out.
+- Hot Smoked Fish and Meat: cooked and ready to eat, 7 / 14 days, 0.78 of the cured weight (about 70% of raw), food
+  carried from each piece (`F.carry`), a little salt (thirst 15), mood +5; in soups, stews, rice, pasta, sandwiches and
+  salads, with dish stand-ins. Icons: Salt Dried fish pulled to gold, meat cuts to mahogany (`build_meat_icons.py`).
+  The engine puts a drying station's outputs in its slots before OnCreate (`CraftLogicSystem.stop`), so OnCreate swaps
+  them there (`F.hotSmokeOutputs`); a done cook is noted by the World each look (`F.hotStations`, not saved) and its
+  OnUpdate ends the stack.
+- **A ham hangs by the Smokehouse door** while finished stacks wait inside (user's idea): tiles 868-869, on the door's
+  tile (`F.hamSprite`).
+- Stack popup: "Hot Smoke: x of y h stoked in a row" in a joined shed, "Smoke: x h" once there is any.
+- Dev: `TPFM.smoke()` (the joined Firebox's record and each stack's counters), `TPFM.stoke(hours)` (adds stoked hours
+  to the running session), `TPFM.curedFish(name, n)` (Salt Cured fish, default Walleye).
+
 ## 0.4.8
 - **Connect the Firebox** (ROADMAP §7, phase 5b-2b): TP Core's Firebox joins the Smokehouse chamber beside it, with a
   **clay pipe** (2 Clay Pipe Segments + 1 Clay, Mason's Trowel kept) or a **stone trench** (3 Flat Stones + 2 Clay,
