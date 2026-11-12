@@ -179,7 +179,7 @@ check("ten days in a fridge age it five, by the clock", near(fridge.age, 5, 1e-6
 check("a freezer stops it", near(freezer.age, 0))
 -- The ledger's season mean slips a little towards the 0 C days each hour, so a room reads a hair under 25 C.
 check("a room in a hot season (25 C) ages it about 60/14 as fast", near(warm.age, 10 * 60 / 14, 0.5))
-ledger.seasonTemperature = 25
+ledger.seasonTemperature, ledger.groundTemperature = 25, 23.125
 check("so a summer basement (15 C) keeps it about 55 days, the cold 120, a warm room 14",
     near(F.pottedRate("Basement", ledger), 1.08, 0.01) and near(F.pottedRate("Fridge", ledger), 0.5)
     and near(60 / F.pottedRate("Sheltered", ledger), 14, 1e-6))

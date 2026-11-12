@@ -287,9 +287,9 @@ F.DRY_CURE_HOURS = { { 0.45, 504 }, { 2.25, 1008 } }
 F.DRY_CURE_FULL_HEAT = 12
 F.DRY_CURE_FROST_RATE = 0.25
 -- Country Cured meat also dry cures on a Frame, Beam or Gantry in the shade (0.4.15): under a roof or indoors as in the shed
--- with the fire out, and in a basement, the curing cellar, at a steady DRY_CURE_BASEMENT_RATE all year (the still air
--- takes a third; sweep step D ties it to the basement's own temperature). An under-salted stack there spoils by that
--- temperature (Weather.basementTemperature). Always air dried: smoke is the Smokehouse's.
+-- with the fire out, and in a basement, the curing cellar, by the basement's own temperature (Weather.basementTemperature)
+-- times DRY_CURE_BASEMENT_RATE (the still air takes a third): about 76 days a cut in January, 32 from June to September.
+-- An under-salted stack there spoils by that temperature. Always air dried: smoke is the Smokehouse's.
 F.DRY_CURE_BASEMENT_RATE = 2 / 3
 -- Under-salted (6b): Corned meat has salt for a few days, not for weeks in the shed. Until a hot cook is done it
 -- picks up spoilage by the shed's temperature: rotten in UNDER_CURE_HOURS at UNDER_CURE_AT, UNDER_CURE_TENFOLD times
@@ -433,13 +433,26 @@ end
 -- hours of hard frost and of cold fish lying wet above freezing, of a warm cure, of heat and of rain, the
 -- wetness rain left on open frames and on cold ones, for cold smoke (5d) all hours and the cool ones, and salt fish's
 -- and charque's drying in a Smokehouse warmed by a banked or a stoked fire, and dry curing's drying and under-salted
--- meat's spoiling there with the fire out, banked and stoked.
+-- meat's spoiling there with the fire out, banked and stoked. A basement has its own: salt fish's, charque's and dry
+-- curing's drying, under-salted meat's spoiling and a tub's warm and long cures, all by the basement's temperature.
 function F.newLedger(now)
     return { lastHour = now, wetness = 0, coldWetness = 0, open = 0, sheltered = 0, covered = 0, cold = 0, coldCovered = 0, rawSpoil = 0, saltSpoil = 0,
         hardFrost = 0, coldWet = 0, warmCure = 0, heat = 0, charque = 0, charqueCovered = 0, charqueSheltered = 0, charqueRain = 0,
         clock = 0, smokeCool = 0, smokeBanked = 0, smokeStoked = 0, charqueBanked = 0, charqueStoked = 0,
         dryCure = 0, dryCureBanked = 0, dryCureStoked = 0, underCure = 0, underCureBanked = 0, underCureStoked = 0,
-        longCureSpoil = 0, dryCureBasement = 0, underCureBasement = 0 }
+        longCureSpoil = 0, dryCureBasement = 0, underCureBasement = 0, basementSheltered = 0, charqueBasement = 0,
+        warmCureBasement = 0, longCureBasement = 0 }
+end
+
+-- A tub's warm cure and long cure at this temperature, into the totals named: whether each is spoiling now.
+local function addCureSpoil(ledger, celsius, hours, warmKey, longKey)
+    local warmth = celsius - F.WARM_CURE_ABOVE
+    if warmth > 0 then ledger[warmKey] = (ledger[warmKey] or 0) + (1 + warmth / 10) * hours end
+    local longWarmth = celsius - F.LONG_CURE_ABOVE
+    if longWarmth > 0 then
+        ledger[longKey] = (ledger[longKey] or 0) + longWarmth / (F.LONG_CURE_ROT_AT - F.LONG_CURE_ABOVE) / F.LONG_CURE_ROT_HOURS * hours
+    end
+    return warmth > 0, longWarmth > 0
 end
 
 -- Adds one stretch of weather to the totals. Open frames dry nothing until the rain has gone
@@ -490,8 +503,6 @@ function F.advance(ledger, now, weather)
     ledger.dryCure = ledger.dryCure + ledger.dryCureRate * hours
     ledger.dryCureBanked = ledger.dryCureBanked + ledger.dryCureBankedRate * hours
     ledger.dryCureStoked = ledger.dryCureStoked + ledger.dryCureStokedRate * hours
-    ledger.dryCureBasement = ledger.dryCureBasement + F.DRY_CURE_BASEMENT_RATE * hours
-    ledger.underCureBasement = ledger.underCureBasement + F.underCureRate(Weather.basementTemperature(ledger.seasonTemperature or weather.temperature)) * hours
     ledger.underCure = ledger.underCure + F.underCureRate(weather.temperature) * hours
     ledger.underCureBanked = ledger.underCureBanked + underBanked * hours
     ledger.underCureStoked = ledger.underCureStoked + underStoked * hours
@@ -517,16 +528,21 @@ function F.advance(ledger, now, weather)
     if ledger.rawSpoiling then
         ledger.rawSpoil = ledger.rawSpoil + (1 + warmth / 10) * hours
     end
-    local cureWarmth = ledger.seasonTemperature - F.WARM_CURE_ABOVE
-    ledger.warmCuring = cureWarmth > 0
-    if ledger.warmCuring then
-        ledger.warmCure = ledger.warmCure + (1 + cureWarmth / 10) * hours
-    end
-    local longWarmth = ledger.seasonTemperature - F.LONG_CURE_ABOVE
-    ledger.longCuring = longWarmth > 0
-    if ledger.longCuring then
-        ledger.longCureSpoil = ledger.longCureSpoil + longWarmth / (F.LONG_CURE_ROT_AT - F.LONG_CURE_ABOVE) / F.LONG_CURE_ROT_HOURS * hours
-    end
+    ledger.warmCuring, ledger.longCuring = addCureSpoil(ledger, ledger.seasonTemperature, hours, "warmCure", "longCureSpoil")
+
+    -- A basement (sweep step D) goes by its own temperature, not the day's: everything dries there as indoors
+    -- (salt fish at SHELTERED_RATE, charque at CHARQUE_INDOORS_RATE, dry curing at DRY_CURE_BASEMENT_RATE), and a
+    -- tub there minds the basement for its warm and long cures.
+    local basement = Weather.placeTemperature(ledger, "Basement")
+    local air = F.airRate(weather.humidity)
+    ledger.basementShelteredRate = math.max(F.temperatureRate(basement) * air * F.SHELTERED_RATE, minRate)
+    ledger.basementSheltered = (ledger.basementSheltered or 0) + ledger.basementShelteredRate * hours
+    ledger.charqueBasementRate = F.charqueWarmRate(basement) * air * F.CHARQUE_INDOORS_RATE
+    ledger.charqueBasement = (ledger.charqueBasement or 0) + ledger.charqueBasementRate * hours
+    ledger.dryCureBasementRate = F.dryCureRate(basement) * F.DRY_CURE_BASEMENT_RATE
+    ledger.dryCureBasement = ledger.dryCureBasement + ledger.dryCureBasementRate * hours
+    ledger.underCureBasement = ledger.underCureBasement + F.underCureRate(basement) * hours
+    ledger.basementWarmCuring, ledger.basementLongCuring = addCureSpoil(ledger, basement, hours, "warmCureBasement", "longCureBasement")
     ledger.saltSpoiling = ledger.seasonTemperature > F.SALT_SPOIL_ABOVE and ledger.seasonHumidity > F.SALT_SPOIL_HUMIDITY
     if ledger.saltSpoiling then
         ledger.saltSpoil = ledger.saltSpoil + hours
@@ -556,7 +572,7 @@ function F.stackStatus(isCold, modData, ledger)
         if rate <= 0 then reason = "Rain" end
     elseif modData.sheltered then
         -- A burning Firebox warms a Smokehouse stack's air (F.smokeStep).
-        rate = ledger.shelteredRate or 0
+        rate = (modData.basement and ledger.basementShelteredRate or ledger.shelteredRate) or 0
         if modData.burning then
             rate = math.max(rate, (modData.burning == Hearth.STOKED and ledger.stokedRate or ledger.bankedRate) or 0)
         end
@@ -612,7 +628,7 @@ function F.charqueStatus(modData, ledger)
     local lift = 0
     local curePlace = curing and F.curePlace(modData)
     if curePlace == "Basement" then
-        rate = F.DRY_CURE_BASEMENT_RATE
+        rate = ledger.dryCureBasementRate or 0
     elseif curePlace == "Open" then
         rate, reason = 0, "NeedsRoof"
     elseif curing then
@@ -622,6 +638,8 @@ function F.charqueStatus(modData, ledger)
             rate = math.max(rate, (stoked and ledger.dryCureStokedRate or ledger.dryCureBankedRate) or 0)
             lift = stoked and F.STOKED_LIFT or F.BANKED_LIFT
         end
+    elseif modData.basement then
+        rate = ledger.charqueBasementRate or 0
     elseif modData.sheltered then
         rate = ledger.charqueShelteredRate or 0
         if modData.burning then
@@ -676,9 +694,9 @@ end
 -- The ledger is the mod's global ModData table itself, so its keys are the ones in every save.
 function F.getLedger()
     local data = ModData.getOrCreate(F.MOD_DATA_KEY)
-    -- cold, hardFrost, covered, warmCure, heat, the charque, the smoke, the smoulder's, dry curing's and the long
-    -- cure's totals came after the first release, so a save can have the rest without them.
-    if not data.underCureBasement then
+    -- cold, hardFrost, covered, warmCure, heat, the charque, the smoke, the smoulder's, dry curing's, the long
+    -- cure's and the basement's totals came after the first release, so a save can have the rest without them.
+    if not data.longCureBasement then
         local ledger = F.newLedger(getGameTime():getWorldAgeHours())
         for key, value in pairs(ledger) do
             if data[key] == nil then data[key] = value end
@@ -703,8 +721,10 @@ end
 -- taken in, so the batch's heaviest fish or cut sets its hours.
 function F.onPressStart(craftRecipeData)
     Weather.startClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours())
-    craftRecipeData:getModData().lastWarmCure = F.getLedger().warmCure
-    craftRecipeData:getModData().lastLongCure = nil
+    local ledger = F.getLedger()
+    craftRecipeData:getModData().lastWarmCure = ledger.warmCure
+    craftRecipeData:getModData().lastWarmCureBasement = ledger.warmCureBasement
+    craftRecipeData:getModData().lastLongCure, craftRecipeData:getModData().lastLongCureBasement = nil, nil
     local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
     local heaviest, meat, leg = 0, false, false
     for i = 0, fish:size() - 1 do
@@ -717,7 +737,8 @@ function F.onPressStart(craftRecipeData)
     local recipeName = string.gsub(craftRecipeData:getRecipe():getName(), "^.*%.", "")
     if recipeName == F.LONG_CURE_RECIPE then
         hours = F.longCureHours(leg)
-        craftRecipeData:getModData().lastLongCure = F.getLedger().longCureSpoil
+        craftRecipeData:getModData().lastLongCure = ledger.longCureSpoil
+        craftRecipeData:getModData().lastLongCureBasement = ledger.longCureBasement
     end
     craftRecipeData:getModData().pressHours = hours
 end
@@ -753,12 +774,32 @@ function F.onCreateLongCured(craftRecipeData)
     end
 end
 
+-- Whether a tub batch goes by the basement's totals: a tub in a basement, pressed since 0.4.24 (older ones have no
+-- basement mark and keep the season's).
+local function inBasementTub(modData)
+    return modData.basement == true and modData.lastWarmCureBasement ~= nil
+end
+
 -- The share of its keeping a batch has lost to a warm cure so far. A press started before this counts from now.
 function F.cureSpoiled(modData, ledger)
-    local warm = ledger.warmCure - (modData.lastWarmCure or ledger.warmCure)
-    -- A long cure (lastLongCure is set at its start) also minds a season over LONG_CURE_ABOVE.
-    local long = modData.lastLongCure and (ledger.longCureSpoil or 0) - modData.lastLongCure or 0
+    local warmTotal, warmMark, longTotal, longMark = ledger.warmCure, modData.lastWarmCure, ledger.longCureSpoil, modData.lastLongCure
+    if inBasementTub(modData) then
+        warmTotal, warmMark = ledger.warmCureBasement or 0, modData.lastWarmCureBasement
+        longTotal, longMark = ledger.longCureBasement or 0, modData.lastLongCureBasement
+    end
+    local warm = warmTotal - (warmMark or warmTotal)
+    -- A long cure (its mark is set at its start) also minds a place over LONG_CURE_ABOVE.
+    local long = longMark and (longTotal or 0) - longMark or 0
     return math.min(warm * F.WARM_CURE_SHARE / F.RAW_SPOIL_HOURS + long, 1)
+end
+
+-- Whether a tub batch is spoiling now: a warm cure, or a long cure over LONG_CURE_ABOVE, by its place.
+function F.tubSpoiling(modData, ledger)
+    local basement = inBasementTub(modData)
+    local warm = basement and ledger.basementWarmCuring or not basement and ledger.warmCuring
+    local long = basement and ledger.basementLongCuring or not basement and ledger.longCuring
+    local isLong = (basement and modData.lastLongCureBasement or not basement and modData.lastLongCure) ~= nil
+    return warm == true or isLong and long == true
 end
 
 -- How far a batch in the tub is, for its popup.
@@ -767,7 +808,7 @@ function F.pressStatus(modData, now, ledger)
     local done = math.max(now - (modData.pressStartHour or now), 0)
     return { progress = math.min(done / hours, 1), hoursLeft = math.max(hours - done, 0),
         spoiled = F.cureSpoiled(modData, ledger),
-        spoiling = ledger.warmCuring == true or modData.lastLongCure ~= nil and ledger.longCuring == true }
+        spoiling = F.tubSpoiling(modData, ledger) }
 end
 
 -- Craft timers tick at a fixed speed whatever Day Length says and stop when the area unloads,
@@ -948,6 +989,7 @@ local function startStack(craftRecipeData)
     modData.stackId = getGameTime():getWorldAgeHours()
     modData.lastOpen = ledger.open
     modData.lastSheltered = ledger.sheltered
+    modData.lastBasementSheltered = ledger.basementSheltered
     modData.lastCovered = ledger.covered
     modData.lastCold = ledger.cold
     modData.lastColdCovered = ledger.coldCovered
@@ -959,6 +1001,7 @@ local function startStack(craftRecipeData)
     modData.lastCharque = ledger.charque
     modData.lastCharqueCovered = ledger.charqueCovered
     modData.lastCharqueSheltered = ledger.charqueSheltered
+    modData.lastCharqueBasement = ledger.charqueBasement
     modData.lastCharqueRain = ledger.charqueRain
     modData.lastDryCure, modData.lastUnderCure = ledger.dryCure, ledger.underCure
     modData.lastCureBasement, modData.lastUnderBasement = ledger.dryCureBasement, ledger.underCureBasement
@@ -1028,7 +1071,10 @@ function F.saltStep(modData, ledger)
     if exposed and vulnerability > 1 - F.SALT_FRESH_UNTIL then
         damage = heat / F.HEAT_DAMAGE_HOURS * F.HEAT_DAMAGE * vulnerability
     end
-    if modData.sheltered then
+    if modData.basement then
+        local total = ledger.basementSheltered or 0
+        modData.dried = modData.dried + total - (modData.lastBasementSheltered or total)
+    elseif modData.sheltered then
         modData.dried = modData.dried + ledger.sheltered - modData.lastSheltered
     elseif modData.covered then
         modData.dried = modData.dried + ledger.covered - (modData.lastCovered or ledger.covered)
@@ -1040,6 +1086,7 @@ function F.saltStep(modData, ledger)
     modData.spoiled = spoiled
     modData.lastOpen = ledger.open
     modData.lastSheltered = ledger.sheltered
+    modData.lastBasementSheltered = ledger.basementSheltered
     modData.lastCovered = ledger.covered
     modData.lastSaltSpoil = ledger.saltSpoil
     modData.lastHeat = ledger.heat
@@ -1147,6 +1194,9 @@ function F.charqueStep(modData, ledger)
     local rain = ledger.charqueRain - (modData.lastCharqueRain or ledger.charqueRain)
     if F.dryCuring(modData) then
         dryCureStep(modData, ledger)
+    elseif modData.basement then
+        local total = ledger.charqueBasement or 0
+        modData.dried = modData.dried + total - (modData.lastCharqueBasement or total)
     elseif modData.sheltered then
         modData.dried = modData.dried + ledger.charqueSheltered - modData.lastCharqueSheltered
     elseif modData.covered then
@@ -1159,6 +1209,7 @@ function F.charqueStep(modData, ledger)
     modData.lastCharque = ledger.charque
     modData.lastCharqueCovered = ledger.charqueCovered
     modData.lastCharqueSheltered = ledger.charqueSheltered
+    modData.lastCharqueBasement = ledger.charqueBasement
     modData.lastCharqueRain = ledger.charqueRain
     modData.lastSaltSpoil = ledger.saltSpoil
 end

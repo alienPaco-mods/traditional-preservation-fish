@@ -105,13 +105,15 @@ local function drawStackTooltip(slot, tooltip, kind)
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Progress", UI.percent(status.progress))
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_TimeLeft", timeText(status.hoursLeft))
         local modData = slot.craftRecipeData:getModData()
-        local place = modData.sheltered and "Indoors" or modData.covered and "Covered" or "Open"
-        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Place", getText("IGUI_TraditionalPreservationFishMeat_Place" .. place))
-        local word = F.temperatureWord(isCold, ledger.temperature or 0, place == "Open")
+        local place = modData.basement and "Basement" or modData.sheltered and "Sheltered" or modData.covered and "Covered" or "Open"
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Place", UI.placeName(place))
+        -- A basement stack dries by the basement's temperature, not the day's.
+        local celsius = place == "Basement" and Weather.placeTemperature(ledger, "Basement") or ledger.temperature or 0
+        local word = F.temperatureWord(isCold, celsius, place == "Open")
         if status.dryCuring then
             word = F.dryCureTemperatureWord(status.shedTemperature)
         elseif isMeat then
-            word = F.charqueTemperatureWord(ledger.temperature or 0)
+            word = F.charqueTemperatureWord(celsius)
         end
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Temperature", getText(word))
         if isCold or isMeat and not modData.sheltered and not status.dryCuring then UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wind", getText(F.windWord(ledger.wind))) end

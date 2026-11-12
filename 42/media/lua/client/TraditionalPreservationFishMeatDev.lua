@@ -57,6 +57,9 @@ function TPFM.weather()
         .. ", charque " .. n(ledger.charqueRate) .. ", charque covered " .. n(ledger.charqueCoveredRate) .. ", charque indoors " .. n(ledger.charqueShelteredRate)
         .. "; Smokehouse banked " .. n(ledger.bankedRate) .. ", stoked " .. n(ledger.stokedRate)
         .. ", charque banked " .. n(ledger.charqueBankedRate) .. ", charque stoked " .. n(ledger.charqueStokedRate))
+    say("Basement (" .. n(Weather.placeTemperature(ledger, "Basement")) .. " C): salt fish " .. n(ledger.basementShelteredRate)
+        .. ", charque " .. n(ledger.charqueBasementRate) .. ", dry cure " .. n(ledger.dryCureBasementRate)
+        .. "; a tub there: warm cure " .. tostring(ledger.basementWarmCuring == true) .. ", long cure " .. tostring(ledger.basementLongCuring == true))
     say("Spoiling now: unsalted " .. tostring(ledger.rawSpoiling == true) .. ", salted " .. tostring(ledger.saltSpoiling == true)
         .. ", warm cure " .. tostring(ledger.warmCuring == true) .. ", hot sun " .. tostring((ledger.temperature or 0) > F.HEAT_ABOVE))
     say("Totals (hours at full speed): open " .. n(ledger.open) .. ", covered " .. n(ledger.covered) .. ", indoors " .. n(ledger.sheltered)
@@ -118,6 +121,7 @@ function TPFM.age(hours)
     local under = hours * F.underCureRate(F.DRY_CURE_FULL_HEAT)
     ledger.underCure, ledger.underCureBanked, ledger.underCureStoked = ledger.underCure + under, ledger.underCureBanked + under, ledger.underCureStoked + under
     ledger.dryCureBasement, ledger.underCureBasement = (ledger.dryCureBasement or 0) + hours, (ledger.underCureBasement or 0) + under
+    ledger.basementSheltered, ledger.charqueBasement = (ledger.basementSheltered or 0) + hours, (ledger.charqueBasement or 0) + hours
     say(string.format("Added %.0f hours of perfect drying weather. Stacks update within a few seconds. Corned meat in a Smokehouse spoiled %.0f%% (a 12 C shed).", hours, under * 100))
 end
 
@@ -168,7 +172,7 @@ function TPFM.warmCure(hours)
     hours = hours or 24
     local ledger = F.getLedger()
     ledger.warmCure = ledger.warmCure + hours * 1.5
-    say(string.format("Added %.0f hours of a warm cure at 25 C: about %.0f%% off a batch in the tub now.",
+    say(string.format("Added %.0f hours of a warm cure at 25 C: about %.0f%% off a batch in a tub above ground (a basement tub goes by its own).",
         hours, hours * 1.5 * F.WARM_CURE_SHARE / F.RAW_SPOIL_HOURS * 100))
 end
 
@@ -178,7 +182,7 @@ function TPFM.longCure(hours)
     hours = hours or 168
     local ledger = F.getLedger()
     ledger.longCureSpoil = (ledger.longCureSpoil or 0) + hours / F.LONG_CURE_ROT_HOURS
-    say(string.format("Added %.0f hours of a 15 C season to running Country Cures: %.0f%% spoiled.", hours, hours / F.LONG_CURE_ROT_HOURS * 100))
+    say(string.format("Added %.0f hours of a 15 C season to running Country Cures above ground: %.0f%% spoiled (a basement tub goes by its own).", hours, hours / F.LONG_CURE_ROT_HOURS * 100))
 end
 
 function TPFM.mature(days)

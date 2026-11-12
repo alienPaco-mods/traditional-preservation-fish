@@ -70,6 +70,7 @@ end
 
 -- Hot smoking (5c): the cook's hours by the heaviest piece, and the two counters against the Firebox's record.
 local Hearth = require "TraditionalPreservationCore/Hearth"
+local Weather = require "TraditionalPreservationCore/Weather"
 local near = H.near
 check("small fish need 4 stoked hours", F.hotHours(false, 0.8) == 4 and F.hotHours(false, 1.1) == 4)
 check("big fish 6, between them in step", F.hotHours(false, 2.2) == 6 and near(F.hotHours(false, 1.65), 5))
@@ -301,7 +302,8 @@ check("the shed's words", F.dryCureTemperatureWord(15) == "IGUI_TraditionalPrese
 check("on a frame it is still charque", not F.dryCuring({ cureNeed = 504 }) and F.meatHours({ cureNeed = 504 }) == F.CHARQUE_HOURS
     and F.meatHours({ cureNeed = 504, inShed = true }) == 504)
 
--- Country Cured meat on a Frame or Beam in the shade (0.4.15): it dry cures there too, air dried; a basement is steady.
+-- Country Cured meat on a Frame or Beam in the shade (0.4.15): it dry cures there too, air dried; a basement by its own
+-- temperature, times two thirds (sweep step D).
 local shade = {}
 F.startSmoke(shade, pieces(0.45), true)
 check("a stack with Country Cured meat dry cures wherever it hangs", shade.longStack and F.dryCuring(shade) and F.meatHours(shade) == 504)
@@ -326,19 +328,49 @@ check("under a roof it dries as the shed with the fire out", near(shade.dried, 2
 shade.covered, shade.basement, shade.sheltered = nil, true, true
 F.advance(cellar, 72, { temperature = 0, humidity = 0.3, precipitation = 0, wind = 0 })
 F.charqueStep(shade, cellar)
-check("in a basement at two thirds, whatever the weather", near(shade.dried, 24 * 0.25 + 24 * 2 / 3) and F.curePlace(shade) == "Basement")
+local cellarRate = F.dryCureRate(Weather.placeTemperature(cellar, "Basement")) * 2 / 3
+check("in a basement by the basement's temperature, at two thirds", near(shade.dried, 24 * 0.25 + 24 * cellarRate)
+    and cellarRate > 0.25 and cellarRate < 2 / 3 and F.curePlace(shade) == "Basement")
 local cellarStatus = F.charqueStatus(shade, cellar)
-check("its popup reads the cellar's temperature and steady rate", near(cellarStatus.rate, 2 / 3)
-    and cellarStatus.shedTemperature == 10 + 0.35 * (cellar.seasonTemperature - 10)
+check("its popup reads the cellar's temperature and rate", near(cellarStatus.rate, cellarRate)
+    and cellarStatus.shedTemperature == Weather.placeTemperature(cellar, "Basement")
     and cellarStatus.dryCuring and not cellarStatus.underSalted)
-check("a basement cut takes about 32 days, a leg 63", near(504 / (2 / 3) / 24, 31.5) and near(1008 / (2 / 3) / 24, 63))
+check("a warm basement (12 C and up) dries a cut in about 32 days, a leg 63", near(F.dryCureRate(12) * 2 / 3, 2 / 3)
+    and near(504 / (2 / 3) / 24, 31.5) and near(1008 / (2 / 3) / 24, 63))
 local cellarCorned = { cureNeed = 504, longStack = true, underCured = true, basement = true, sheltered = true, dried = 0, spoiled = 0,
     lastSaltSpoil = cellar.saltSpoil, lastDryCure = cellar.dryCure, lastUnderCure = cellar.underCure,
     lastCureBasement = cellar.dryCureBasement, lastUnderBasement = cellar.underCureBasement }
-local cellarC = 10 + 0.35 * (cellar.seasonTemperature - 10)
 F.advance(cellar, 96, { temperature = -10, humidity = 0.3, precipitation = 0, wind = 0 })
+-- The stretch goes by the basement as the season stands at its end.
+local cellarC = Weather.placeTemperature(cellar, "Basement")
 F.charqueStep(cellarCorned, cellar)
 check("a Corned piece in a basement stack spoils at the basement's temperature", near(cellarCorned.underSpoiled, 24 * F.underCureRate(cellarC)))
+
+-- Sweep step D: whatever dries in a basement goes by the basement's temperature, and a tub there minds it.
+local hot = F.newLedger(0)
+local summer = { temperature = 30, humidity = 0.3, precipitation = 0, wind = 0 }
+F.advance(hot, 24, summer)
+local hotC = Weather.placeTemperature(hot, "Basement")
+local cellarFish = { dried = 0, spoiled = 0, basement = true, sheltered = true, lastOpen = hot.open, lastSheltered = hot.sheltered,
+    lastCovered = hot.covered, lastSaltSpoil = hot.saltSpoil, lastHeat = hot.heat, lastBasementSheltered = hot.basementSheltered }
+local cellarMeat = { dried = 0, spoiled = 0, basement = true, sheltered = true, lastSaltSpoil = hot.saltSpoil,
+    lastCharqueRain = hot.charqueRain, lastCharqueBasement = hot.charqueBasement }
+F.advance(hot, 48, summer)
+F.saltStep(cellarFish, hot)
+F.charqueStep(cellarMeat, hot)
+check("salt fish in a basement dries indoors by the basement's temperature", near(hot.basementShelteredRate,
+    math.max(F.temperatureRate(hotC) * F.airRate(0.3) * F.SHELTERED_RATE, F.MIN_DRY_RATE))
+    and hot.basementShelteredRate < hot.shelteredRate and near(cellarFish.dried, 24 * hot.basementShelteredRate))
+check("so does charque", near(cellarMeat.dried, 24 * F.charqueWarmRate(hotC) * F.airRate(0.3) * F.CHARQUE_INDOORS_RATE)
+    and near(F.charqueStatus(cellarMeat, hot).rate, hot.charqueBasementRate))
+local upstairsTub = { lastWarmCure = 0, lastWarmCureBasement = 0, lastLongCure = 0, lastLongCureBasement = 0 }
+local cellarTub = { basement = true, lastWarmCure = 0, lastWarmCureBasement = 0, lastLongCure = 0, lastLongCureBasement = 0 }
+local oldCellarTub = { basement = true, lastWarmCure = 0, lastLongCure = 0 }
+check("a tub in a basement has no warm cure in a 30 C season, only the long cure's share",
+    F.cureSpoiled(upstairsTub, hot) > F.cureSpoiled(cellarTub, hot) and hot.warmCureBasement == 0
+    and near(F.cureSpoiled(cellarTub, hot), hot.longCureBasement) and hot.longCureBasement > 0
+    and F.tubSpoiling(cellarTub, hot) and F.tubSpoiling(upstairsTub, hot))
+check("a basement tub pressed before step D keeps the season's totals", F.cureSpoiled(oldCellarTub, hot) == F.cureSpoiled(upstairsTub, hot))
 
 -- A leg's stoked hours are smoke at once.
 local legFire = {}

@@ -6,14 +6,14 @@ These console commands load only when the game runs in **debug mode** (launch op
 
 | Command | What it does |
 |---|---|
-| `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness (open and cold frames), wind, the drying speed open, under a roof and cold, whether unsalted and salted fish are spoiling, and the running totals (with hours of hard frost and of cold fish lying wet). |
+| `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, the basement's temperature and its drying and tub rates, humidity, wetness (open and cold frames), wind, the drying speed open, under a roof and cold, whether unsalted and salted fish are spoiling, and the running totals (with hours of hard frost and of cold fish lying wet). |
 | `TPFM.here()` | Which place you're standing in, as a station there would read it: Open, Covered (a roof, no room), Sheltered (a room) or Basement. |
 | `TPFM.wind()` | Starts a log of the live wind (0-1) every 10 game minutes; run it again to print the mean, min and max on dry and on rainy or snowy spells, beside the forecast's mean wind for the same days, and stop. For setting the cold-drying wind curve. |
 | `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one, `TPFM.age(120)` a charque one, `TPFM.age(520)` a Country Cured cut in the Smokehouse (1010 with a leg). Corned meat hanging in a Smokehouse spoils with it as a 12 C shed would, so `TPFM.age(520)` rots it. |
 | `TPFM.spoil(hours)` | Adds spoiling weather, to test rotting. A fresh cold stack rots after 48; a part-dried one takes longer. |
 | `TPFM.frost(hours)` | Adds hours of hard frost. A cold stack under 30% dried loses a tenth of its keeping per 72 hours, at most a quarter in all with wet. |
 | `TPFM.heat(hours)` | Adds hours of hot sun (above 25 C). An open salt stack under half dried loses 5% of its keeping per 24 hours, times how wet it still is, at most a quarter. |
-| `TPFM.warmCure(hours)` | Adds hours of a warm cure at 25 C (1.5 x hours to `warmCure`). A batch in the tub loses about 0.8% of its keeping per hour. |
+| `TPFM.warmCure(hours)` | Adds hours of a warm cure at 25 C (1.5 x hours to `warmCure`). A batch in a tub above ground loses about 0.8% of its keeping per hour; a tub in a basement goes by its own totals (0.4.24) and takes none. |
 | `TPFM.dry()` | Clears the wetness, so open and cold frames start drying again at once after rain. |
 | `TPFM.mature(days)` | Ages the stockfish and the dry cured meat you carry by this many days. Stockfish is Matured after 60; a dry cured cut is Aged after 30, a Country Ham after 90. |
 | `TPFM.food()` | Each cured fish or meat item you carry, with the numbers the game's tooltip rounds or hides: hunger, unhappiness, boredom, thirst, weight, age against its fresh / rotten days, and how far it has aged. |

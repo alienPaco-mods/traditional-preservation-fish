@@ -248,6 +248,7 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 - **Open air**: no roof overhead. Walls with no roof are still the open air. Rain pauses drying until the wet has dried off.
 - **Under an open roof**: a porch, an open shed, a floor laid on the level above. Rain never reaches it, and it's **in the shade**.
 - **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 11).
+- **Basement**: any level below ground. Indoors, but at the **cellar's own temperature**, not the day's: about 5 C from January to March, 13 C from July to September, a month behind the season. Whatever dries there goes by it, so salt fish crawls (about **27 days** a batch, all year): a cellar is for keeping salt fish, not drying it.
 
 **Hover a stack** to see its method, progress, time left, place, the temperature, the wind, how wet it is and how fast it's drying right now, a warning if the season is spoiling it, and in a Smokehouse its smoke.
 
@@ -483,18 +484,28 @@ Dry curing is the winter road for meat: a long salting in the cold, then weeks o
 |---|---|---|---|---|
 | Smokehouse, fire out; any station under a roof; a Frame or Beam in a room | 12 weeks | 6 weeks | 3 weeks | no |
 | Smokehouse, fire banked all day | 3 to 4 weeks | 3 weeks | 3 weeks | yes |
-| Frame or Beam in a **basement** | **32 days** | **32 days** | **32 days** | no |
 
-> 📏 *A leg takes twice as long: about nine weeks in a basement. With a fire a few hours a day, a cut hung in the Smokehouse in December is done in about seven weeks and a leg in about three months; hung in March, a cut takes five weeks.*
+A Frame or Beam in a **basement** goes by the cellar's own temperature, which runs a month behind the season, at two thirds of the speed (still air):
 
-- **The basement is the curing cellar:** steady all year, whatever the weather. It is the quickest place for unsmoked meat in winter. The Gantry can't be built there.
-- **The cellar is for the hang, not the salt.** The Salting Tub goes by the season wherever it stands: a long cure started in a basement in July spoils like any other. Salt in the cold months, then hang in the cellar as late as you like.
+| Hung in a basement in | A cut | A leg |
+|---|---|---|
+| December to February | 9 to 11 weeks | 17 to 19 weeks |
+| March | 8 to 9 weeks | 14 to 15 weeks |
+| April | 7 weeks | 12 weeks |
+| May | 6 weeks | 10 weeks |
+| June to October | 4½ to 5 weeks | 9 to 11 weeks |
+| November | 6 to 7 weeks | 16 to 18 weeks |
+
+> 📏 *A leg takes about twice as long as a cut. With a fire a few hours a day, a cut hung in the Smokehouse in December is done in about seven weeks and a leg in about three months; hung in March, a cut takes five weeks.*
+
+- **The basement is the curing cellar:** the weather never reaches it, only the season, a month late. It is slow in midwinter (the cold that keeps the cure safe slows the drying too) and at its best from June to October, and in frost it still beats an unheated shed. The Gantry can't be built there.
+- **The cellar is cool for the salt, too.** A Salting Tub in a basement goes by the cellar's temperature: fish and Corned meat never take a warm cure there, and a long cure loses far less than upstairs (a leg started in May about 4%, where upstairs it rots). It is still no summer cure: from June to September a leg in the cellar loses a third to two thirds of its keeping, and the cellar is still warm in October (about 18%). Salt from November to May.
 - **If a stack loses its roof** it waits (*Stopped (Needs a roof)*).
 - **No smoke outside the shed.** Suho Meso, Mutton Ham, Jerked Venison and the smoked hams need the Smokehouse and its Firebox.
 
 **Mind the salt**
 
-- **Use the long cure.** *Country Cured* meat has salt for the whole hang. **Corned** meat hasn't: hung in the Smokehouse, a room or a basement it dry cures too, but its popup shows a red **Under-salted** line and it spoils by the temperature where it hangs, a fire's warmth included. Near freezing it comes out about half way through its keeping; at 10 C it rots in four weeks, in a basement (15 C) in under two, and a banked fire makes the shed 15 C warmer than the day.
+- **Use the long cure.** *Country Cured* meat has salt for the whole hang. **Corned** meat hasn't: hung in the Smokehouse, a room or a basement it dry cures too, but its popup shows a red **Under-salted** line and it spoils by the temperature where it hangs, a fire's warmth included. Near freezing it comes out about half way through its keeping; at 10 C it rots in four weeks, in a summer basement (13 C) in two and a half, and a banked fire makes the shed 15 C warmer than the day.
 - **Corned meat has two good roads:** a hot cook in the Smokehouse (chapter 10), or the sun (chapter 8). Corned pork has only the first.
 - **A rotted stack comes down as what you hung:** *Corned Beef (Rotten)*, not Bresaola. In a mixed stack only the Corned pieces rot.
 - **You can see rot from across the yard** (0.4.21): a stack that is lost turns grey-green, mottled and mouldy on the Frame, Beam or Gantry, one look each for salt fish, cold dried fish and meat. A mixed stack whose Corned share rotted keeps its drying look while the Country Cured pieces dry on; once it is done, it shows rotten if any piece in it rotted. Sort it as you take it down.
@@ -622,7 +633,7 @@ Potted Meat is the road for any season and any red meat, pork too: cuts cooked s
 | Place | Fresh | Rotten |
 |---|---|---|
 | Powered fridge, or 4 C and colder outdoors | **120 days** | 180 days |
-| Basement (about 5 C in January, 14 C in July) | **110 to 64 days** | 165 to 96 days |
+| Basement (about 5 C from January to March, 13 C from July to September) | **110 to 64 days** | 165 to 96 days |
 | A room, by the season | **120 to 14 days** | 180 to 21 days |
 | A room while the grid is on (22 C) | **18 days** | 27 days |
 | Powered freezer | stops | stops |
@@ -831,7 +842,7 @@ The farm's year turns on two slaughters.
   2. **Legs into the long cure first**, 21 days; cuts follow for 10. The tub holds one cure at a time, so a second tub earns its keep here.
   3. **Pot eight to twelve cuts** under the pig's own Lard: two or three crocks in the winter pantry, good until March.
   4. **Corn a few cuts and hot smoke them**: Ham for the week of the slaughter.
-  5. **Mid-December: hang the Country Cured meat.** On a Hanging Beam in the basement the cuts are Dry Cured Pork by mid-January and the legs **Country Ham** by mid-February. In the Smokehouse with a fire each day they take seven weeks and three months, and come out smoked.
+  5. **Mid-December: hang the Country Cured meat.** On a Hanging Beam in the basement the cuts are Dry Cured Pork by late February and the legs **Country Ham** by the end of April. In the Smokehouse with a fire each day they are quicker (seven weeks and three months) and come out smoked.
 - **A winter steer or a few sheep, January to March**: country cure for 10 days, then the Smokehouse: **Suho Meso** and **Mutton Ham** for the spring.
 
 | Month | On the table |
@@ -932,7 +943,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 - **Winter is stockfish season.** Gut everything you catch in December and January. Turn the heads into stock the same day, as they spoil like fresh fish.
 - **Don't eat December's stockfish in January.** Give it the 60 days. A crate in the shed is enough, a pallet in the loft is better, and the freezer is the one place it won't mature.
 - **Kill hogs after the first frosts.** The long cure is only safe from October to April. Salt the legs first: they take 21 days in the tub and the tub holds one cure at a time.
-- **A cellar beam is a ham's best friend.** A Hanging Beam in a basement dries Country Cured meat in a month whatever the weather, with no fire to tend.
+- **A cellar beam is a ham's best friend.** A Hanging Beam in a basement dries Country Cured meat with no fire to tend and never sees rain or frost: about a month a cut from June to October, two to three in the depth of winter.
 - **Butcher on the hook.** The Butchering Hook gives nearly five times the fat of the ground.
 - **Cook four cuts to a crock**, and keep it in the basement or a winter pantry. Open it when you mean to finish it.
 - **Hot smoke what you'll eat this week**, and salt-dry the rest. A small batch of fish cooks in four hours of fire.
@@ -1015,7 +1026,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 | Command | What it does |
 |---|---|
-| `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness, the wind, the drying speeds, whether unsalted and salted fish are spoiling, and the running totals |
+| `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, the basement's temperature and its drying and tub rates, humidity, wetness, the wind, the drying speeds, whether unsalted and salted fish are spoiling, and the running totals |
 | `TPFM.here()` | Which place you're standing in, as a station there would read it: Open, Covered (a roof, no room), Sheltered (a room) or Basement. |
 | `TPFM.wind()` | Starts a log of the live wind every 10 minutes; run it again to print it beside the forecast |
 | `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one, `TPFM.age(120)` a charque one |

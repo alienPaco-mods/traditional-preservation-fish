@@ -1,5 +1,20 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.24
+- **Whatever dries in a basement goes by the basement** (2026-11-12, consistency sweep step D): salt fish dries there
+  indoors at the basement's own temperature (TP Core's ground mean, a month behind the season), not the day's: about
+  27 days a batch all year, the slowest the mod allows (a cellar is for keeping salt fish). Charque the same.
+  **Dry curing** in a basement is `F.dryCureRate(basement) x 2/3`, no longer a steady two thirds: a cut 9 to 11
+  weeks hung December to February, 32 days June to October; a leg 17 to 19 weeks and 9.
+- **The Salting Tub reads its place**: in a basement its warm cure and long cure go by the basement's temperature
+  (`warmCureBasement`, `longCureBasement`, `F.tubSpoiling`; a batch pressed before this keeps the season's). No warm
+  cure in a basement ever; a leg's long cure loses about 4% in May against rotting upstairs, a third to two thirds
+  June to September, 18% in October.
+- **Fix:** the stack popup's Place line showed a raw translation key since 0.4.23 (Fish & Meat's own place keys
+  were removed with step C). It uses TP Core's place words now, Basement included, and a basement stack's
+  temperature word reads the basement.
+- Guide (places, dry curing, the tub, the year), README, Workshop text, tests.
+
 ## 0.4.23
 - **TP Core's new places** (2026-11-12, consistency sweep step C): `Weather.placeOf` gives Covered by itself (the
   `true` flag is gone from every call). Potted Meat keeps by Core's place temperature (`F.pottedTemperature` is a
