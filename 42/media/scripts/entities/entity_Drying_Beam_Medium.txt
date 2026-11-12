@@ -32,7 +32,7 @@ module TraditionalPreservationFishMeat
         component SpriteConfig
         {
             isThumpable = false,
-            OnIsValid = TraditionalPreservationFishMeat.notInRoom,
+            OnIsValid = TraditionalPreservationFishMeat.doorFree,
             face S
             {
                 layer

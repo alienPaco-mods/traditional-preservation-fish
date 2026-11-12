@@ -253,13 +253,17 @@ end
 -- for the Smokehouse; a stack with a leg never hot smokes, and one with Corned meat (no long cure) is under-salted.
 function F.startSmoke(modData, items, isMeat)
     local heaviest = 0
-    modData.noHot, modData.underCured, modData.allUnder = nil, nil, isMeat or nil
+    modData.noHot, modData.underCured, modData.allUnder, modData.longStack = nil, nil, isMeat or nil, nil
     for i = 0, items:size() - 1 do
         local item = items:get(i)
         heaviest = math.max(heaviest, item:getActualWeight())
         if isMeat then
             if F.isLeg(item) then modData.noHot = true end
-            if item:getModData().longCure then modData.allUnder = nil else modData.underCured = true end
+            if item:getModData().longCure then
+                modData.allUnder, modData.longStack = nil, true
+            else
+                modData.underCured = true
+            end
         end
     end
     modData.heaviest = heaviest

@@ -72,7 +72,7 @@ F.HEAD_FOOD = 0.06
 F.PACK_GUTTING_XP = 5
 -- Charque (phase 3b): the meat cuts that go in the salt as vanilla gives them, in the order of the meat stages'
 -- IconsForTexture. Pork, Pork Chop and the Leg of Pork came with 6a, for the Smokehouse only: pork fat goes rancid
--- in sun and wind (porkRefusal).
+-- in sun and wind (meatRefusal).
 F.MEAT_CUTS = { "Base.Beef", "Base.Steak", "Base.MuttonChop", "Base.Venison", "Base.Pork", "Base.PorkChop",
     "TraditionalPreservationFishMeat.LegOfPork" }
 -- The pork cuts' and the leg's model indices.
@@ -260,6 +260,10 @@ F.CHARQUE_ON = true
 F.DRY_CURE_HOURS = { { 0.45, 504 }, { 2.25, 1008 } }
 F.DRY_CURE_FULL_HEAT = 12
 F.DRY_CURE_FROST_RATE = 0.25
+-- Country Cured meat also dry cures on a Frame, Beam or Gantry in the shade (0.4.15): under a roof or indoors as in the shed
+-- with the fire out, and in a basement, the curing cellar, at a steady DRY_CURE_BASEMENT_RATE all year (its 15 C is
+-- full heat; the still air takes a third). Always air dried: smoke is the Smokehouse's.
+F.DRY_CURE_BASEMENT_RATE = 2 / 3
 -- Under-salted (6b): Corned meat has salt for a few days, not for weeks in the shed. Until a hot cook is done it
 -- picks up spoilage by the shed's temperature: rotten in UNDER_CURE_HOURS at UNDER_CURE_AT, UNDER_CURE_TENFOLD times
 -- faster for every 10 C more (and slower for less), no faster than at UNDER_CURE_MAX. Near freezing it ends about
@@ -404,7 +408,7 @@ function F.newLedger(now)
         hardFrost = 0, coldWet = 0, warmCure = 0, heat = 0, charque = 0, charqueCovered = 0, charqueSheltered = 0, charqueRain = 0,
         clock = 0, smokeCool = 0, smokeBanked = 0, smokeStoked = 0, charqueBanked = 0, charqueStoked = 0,
         dryCure = 0, dryCureBanked = 0, dryCureStoked = 0, underCure = 0, underCureBanked = 0, underCureStoked = 0,
-        longCureSpoil = 0 }
+        longCureSpoil = 0, dryCureBasement = 0, underCureBasement = 0 }
 end
 
 -- Adds one stretch of weather to the totals. Open frames dry nothing until the rain has gone
@@ -455,6 +459,8 @@ function F.advance(ledger, now, weather)
     ledger.dryCure = ledger.dryCure + ledger.dryCureRate * hours
     ledger.dryCureBanked = ledger.dryCureBanked + ledger.dryCureBankedRate * hours
     ledger.dryCureStoked = ledger.dryCureStoked + ledger.dryCureStokedRate * hours
+    ledger.dryCureBasement = ledger.dryCureBasement + F.DRY_CURE_BASEMENT_RATE * hours
+    ledger.underCureBasement = ledger.underCureBasement + F.underCureRate(Weather.BASEMENT_TEMPERATURE) * hours
     ledger.underCure = ledger.underCure + F.underCureRate(weather.temperature) * hours
     ledger.underCureBanked = ledger.underCureBanked + underBanked * hours
     ledger.underCureStoked = ledger.underCureStoked + underStoked * hours
@@ -562,7 +568,12 @@ function F.charqueStatus(modData, ledger)
     local rate, reason
     local curing = F.dryCuring(modData)
     local lift = 0
-    if curing then
+    local curePlace = curing and F.curePlace(modData)
+    if curePlace == "Basement" then
+        rate = F.DRY_CURE_BASEMENT_RATE
+    elseif curePlace == "Open" then
+        rate, reason = 0, "NeedsRoof"
+    elseif curing then
         rate = ledger.dryCureRate or 0
         if modData.burning then
             local stoked = modData.burning == Hearth.STOKED
@@ -593,7 +604,7 @@ function F.charqueStatus(modData, ledger)
         dryCuring = curing,
         -- Corned meat in the shed, and the shed's temperature it spoils by.
         underSalted = curing and modData.underCured == true,
-        shedTemperature = (ledger.temperature or 0) + lift,
+        shedTemperature = curePlace == "Basement" and Weather.BASEMENT_TEMPERATURE or (ledger.temperature or 0) + lift,
     }
 end
 
@@ -625,7 +636,7 @@ function F.getLedger()
     local data = ModData.getOrCreate(F.MOD_DATA_KEY)
     -- cold, hardFrost, covered, warmCure, heat, the charque, the smoke, the smoulder's, dry curing's and the long
     -- cure's totals came after the first release, so a save can have the rest without them.
-    if not data.longCureSpoil then
+    if not data.underCureBasement then
         local ledger = F.newLedger(getGameTime():getWorldAgeHours())
         for key, value in pairs(ledger) do
             if data[key] == nil then data[key] = value end
@@ -747,14 +758,17 @@ function F.fishRefusal(isTub, fullType)
     return nil
 end
 
--- Meat a frame, Beam or Gantry refuses: pork, whose fat goes rancid in sun and wind, and Country Cured meat, whose
--- long cure is for the Smokehouse's dry-cured meat, not charque. The Smokehouse (closed) takes both.
-function F.porkRefusal(closed, item)
-    if closed then return nil end
-    if F.isPork(item) then return "IGUI_TraditionalPreservationFishMeat_PorkSmokehouse" end
+-- Meat a drying station refuses, by where it stands (Weather.placeOf with Covered). The Smokehouse (closed) takes
+-- all. Country Cured meat, pork too, dry cures in the shade: a Frame, Beam or Gantry under a roof, a Frame or Beam
+-- indoors or in a basement, never in the open (sun and rain are charque's). Corned pork has only its hot cook: in
+-- sun and wind its fat goes rancid, and it has too little salt to hang.
+function F.meatRefusal(hanger, place, item)
+    if hanger.closed then return nil end
     if item:getFullType() == F.CURED_MEAT and item:getModData().longCure then
-        return "IGUI_TraditionalPreservationFishMeat_CountryCuredSmokehouse"
+        if place == "Open" then return "IGUI_TraditionalPreservationFishMeat_CountryCuredSmokehouse" end
+        return nil
     end
+    if F.isPork(item) then return "IGUI_TraditionalPreservationFishMeat_PorkSmokehouse" end
     return nil
 end
 
@@ -798,9 +812,14 @@ function F.stationIndex(object)
     return name and STATION_INDEX[name]
 end
 
--- The big beams and the Smokehouse stand in the open or under an open roof, not in a room, unlike the frame; and
--- not in front of a door (TP Core's Doors: the Hearth's mouth, the Firebox's door, the Smokehouse's), with the
--- Smokehouse's own door's front free.
+-- The Gantry and the Smokehouse stand in the open or under an open roof, not in a room, unlike the frame and (since
+-- 0.4.15) the Hanging Beam; and not in front of a door (TP Core's Doors: the Hearth's mouth, the Firebox's door, the
+-- Smokehouse's), with the Smokehouse's own door's front free. The Hanging Beam only minds the doors (F.doorFree).
+function F.doorFree(params)
+    local name = params.tileInfo and params.tileInfo:getSpriteName()
+    return Doors.fits(params.square, name)
+end
+
 function F.notInRoom(params)
     local name = params.tileInfo and params.tileInfo:getSpriteName()
     return not params.square:isInARoom() and Doors.fits(params.square, name)
@@ -887,6 +906,8 @@ local function startStack(craftRecipeData)
     modData.lastCharqueSheltered = ledger.charqueSheltered
     modData.lastCharqueRain = ledger.charqueRain
     modData.lastDryCure, modData.lastUnderCure = ledger.dryCure, ledger.underCure
+    modData.lastCureBasement, modData.lastUnderBasement = ledger.dryCureBasement, ledger.underCureBasement
+    modData.basement, modData.longStack = nil, nil
     modData.sheltered = nil
     modData.covered = nil
     -- Recipe data is pooled with its ModData (ENGINE_NOTES): a stack mustn't inherit an old one's shed or smoke.
@@ -907,6 +928,8 @@ local function showProgress(craftRecipeData, modData, hours)
     local rotten = modData.spoiled + (modData.allUnder and modData.underSpoiled or 0) >= 1
     local progress = (rotten or F.hotStations[modData.stackId]) and 1 or math.min(modData.dried / hours, 1)
     if progress >= 1 and modData.inShed and not F.smokeStations[modData.stackId] then progress = F.SHED_WAIT end
+    -- A dry-curing stack on a frame waits for the World too, which swaps its Charque for dry-cured meat.
+    if progress >= 1 and not modData.inShed and F.dryCuring(modData) and not F.stackStations[modData.stackId] then progress = F.SHED_WAIT end
     craftRecipeData:setElapsedTime(progress * time)
 end
 
@@ -996,10 +1019,12 @@ function F.onColdDryUpdate(craftRecipeData)
     showProgress(craftRecipeData, modData, F.COLD_DRY_HOURS)
 end
 
--- Whether a stack of meat hangs in a Smokehouse (the World marks it, and F.smokeStep sets its need), and the hours
--- at a rate of 1 a stack of meat needs where it hangs.
+-- Whether a stack of meat dry cures: any in a Smokehouse (the World marks it) or in a room or a basement (sheltered:
+-- charque is the sun's, so Corned meat indoors is under-salted meat drying, as in the shed), and under an open roof
+-- one with Country Cured meat in it (longStack, from F.startSmoke). Then the hours at a rate of 1 a stack of meat
+-- needs.
 function F.dryCuring(modData)
-    return modData.inShed == true and modData.cureNeed ~= nil
+    return (modData.inShed == true or modData.longStack == true or modData.sheltered == true) and modData.cureNeed ~= nil
 end
 
 function F.meatHours(modData)
@@ -1013,14 +1038,31 @@ function F.onCharqueStart(craftRecipeData)
     craftRecipeData:getModData().style = F.STYLE_MEAT
 end
 
+-- Where a dry-curing stack hangs: "Shed", "Basement", "Shade" (a Frame or Beam under a roof or indoors) or "Open"
+-- (its roof is gone: it waits).
+function F.curePlace(modData)
+    if modData.inShed then return "Shed" end
+    if modData.basement then return "Basement" end
+    return (modData.sheltered or modData.covered) and "Shade" or "Open"
+end
+
 -- Meat in the Smokehouse dry cures (6b): the shed's cool-air drying with the fire out (F.smokeStep adds the fire's
--- hours), and for Corned meat the spoiling of the under-salted.
+-- hours), and for Corned meat the spoiling of the under-salted. The same under a roof; a basement has its own steady
+-- totals; in the open nothing dries.
 local function dryCureStep(modData, ledger)
-    modData.dried = modData.dried + ledger.dryCure - (modData.lastDryCure or ledger.dryCure)
-    if modData.underCured then
-        modData.underSpoiled = (modData.underSpoiled or 0) + ledger.underCure - (modData.lastUnderCure or ledger.underCure)
+    local place = F.curePlace(modData)
+    local dried = ledger.dryCure - (modData.lastDryCure or ledger.dryCure)
+    local under = ledger.underCure - (modData.lastUnderCure or ledger.underCure)
+    if place == "Basement" then
+        dried = (ledger.dryCureBasement or 0) - (modData.lastCureBasement or ledger.dryCureBasement or 0)
+        under = (ledger.underCureBasement or 0) - (modData.lastUnderBasement or ledger.underCureBasement or 0)
+    elseif place == "Open" then
+        dried = 0
     end
+    modData.dried = modData.dried + dried
+    if modData.underCured then modData.underSpoiled = (modData.underSpoiled or 0) + under end
     modData.lastDryCure, modData.lastUnderCure = ledger.dryCure, ledger.underCure
+    modData.lastCureBasement, modData.lastUnderBasement = ledger.dryCureBasement, ledger.underCureBasement
 end
 
 -- Adds what the weather has done to a charque stack since it was last looked at, by the frame's place now. Rain on
@@ -1722,6 +1764,8 @@ function F.onCreateDried(craftRecipeData)
         F.hotStations[modData.stackId] = nil
         if F.smokedOutputs(craftRecipeData, station, F.HOT_FISH, F.HOT_MEAT) then return end
     end
+    -- Meat dry cured on a Frame or Beam in the shade: air dried, as from the shed with no smoke.
+    if hung and modData.smokeMeat and not modData.inShed and F.dryCuring(modData) and F.smokedOutputs(craftRecipeData, hung, F.COLD_FISH_OUT, F.DRY_CURED, true) then return end
     station = modData.stackId and F.smokeStations[modData.stackId]
     if station then F.smokeStations[modData.stackId] = nil end
     if station then

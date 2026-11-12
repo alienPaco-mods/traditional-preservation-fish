@@ -54,7 +54,7 @@ local function refusal(slot, item, queued)
         return "IGUI_TraditionalPreservationFishMeat_MixedStack"
     end
     local hanger = F.hangerFor(spriteIndex(entity))
-    local porkRefused = F.porkRefusal(hanger.closed, item)
+    local porkRefused = F.meatRefusal(hanger, hanger.closed and "Sheltered" or Weather.placeOf(entity, true), item)
     if porkRefused then return porkRefused end
     if F.hangKind(item:getFullType()) == "cold" then
         local coldRefused = F.coldRefusal(hanger.closed and "Sheltered" or Weather.placeOf(entity, true))
@@ -113,7 +113,7 @@ local function drawStackTooltip(slot, tooltip, kind)
             word = F.charqueTemperatureWord(ledger.temperature or 0)
         end
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Temperature", getText(word))
-        if isCold or isMeat and not modData.sheltered then UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wind", getText(F.windWord(ledger.wind))) end
+        if isCold or isMeat and not modData.sheltered and not status.dryCuring then UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wind", getText(F.windWord(ledger.wind))) end
         -- Wetness is rain left on open frames: indoors (a room, the Smokehouse) none reaches the stack.
         if not modData.sheltered then
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wetness", UI.percent(isCold and ledger.coldWetness or ledger.wetness))
@@ -190,9 +190,10 @@ UI.onProgressSlot(function(slot, name)
     end
 end)
 
--- The Fish Hanging Beam and Gantry each stands in the open or under an open roof, not in a room.
+-- The Gantry and the Smokehouse stand in the open or under an open roof, not in a room; they and the Hanging Beam
+-- keep out of a door's front.
 UI.notInRooms(Tiles.OUTDOOR)
-UI.keepDoorsFree(Tiles.OUTDOOR)
+UI.keepDoorsFree(Tiles.DOOR_KEPT)
 
 -- Fish names and the stockfish's ripeness follow the days: the player's own things every hour, and any
 -- container as soon as the inventory windows show it. Names from before the bracket names update the same way.

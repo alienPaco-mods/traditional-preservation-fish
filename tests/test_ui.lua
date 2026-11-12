@@ -298,7 +298,8 @@ local function placing(spriteName, inRoom)
     getCell = realCell
     return fits
 end
-check("a beam can't be put down in a room", not placing("traditionalpreservationfishmeat_02_0", true) and not placing("traditionalpreservationfishmeat_02_3", true))
+check("a Gantry can't be put down in a room, a Hanging Beam can (0.4.15)", not placing("traditionalpreservationfishmeat_02_3", true)
+    and not placing("traditionalpreservationfishmeat_02_2", true) and placing("traditionalpreservationfishmeat_02_0", true))
 check("but can outdoors or under an open roof", placing("traditionalpreservationfishmeat_02_2", false))
 check("and the frame can go anywhere", placing("traditionalpreservationfishmeat_01_0", true))
 

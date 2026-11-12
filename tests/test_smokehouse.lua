@@ -292,6 +292,43 @@ check("the shed's words", F.dryCureTemperatureWord(15) == "IGUI_TraditionalPrese
 check("on a frame it is still charque", not F.dryCuring({ cureNeed = 504 }) and F.meatHours({ cureNeed = 504 }) == F.CHARQUE_HOURS
     and F.meatHours({ cureNeed = 504, inShed = true }) == 504)
 
+-- Country Cured meat on a Frame or Beam in the shade (0.4.15): it dry cures there too, air dried; a basement is steady.
+local shade = {}
+F.startSmoke(shade, pieces(0.45), true)
+check("a stack with Country Cured meat dry cures wherever it hangs", shade.longStack and F.dryCuring(shade) and F.meatHours(shade) == 504)
+check("an all-Corned stack on a frame in the open or under a roof is charque", not corned.longStack
+    and not F.dryCuring({ cureNeed = 504, underCured = true }) and not F.dryCuring({ cureNeed = 504, underCured = true, covered = true }))
+check("in a room or a basement it dry cures, under-salted: no charque indoors", F.dryCuring({ cureNeed = 504, underCured = true, sheltered = true })
+    and F.curePlace({ sheltered = true, basement = true }) == "Basement" and F.meatHours({ cureNeed = 504, sheltered = true }) == 504)
+check("a charque stack from before 6b stays charque indoors", not F.dryCuring({ sheltered = true }))
+local cellar = F.newLedger(0)
+for _, stack in ipairs({ shade }) do
+    stack.dried, stack.spoiled, stack.lastSaltSpoil = 0, 0, 0
+    stack.lastDryCure, stack.lastUnderCure, stack.lastCureBasement, stack.lastUnderBasement = 0, 0, 0, 0
+end
+F.advance(cellar, 24, { temperature = 0, humidity = 0.3, precipitation = 0, wind = 0 })
+check("in the open it waits for a roof", F.curePlace(shade) == "Open" and F.charqueStatus(shade, cellar).reason == "NeedsRoof")
+F.charqueStep(shade, cellar)
+check("and dries nothing", shade.dried == 0)
+shade.covered = true
+F.advance(cellar, 48, { temperature = 0, humidity = 0.3, precipitation = 0, wind = 0 })
+F.charqueStep(shade, cellar)
+check("under a roof it dries as the shed with the fire out", near(shade.dried, 24 * 0.25) and F.curePlace(shade) == "Shade")
+shade.covered, shade.basement, shade.sheltered = nil, true, true
+F.advance(cellar, 72, { temperature = 0, humidity = 0.3, precipitation = 0, wind = 0 })
+F.charqueStep(shade, cellar)
+check("in a basement at two thirds, whatever the weather", near(shade.dried, 24 * 0.25 + 24 * 2 / 3) and F.curePlace(shade) == "Basement")
+local cellarStatus = F.charqueStatus(shade, cellar)
+check("its popup reads the cellar's 15 C and steady rate", near(cellarStatus.rate, 2 / 3) and cellarStatus.shedTemperature == 15
+    and cellarStatus.dryCuring and not cellarStatus.underSalted)
+check("a basement cut takes about 32 days, a leg 63", near(504 / (2 / 3) / 24, 31.5) and near(1008 / (2 / 3) / 24, 63))
+local cellarCorned = { cureNeed = 504, longStack = true, underCured = true, basement = true, sheltered = true, dried = 0, spoiled = 0,
+    lastSaltSpoil = cellar.saltSpoil, lastDryCure = cellar.dryCure, lastUnderCure = cellar.underCure,
+    lastCureBasement = cellar.dryCureBasement, lastUnderBasement = cellar.underCureBasement }
+F.advance(cellar, 96, { temperature = -10, humidity = 0.3, precipitation = 0, wind = 0 })
+F.charqueStep(cellarCorned, cellar)
+check("a Corned piece in a basement stack spoils as at 15 C", near(cellarCorned.underSpoiled, 24 * F.underCureRate(15)))
+
 -- A leg's stoked hours are smoke at once.
 local legFire = {}
 Hearth.logFire(legFire, 700, nil, nil)

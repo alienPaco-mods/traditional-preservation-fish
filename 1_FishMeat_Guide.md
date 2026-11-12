@@ -203,7 +203,7 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 | Station | Skill | Materials (hammer kept) | Holds | Where |
 |---|---|---|---|---|
 | **Fish Drying Frame** | Carpentry 2, Fishing 2 | 6 long sticks, 3 nails, 4 twine | 8 stacks × 2.5 weight | Anywhere, a room too |
-| **Fish Hanging Beam** | Carpentry 4, Fishing 2 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight | Open air or under an open roof |
+| **Fish Hanging Beam** | Carpentry 4, Fishing 2 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight | Anywhere: open air, under a roof, in a room or a basement |
 | **Fish Gantry** | Carpentry 6, Fishing 2 | 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks × 50 weight | Open air or under an open roof |
 | **Smokehouse** | Carpentry 3 | 14 planks, 20 nails | 6 stacks × 15 weight | Open air or under an open roof; two tiles; chapter 10 |
 
@@ -216,7 +216,7 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 **Where it hangs** (the stack's *Place*):
 - **Open air**: no roof overhead. Walls with no roof are still the open air. Rain pauses drying until the wet has dried off.
 - **Under an open roof**: a porch, an open shed, a floor laid on the level above. Rain never reaches it, and it's **in the shade**.
-- **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. Still air: salt fish and charque dry at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air).
+- **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 10, *Without a Smokehouse*).
 
 **Hover a stack** to see its method, progress, time left, place, the temperature, the wind, how wet it is and how fast it's drying right now, a warning if the season is spoiling it, and in a Smokehouse its smoke.
 
@@ -248,7 +248,7 @@ Charque is the summer road for red meat: salted and cured in the tub like fish, 
 **Weather on the frame**
 - **Heat helps.** Full speed from 25 C, two fifths at 10 C, nothing at or below freezing. Unlike salt fish, charque takes no harm from the sun.
 - **Wind helps.** Still air dries at two thirds of the speed, a good breeze adds a fifth.
-- **Rain hurts.** An open station waits while the meat is wet, and every 6 hours of rain take back **a tenth** of what had dried. Under an open roof it dries as fast as in the open and is never rained on. Indoors, two thirds of the speed, no wind.
+- **Rain hurts.** An open station waits while the meat is wet, and every 6 hours of rain take back **a tenth** of what had dried. Under an open roof it dries as fast as in the open and is never rained on. **Not indoors**: charque is the sun's and the wind's. Corned meat hung in a room or a basement dry cures as in the Smokehouse, **under-salted**, and spoils as it hangs.
 - **Muggy summers** spoil it a little, under salt fish's rule.
 
 | Month | Open | Under an open roof | Indoors |
@@ -304,7 +304,7 @@ A plank shed two tiles long under one sloping roof, the door on the high end wit
 |---|---|
 | Build | Carpentry 3: **14 planks, 20 nails**, hammer kept (Build menu, Furniture) |
 | Holds | **6 stacks** of up to **15 weight** |
-| Takes | **Hang Salt Cured Fish** and **Hang Salted Meat** only; the one place pork may hang |
+| Takes | **Hang Salt Cured Fish** and **Hang Salted Meat** only; the one place Corned pork may hang |
 | Inside | always **Indoors**: no rain, no wind, wherever the shed stands |
 | Stands | in the open or under an open roof, not inside a room; the tile in front of its door stays clear |
 
@@ -394,7 +394,7 @@ Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank 
 
 ### Dry curing
 
-Meat in the shed is never charque: charque is the sun's and the wind's. Here it **dry cures**, slowly, in cool air, and what it becomes goes by its animal and by whether it had its smoke.
+Meat in the shed is never charque: charque is the sun's and the wind's. Here it **dry cures**, slowly, in cool air, and what it becomes goes by its animal and by whether it had its smoke. (No shed yet? See *Without a Smokehouse*, below.)
 
 | From | With its smoke | Air dried, no smoke |
 |---|---|---|
@@ -420,6 +420,22 @@ Meat in the shed is never charque: charque is the sun's and the wind's. Here it 
 - **Use the long cure.** *Country Cured* meat has salt for the whole hang. **Corned** meat hasn't: its popup shows a red **Under-salted** line, and it spoils by the shed's temperature, the fire's warmth included. Near freezing it comes out about half way through its keeping; in a shed at 10 C it rots in four weeks, by a banked fire in midwinter in about nine days. A hot cook stops it: Corned meat is for **hot smoking** and for charque.
 - **A rotted stack comes down as what you hung**: *Corned Beef (Rotten)*, not Bresaola. In a mixed stack only the Corned pieces rot.
 - **A Country Ham** keeps **180 / 365 days**; the cuts keep 120 / 180.
+
+**Without a Smokehouse.** Air drying needs no shed, only shade. **Country Cured** meat, pork and the leg too, also hangs on any drying station that stands **in the shade**: a **Fish Drying Frame** or a **Hanging Beam** under a roof, in a room or in a basement, or a **Gantry** under an open roof (it can't be built indoors). There it dry cures to the air-dried meats: Bresaola, Dry-Cured Mutton, Venison and Pork, Country Ham.
+
+| Where a cut hangs | January | April | Notes |
+|---|---|---|---|
+| Frame, Beam or Gantry under a roof; Frame or Beam in a room | 12 weeks | 4 to 5 weeks | as the shed with the fire out |
+| Frame or Beam in a **basement** | **32 days** | **32 days** | the curing cellar: steady all year, whatever the weather |
+| Smokehouse, fire a few hours a day | 7 weeks | 4 weeks | and the only place for smoke |
+
+- A leg takes twice as long: about nine weeks in a basement.
+- **Not in the open.** Sun and rain are for charque. If a stack loses its roof it waits (*Stopped (Needs a roof)*).
+- **Corned meat indoors** (a room or a basement) dry cures too, but it is **under-salted** there as in the shed: the red line shows, and it spoils as it hangs. Under an open roof or in the sun it is still charque.
+- **The cellar is for the hang, not the salt.** The Salting Tub goes by the season wherever it stands: a long cure started in a basement in July spoils like any other. Salt in the cold months, then hang in the cellar the year round.
+- **No smoke out here.** Suho Meso, Mutton Ham, Jerked Venison and the smoked hams need the Smokehouse and its Firebox, and so does hot smoking. Corned pork has nowhere else to go.
+
+> 📜 **Old names:** the Italian *cantina* and the Alpine cellar are where *bresaola*, *coppa* and *lonza* hang: cool, still and a little damp, so the outside doesn't harden before the middle has dried.
 
 | | Cold Smoked Fish | Dry-cured meat, smoked or air dried |
 |---|---|---|
@@ -673,10 +689,10 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 |---|---|
 | Tub won't accept more | It's full (50 weight or 35 items), curing, or still has cured pieces in it; or it holds the other kind (fish or meat) |
 | Pack Fish in Salt won't take a fish | A whole or gutted fish over 4.5 weight must be split first; or you don't carry enough salt for its size |
-| Pork won't hang on a frame | Pork hangs in the Smokehouse only: its fat goes rancid in sun and wind |
+| Pork won't hang on a frame | Corned pork hangs in the Smokehouse only. Country cure it and it hangs on a Frame or Beam under a roof, indoors or in a basement, never in the open |
 | Corn Salted Meat won't take a Leg of Pork | A leg is too thick for the short cure: take it out, or use Country Cure Salted Meat (21 days) |
 | A Country Cure spoils in the tub in May | The long cure is safe at a ten-day average of 10 C or less: start it between October and April |
-| Country Cured beef won't hang on a frame | The long cure is for the Smokehouse's dry-cured meat. For charque, corn it |
+| Country Cured meat won't hang on a frame | It dries in the shade: put the station under a roof, indoors or in a basement, or use the Smokehouse. For charque, corn it |
 | Pack Meat in Salt missing | Charque may be off in the sandbox |
 | A station refuses a fish or cut | It takes only Salt Cured fish or meat, or Gutted Fish and halves. Raw, rotten, frozen salted and cooked pieces are refused, and a frame stack holds 2.5 weight at most |
 | A station refuses meat (or fish) | The stack waiting to start is the other kind: one stack is one kind. Craft it first, then load the next |

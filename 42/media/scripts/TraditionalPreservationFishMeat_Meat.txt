@@ -444,7 +444,7 @@ module TraditionalPreservationFishMeat
     }
 
     /* Charque, phase 3b: red meat salted in the Salting Tub; pork and the Leg of Pork since 6a, for the Smokehouse
-       only (its fat goes rancid in sun and wind, TraditionalPreservationFishMeat.porkRefusal). The cuts go in as vanilla gives them. As with fish, nutrition, hunger and weight come from
+       and, Country Cured, for a Frame or Beam in the shade (its fat goes rancid in sun and wind, TraditionalPreservationFishMeat.meatRefusal). The cuts go in as vanilla gives them. As with fish, nutrition, hunger and weight come from
        the cut that went in (TraditionalPreservationFishMeat.onCreateCured), and the name from it too ("Steak (Salt
        Cured)"). IconsForTexture and WorldStaticModelsByIndex are in MEAT_CUTS' order in TraditionalPreservationFishMeat.lua. */
     item SaltPackedMeat

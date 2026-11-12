@@ -278,9 +278,17 @@ check("beside it is fine", T.notInRoom(building(gridSquare(21, 20))))
 gridSquare(30, 31, { "a crate" })
 check("the Smokehouse's door needs its front free", not T.notInRoom(building(gridSquare(30, 30), T.spriteName(857)))
     and T.notInRoom(building(gridSquare(31, 30), T.spriteName(857))))
-for _, name in ipairs({ "Medium", "Large" }) do
+check("the Hanging Beam goes up in a room too, but not in front of a door", T.doorFree(building(inside)) and T.doorFree(building(outside))
+    and not T.doorFree(building(gridSquare(20, 21))))
+for name, rule in pairs({ Medium = "doorFree", Large = "notInRoom" }) do
     local entity = io.open("42/media/scripts/entities/entity_Drying_Beam_" .. name .. ".txt"):read("*a")
-    check(name .. " beam stays out of rooms", entity:find("OnIsValid = TraditionalPreservationFishMeat.notInRoom", 1, true) ~= nil)
+    check(name .. " beam: " .. rule, entity:find("OnIsValid = TraditionalPreservationFishMeat." .. rule .. ",", 1, true) ~= nil)
+end
+do
+    local Tiles = require "TraditionalPreservationFishMeat/Tiles"
+    local medium, large = T.spriteName(408), T.spriteName(410)
+    check("only the Gantry and the Smokehouse are kept out of rooms", not Tiles.OUTDOOR[medium] and Tiles.OUTDOOR[large]
+        and Tiles.OUTDOOR[T.spriteName(856)] and Tiles.DOOR_KEPT[medium] and Tiles.DOOR_KEPT[large])
 end
 check("the frame isn't", not io.open("42/media/scripts/entities/entity_Drying_Frame.txt"):read("*a"):find("OnIsValid", 1, true))
 check("sprites below the first sheet's end are on it", T.spriteName(407) == "traditionalpreservationfishmeat_01_407")
@@ -1154,8 +1162,10 @@ check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnT
     check("a leg takes half fish's salt, 10 for 2.5", T.saltFor(leg) == 10 and T.saltFor(newFood("Base.Pork", { ActualWeight = 0.5 })) == 4)
     check("the short cure refuses a leg, not a cut", not T.canCorn(packedLeg) and not T.canCorn(leg) and T.canCorn(pork))
     check("pork is pork, beef is not", T.isPork(pork) and T.isPork(packedLeg) and not T.isPork(packedSteak))
-    check("pork hangs in the Smokehouse only", T.porkRefusal(false, pork) == "IGUI_TraditionalPreservationFishMeat_PorkSmokehouse"
-        and T.porkRefusal(true, pork) == nil and T.porkRefusal(false, packedSteak) == nil)
+    local frame, beam, gantry, shed = T.HANGERS[6], T.HANGERS[408], T.HANGERS[410], { closed = true }
+    check("pork that isn't Country Cured hangs in the Smokehouse only", T.meatRefusal(frame, "Open", pork) == "IGUI_TraditionalPreservationFishMeat_PorkSmokehouse"
+        and T.meatRefusal(frame, "Covered", pork) == "IGUI_TraditionalPreservationFishMeat_PorkSmokehouse"
+        and T.meatRefusal(shed, "Sheltered", pork) == nil and T.meatRefusal(frame, "Open", packedSteak) == nil)
     local longCuts = newRecipeData(T.LONG_LEG_HOURS * 3600, { packedSteak, pork }, nil, T.LONG_CURE_RECIPE)
     T.onPressStart(longCuts)
     local longLeg = newRecipeData(T.LONG_LEG_HOURS * 3600, { pork, packedLeg }, nil, T.LONG_CURE_RECIPE)
@@ -1167,8 +1177,14 @@ check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnT
     local countrySteak = newFood(T.CURED_MEAT, {})
     T.onCreateLongCured(newRecipeData(0, { packedSteak }, { countrySteak }))
     local cornedSteak = through(packedSteak, "SaltCuredMeat")
-    check("a frame refuses Country Cured beef, not Corned", T.porkRefusal(false, countrySteak) == "IGUI_TraditionalPreservationFishMeat_CountryCuredSmokehouse"
-        and T.porkRefusal(false, cornedSteak) == nil and T.porkRefusal(true, countrySteak) == nil)
+    local needsShade = "IGUI_TraditionalPreservationFishMeat_CountryCuredSmokehouse"
+    check("a frame in the open refuses Country Cured beef, not Corned", T.meatRefusal(frame, "Open", countrySteak) == needsShade
+        and T.meatRefusal(frame, "Open", cornedSteak) == nil and T.meatRefusal(shed, "Sheltered", countrySteak) == nil)
+    check("in the shade a Frame or Beam takes Country Cured meat, pork too", T.meatRefusal(frame, "Covered", countrySteak) == nil
+        and T.meatRefusal(beam, "Sheltered", countrySteak) == nil and T.meatRefusal(beam, "Basement", countryPork) == nil
+        and T.meatRefusal(frame, "Covered", countryPork) == nil and T.meatRefusal(frame, "Open", countryPork) == needsShade)
+    check("a roofed Gantry does too, an open one not", T.meatRefusal(gantry, "Covered", countrySteak) == nil and T.meatRefusal(gantry, "Covered", countryPork) == nil
+        and T.meatRefusal(gantry, "Open", countrySteak) == needsShade and T.meatRefusal(gantry, "Open", cornedSteak) == nil)
     check("the short cure refuses a leg, the long one takes it", T.recipeRefusal("PressSaltedMeat", packedLeg) == "IGUI_TraditionalPreservationFishMeat_LegNeedsLongCure"
         and T.recipeRefusal("PressSaltedMeat", pork) == nil and T.recipeRefusal(T.LONG_CURE_RECIPE, packedLeg) == nil)
     check("the long cure's time is set from the leg's", loaded["TraditionalPreservationFishMeat.CountryCureMeat"] == "{ time = " .. T.LONG_LEG_HOURS * 3600 .. ", }")
@@ -1226,8 +1242,12 @@ end)()
     local open, covered, indoors = stack("open"), stack("covered"), stack("indoors")
     check("a meat stack hangs as meat", open.modData.style == T.STYLE_MEAT and open.modData.dried == 0)
     shared.charque, shared.charqueCovered, shared.charqueSheltered = shared.charque + 60, shared.charqueCovered + 60, shared.charqueSheltered + 30
+    shared.dryCure, shared.underCure = shared.dryCure + 20, shared.underCure + 0.1
     for _, data in ipairs({ open, covered, indoors }) do T.onCharqueUpdate(data) end
-    check("each place reads its own total", open.modData.dried == 60 and covered.modData.dried == 60 and indoors.modData.dried == 30)
+    check("each place reads its own total", open.modData.dried == 60 and covered.modData.dried == 60)
+    check("in a room there is no charque: Corned meat dry cures, under-salted (0.4.15)", near(indoors.modData.dried, 20)
+        and near(indoors.modData.underSpoiled, 0.1) and T.dryCuring(indoors.modData) and not T.dryCuring(covered.modData)
+        and near(indoors.elapsed, T.CHARQUE_HOURS * 3600 * 20 / indoors.modData.cureNeed))
     check("half way is half the bar", near(open.elapsed, T.CHARQUE_HOURS * 3600 / 2))
     shared.charqueRain = shared.charqueRain + T.CHARQUE_RAIN_HOURS
     for _, data in ipairs({ open, covered }) do T.onCharqueUpdate(data) end

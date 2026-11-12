@@ -15,6 +15,14 @@ return {
     FACE_COUNT = 2,
     STATIONS = { "traditionalpreservationfishmeat_01_0", "traditionalpreservationfishmeat_01_1", "traditionalpreservationfishmeat_01_6", "traditionalpreservationfishmeat_01_7", "traditionalpreservationfishmeat_02_0", "traditionalpreservationfishmeat_02_1", "traditionalpreservationfishmeat_02_2", "traditionalpreservationfishmeat_02_3", "traditionalpreservationfishmeat_02_448", "traditionalpreservationfishmeat_02_449", "traditionalpreservationfishmeat_02_450", "traditionalpreservationfishmeat_02_451" },
     OUTDOOR = {
+        traditionalpreservationfishmeat_02_2 = true,
+        traditionalpreservationfishmeat_02_3 = true,
+        traditionalpreservationfishmeat_02_448 = true,
+        traditionalpreservationfishmeat_02_449 = true,
+        traditionalpreservationfishmeat_02_450 = true,
+        traditionalpreservationfishmeat_02_451 = true,
+    },
+    DOOR_KEPT = {
         traditionalpreservationfishmeat_02_0 = true,
         traditionalpreservationfishmeat_02_1 = true,
         traditionalpreservationfishmeat_02_2 = true,

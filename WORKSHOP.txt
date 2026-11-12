@@ -33,7 +33,7 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [list]
 [*][b]Salting Tub:[/b] Carpentry 2, Fishing 2. 4 planks, 6 nails, 2 twine, hammer and saw kept. Holds 50 weight or 35 pieces, fish or meat, never both at once.
 [*][b]Pack Fish in Salt:[/b] a raw fish or fillet and a sharp knife or meat cleaver (kept). 4 salt for each started half weight, about 15%, as on the Volga: a bluegill takes 4, a 4.5 weight walleye 36. A fish over 4.5 weight is too thick to salt whole: gut and split it first.
-[*][b]Pack Meat in Salt:[/b] a Beef, Steak, Mutton Chop, Venison, Pork or Pork Chop as the butcher gives it, with 4 salt, or a whole Leg of Pork with 10. No knife needed. Pork and Country Cured meat hang in the Smokehouse only: pork fat goes rancid in sun and wind.
+[*][b]Pack Meat in Salt:[/b] a Beef, Steak, Mutton Chop, Venison, Pork or Pork Chop as the butcher gives it, with 4 salt, or a whole Leg of Pork with 10. No knife needed. Pork never hangs in the open: its fat goes rancid in sun and wind.
 [*][b]Leg of Pork:[/b] a grown pig gives some of its Pork as whole legs for country ham, one or two on a Butchering Hook. Five Pork make a leg, so the pig's meat stays the same.
 [*][b]Cure Salted Fish / Corn Salted Meat:[/b] the heaviest piece sets the time, 1 to 2 in-game days: Salt Cured fish, Corned meat. Nothing else goes in until the last piece is out.
 [*][b]Country Cure Salted Meat:[/b] the long cure for the Smokehouse's dry-cured meat and country ham: 10 days for cuts, 21 with a leg. A cold-season job: safe while the last ten days average 10 C or less, about October to April. Warmer, it spoils by the bone; at 15 C a leg rots in the tub.
@@ -43,7 +43,7 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [h2]Drying stations[/h2]
 Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate, smoke and any spoilage. Weights are inventory weight, not kilograms.
 [list]
-[*][b]Fish Drying Frame:[/b] Carpentry 2, Fishing 2. 6 long sticks, 3 nails, 4 twine, hammer kept. 8 stacks of 2.5 weight. The only station that can stand in a room.
+[*][b]Fish Drying Frame:[/b] Carpentry 2, Fishing 2. 6 long sticks, 3 nails, 4 twine, hammer kept. 8 stacks of 2.5 weight. It can stand in a room or a basement, as the Hanging Beam can.
 [*][b]Fish Hanging Beam:[/b] Carpentry 4, Fishing 2. 6 planks, 6 nails, 1 large hook, hammer kept. 4 stacks of 15. Open air or under an open roof.
 [*][b]Fish Gantry:[/b] Carpentry 6, Fishing 2. 2 logs, 2 planks, 8 nails, 2 large hooks, hammer kept. 2 stacks of 50. Open air or under an open roof.
 [*][b]Smokehouse:[/b] Carpentry 3. 14 planks, 20 nails, hammer kept. 6 stacks of 15. Two tiles; open air or under an open roof. Salt fish and meat only.
@@ -64,7 +64,7 @@ Gut Fish (a big one also gives a Fish Head), split it if it's over 2.5 weight, a
 [*][b]Connect the Firebox[/b] (from TP Core) on a tile beside it: a clay pipe (2 Clay Pipe Segments, 1 Clay, mason's trowel kept) or a stone trench (3 Flat Stones, 2 Clay, shovel kept). Not at the door end, not with the Firebox's door towards the shed, one Firebox a shed, and only with the fire out. Disconnect gives the pipe or stones back.
 [*][b]Hot smoking:[/b] keep the joined Firebox stoked and each salt stack inside counts the hours in a row: 4 to 6 for fish, 6 to 8 for meat, by the heaviest piece. Then it comes out Hot Smoked: cooked, ready to eat, 1 to 2 weeks' keeping. Banking the fire for up to an hour doesn't break the run. Pork comes out as a Ham you can slice. Stop sooner and fish dries on as Salt Dried; corned meat must get its cook, or it spoils in the shed.
 [*][b]Cold smoking:[/b] bank the Firebox to a smoulder. Banked hours, and stoked runs that broke off, count as smoke on days of 15 C or less. With its hours of smoke (a day or two for fish, 60 hours for cuts, 120 for a leg, by the heaviest piece) a stack comes out Cold Smoked fish, or the old smoked meats: Suho Meso from beef, Mutton Ham, Jerked Venison, Smoked Dry-Cured Pork, Smoked Country Ham from a leg. Dry, ready to eat sliced thin, 4 to 6 months' keeping. A burning fire also warms the shed, so it dries faster even in frost.
-[*][b]Dry curing:[/b] meat hung in the Smokehouse is never charque. Country cured, it dries slowly in cool air: 3 weeks at best for a cut, 6 for a leg, longer in frost. Without smoke it comes out air dried: Bresaola, Dry-Cured Mutton, Venison or Pork, and a Country Ham from a leg, which keeps half a year to a year.
+[*][b]Dry curing:[/b] meat hung in the Smokehouse is never charque. Country cured, it dries slowly in cool air: 3 weeks at best for a cut, 6 for a leg, longer in frost. Without smoke it comes out air dried: Bresaola, Dry-Cured Mutton, Venison or Pork, and a Country Ham from a leg, which keeps half a year to a year. No Smokehouse yet? Country cured meat dries the same way on any drying station under a roof, on a Frame or Beam indoors, and in a basement at a steady pace all year: about a month for a cut, two for a leg.
 [*]A smoked ham hangs by the door while finished stacks wait inside.
 [/list]
 

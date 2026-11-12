@@ -119,6 +119,7 @@ function TPFM.age(hours)
     -- Perfect dry-curing weather is a shed at 12 C: Corned meat hanging in a Smokehouse spoils as it would there.
     local under = hours * F.underCureRate(F.DRY_CURE_FULL_HEAT)
     ledger.underCure, ledger.underCureBanked, ledger.underCureStoked = ledger.underCure + under, ledger.underCureBanked + under, ledger.underCureStoked + under
+    ledger.dryCureBasement, ledger.underCureBasement = (ledger.dryCureBasement or 0) + hours, (ledger.underCureBasement or 0) + under
     say(string.format("Added %.0f hours of perfect drying weather. Stacks update within a few seconds. Corned meat in a Smokehouse spoiled %.0f%% (a 12 C shed).", hours, under * 100))
 end
 

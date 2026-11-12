@@ -78,8 +78,12 @@ TRENCH_W = 0.07
 # A ham hung by the door while finished stacks wait in the chamber (5c, user's idea): one overlay per face, on the
 # door's tile, on the door's end wall beside the door.
 CHAMBER_HAM = 868
-HAM_A = 0.33              # across the end wall, right of the door
-HAM_TOP = 92              # px up to the bone's knob; the nail is above it
+HAM_A = -0.37             # across the end wall, on the door's far side from the long wall in view: it overhangs the corner
+HAM_TOP = 98              # px up to the bone's knob; the nail is above it
+HAM_SCALE = 1.35          # its width against the first ham's
+HAM_STEP = 6.6            # px between its outline's steps down (the first ham's were 5)
+HAM_MEAT = (198, 96, 98)  # the cut face: cured pink
+HAM_FAT = (232, 208, 176) # and the rim of fat round it
 HAM_COLOUR = (100, 52, 28)  # a shade under the Hot Smoked meat icons' mahogany: it hangs in the shade of the eave
 HAM_CORD = (196, 176, 136)
 HAM_BONE = (232, 222, 196)
@@ -1286,8 +1290,10 @@ def paint_chamber_entry(kind, face, part):
 
 
 def paint_chamber_ham(face):
-    """A smoked ham on a cord from a nail on the door's end wall: the shank up, the round of it at the bottom, a lighter
-    face where the light falls and the bone's knob at the top."""
+    """A smoked ham on a cord from a nail on the door's end wall, on the side away from the long wall the camera sees:
+    the shank up, the round of it at the bottom, a lighter face where the light falls, the bone's knob at the top,
+    and low on its face a slice taken off: pink meat inside a rim of fat, which gives it depth. It hangs a little
+    past the shed's corner."""
     layer = new_layer()
     draw = ImageDraw.Draw(layer)
     h, a = CHAMBER_HALF, HAM_A
@@ -1301,14 +1307,25 @@ def paint_chamber_ham(face):
     draw.ellipse([px(0, nail)[0] - 1.2 * SS, px(0, nail)[1] - 1.2 * SS, px(0, nail)[0] + 1.2 * SS, px(0, nail)[1] + 1.2 * SS],
                  fill=tint(IRON, 1.0))
     # Half-widths (in tiles) down the ham, from the shank to the round bottom.
-    zs = [HAM_TOP - 2 - 5 * i for i in range(9)] + [HAM_TOP - 44]
-    ws = [0.02, 0.026, 0.042, 0.07, 0.092, 0.102, 0.1, 0.088, 0.06, 0.028]
+    zs = [HAM_TOP - 2 - HAM_STEP * i for i in range(9)] + [HAM_TOP - 2 - HAM_STEP * 8.5]
+    ws = [w * HAM_SCALE for w in (0.02, 0.026, 0.042, 0.07, 0.092, 0.102, 0.1, 0.088, 0.06, 0.028)]
     outline = [px(-w, z) for z, w in zip(zs, ws)] + [px(w, z) for z, w in reversed(list(zip(zs, ws)))]
     draw.polygon(outline, fill=tint(HAM_COLOUR, light * 0.78))
     inner = [px(-w * 0.7 - 0.006, z) for z, w in zip(zs[2:-1], ws[2:-1])] + [px(w * 0.45, z) for z, w in reversed(list(zip(zs[2:-1], ws[2:-1])))]
     draw.polygon(inner, fill=tint(HAM_COLOUR, light * 1.08))
+    # The cut: a slice taken off the round end, low and towards the door: pink meat in a thin rim of fat, the bone's
+    # end showing, and a darker lip above it where the skin stands proud.
+    cut_z, cut_w = HAM_TOP - 2 - HAM_STEP * 6.3, ws[6] * 0.74
+    centre = ws[6] * 0.16
+    oval = lambda scale, lift=0: [px(centre + cut_w * scale * math.cos(t / 12 * math.pi),
+                                     cut_z + lift + HAM_STEP * 1.75 * scale * math.sin(t / 12 * math.pi), 0.014) for t in range(24)]
+    draw.polygon(oval(1.0, 1.2), fill=tint(HAM_COLOUR, light * 0.6))
+    draw.polygon(oval(1.0), fill=tint(HAM_FAT, light))
+    draw.polygon(oval(0.86), fill=tint(HAM_MEAT, light))
+    marrow = px(centre - cut_w * 0.25, cut_z + HAM_STEP * 0.5, 0.014)
+    draw.ellipse([marrow[0] - 1.1 * SS, marrow[1] - 0.9 * SS, marrow[0] + 1.1 * SS, marrow[1] + 0.9 * SS], fill=tint(HAM_BONE, light))
     knob = px(0, HAM_TOP)
-    draw.ellipse([knob[0] - 2 * SS, knob[1] - 1.6 * SS, knob[0] + 2 * SS, knob[1] + 1.6 * SS], fill=tint(HAM_BONE, light))
+    draw.ellipse([knob[0] - 2.4 * SS, knob[1] - 1.9 * SS, knob[0] + 2.4 * SS, knob[1] + 1.9 * SS], fill=tint(HAM_BONE, light))
     return pzart.hard_edges(shrink(layer).convert("RGBA"))
 
 
@@ -1368,12 +1385,16 @@ def lua_tiles():
     chamber = [tile_name(chamber_index(face, part)) for face in range(len(FACES)) for part in range(2)]
     stations = [tile_name(base + face) for base in (TUB, FRAME, MEDIUM_BEAM, LARGE_BEAM) for face in range(len(FACES))] + chamber
     beams = [tile_name(base + face) for base in (MEDIUM_BEAM, LARGE_BEAM) for face in range(len(FACES))] + chamber
+    # The Gantry and the Smokehouse stay out of rooms; the Hanging Beam may go indoors since 0.4.15 (a cellar's beam).
+    outdoor = [tile_name(LARGE_BEAM + face) for face in range(len(FACES))] + chamber
     return {
         "SHEETS": [{"prefix": tileset + "_", "tiles": COLUMNS * rows} for tileset, rows in zip(TILESETS, SHEET_ROWS)],
         "FIRST_SHEET_SIZE": FIRST_SHEET_SIZE,
         "FACE_COUNT": len(FACES),
         "STATIONS": stations,
-        "OUTDOOR": {name: True for name in beams},
+        "OUTDOOR": {name: True for name in outdoor},
+        # Stations kept out of the tile in front of a door (TP Core's Doors), indoors or out.
+        "DOOR_KEPT": {name: True for name in beams},
         "TUB": TUB,
         "TUB_FILLED": TUB_FILLED,
         "TUB_WEIGHTED": TUB_WEIGHTED,

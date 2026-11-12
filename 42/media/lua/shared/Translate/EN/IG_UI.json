@@ -79,8 +79,9 @@
   "IGUI_TraditionalPreservationFishMeat_TempGoodCure": "Good for dry curing",
   "IGUI_TraditionalPreservationFishMeat_TempFrostSlow": "Frost (slow)",
   "IGUI_TraditionalPreservationFishMeat_UnderSalted": "Under-salted",
-  "IGUI_TraditionalPreservationFishMeat_UnderSaltedShed": "Spoiling (shed %1 C): Corned meat wants a hot cook, or the long cure",
+  "IGUI_TraditionalPreservationFishMeat_UnderSaltedShed": "Spoiling (%1 C where it hangs): Corned meat wants a hot cook, or the long cure",
   "IGUI_TraditionalPreservationFishMeat_StoppedTooCold": "Stopped (Too cold)",
+  "IGUI_TraditionalPreservationFishMeat_StoppedNeedsRoof": "Stopped (Needs a roof)",
   "IGUI_TraditionalPreservationFishMeat_TempHotGood": "Hot sun, best for charque",
   "IGUI_TraditionalPreservationFishMeat_TempTooCold": "Too cold",
   "IGUI_TraditionalPreservationFishMeat_CharqueOff": "Charque is off in this world's sandbox options",
@@ -116,7 +117,7 @@
   "IGUI_TraditionalPreservationFishMeat_AnimalVenison": "Venison",
   "IGUI_TraditionalPreservationFishMeat_ColdSmokeNeed": "%1 of %2 h of smoke",
   "IGUI_TraditionalPreservationFishMeat_ColdSmokeTooWarm": "Too warm to count: over 15 C the smoulder heats the shed past 30 C, and the smoke cooks rather than cures",
-  "IGUI_TraditionalPreservationFishMeat_PorkSmokehouse": "Pork hangs in the Smokehouse only: in sun and wind its fat goes rancid",
+  "IGUI_TraditionalPreservationFishMeat_PorkSmokehouse": "Corned pork goes in the Smokehouse for its hot cook: in sun and wind its fat goes rancid. Country cure it to dry it in the shade",
   "IGUI_TraditionalPreservationFishMeat_Stockfish": "%1 Stockfish",
   "IGUI_TraditionalPreservationFishMeat_Soaked": "Soaked",
   "IGUI_TraditionalPreservationFishMeat_Rehydrated": "Soaked",
@@ -135,6 +136,6 @@
   "IGUI_TraditionalPreservationFishMeat_AirDried_Venison": "Dry-Cured Venison",
   "IGUI_TraditionalPreservationFishMeat_AirDried_Pork": "Dry-Cured Pork",
   "IGUI_TraditionalPreservationFishMeat_AirDried_Leg": "Country Ham",
-  "IGUI_TraditionalPreservationFishMeat_CountryCuredSmokehouse": "Country cured meat hangs in the Smokehouse: its long cure is for dry-cured meat, not charque",
+  "IGUI_TraditionalPreservationFishMeat_CountryCuredSmokehouse": "Country cured meat dries in the shade: under a roof, indoors or in a basement, or in the Smokehouse",
   "IGUI_TraditionalPreservationFishMeat_LegNeedsLongCure": "A Leg of Pork is too thick to corn: take it out, or pick Country Cure Salted Meat"
 }

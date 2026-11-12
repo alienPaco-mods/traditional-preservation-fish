@@ -1,5 +1,20 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.15
+- **Dry curing without the Smokehouse**: Country Cured meat, pork too, hangs on a **Frame, Beam or Gantry under a
+  roof, or a Frame or Beam in a room or a basement** (`F.meatRefusal`; not in the open) and dry cures there to air dried
+  meat: Bresaola, Dry-Cured Mutton / Venison / Pork, Country Ham. Under a roof or indoors as the shed with the fire
+  out; in a basement at a steady two thirds all year (`F.DRY_CURE_BASEMENT_RATE`: about 32 days a cut, 63 a leg); a
+  stack that loses its roof waits. Smoke, hot smoking and the fire's warmth stay the Smokehouse's. Corned pork still
+  hangs in the Smokehouse only.
+- **The Hanging Beam can be built in a room or a basement** (`F.doorFree`; the Gantry and the Smokehouse stay
+  outdoors: `Tiles.OUTDOOR`, with `Tiles.DOOR_KEPT` for the door rule).
+- **No charque indoors**: in a room or a basement every meat stack dry cures; Corned meat there is under-salted, as
+  in the Smokehouse. Charque is the open air's and the open roof's.
+- Air dried meat's tooltip no longer speaks of smoke at all.
+- **The ham by the Smokehouse door** hangs on the door's other side, a third larger, a little past the shed's corner,
+  with a slice taken off its round end: pink meat in a rim of fat (`paint_chamber_ham`; same tile numbers).
+
 ## 0.4.14
 - **Dry curing in the Smokehouse** (phase 6b): meat hung in the shed never comes out Charque. It dries on its own
   need by the heaviest piece (`F.dryCureHours`: 3 weeks at full rate for a Beef, 6 for a Leg of Pork) in cool air
@@ -18,7 +33,7 @@
 - Popup in the shed: Method "Dry curing", the shed's temperature word, no Hot Smoke line for a stack with a leg.
 - **A rotted stack comes down as what was hung** (`F.rottenStage`, `F.rottenOutputs`, `F.stackStations`): Corned Beef
   (Rotten), a pressed or gutted fish, not Bresaola, Salt Dried or Stockfish. In a mixed stack only the Corned pieces
-  rot and the stack dries on (`modData.allUnder`). Air dried meat has its own tooltip, with no smoke in it.
+  rot and the stack dries on (`modData.allUnder`). Air dried meat has its own tooltip, which doesn't speak of smoke at all.
 - **Smoke by fixed hours** (`F.smokeHours`, `modData.smokeNeed`), for fish and meat alike: by the heaviest piece, fish
   24 hours (up to 1.1 weight) to 48 (2.2), meat 60 (a cut) to 120 (a leg). It was a third of the hours hung, which
   the slow dry cure turned into weeks of fire. Popup: *x of y h of smoke*.
