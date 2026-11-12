@@ -187,7 +187,7 @@ Numbers are for an average animal and an unskilled butcher. A bigger or meatier 
 
 ### Step 2. Cure
 
-Pick the cure, load the tub, press **Craft**. The board and stones go on, and the **heaviest piece sets the time**. Fish has one cure; meat has two:
+Pick the cure, load the tub, press **Craft**. Until then the tub stands open and shows its top layer in the salt: fish, red cuts, pale pork, or a leg (a leg always shows, it fills the tub). The board and stones go on, and the **heaviest piece sets the time**. Fish has one cure; meat has two:
 
 | Recipe | Gives | For |
 |---|---|---|
