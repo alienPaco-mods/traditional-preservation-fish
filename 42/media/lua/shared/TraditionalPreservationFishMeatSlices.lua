@@ -6,6 +6,7 @@
 -- through them as the piece was. Hot smoked pork is vanilla's Ham, which vanilla slices.
 TraditionalPreservationFishMeat = TraditionalPreservationFishMeat or {}
 local F = TraditionalPreservationFishMeat
+local Recipes = require "TraditionalPreservationCore/Recipes"
 
 F.SLICE_HUNGER = 0.14
 -- What the slicing recipes' scripts give; the rest are made in OnCreate.
@@ -88,11 +89,7 @@ function F.canCarveLast(item)
     return item:getFullType() ~= HAM or not F.carvesOn(item)
 end
 
-local function created(craftRecipeData)
-    local list, slices = craftRecipeData:getAllCreatedItems(), {}
-    for i = 0, list:size() - 1 do slices[i + 1] = list:get(i) end
-    return slices
-end
+local created = Recipes.created
 
 -- Slice Hot Smoked Meat and Slice Dry Cured Meat: the whole cut, in as many slices as it holds. The recipe makes
 -- MIN_SLICES; the rest go straight to the character.

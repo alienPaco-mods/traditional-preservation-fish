@@ -81,8 +81,8 @@ Every road on one page. *Start* is when to begin it in Kentucky's weather; *Yiel
 | You make | Start | In the tub | Then where | Takes | Yield | Keeps | Eat it |
 |---|---|---|---|---|---|---|---|
 | **Salt Dried fish** | Any month; best **May to September** | 1 to 2 days | Any drying station; an open roof is best | 2 to 3 weeks in summer, 4 in winter | 37% weight, 90% food | 120 / 180 | As it is (salty), or in soup |
-| **Stockfish** | **November to mid-February** | No salt, no tub | Frame, Beam or Gantry in the open or under an open roof | 7 to 8 weeks, then 60 days maturing | 18% weight, 89% food | **365 / 540** | Soak; then eat it as it is, or cook it (better hot) |
-| **Hot Smoked fish** | Any month | 1 to 2 days | Smokehouse, Firebox stoked | 4 to 6 hours of fire | 63% weight, all the food | 7 / 14 | As it is |
+| **Stockfish** | **November to February** (October to March under a roof) | No salt, no tub | Frame, Beam or Gantry in the open or under an open roof | 7 to 8 weeks, then 60 days maturing | 18% weight, 89% food | **365 / 540** | Soak; then eat it as it is, or cook it (better hot) |
+| **Hot Smoked fish** | Any month | 1 to 2 days | Smokehouse, Firebox stoked | 4 to 6 hours of fire (a big fish up to 9) | 63% weight, all the food | 7 / 14 | As it is |
 | **Cold Smoked fish** | **October to April** (days of 15 C or less) | 1 to 2 days | Smokehouse, Firebox banked | 2 to 4 weeks, with 1 to 2 days of smoke | 37% weight, 90% food | 120 / 180 | As it is |
 
 **Meat**
@@ -90,10 +90,10 @@ Every road on one page. *Start* is when to begin it in Kentucky's weather; *Yiel
 | You make | Start | In the tub | Then where | Takes | Yield | Keeps | Eat it |
 |---|---|---|---|---|---|---|---|
 | **Charque** (beef, mutton, venison) | **May to September** | Corned, 1 to 2 days | Any drying station in the sun or under an open roof | 1 to 3 weeks | 50% weight, 90% food | 120 / 180 | Soak, then cook |
-| **Hot Smoked meat**; pork becomes **Ham** | Any month | Corned, 1 to 2 days | Smokehouse, Firebox stoked | 6 to 8 hours of fire | 70% weight, all the food | 7 / 14 (Ham 5 / 10) | As it is |
+| **Hot Smoked meat**; pork becomes **Ham** | Any month | Corned, 1 to 2 days | Smokehouse, Firebox stoked | 6 to 7½ hours of fire | 70% weight, all the food | 7 / 14 (Ham 5 / 10) | As it is |
 | **Dry cured cuts**: Bresaola, Suho Meso and their kin | **October to April** | Country Cured, 10 days | Smokehouse, any station under a roof, or a Frame or Beam in a room or basement | 3 to 12 weeks | 50% weight, 90% food | 120 / 180 | As it is |
 | **Country Ham** (a Leg of Pork) | **October to March** | Country Cured, 21 days | The same | 6 weeks to 5 months | 50% weight, 90% food | **180 / 365** | As it is |
-| **Potted Meat** (any cut, pork too) | Any month; whenever you butcher | None | A pot, a fire, a clay jar | 2 hours | The meat and its fat | 14 to 120, by where it's kept | As it is |
+| **Potted Meat** (any cut, pork too) | Any month; whenever you butcher | None | A pot, a fire, a clay jar | 2 hours | The meat and its fat | 17 to 120, by where it's kept | As it is |
 | **Lard, Tallow** | Whenever you butcher | None | A pot, or the Hearth's copper | 1 hour | 2 pieces of fat a block | Don't spoil | For cooking and potting |
 
 **What each road costs**
@@ -213,7 +213,7 @@ The clock runs while you're away. The tub stays closed until you've taken every 
 - **Mind a warm spell.** When the last ten days average above 20 C, the flesh by the spine starts to spoil (bone taint) before the salt reaches it, and the finished batch keeps less long: about a seventh off for a day at 21 C, over a third for two days at 25 C. Hover the batch to see it (*Spoiling (Warm cure)*). Salt in spring and autumn, or cure small fish. **A tub in a room minds the room**: 22 C while the power grid is on, so in the first weeks a batch indoors loses about a third of its keeping on a two-day press and a long cure rots. Put the tub under an open roof, in an outbuilding or in a basement. **The long cure wants the cold**: its salt takes weeks to reach the bone, so it is safe only while the last ten days average **10 C or less**, about **October to April**. Warmer, it spoils in step: at 12 C a leg loses two fifths of its keeping and cuts a fifth; at 15 C a leg rots in the tub and cuts lose half. The short cure and fish only mind 20 C.
 - **Salt Cured** fish, **Corned** and **Country Cured** meat keep 7 / 14 days and are raw: cook them before eating, or hang them.
 
-> *Corned* is the old word for dry-salted with coarse grains of salt, "corns": corned beef was a short cure, boiled with cabbage, long before it came in tins. *Country cured* is what Kentucky still calls a ham rubbed in dry salt and left in the box: "a day and a half to the pound", hogs killed after the first hard frost so the meat cools before the salt reaches the bone.
+> *Old names:* *corned* is the old word for dry-salted with coarse grains of salt, "corns": corned beef was a short cure, boiled with cabbage, long before it came in tins. *Country cured* is what Kentucky still calls a ham rubbed in dry salt and left in the box: "a day and a half to the pound", hogs killed after the first hard frost so the meat cools before the salt reaches the bone.
 
 ### Optional: rinse off the salt
 
@@ -221,7 +221,7 @@ Right-click Salt Cured fish or Corned or Country Cured meat and open its submenu
 
 Rinsed, whatever it becomes is **less salty** (a third less thirst; Salt Dried fish also loses its sharp tang) and keeps **a tenth less long**. Skip it and nothing changes.
 
-> *On the Volga, vobla makers soak the cured fish about an hour for each day it spent in salt before hanging it in the shade. The charqueadas of Brazil washed every sheet of beef before it went out in the sun.*
+> *Old names:* on the Volga, vobla makers soak the cured fish about an hour for each day it spent in salt before hanging it in the shade. The charqueadas of Brazil washed every sheet of beef before it went out in the sun.
 
 ---
 
@@ -247,7 +247,7 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 **Where it hangs** (the stack's *Place*):
 - **Open air**: no roof overhead. Walls with no roof are still the open air. Rain pauses drying until the wet has dried off.
 - **Under an open roof**: a porch, an open shed, a floor laid on the level above. Rain never reaches it, and it's **in the shade**: salt fish, charque, dry curing and stockfish go by the **average of the last ten days**, not the afternoon's heat or the night's frost: a warm afternoon in November stops stockfish in the open, not under a roof. A **Salting Tub in the open air** feels the day: afternoons over 20 C warm cure it (May to September), so give it a roof.
-- **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. A room goes by the **average of the last ten days**, and is **22 C while the power grid is on**, as vanilla keeps it: drying runs at summer speed all year, but so does spoiling (see the Salting Tub below). The **Smokehouse** is a shed in the outside air: it goes by **the day's temperature**, plus its fire. Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 11).
+- **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. A room goes by the **average of the last ten days**, and is **22 C while the power grid is on**, as vanilla keeps it: drying runs at summer speed all year, but so does spoiling (chapter 5). The **Smokehouse** is a shed in the outside air: it goes by **the day's temperature**, plus its fire. Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 11).
 - **Loft**: the top storey: a room upstairs with no room over it. Indoors, but at the **loft's own temperature**, not the day's: as indoors, plus three tenths of whatever the 10-day average is above 10 C: the sun on the roof (about 24 C in a 21 C July, no warmer than a room from October to April); 22 C while the power grid is on. Salt fish, charque and dry curing there go by it, and so does a Salting Tub: a summer loft is the worst place for a cure in the tub.
 - **Basement**: any level below ground. Indoors, but at the **cellar's own temperature**, not the day's: about 5 C from January to March, 13 C from July to September, a month behind the season. Whatever dries there goes by it, so salt fish crawls (about **27 days** a batch, all year): a cellar is for keeping salt fish, not drying it.
 
@@ -267,7 +267,7 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 4. **Eat it** as it is (very salty, and safe), toss it straight into soup, stew, rice or pasta, or **Soak Fish** (1 L of water, container kept) for a mild fish that cooks like fresh and keeps 2 / 4 days.
 
 - **Hot sun**: above 25 C, salt fish in the open air that is less than half dry takes a little off how long it keeps (the popup says *Too hot in the sun*). A few percent in a Kentucky summer; under an open roof it's spared.
-- **Muggy summers**: salt fish only loses keeping time when the place is over 22 C *and* the air is humid: a few days in a hot July outdoors, if any, but a **July loft** (about 24 C under the roof) for weeks: a batch dried there loses about two thirds of its keeping. A cellar never. Dry cured meat doesn't mind: hams were aged through the summer heat.
+- **Muggy summers**: salt fish only loses keeping time in a warm, damp spell: when the air has been humid for days *and* the place is over 22 C. In the open air, under an open roof and in the Smokehouse that goes by the **average of the last ten days**, so a hot afternoon alone does nothing: a few days in a hot July, if any. A room, a loft and a basement go by their own temperature: a **July loft** (about 24 C under the roof) is muggy for weeks, and a batch dried there loses about two thirds of its keeping; a cellar never is. Dry cured meat doesn't mind: hams were aged through the summer heat.
 
 > **Warning:** Packed and cured fish are **not** safe uncooked. Drying is what makes salt fish safe.
 
@@ -302,9 +302,9 @@ Charque is the summer road for red meat: salted and cured in the tub like fish, 
 
 From November to February it barely dries at all: that's the season for stockfish, Potted Meat and dry curing.
 
-> **Margin note:** why no pork charque? Its fat goes rancid in sun and wind, so pork has always been salted and then kept cool, smoked or put down in lard. Corned pork goes to the Smokehouse for a hot cook (chapter 10), Country Cured pork hangs in the shade (chapter 11), and Potted Meat takes it any day.
+> *Margin note:* why no pork charque? Its fat goes rancid in sun and wind, so pork has always been salted and then kept cool, smoked or put down in lard. Corned pork goes to the Smokehouse for a hot cook (chapter 10), Country Cured pork hangs in the shade (chapter 11), and Potted Meat takes it any day.
 
-> **Old names:** in the *charqueadas* of southern Brazil a quarter of beef was opened into thick sheets, *mantas*, salted in brine and then in piles for a few days, washed, and laid out on rails in the sun for four to six days, piled and covered each night. It was never eaten off the rail: cooks soaked it overnight in two or three changes of water first. The word comes from the Andes, where *ch'arki* was llama and alpaca.
+> *Old names:* in the *charqueadas* of southern Brazil a quarter of beef was opened into thick sheets, *mantas*, salted in brine and then in piles for a few days, washed, and laid out on rails in the sun for four to six days, piled and covered each night. It was never eaten off the rail: cooks soaked it overnight in two or three changes of water first. The word comes from the Andes, where *ch'arki* was llama and alpaca.
 
 ---
 
@@ -361,7 +361,7 @@ The **Firebox** comes from *Traditional Preservation (Core)* (Masonry 2: 8 Clay 
 | **With a Clay Pipe** | 2 Clay Pipe Segments, 1 Clay | Mason's Trowel | 2 Clay Pipe Segments |
 | **With a Stone Trench** | 3 Flat Stones, 2 Clay | Shovel, Spade or Entrenching Tool | 3 Flat Stones |
 
-- **Connect the Firebox** is on the Firebox's own menu and on the shed's right-click. No skill; about half an hour of work and a little Masonry experience. The clay is lost when you take the flue up.
+- **Connect the Firebox** is on the Firebox's own menu and on the shed's right-click. No skill; about half an hour of work and a little Masonry experience. **Disconnect the Firebox** wants the same tool again, and the clay is lost when you take the flue up.
 - **Where it may stand:** beside either long side of the shed, or behind its back end. Not at the door end, and **not with the Firebox's own door towards the shed**: its flue leaves from its back or a flank.
 - **One Firebox to a shed**, and the fire must be **out** (not lit, not banked) to connect or disconnect.
 - **Joined, neither moves** until you **Disconnect the Firebox**.
@@ -372,14 +372,15 @@ The **Firebox** comes from *Traditional Preservation (Core)* (Masonry 2: 8 Clay 
 Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank the Fire** (Core) rakes it down to a smoulder, **Stoke the Fire** brings it back up.
 
 - Every salt stack in the shed counts the **stoked hours in a row**. When a stack has enough, it **finishes at once** as **Hot Smoked Fish** or **Hot Smoked** meat (*Beef (Hot Smoked)*); **pork comes out as a Ham**, the game's own, with the cut's weight and food, so **Slice Ham** and every ham dish take it. And a **smoked ham hangs by the shed's door** until you take it out.
-- **How long** goes by the **heaviest piece** in the stack:
+- **How long** goes by the **heaviest piece** in the stack, as it weighs now, cured (the popup shows the stack's own figure):
 
 | Stack | Stoked hours in a row |
 |---|---|
 | Salt Cured fish, all up to 1.1 weight | **4** |
-| Salt Cured fish of 2.2 weight or more | **6** (in between by weight) |
-| Steaks and Mutton Chops (0.3) | **6** |
-| Any Beef, Venison or Pork (0.5) | **8** |
+| A Salt Cured fish of 2.2 weight | **6** (in between by weight) |
+| A bigger fish still | 2 more for each 1.1 weight: about **8** for a walleye caught at 4 weight, **9** for the biggest that goes in whole |
+| Steaks and Mutton Chops | about **6** |
+| Any Beef, Venison or Pork | about **7½** |
 | A stack with a **Leg of Pork** in it | **never**: a leg takes no hot cook, its stoked hours are smoke |
 
 - **Watch the stack.** While the run is counting, the stack's yellow bar follows the cook and a small **Hot Smoked icon** sits in its bottom left corner, where a salt stack shows its salt. A full bar is a finished cook. If the run breaks, the icon goes and the bar drops back to how far the stack has dried.
@@ -398,11 +399,11 @@ Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank 
 | Eat it | **As it is**: cooked, a little salty, a small mood lift | **As it is**: cooked, a little salty, a small mood lift |
 | Cook with it | Soups, stews, rice, pasta, sandwiches, salads | Soups, stews, pies, rice, pasta, sandwiches, salads, tacos, burritos |
 
-> **Margin note:** a hot smoked fish is cooked through: it has to reach about 63 C inside and stay there, in one run. That's why the hours must come in a row. Stoke an hour a day for a week and you get smoke on a drying fish, not a cooked one.
+> *Margin note:* a hot smoked fish is cooked through: it has to reach about 63 C inside and stay there, in one run. That's why the hours must come in a row. Stoke an hour a day for a week and you get smoke on a drying fish, not a cooked one.
 
-> **Old names:** the Volga sells its fish three ways from the smokehouse: *goryachego kopcheniya*, hot smoked, golden and soft and eaten within days; *kholodnogo kopcheniya*, cold smoked over days and keeping for months; and *kopchyono-vyalenaya*, smoked a while and then air-dried, which is what a broken run gives you here. Every Kentucky farm had its smokehouse, hickory smoke and a ham hanging by the door, and the low firebox outside the wall is how many a Bosnian *pušnica* is fed: the fire stays outside where it can be tended, and only its smoke goes in.
+> *Old names:* the Volga sells its fish three ways from the smokehouse: *goryachego kopcheniya*, hot smoked, golden and soft and eaten within days; *kholodnogo kopcheniya*, cold smoked over days and keeping for months; and *kopchyono-vyalenaya*, smoked a while and then air-dried, which is what a broken run gives you here. Every Kentucky farm had its smokehouse, hickory smoke and a ham hanging by the door, and the low firebox outside the wall is how many a Bosnian *pušnica* is fed: the fire stays outside where it can be tended, and only its smoke goes in.
 
-> **Margin note:** why may nothing stand in front of a door? The same rule holds for the Hearth's open mouth and the Firebox's door: you have to be able to reach the fire and the hooks.
+> *Margin note:* why may nothing stand in front of a door? The same rule holds for the Hearth's open mouth and the Firebox's door: you have to be able to reach the fire and the hooks.
 
 ### Cold smoking
 
@@ -428,7 +429,8 @@ Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank 
 | 2 C | 27 days | 17 days | 12 days |
 | 5 C and up | 27 days | 12 days | 12 days |
 
-> *Days as if the fire burned every hour; a few hours a day lands between the two columns.*
+> *Margin note:* days as if the fire burned every hour; a few hours a day lands between the two columns.
+
 - The popup's **Smoke** line reads *x of y h of smoke*. Over 15 C it says **Too warm to count**.
 
 | | Cold Smoked Fish |
@@ -441,9 +443,9 @@ Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank 
 
 **Meat in the smoke** takes the same fire and the same count, but it hangs for weeks, not days, and it has a chapter of its own: **Dry Cured Meat and Country Ham**, next.
 
-> **Margin note:** cold smoke never cooks. The meat stays under about 30 C, so the smoke only flavours and guards the surface while the air does the drying, a few hours of smoke a day over weeks. That's why it belongs to the cool months, why the hours needn't come in a row, and why it keeps for months where hot smoked keeps for days.
+> *Margin note:* cold smoke never cooks. The meat stays under about 30 C, so the smoke only flavours and guards the surface while the air does the drying, a few hours of smoke a day over weeks. That's why it belongs to the cool months, why the hours needn't come in a row, and why it keeps for months where hot smoked keeps for days.
 
-> **Old names:** across the Balkans, beef, mutton and pork loin are salted, then hung in the *pušnica* over a smouldering fire through the winter: *suho meso* in Bosnia, *suva pečenica* in Serbia; Spain's *cecina de León* is beef smoked over oak the same way. Scotland and Wales salted and smoked a leg of mutton as a *mutton ham*, and Norway air-dries one as *fenalår*. On the American frontier a deer was cut in strips, salted and dried over a slow smoky fire: *jerked venison*, a word settlers learned from the Quechua *ch'arki* by way of Spanish, the same root as charque. On the Volga the same treatment makes *balyk* from sturgeon backs and *kholodnogo kopcheniya* fish.
+> *Old names:* across the Balkans, beef, mutton and pork loin are salted, then hung in the *pušnica* over a smouldering fire through the winter: *suho meso* in Bosnia, *suva pečenica* in Serbia; Spain's *cecina de León* is beef smoked over oak the same way. Scotland and Wales salted and smoked a leg of mutton as a *mutton ham*, and Norway air-dries one as *fenalår*. On the American frontier a deer was cut in strips, salted and dried over a slow smoky fire: *jerked venison*, a word settlers learned from the Quechua *ch'arki* by way of Spanish, the same root as charque. On the Volga the same treatment makes *balyk* from sturgeon backs and *kholodnogo kopcheniya* fish.
 
 ---
 
@@ -500,7 +502,7 @@ A Frame or Beam in a **basement** goes by the cellar's own temperature, which ru
 | June to October | 4½ to 5 weeks | 9 to 11 weeks |
 | November | 6 to 7 weeks | 16 to 18 weeks |
 
-> *A leg takes about twice as long as a cut. With a fire a few hours a day, a cut hung in the Smokehouse in December is done in about seven weeks and a leg in about three months; hung in March, a cut takes five weeks.*
+> *Margin note:* a leg takes about twice as long as a cut. With a fire a few hours a day, a cut hung in the Smokehouse in December is done in about seven weeks and a leg in about three months; hung in March, a cut takes five weeks.
 
 - **The basement is the curing cellar:** the weather never reaches it, only the season, a month late. It is slow in midwinter (the cold that keeps the cure safe slows the drying too) and at its best from June to October, and in frost it still beats an unheated shed. The Gantry can't be built there.
 - **The cellar is cool for the salt, too.** A Salting Tub in a basement goes by the cellar's temperature: fish and Corned meat never take a warm cure there, and a long cure loses far less than upstairs (a leg started in May about 4%, where upstairs it rots). It is still no summer cure: from June to September a leg in the cellar loses a third to two thirds of its keeping, and the cellar is still warm in October (about 18%). Salt from November to May.
@@ -512,7 +514,7 @@ A Frame or Beam in a **basement** goes by the cellar's own temperature, which ru
 - **Use the long cure.** *Country Cured* meat has salt for the whole hang. **Corned** meat hasn't: hung in the Smokehouse, a room or a basement it dry cures too, but its popup shows a red **Under-salted** line and it spoils by the temperature where it hangs, a fire's warmth included. Near freezing it comes out about half way through its keeping; at 10 C it rots in four weeks, in a summer basement (13 C) in two and a half, and a banked fire makes the shed 15 C warmer than the day.
 - **Corned meat has two good roads:** a hot cook in the Smokehouse (chapter 10), or the sun (chapter 8). Corned pork has only the first.
 - **A rotted stack comes down as what you hung:** *Corned Beef (Rotten)*, not Bresaola. In a mixed stack only the Corned pieces rot.
-- **You can see rot from across the yard** (0.4.21): a stack that is lost turns grey-green, mottled and mouldy on the Frame, Beam or Gantry, one look each for salt fish, cold dried fish and meat. A mixed stack whose Corned share rotted keeps its drying look while the Country Cured pieces dry on; once it is done, it shows rotten if any piece in it rotted. Sort it as you take it down.
+- **You can see rot from across the yard**: a stack that is lost turns grey-green, mottled and mouldy on the Frame, Beam or Gantry, one look each for salt fish, cold dried fish and meat. A mixed stack whose Corned share rotted keeps its drying look while the Country Cured pieces dry on; once it is done, it shows rotten if any piece in it rotted. Sort it as you take it down.
 
 **Ageing**
 
@@ -553,11 +555,11 @@ On any surface, with a sharp knife or cleaver, as the base game's Slice Ham:
 - **A cut face keeps half as long.** Dry cured slices **60 / 90 days**, Country Ham slices **90 / 180**, Hot Smoked slices **3 / 7**; a slice starts as far through its days as the piece was through its own.
 - **So carve what you need.** A whole ham gives **three carvings, 15 slices**, and what stays on the bone keeps its own long clock and goes on ageing.
 
-> *A ham hung in the Smokehouse in December, dried by March and left on its hook is Aged by late May. Taken down in March and put on a shelf, by mid June.*
+> *Margin note:* a ham hung in the Smokehouse in December, dried by March and left on its hook is Aged by late May. Taken down in March and put on a shelf, by mid June.
 
-> **Margin note:** why does the cure want the cold when the hang doesn't? Salt takes weeks to reach the middle of a joint, and until it does the meat by the bone is as raw as the day it was cut. That is why every farm killed its hogs after the first hard frost. Once the salt is through, a ham hangs happily into summer: Kentucky calls it the "summer sweat", and it is where the flavour comes from.
+> *Margin note:* why does the cure want the cold when the hang doesn't? Salt takes weeks to reach the middle of a joint, and until it does the meat by the bone is as raw as the day it was cut. That is why every farm killed its hogs after the first hard frost. Once the salt is through, a ham hangs happily into summer: Kentucky calls it the "summer sweat", and it is where the flavour comes from.
 
-> **Old names:** the Italian *cantina* and the Alpine cellar are where *bresaola*, *coppa* and *lonza* hang: cool, still and a little damp, so the outside doesn't harden before the middle has dried. Bresaola is beef salted and hung in mountain air with no smoke at all, and Kentucky hung its country hams smoked or plain, as the family liked them. A country ham was sold young at three months and prized at a year, when the knife squeaked on it; Spain hangs its *jamón* on a stand and carves it a plateful at a time for the same reason this guide does: the cut face is the part that goes.
+> *Old names:* the Italian *cantina* and the Alpine cellar are where *bresaola*, *coppa* and *lonza* hang: cool, still and a little damp, so the outside doesn't harden before the middle has dried. Bresaola is beef salted and hung in mountain air with no smoke at all, and Kentucky hung its country hams smoked or plain, as the family liked them. A country ham was sold young at three months and prized at a year, when the knife squeaked on it; Spain hangs its *jamón* on a stand and carves it a plateful at a time for the same reason this guide does: the cut face is the part that goes.
 
 ---
 
@@ -572,7 +574,7 @@ On any surface, with a sharp knife or cleaver, as the base game's Slice Ham:
 
 | Strains fat | Notes |
 |---|---|
-| Cheese Cloth, Dish Towel, Rag, Sheet | Clean and dry |
+| Cheese Cloth, Dish Towel, Ripped Sheets, Sheet | Kept, like the pot |
 | Strainer | The kitchen kind |
 
 Melted fat is a liquid like any other: pour several pots into a bucket and strain it later. It does not spoil.
@@ -582,19 +584,19 @@ Melted fat is a liquid like any other: pour several pots into a bucket and strai
 | Pork Fat, Beef Suet, Mutton Fat | 2 / 4 days | Raw, it will make you sick. Fry a piece if you must |
 | Lard | does not spoil | The base game's own Lard |
 | Tallow | does not spoil | Bakes and seasons wherever Lard does |
-| Cracklings | 7 / 14 days | A crisp snack; goes in salads, soups, stews and sandwiches |
+| Cracklings | 7 / 14 days | A crisp snack; goes in salads, soups, stews, stir fries and sandwiches |
 
-> **Don't walk away.** Left on the heat for two and a half hours the fat burns. A burnt pot gives nothing: **Scrape Out Burnt Fat** gets you the pot back.
+> **Warning:** don't walk away. Left on the heat for two and a half hours the fat burns. A burnt pot gives nothing: **Scrape Out Burnt Fat** gets you the pot back.
 
-> **Margin note:** a pig on the hook gives 2 or 3 blocks of Lard, about as many calories as its meat. That is close to a real lard pig, and the reason the old breeds were kept.
+> *Margin note:* a pig on the hook gives 2 or 3 blocks of Lard, about as many calories as its meat. That is close to a real lard pig, and the reason the old breeds were kept.
 
 **A whole pig at once: the Hearth's copper**
 
 A pot takes two pieces. The copper of a **Hearth** (TP Core) takes the lot.
 
-1. Right-click the Hearth: **Put Fat in the Copper**. Every piece of that kind you carry goes in. Pork fat on its own; suet and mutton fat together.
+1. Right-click the Hearth: **Put Fat in the Copper**. Every piece of that kind on you or in reach goes in, rotten ones left out. Pork fat on its own; suet and mutton fat together.
 2. **Light the fire.** Once the copper steams (85 C), the fat needs **one hour** to melt. A banked fire is too cool.
-3. **Fill from Copper** into a pot, a bucket or jars: you now carry **Lard (Melted)** or **Tallow (Melted)**.
+3. **Fill from the Copper** into a pot, a bucket or jars: you now carry **Lard (Melted)** or **Tallow (Melted)**.
 4. **Strain** it: each half litre gives one block and one Cracklings.
 
 | | Pot | Copper |
@@ -606,9 +608,9 @@ A pot takes two pieces. The copper of a **Hearth** (TP Core) takes the lot.
 
 Raw fat left in a cold copper goes **rancid** when its oldest piece would have rotted, and is only good for **Empty the Copper**. Melted fat keeps, in the copper or out of it.
 
-> **Margin note:** the kettle in the yard on hog-killing day had a little water in the bottom, so the fat melted before it could scorch. That is why the copper never burns it. Straining is what makes lard keep: fat with scraps of meat left in it turns rancid in weeks.
+> *Margin note:* the kettle in the yard on hog-killing day had a little water in the bottom, so the fat melted before it could scorch. That is why the copper never burns it. Straining is what makes lard keep: fat with scraps of meat left in it turns rancid in weeks.
 
-> **Old names:** Balkan cooks call cracklings *čvarci* and make them every winter at the pig slaughter. In Britain, tallow lit the house and suet went into the pudding.
+> *Old names:* Balkan cooks call cracklings *čvarci* and make them every winter at the pig slaughter. In Britain, tallow lit the house and suet went into the pudding.
 
 ---
 
@@ -638,17 +640,17 @@ Potted Meat is the road for any season and any red meat, pork too: cuts cooked s
 |---|---|---|
 | Powered fridge, or 4 C and colder outdoors | **120 days** | 180 days |
 | Basement (about 5 C from January to March, 13 C from July to September) | **110 to 64 days** | 165 to 96 days |
-| A room, by the season | **120 to 14 days** | 180 to 21 days |
+| A room, by the season | **120 to 17 days** (14 at 25 C and over) | 180 to 25 days (21) |
 | A room while the grid is on (22 C) | **18 days** | 27 days |
 | Powered freezer | stops | stops |
 
-A pantry, kitchen or shed is unheated once the power's gone: it follows the average of the last ten days outdoors, on any floor. While the grid is on, a room is 22 C, as vanilla keeps it. A winter pantry keeps it like a fridge, a spring or autumn one about two months, a July one barely two weeks. **The first portion you take** lets air under the fat: a third of the time the crock has left goes at once, only that once. Open it when you mean to eat it out.
+A pantry, kitchen or shed is unheated once the power's gone: it follows the average of the last ten days outdoors, on any floor. While the grid is on, a room is 22 C, as vanilla keeps it. A winter pantry keeps it like a fridge, a spring or autumn one about two months, a July one under three weeks. **The first portion you take** lets air under the fat: a third of the time the crock has left goes at once, only that once. Open it when you mean to eat it out.
 
 **The fat counts.** A Lard that has been used in cooking only gives what is left of it: a tenth of a block covers one cut with a tenth of the fat, and the next cut gets none.
 
-> **Margin note:** keep it cold. Farmhouses kept their crocks in cellars through the winter, for months. Modern food safety is stricter: meat sealed under fat is a cold-storage food, kept below about 4 C for no more than three months, under at least a finger's width of fat. Warm, it is a botulism risk, whatever the seal looks like.
+> *Margin note:* keep it cold. Farmhouses kept their crocks in cellars through the winter, for months. Modern food safety is stricter: meat sealed under fat is a cold-storage food, kept below about 4 C for no more than three months, under at least a finger's width of fat. Warm, it is a botulism risk, whatever the seal looks like.
 
-> **Old names:** Turkish *kavurma* and Central Asian *qovurma* are mutton or beef fried slowly in its own fat until the water is gone, packed into clay pots and sealed. French *confit* means "preserved"; the year's duck and goose were kept under their fat in glazed *pots à confit*. In the Balkans it is *meso u masti*, "meat in fat": pork in its own lard, put down after the autumn pig-killing.
+> *Old names:* Turkish *kavurma* and Central Asian *qovurma* are mutton or beef fried slowly in its own fat until the water is gone, packed into clay pots and sealed. French *confit* means "preserved"; the year's duck and goose were kept under their fat in glazed *pots à confit*. In the Balkans it is *meso u masti*, "meat in fat": pork in its own lard, put down after the autumn pig-killing.
 
 ---
 
@@ -869,7 +871,7 @@ The farm's year turns on two slaughters.
 - **Winter: every fish is stockfish.** The bite is halved, so nothing is wasted: gut it and hang it the same day, no salt, no tub. A frame's 20 weight comes down in seven or eight weeks as 3.6 weight of stockfish, about 7,000 calories, and it keeps a year.
 - **A winter deer is dry cured.** Country cure it for ten days, then hang it under the lean-to: twelve weeks in the frosts, five to seven from March. That's **Dry Cured Venison**, eaten as it is. With a Smokehouse and a Firebox (Carpentry 3, Masonry 2) it's **Jerked Venison** in about seven weeks.
 - **No fat, no crocks.** Deer give no fat, so Potted Meat needs Lard you've found. A wild boar or a raided pig farm changes that.
-- **Hot smoke for the trail's first week**, if you have the shed: four hours of fire for fish.
+- **Hot smoke for the trail's first week**, if you have the shed: four hours of fire for small fish.
 
 **What to carry**
 
@@ -955,7 +957,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 - **Hot smoke what you'll eat this week**, and salt-dry the rest. A small batch of fish cooks in four hours of fire.
 - **In winter, bank the Smokehouse a few hours a day.** A banked Firebox burns a third of the wood; fish has its smoke in under a week and meat in a week or two, and both dry faster for the warmth.
 - **Rehydrate only what you'll cook today.** Soaked fish and soaked charque keep 2 days.
-- With the **Salt mod**, a salt lick keeps you packing forever. See the Collection Guide.
+- With the **Salt mod**, a salt lick keeps you packing forever. See the Collection Guide (number 0).
 
 ---
 
@@ -973,7 +975,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | A station refuses a fish or cut | It takes only Salt Cured fish or meat, or Gutted Fish and halves. Raw, rotten, frozen salted and cooked pieces are refused, and a frame stack holds 2.5 weight at most. A Hanging Beam stack holds 12 pieces and a Gantry stack 6, fish or meat: they are for bigger pieces, not more of them |
 | A station refuses meat (or fish) | The stack waiting to start is the other kind: one stack is one kind. Craft it first, then load the next |
 | Station indoors refuses gutted fish | It has no moving air. Cold drying needs the open or an open roof |
-| Not drying | Rain on an open station (cold fish too, until it dries off); a stockfish stack hung indoors before 0.4.7; or charque at or below freezing |
+| Not drying | Rain on an open station (cold fish too, until it dries off); a stockfish stack hung indoors in a save from an older version of the mod; or charque at or below freezing |
 | Cold stack came out rotten | It was hung in a warm season: the last 10 days averaged above 10 C |
 | Stockfish keeps less than a year | Hard frost or rain caught it in its first days on the frame |
 | Charque lost progress | It was rained on, on an open station: a tenth for every 6 hours of rain |
@@ -1033,7 +1035,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Command | What it does |
 |---|---|
 | `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, the basement's temperature and its drying and tub rates, humidity, wetness, the wind, the drying speeds, whether unsalted and salted fish are spoiling, and the running totals |
-| `TPFM.here()` | Which place you're standing in, as a station there would read it: Open, Covered (a roof, no room), Sheltered (a room) or Basement. |
+| `TPFM.here()` | Which place you're standing in, as a station there would read it: Open, Covered (a roof, no room), Sheltered (a room), Loft or Basement |
 | `TPFM.wind()` | Starts a log of the live wind every 10 minutes; run it again to print it beside the forecast |
 | `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one, `TPFM.age(120)` a charque one |
 | `TPFM.rain(hours)` | Adds hours of rain (default 6) and wets the open stations: an open charque stack loses a tenth per 6 hours. Then `TPFM.dry()` |
@@ -1042,6 +1044,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | `TPFM.frost(hours)` | Adds hours of hard frost (72 hours take a tenth of a fresh cold stack's keeping) |
 | `TPFM.heat(hours)` | Adds hours of hot sun (24 hours take a twentieth of a fresh open salt stack's keeping) |
 | `TPFM.warmCure(hours)` | Adds hours of a warm cure at 25 C, to test a warm cure spoiling a running tub (24 hours take about a fifth) |
+| `TPFM.longCure(hours)` | Adds hours of a 15 C season (default 168) to a running Country Cure, which wants 10 C or less (a leg's cure rots after 504) |
 | `TPFM.mature(days)` | Ages the stockfish and the dry cured meat you carry by this many days. Stockfish is Matured after 60, a cut Aged after 30, a Country Ham after 90 |
 | `TPFM.food()` | The cured fish and meat you carry, with the numbers the game rounds or hides: hunger, unhappiness, boredom, thirst, weight, age against its days, ageing |
 
@@ -1067,6 +1070,8 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | `TPFM.smoke()` | The joined Firebox's fire record (stoked, banked, the run now going) and each stack's heaviest piece, hot hours and smoke against Cold Smoked's need |
 | `TPFM.stoke(hours)` | Adds stoked hours to the run now going in those joined Fireboxes (stoke it first) |
 | `TPFM.bank(hours)` | Adds banked hours (default 6) to those joined Fireboxes: smoke for Cold Smoked, if today is 15 C or less |
+| `TPFM.addSmoke(hours)` | Adds hours of smoke (default 60) straight to every stack in the Smokehouses within 3 tiles, whatever the weather or the fire |
+| `TPFM.underSalt(hours)` | Adds hours of a 10 C shed (default 168) for Corned meat hanging in a Smokehouse, a room or under a roof; it rots after 672 |
 
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.
 
@@ -1078,3 +1083,13 @@ The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't s
 - **Cold smoking:** in a cool month, the same Smokehouse and Firebox, hang `TPFM.fish("Walleye", 3, "cured")`, bank the Firebox, `TPFM.bank(50)`, then `TPFM.age(288)`: Cold Smoked Fish.
 - **Dry curing:** hang `TPFM.meat("all", 1, "country")` (Country Cured, with a leg) in the Smokehouse. `TPFM.age(1008)` with no fire: Bresaola, the Dry Cured meats and a Country Ham. With `TPFM.addSmoke(130)` first (or `TPFM.bank(130)` on a day of 15 C or less): Suho Meso, Mutton Ham, Jerked Venison, Smoked Dry Cured Pork and a Smoked Country Ham. Hang `TPFM.meat("all", 1, "corned")` (Corned) and `TPFM.age(520)`: it comes down Corned and rotten, as it would after three weeks in a 12 C shed (`TPFM.underSalt(hours)` adds the spoiling alone). `TPFM.smoke()` lists each stack's hours.
 - **Heads:** `TPFM.fish("Walleye", 1, 4)` and `TPFM.fish("Bluegill", 1, 0.9)`, then Gut Fish on both. Only the walleye gives a head.
+
+---
+
+## Credits
+
+**Design and code:** alienPaco
+
+**Made for:** Project Zomboid, Build 42. Singleplayer.
+
+*Traditional Preservation is a fan-made modification. It is not made or endorsed by The Indie Stone.*

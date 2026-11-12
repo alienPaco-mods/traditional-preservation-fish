@@ -7,6 +7,7 @@ local Weather = require "TraditionalPreservationCore/Weather"
 local Tiles = require "TraditionalPreservationFishMeat/Tiles"
 local Doors = require "TraditionalPreservationCore/Doors"
 local Hearth = require "TraditionalPreservationCore/Hearth"
+local Station = require "TraditionalPreservationCore/Station"
 
 F.MOD_DATA_KEY = "TraditionalPreservationFishMeat"
 
@@ -1733,22 +1734,9 @@ end
 
 -- The nearest sink, bathtub, barrel or well of clean water within RINSE_REACH on the character's floor with at least litres.
 function F.findWaterSource(character, litres)
-    local cell, px, py, z = getCell(), math.floor(character:getX()), math.floor(character:getY()), math.floor(character:getZ())
-    local best, bestDistance
-    for x = px - F.RINSE_REACH, px + F.RINSE_REACH do
-        for y = py - F.RINSE_REACH, py + F.RINSE_REACH do
-            local square = cell:getGridSquare(x, y, z)
-            local objects = square and square:getObjects()
-            for i = 0, objects and objects:size() - 1 or -1 do
-                local object = objects:get(i)
-                if object:hasWater() and not object:isTaintedWater() and object:getFluidAmount() >= litres then
-                    local distance = (x - px) ^ 2 + (y - py) ^ 2
-                    if not best or distance < bestDistance then best, bestDistance = object, distance end
-                end
-            end
-        end
-    end
-    return best
+    return Station.nearAt(math.floor(character:getX()), math.floor(character:getY()), math.floor(character:getZ()), F.RINSE_REACH, function(object)
+        return object:hasWater() and not object:isTaintedWater() and object:getFluidAmount() >= litres
+    end)[1]
 end
 
 -- How far a stockfish has matured, 0 to 1, by the days on its own food clock since it came off the frame.

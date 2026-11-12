@@ -8,6 +8,8 @@ TraditionalPreservationFishMeat = TraditionalPreservationFishMeat or {}
 local F = TraditionalPreservationFishMeat
 local Weather = require "TraditionalPreservationCore/Weather"
 local FluidAgeing = require "TraditionalPreservationCore/FluidAgeing"
+local Portions = require "TraditionalPreservationCore/Portions"
+local Recipes = require "TraditionalPreservationCore/Recipes"
 
 -- Pork joins the Salting Tub's cuts here: kept under fat and out of the sun, its own fat doesn't go rancid.
 F.POTTED_CUTS = {
@@ -50,15 +52,6 @@ local function addFood(total, food)
     for key, value in pairs(food) do total[key] = (total[key] or 0) + value end
 end
 
--- Sets a food item's values to portions of one portion's food p; full is the portions it was made with.
-local function setPortions(food, portions, full, p)
-    food:setHungChange(p.hunger * portions)
-    food:setBaseHunger(p.hunger * full)
-    food:setCalories(p.calories * portions)
-    food:setCarbohydrates(p.carbohydrates * portions)
-    food:setLipids(p.lipids * portions)
-    food:setProteins(p.proteins * portions)
-end
 
 -- A pot of meat in fat keeps its batch in modData tpfmPotted: { portions = cuts in, food = all of it, weight = all of
 -- it, fat = a full block's food, blocks = blocks of fat still free }. Each cut takes its own food and a quarter
@@ -95,23 +88,13 @@ end
 -- The pot takes the batch's food (it can't be eaten, but its food shows what the crock will hold).
 local function setPot(pot, batch)
     pot:getModData().tpfmPotted = batch
-    setPortions(pot, batch.portions, batch.portions, (F.pottedPortion(batch)))
+    Portions.set(pot, (F.pottedPortion(batch)), batch.portions, batch.portions)
 end
 
-local function consumed(craftRecipeData, set)
-    local used, found = craftRecipeData:getAllConsumedItems(), {}
-    for i = 0, used:size() - 1 do
-        if set[used:get(i):getFullType()] then table.insert(found, used:get(i)) end
-    end
-    return found
-end
+local consumed = Recipes.consumed
 
 local function createdPots(craftRecipeData)
-    local created, pots = craftRecipeData:getAllCreatedItems(), {}
-    for i = 0, created:size() - 1 do
-        if F.MEAT_FAT_POTS[created:get(i):getFullType()] then table.insert(pots, created:get(i)) end
-    end
-    return pots
+    return Recipes.created(craftRecipeData, F.MEAT_FAT_POTS)
 end
 
 -- OnCreate of Put Meat in Lard, Put Meat in Tallow and Put Meat in the Melted Fat: a new batch of one cut.
@@ -157,16 +140,8 @@ end
 -- "Crock of Potted Meat (3 portions)", and the weight of the vessel and what is left in it.
 function F.labelCrock(crock)
     local data = crock:getModData()
-    local left = F.crockPortions(crock)
-    local text = string.format("%.1f", left):gsub("%.0$", "")
-    local base = getItemNameFromFullType(F.CROCK)
-    crock:setName(getText(text == "1" and "IGUI_TraditionalPreservationFishMeat_CrockOnePortion"
-        or "IGUI_TraditionalPreservationFishMeat_CrockPortions", base, text))
-    crock:setCustomName(true)
-    local empty = ScriptManager.instance:getItem(data.tpfmVessel or "Base.ClayJar")
-    crock:setActualWeight((empty and empty:getActualWeight() or 0) + left * (data.tpfmPortionWeight or 0))
-    -- The engine saves only a custom weight; without this a reloaded crock weighs a full one again.
-    crock:setCustomWeight(true)
+    Portions.label(crock, getItemNameFromFullType(F.CROCK), F.crockPortions(crock), data.tpfmVessel or "Base.ClayJar",
+        data.tpfmPortionWeight or 0)
 end
 
 -- A new crock: the pot's batch in the vessel (a full type).
@@ -175,7 +150,7 @@ function F.fillCrock(crock, batch, vessel)
     data.tpfmVessel = vessel
     data.tpfmPortion, data.tpfmPortionWeight = F.pottedPortion(batch)
     crock:setModelIndex(F.POTTED_VESSELS[vessel] or 0)
-    setPortions(crock, batch.portions, batch.portions, data.tpfmPortion)
+    Portions.set(crock, data.tpfmPortion, batch.portions, batch.portions)
     crock:setAge(0)
     F.labelCrock(crock)
 end
@@ -203,13 +178,8 @@ end
 -- After any eat: an emptied crock goes back to its container as its jar or pot; one with meat left is relabelled.
 -- Returns the empty vessel, if any.
 function F.afterCrockUse(crock, container)
-    if container and container:contains(crock) and F.crockPortions(crock) >= F.POTTED_EMPTY then
-        F.labelCrock(crock)
-        return nil
-    end
-    if container and container:contains(crock) then container:DoRemoveItem(crock) end
-    local target = container or crock:getContainer()
-    return target and target:AddItem(crock:getModData().tpfmVessel or "Base.ClayJar")
+    return Portions.used(crock, container, function() return F.crockPortions(crock) >= F.POTTED_EMPTY end,
+        crock:getModData().tpfmVessel or "Base.ClayJar", F.labelCrock)
 end
 
 -- Keeping by place (4c). The crock's script days (60 fresh, 90 to rotten) are a cellar's, so a day at the cellar's
@@ -315,23 +285,13 @@ function F.openCrock(crock)
     crock:setAge(keep.base + keep.record.age / 24)
 end
 
-local function wrapEat(name)
-    local original = ISEatFoodAction[name]
-    ISEatFoodAction[name] = function(self, ...)
-        local crock = self.item and self.item:getFullType() == F.CROCK and self.item
-        local container = crock and crock:getContainer()
-        local before = crock and F.crockPortions(crock)
-        if crock then F.keepCrock(crock) end
-        local result = original(self, ...)
-        if crock and F.crockPortions(crock) < before then F.openCrock(crock) end
-        if crock then F.afterCrockUse(crock, container) end
-        return result
-    end
-end
-
--- complete eats what was asked; serverStop eats the part done when the action is cut short. Outside the game
--- (tests) there is no eat action unless one is stubbed.
-if ISEatFoodAction then
-    wrapEat("complete")
-    wrapEat("serverStop")
-end
+-- Eaten through vanilla's eat action (TP Core's Portions, the one wrap of it, which Dairy's jar uses too): the crock's
+-- keeping is brought up to now first; a first portion taken opens it; then it is relabelled or gives its vessel back.
+Portions.onEat(F.CROCK, function(crock)
+    local before = F.crockPortions(crock)
+    F.keepCrock(crock)
+    return before
+end, function(crock, container, before)
+    if F.crockPortions(crock) < before then F.openCrock(crock) end
+    F.afterCrockUse(crock, container)
+end)

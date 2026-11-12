@@ -1,5 +1,20 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.27
+- **On TP Core's shared modules** (2026-11-12; nothing a player sees): the Crock of Potted Meat's portions, name,
+  weight and empty vessel go through Core's `Portions` (its `onEat` in place of the mod's own wrap of the eat
+  action; the crock's texts are Core's), an OnCreate's items come from Core's `Recipes.created` and
+  `Recipes.consumed`, and Rinse at Sink finds its water with Core's `Station.nearAt`. Save keys are unchanged.
+  In-game steps 10 and 101 of `TESTING_GUIDE.md`.
+- Guide, README and DEVHELP (2026-11-12): checked line by line against the code. Hot smoking's hours go by the
+  heaviest piece as it weighs cured and run on past 2.2 weight (about 8 for a walleye caught at 4, a Steak about
+  6, a Beef about 7½); a muggy spell is read off the last ten days in the open air, under a roof and in the
+  Smokehouse, off the place's own temperature in a room, a loft and a basement; a July pantry keeps a crock about
+  17 days (14 only at 25 C and over); straining asks nothing of the cloth but that it is one; Disconnect wants
+  the tool again; `TPFM.longCure`, `TPFM.addSmoke` and `TPFM.underSalt` are in the lists, and `TPFM.here` names
+  the Loft. One form for margin notes, no version numbers in the player's text, a Credits page.
+
+
 ## 0.4.26
 - **Rooms and roofs go by TP Core's temperature** (2026-11-12, consistency sweep step I; the user's rule, one place,
   one temperature). A room is the season's mean, 22 C while the grid is on; under an open roof the season's mean.
