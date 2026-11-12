@@ -14,7 +14,9 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.heat(hours)` | Adds hours of hot sun (above 25 C). An open salt stack under half dried loses 5% of its keeping per 24 hours, times how wet it still is, at most a quarter. |
 | `TPFM.warmCure(hours)` | Adds hours of a warm cure at 25 C (1.5 x hours to `warmCure`). A batch in the tub loses about 0.8% of its keeping per hour. |
 | `TPFM.dry()` | Clears the wetness, so open and cold frames start drying again at once after rain. |
-| `TPFM.mature(days)` | Ages the stockfish you carry by this many days. Matured after 60. |
+| `TPFM.mature(days)` | Ages the stockfish and the dry-cured meat you carry by this many days. Stockfish is Matured after 60; a dry-cured cut is Aged after 30, a Country Ham after 90. |
+| `TPFM.food()` | Each cured fish or meat item you carry, with the numbers the game's tooltip rounds or hides: hunger, unhappiness, boredom, thirst, weight, age against its fresh / rotten days, and how far it has aged. |
+| `TPFM.dryCured(n)` | Spawns `n` each of the seven cuts dry cured, smoked and young ("Suho Meso", "Mutton Ham", "Smoked Country Ham"), to age and slice. |
 | `TPFM.stockfish(n)` | Spawns n young stockfish, as if fresh off the frame, for the pallet. |
 | `TPFM.pallet()` | Reports the Stockfish Pallet within 3 tiles: its place, how much faster it ripens, its stack (1-3 or none), its stockfish and the ripest one. |
 | `TPFM.fish(name, weight, n)` | Spawns `n` whole fish at that weight, with food scaled to match, e.g. `TPFM.fish("Walleye", 4, 2)`. `TPFM.fish()` lists the names. |

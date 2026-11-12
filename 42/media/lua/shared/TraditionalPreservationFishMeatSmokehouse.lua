@@ -436,6 +436,8 @@ function F.smokedItem(input, modData, fishType, meatType, airDried)
         hot:getModData().style = modData.style
     end
     hot:setAge(hot:getOffAge() * lost)
+    -- Dry-cured meat ages from here (6c).
+    if F.ageDays(hot) then hot:getModData().agedFrom = hot:getAge() end
     return hot
 end
 

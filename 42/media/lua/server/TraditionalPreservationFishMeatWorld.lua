@@ -16,8 +16,9 @@ local TUB_FILLED_SPRITE, TUB_WEIGHTED_SPRITE = Tiles.TUB_FILLED, Tiles.TUB_WEIGH
 local FRAME_SPRITE = Tiles.FRAME
 local STAGE_FRESH = 0
 
--- How many fish, how many stacks, and each stack's style.
-local function countItems(resources, group, io)
+-- How many fish, how many stacks, and each stack's style. Finished dry-cured meat still hanging (hangingSince, the
+-- hour) ages faster as it is counted (F.ageHanging).
+local function countItems(resources, group, io, hangingSince)
     local count, stacks = 0, 0
     local seen, styles = {}, {}
     local items = Station.itemSlots(resources, group, io)
@@ -25,6 +26,7 @@ local function countItems(resources, group, io)
         local stored = items:get(i):getStoredItems()
         count = count + stored:size()
         for j = 0, stored:size() - 1 do
+            if hangingSince then F.ageHanging(stored:get(j), hangingSince) end
             local stackId = tostring(stored:get(j):getModData().stackId)
             if not seen[stackId] then
                 seen[stackId] = true
@@ -147,7 +149,8 @@ local function refresh(station, entry)
     if not uiLogic then return end
 
     local waiting, _, waitingStyles = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
-    local _, finishedStacks, finishedStyles = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output)
+    local _, finishedStacks, finishedStyles = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output,
+        entry.hanger and getGameTime():getWorldAgeHours())
     local batches = readBatches(station, entry, logic, uiLogic, entry.place or Weather.placeOf(station, true))
     entry.busyStacks = finishedStacks + #batches
     entry.show(station, entry, entry.faceIndex, waiting, waitingStyles[1], batches, finishedStyles)

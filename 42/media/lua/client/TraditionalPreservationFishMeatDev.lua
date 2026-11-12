@@ -25,7 +25,9 @@ function TPFM.help()
     say("TPFM.warmCure(hours)       add this many hours of a warm cure at 25 C, to test a warm cure spoiling a running tub")
     say("TPFM.longCure(hours)       add this many hours of a 15 C season (default 168) to a running Country Cure, which wants 10 C or less")
     say("TPFM.dry()                 clear the wetness, so open and cold frames start drying again at once")
-    say("TPFM.mature(days)          age the stockfish you carry by this many days, to test maturing")
+    say("TPFM.mature(days)          age the stockfish and dry-cured meat you carry by this many days, to test maturing and ageing")
+    say("TPFM.food()                the cured fish and meat you carry: hunger, unhappiness, boredom, thirst, age against its days, ageing")
+    say("TPFM.dryCured(n)           spawn n each of the seven cuts dry cured and young (smoked; a Country Ham from the leg), to age and slice")
     say("TPFM.stockfish(n)          spawn n young stockfish (fresh off the frame), for the pallet")
     say("TPFM.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
     say("TPFM.fish(name, weight, n) spawn n whole fish, e.g. TPFM.fish(\"Walleye\", 4, 2). TPFM.fish() lists the names")
@@ -192,6 +194,49 @@ function TPFM.mature(days)
         F.rename(item)
     end
     say(string.format("Aged %d Cold Dried fish by %d days. Ripe after %d.", fish:size(), days, F.MATURE_DAYS))
+    local meat = 0
+    for _, fullType in ipairs({ F.DRY_CURED, F.COUNTRY_HAM }) do
+        local items = getPlayer():getInventory():getAllTypeRecurse(fullType)
+        for i = 0, items:size() - 1 do
+            local item = items:get(i)
+            item:setAge(item:getAge() + days)
+            F.rename(item)
+        end
+        meat = meat + items:size()
+    end
+    say(string.format("Aged %d dry-cured pieces by %d days. A cut is Aged after %d, a Country Ham after %d.", meat, days, F.AGE_CUT_DAYS, F.AGE_HAM_DAYS))
+end
+
+-- The numbers the game's tooltip rounds or hides, for every stage item in the main inventory.
+function TPFM.food()
+    local inventory = getPlayer():getInventory()
+    local count = 0
+    for fullType in pairs(F.STAGES) do
+        local items = inventory:getAllTypeRecurse(fullType)
+        for i = 0, items:size() - 1 do
+            local item = items:get(i)
+            local ageing = F.ageDays(item) and string.format(", aged %.0f%%", F.agedness(item) * 100) or ""
+            say(string.format("%s: hunger %.1f, unhappiness %.1f, boredom %.1f, thirst %.1f, weight %.2f, age %.1f of %d / %d days%s",
+                item:getDisplayName(), item:getHungChange() * 100, item:getUnhappyChange(), item:getBoredomChange(),
+                item:getThirstChange() * 100, item:getActualWeight(), item:getAge(), item:getOffAge(), item:getOffAgeMax(), ageing))
+            count = count + 1
+        end
+    end
+    if count == 0 then say("No cured fish or meat on you.") end
+end
+
+-- Each cut as the Smokehouse gives it after the long cure and its smoke, just dried: "Suho Meso", "Smoked Country Ham".
+function TPFM.dryCured(count)
+    local inventory = getPlayer():getInventory()
+    for _, cut in ipairs(F.MEAT_CUTS) do
+        for _ = 1, count or 1 do
+            local cured = instanceItem(F.CURED_MEAT)
+            cured:getModData().longCure = true
+            F.carry(instanceItem(cut), cured)
+            inventory:AddItem(F.smokedItem(cured, {}, F.COLD_FISH_OUT, F.DRY_CURED, false))
+        end
+    end
+    say("Gave " .. (count or 1) .. " each of the seven cuts, dry cured and young. TPFM.mature(days) ages them.")
 end
 
 function TPFM.dry()

@@ -220,19 +220,28 @@ check("the ledger keeps the warmed totals", near(warmLedger.smokeBanked, 10)
     and near(warmLedger.smokeStoked, 10) and warmLedger.smokeBanked > warmLedger.sheltered
     and warmLedger.charqueBanked < warmLedger.charqueStoked)
 
+-- The bar and the badge follow the hot cook while a stoked run counts.
+check("no run counting: no cook share", F.cookShare({ hotNeed = 6, hot = 0 }) == nil and F.cookShare({ dried = 5 }) == nil)
+check("a leg's stack never cooks", F.cookShare({ hotNeed = 6, hot = 3, noHot = true }) == nil)
+check("half way through the cook", near(F.cookShare({ hotNeed = 6, hot = 3 }), 0.5))
+check("the bar shows the cook when it is ahead of the drying", near(F.stackProgress({ dried = 10, hotNeed = 6, hot = 3 }, 288), 0.5))
+check("the drying when that is ahead", near(F.stackProgress({ dried = 200, hotNeed = 6, hot = 1 }, 288), 200 / 288))
+check("a broken run drops the bar back to the drying", near(F.stackProgress({ dried = 10, hotNeed = 6, hot = 0 }, 288), 10 / 288))
+check("the cook never ends the stack by the bar alone", F.stackProgress({ dried = 10, hotNeed = 6, hot = 6 }, 288) == F.SHED_WAIT)
+
 -- Dry-Cured meat is named by the animal its cut came from.
 local function meatItem(index)
     return { getFullType = function() return F.DRY_CURED end, getModelIndex = function() return index end,
-        getModData = function() return { fishName = "Steak" } end }
+        getAge = function() return 0 end, getModData = function() return { fishName = "Steak" } end }
 end
 check("a smoked steak is Suho Meso", F.stageName(meatItem(1)) == "Suho Meso")
 check("a mutton chop is Mutton Ham, venison Jerked Venison", F.stageName(meatItem(2)) == "Mutton Ham" and F.stageName(meatItem(3)) == "Jerked Venison")
 check("pork is Smoked Dry-Cured Pork, a leg Smoked Country Ham", F.stageName(meatItem(5)) == "Smoked Dry-Cured Pork" and F.stageName(meatItem(6)) == "Smoked Country Ham")
 
 check("air dried, beef is Bresaola and a leg plain Country Ham", F.stageName({ getFullType = function() return F.DRY_CURED end,
-    getModelIndex = function() return 0 end, getModData = function() return { airDried = true } end }) == "Bresaola"
+    getModelIndex = function() return 0 end, getAge = function() return 0 end, getModData = function() return { airDried = true } end }) == "Bresaola"
     and F.stageName({ getFullType = function() return F.COUNTRY_HAM end, getModelIndex = function() return F.LEG_INDEX end,
-        getModData = function() return { airDried = true } end }) == "Country Ham")
+        getAge = function() return 0 end, getModData = function() return { airDried = true } end }) == "Country Ham")
 
 -- Dry curing (6b): meat in the shed dries in cool air on its own need, by the heaviest piece.
 check("full from 12 C, a quarter in frost", F.dryCureRate(12) == 1 and F.dryCureRate(25) == 1 and near(F.dryCureRate(6), 0.5)

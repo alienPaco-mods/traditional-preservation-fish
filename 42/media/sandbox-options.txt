@@ -36,6 +36,24 @@ option TraditionalPreservationFishMeat.MatureDays {
     translation = TraditionalPreservationFishMeat_MatureDays,
 }
 
+option TraditionalPreservationFishMeat.AgeCutDays {
+    type = double,
+    min = 1.0,
+    max = 180.0,
+    default = 30.0,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_AgeCutDays,
+}
+
+option TraditionalPreservationFishMeat.AgeHamDays {
+    type = double,
+    min = 1.0,
+    max = 365.0,
+    default = 90.0,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_AgeHamDays,
+}
+
 option TraditionalPreservationFishMeat.PressDays {
     type = double,
     min = 0.5,

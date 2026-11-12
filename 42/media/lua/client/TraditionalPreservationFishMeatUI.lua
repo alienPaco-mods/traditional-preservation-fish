@@ -172,20 +172,33 @@ UI.progressTooltips({
     HangMeatToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "meat") end,
 })
 
--- A little salt in the bottom left corner tells salt stacks from cold ones at a glance.
-local saltIcon
-local function renderWithSaltBadge(slot)
+-- A badge in the bottom left corner, as the inventory marks frozen food: a little salt tells salt stacks from cold
+-- ones at a glance, and while a stoked run is cooking a stack (F.cookShare) it shows what the stack is turning
+-- into, Hot Smoked fish or meat, with the bar following the cook.
+local BADGE_ITEMS = { salt = "Base.Salt", hotFish = "TraditionalPreservationFishMeat.HotSmokedFish", hotMeat = "TraditionalPreservationFishMeat.HotSmokedMeat" }
+local badgeIcons = {}
+local function badgeOf(slot)
+    local data = slot.craftRecipeData
+    local modData = data and data:getRecipe() and data:getModData()
+    if modData and F.cookShare(modData) then return slot.tpMeat and "hotMeat" or "hotFish" end
+    return not slot.tpMeat and "salt" or nil
+end
+
+local function renderWithBadge(slot)
     ISItemSlot.render(slot)
-    saltIcon = saltIcon or ScriptManager.instance:getItem("Base.Salt"):getNormalTexture()
-    slot:drawTextureScaled(saltIcon, SALT_BADGE_MARGIN, slot:getHeight() - SALT_BADGE_SIZE - SALT_BADGE_MARGIN,
+    local badge = badgeOf(slot)
+    if not badge then return end
+    badgeIcons[badge] = badgeIcons[badge] or ScriptManager.instance:getItem(BADGE_ITEMS[badge]):getNormalTexture()
+    slot:drawTextureScaled(badgeIcons[badge], SALT_BADGE_MARGIN, slot:getHeight() - SALT_BADGE_SIZE - SALT_BADGE_MARGIN,
         SALT_BADGE_SIZE, SALT_BADGE_SIZE, 1, 1, 1, 1)
 end
 
 -- Slots are reused for other batches, so the badge comes off again.
 UI.onProgressSlot(function(slot, name)
-    if name == "HangFishToDry" then
-        slot.render = renderWithSaltBadge
-    elseif slot.render == renderWithSaltBadge then
+    if name == "HangFishToDry" or name == "HangMeatToDry" then
+        slot.render = renderWithBadge
+        slot.tpMeat = name == "HangMeatToDry"
+    elseif slot.render == renderWithBadge then
         slot.render = nil
     end
 end)

@@ -1365,8 +1365,9 @@ end)()
     local aired = T.smokedItem(longBeef, { underSpoiled = 0.5 }, T.COLD_FISH_OUT, T.DRY_CURED, true)
     check("Country Cured beef with no smoke is Bresaola, and the stack's under-salting isn't its own", aired.name == "Bresaola"
         and aired.fullType == T.DRY_CURED and aired.age == 0 and near(aired.values.Calories, 396))
-    check("Bresaola's tooltip has no smoke in it, Suho Meso keeps the item's", aired.tooltip == "Tooltip_TraditionalPreservationFishMeat_AirDried"
-        and smoked.tooltip == nil)
+    check("Bresaola's tooltip has no smoke in it, Suho Meso's has; both start ageing", aired.tooltip == "Tooltip_TraditionalPreservationFishMeat_AirDried_0"
+        and smoked.tooltip == "Tooltip_TraditionalPreservationFishMeat_DryCured_0")
+    check("ageing counts from the age it came down with", smoked:getModData().agedFrom == smoked.age and aired:getModData().agedFrom == 0)
     local rotten = T.smokedItem(beef, { underSpoiled = 1.2 }, T.COLD_FISH_OUT, T.DRY_CURED, true)
     check("under-salted meat that rots comes down as the Corned Beef that was hung, rotten", rotten.fullType == T.CURED_MEAT
         and rotten.name == "Corned Beef" and rotten.age == 180 and near(rotten.values.ActualWeight, beef.values.ActualWeight)

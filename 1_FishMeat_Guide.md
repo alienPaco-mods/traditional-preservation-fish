@@ -372,6 +372,7 @@ Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank 
 | Any Beef, Venison or Pork (0.5) | **8** |
 | A stack with a **Leg of Pork** in it | **never**: a leg takes no hot cook, its stoked hours are smoke |
 
+- **Watch the stack.** While the run is counting, the stack's yellow bar follows the cook and a small **Hot Smoked icon** sits in its bottom left corner, where a salt stack shows its salt. A full bar is a finished cook. If the run breaks, the icon goes and the bar drops back to how far the stack has dried.
 - **Keep it going.** Adding wood, or banking it **for up to an hour**, doesn't break the run (the banked time doesn't count towards it either). Let it go out or banked for longer and the run is over: those hours count as **smoke** instead (the popup's *Smoke* line), and the next stoking starts from nothing.
 - **Away from home?** The fire burns its wood while you're gone: a fire with three hours of wood gives three hours, however long you stay away.
 - **Short of a cook, fish loses nothing.** The stack keeps drying as the shed always does, and comes out Salt Dried or Cold Smoked when it's dry.
@@ -461,8 +462,9 @@ Dry curing is the winter road for meat: a long salting in the cold, then weeks o
 | Weight | about 50% of the raw cut | about 50% of the leg: 1.25 from a 2.5 leg |
 | Food | 90% | 90% |
 | Keeps | **120 / 180 days** (rinsed 108 / 162) | **180 / 365 days** |
-| Eat it | **As it is**, sliced thin: a little salty, a small mood lift | **As it is** |
-| Cook with it | Soups, stews, pies, rice, pasta, sandwiches, salads, tacos, burritos | - |
+| Eat it | **As it is**, sliced thin: a little salty, a small mood lift | **As it is**: a better mood lift |
+| Aged after | **30 days** (22½ left hanging) | **90 days** (67½ left hanging) |
+| Cook with it | Soups, stews, pies, rice, pasta, sandwiches, salads, tacos, burritos; **sliced**, as Ham Slices | **Carved** into slices, as Ham Slices |
 
 **How fast it dries**
 
@@ -489,9 +491,50 @@ Dry curing is the winter road for meat: a long salting in the cold, then weeks o
 - **Corned meat has two good roads:** a hot cook in the Smokehouse (chapter 10), or the sun (chapter 8). Corned pork has only the first.
 - **A rotted stack comes down as what you hung:** *Corned Beef (Rotten)*, not Bresaola. In a mixed stack only the Corned pieces rot.
 
+**Ageing**
+
+Dried meat is ready, but it isn't finished. Left alone it **ages** on its own food clock, as stockfish matures: a fridge slows it, a freezer stops it.
+
+| | Aged after | Left hanging | Young | **Aged** |
+|---|---|---|---|---|
+| Dry-cured cut | **30 days** | **22½ days** | Unhappiness -3 | **Unhappiness -8** |
+| Country Ham | **90 days** | **67½ days** | Unhappiness -10 | **Unhappiness -40, Boredom -20** |
+
+- **The name tells you:** *Suho Meso*, then *Suho Meso (Aged)*; *Country Ham*, then *Country Ham (Aged)*. The tooltip counts the tenths on the way.
+- **Leave it hanging and it ages in three quarters of the time.** A finished stack still on its Frame, Beam, Gantry or in the Smokehouse is hanging. **Once you take a piece down it can't go back up**, and it ages at the shelf's pace from then on.
+- **Hanging meat holds its place.** A ham left to age in the Smokehouse keeps its stack for two more months. That is the price, and why the old farms had a meat house.
+- **Young is fine.** Nothing is lost by eating it sooner but the mood. Hot-Smoked meat, Ham and Charque never age.
+- **The ham's reward is its mood, not its calories:** a leg makes the same food as the Pork it came from. A whole Aged ham is worth forty points of cheer and twenty of boredom, shared out bite by bite and slice by slice.
+
+**The knife**
+
+On any surface, with a sharp knife or cleaver, as the base game's Slice Ham:
+
+| Recipe | Takes | Gives |
+|---|---|---|
+| **Slice Dry-Cured Meat** | One dry-cured cut | **2 to 4 slices** by its size (*Suho Meso Slice*, *Bresaola Slice (Aged)*) |
+| **Slice Hot-Smoked Meat** | One Hot-Smoked cut | **2 to 6 slices** by its size (*Hot-Smoked Beef Slice*) |
+| **Carve Country Ham** | A Country Ham, **kept** | **5 slices**, and the ham back, lighter |
+| **Carve the Last of the Country Ham** | A ham with one carving left | **5 slices**; the ham is gone |
+| Slice Ham (the base game's) | A Ham from hot smoked pork | 6 Ham Slices |
+
+| Slices from | Hot-Smoked | Dry-cured |
+|---|---|---|
+| Beef, Venison | 6 | 4 |
+| Steak | 3 | 2 |
+| Mutton Chop | 2 | 2 |
+| Leg of Pork | - | 15, in three carvings |
+
+- **A slice is a good mouthful: hunger 14 or so**, a little more than the game's Ham Slice (10). It goes where Ham Slices go: sandwiches, burgers, pizza, omelettes, salads, soups, stews, rice and pasta.
+- **A slice takes its share** of the piece's food, its salt and its mood, and stays *Aged* if the piece was.
+- **A cut face keeps half as long.** Dry-cured slices **60 / 90 days**, Country Ham slices **90 / 180**, Hot-Smoked slices **3 / 7**; a slice starts as far through its days as the piece was through its own.
+- **So carve what you need.** A whole ham gives **three carvings, 15 slices**, and what stays on the bone keeps its own long clock and goes on ageing.
+
+> 📏 *A ham hung in the Smokehouse in December, dried by March and left on its hook is Aged by late May. Taken down in March and put on a shelf, by mid June.*
+
 > ✏ **Margin note:** why does the cure want the cold when the hang doesn't? Salt takes weeks to reach the middle of a joint, and until it does the meat by the bone is as raw as the day it was cut. That is why every farm killed its hogs after the first hard frost. Once the salt is through, a ham hangs happily into summer: Kentucky calls it the "summer sweat", and it is where the flavour comes from.
 
-> 📜 **Old names:** the Italian *cantina* and the Alpine cellar are where *bresaola*, *coppa* and *lonza* hang: cool, still and a little damp, so the outside doesn't harden before the middle has dried. Bresaola is beef salted and hung in mountain air with no smoke at all, and Kentucky hung its country hams smoked or plain, as the family liked them. Ageing, the next step, is still to come.
+> 📜 **Old names:** the Italian *cantina* and the Alpine cellar are where *bresaola*, *coppa* and *lonza* hang: cool, still and a little damp, so the outside doesn't harden before the middle has dried. Bresaola is beef salted and hung in mountain air with no smoke at all, and Kentucky hung its country hams smoked or plain, as the family liked them. A country ham was sold young at three months and prized at a year, when the knife squeaked on it; Spain hangs its *jamón* on a stand and carves it a plateful at a time for the same reason this guide does: the cut face is the part that goes.
 
 ---
 
@@ -616,6 +659,7 @@ A pantry, kitchen or shed is unheated: it follows the average of the last ten da
 | **Suho Meso**, **Bresaola** and the other dry-cured meats | ~50% | 90% | **120 / 180** (rinsed 108 / 162) | Yes |
 | **Country Ham**, **Smoked Country Ham** | ~50% of the leg | 90% | **180 / 365** | Yes |
 | **Ham** (hot smoked pork) | ~70% | 100% | 5 / 10, as the game's Ham | Yes |
+| Slices: dry-cured / Country Ham / Hot-Smoked | a third of the cut; a ham's 18th or so | its share | **60 / 90**, **90 / 180**, 3 / 7 | Yes |
 | Pot of Meat in Fat | the cuts + fat | the cuts + fat | 2 / 4 | No: cook and pack |
 | **Crock of Potted Meat** | the cuts + fat | the cuts + fat | **by place** | Yes |
 
@@ -896,6 +940,8 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Slowest salt drying (days) | 27 | The longest cold or damp weather can stretch salt drying to. Rain pauses come on top |
 | Stockfish drying time (days) | 32 | Cold drying at the best temperature and wind. Hung from late October to January, about 50 to 55 outdoors; the real Lofoten takes about 90 |
 | Stockfish maturing time (days) | 60 | Ripening in storage. A pallet in a loft halves it, in a ground-floor room it takes two thirds |
+| Dry-cured meat ageing time (days) | 30 | A dry-cured cut, after it has dried. Left hanging, three quarters of it |
+| Country Ham ageing time (days) | 90 | A Country Ham, after it has dried. Left hanging, three quarters of it. Real ones age six months to a year |
 | Salt cure time (days) | 2 | In the tub, for a batch with a big fish or a Beef. Small fish take half as long |
 | Spoilage strictness | Normal | Off / Forgiving / Normal / Harsh. Covers every way a batch spoils while it cures or dries: the wrong season on a station, a warm cure, a long cure above 10 C, and under-salted Corned meat. Off, none of them bite |
 | Butchering gives fat | On | Off, butchering gives no fat and Lard is loot only, as in the base game |
@@ -925,7 +971,9 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | `TPFM.frost(hours)` | Adds hours of hard frost (72 hours take a tenth of a fresh cold stack's keeping) |
 | `TPFM.heat(hours)` | Adds hours of hot sun (24 hours take a twentieth of a fresh open salt stack's keeping) |
 | `TPFM.warmCure(hours)` | Adds hours of a warm cure at 25 C, to test a warm cure spoiling a running tub (24 hours take about a fifth) |
-| `TPFM.mature(days)` | Ages the stockfish you carry by this many days. Matured after 60 |
+| `TPFM.mature(days)` | Ages the stockfish and the dry-cured meat you carry by this many days. Stockfish is Matured after 60, a cut Aged after 30, a Country Ham after 90 |
+| `TPFM.food()` | The cured fish and meat you carry, with the numbers the game rounds or hides: hunger, unhappiness, boredom, thirst, weight, age against its days, ageing |
+| `TPFM.dryCured(n)` | Spawns `n` each of the seven cuts dry cured, smoked and young, to age and slice |
 
 **Spawning**
 

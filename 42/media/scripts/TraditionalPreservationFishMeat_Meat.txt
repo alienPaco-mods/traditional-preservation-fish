@@ -626,7 +626,8 @@ module TraditionalPreservationFishMeat
 
     /* A Leg of Pork, country cured and dried in the Smokehouse (6b): Smoked Country Ham with a third of its time in
        smoke, Country Ham without. Dry-Cured meat's shares of the leg; it keeps half a year to a year. The script's
-       values are a 2.5 leg's; its icon and model are the leg's (index 6), as the other meat stages list them. */
+       values are a 2.5 leg's; its icon and model are the leg's (index 6), as the other meat stages list them.
+       Both age (6c, F.applyAged): Aged, the ham's mood goes from -10 to -40 with -20 boredom, a cut's from -3 to -8. */
     item CountryHam
     {
         DisplayCategory = Food,
@@ -638,7 +639,7 @@ module TraditionalPreservationFishMeat
         DaysTotallyRotten = 365,
         HungerChange = -210.0,
         ThirstChange = 25.0,
-        UnhappyChange = -3,
+        UnhappyChange = -10,
         Calories = 1350.0,
         Carbohydrates = 0.0,
         Lipids = 54.0,
@@ -695,6 +696,161 @@ module TraditionalPreservationFishMeat
         Icon = HotSmokedMeat,
         FoodType = Beef,
         EvolvedRecipeName = Beef,
+    }
+
+    /* Slices, phase 6c (TraditionalPreservationFishMeatSlices.lua): a little bigger than vanilla's Ham Slice (hunger
+       14) and into the same dishes, which take up to 15 so a slice goes in whole. Each takes its share of the piece's food and mood (the values here are placeholders), is named by it
+       ("Suho Meso Slice", "Country Ham Slice (Aged)") and keeps half its days. The icon and model are vanilla's. */
+    item HotSmokedMeatSlice
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.07,
+        Icon = HamSlices,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Omelette:15;Sandwich:15;Burger:15;Salad:15;Rice:15;Pasta:15,
+        FoodType = Meat,
+        DaysFresh = 3,
+        DaysTotallyRotten = 7,
+        HungerChange = -9.0,
+        ThirstChange = 5.0,
+        UnhappyChange = -2,
+        Calories = 66.0,
+        Carbohydrates = 0.0,
+        Lipids = 2.8,
+        Proteins = 9.5,
+        StaticModel = HamSlice,
+        WorldStaticModel = HamSlice,
+        EvolvedRecipeName = Smoked Meat,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_HotSmokedSlice,
+    }
+
+    item DryCuredMeatSlice
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.05,
+        Icon = HamSlices,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Omelette:15;Sandwich:15;Burger:15;Salad:15;Rice:15;Pasta:15,
+        FoodType = Meat,
+        DaysFresh = 60,
+        DaysTotallyRotten = 90,
+        HungerChange = -9.0,
+        ThirstChange = 8.0,
+        UnhappyChange = -1,
+        Calories = 66.0,
+        Carbohydrates = 0.0,
+        Lipids = 2.8,
+        Proteins = 9.5,
+        StaticModel = HamSlice,
+        WorldStaticModel = HamSlice,
+        EvolvedRecipeName = Dry-Cured Meat,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_DryCuredSlice,
+    }
+
+    item CountryHamSlice
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.06,
+        Icon = HamSlices,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Omelette:15;Sandwich:15;Burger:15;Salad:15;Rice:15;Pasta:15,
+        FoodType = Meat,
+        DaysFresh = 90,
+        DaysTotallyRotten = 180,
+        HungerChange = -10.0,
+        ThirstChange = 1.2,
+        UnhappyChange = -1,
+        Calories = 64.0,
+        Carbohydrates = 0.0,
+        Lipids = 2.6,
+        Proteins = 10.7,
+        StaticModel = HamSlice,
+        WorldStaticModel = HamSlice,
+        EvolvedRecipeName = Country Ham,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_CountryHamSlice,
+    }
+
+    /* As vanilla's Slice Ham, on a surface with a knife. OnCreate shares the piece out, so no InheritFood, and adds
+       slices beyond these two by the cut's size (F.sliceCount: about hunger 14 a slice). */
+    craftRecipe SliceHotSmokedMeat
+    {
+        timedAction = SliceMeat_Surface,
+        time = 50,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        xpAward = Cooking:3,
+        OnCreate = TraditionalPreservationFishMeat.onCreateMeatSliced,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.HotSmokedMeat] flags[ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 2 TraditionalPreservationFishMeat.HotSmokedMeatSlice,
+        }
+    }
+
+    craftRecipe SliceDryCuredMeat
+    {
+        timedAction = SliceMeat_Surface,
+        time = 50,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        xpAward = Cooking:3,
+        OnCreate = TraditionalPreservationFishMeat.onCreateMeatSliced,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.DryCuredMeat] flags[ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 2 TraditionalPreservationFishMeat.DryCuredMeatSlice,
+        }
+    }
+
+    /* Five slices (hunger 14 each) come off and the ham is kept, lighter (onCreateCarved), while it has more on it than one last
+       carving (canCarve). */
+    craftRecipe CarveCountryHam
+    {
+        timedAction = SliceMeat_Surface,
+        time = 80,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        xpAward = Cooking:3,
+        OnTest = TraditionalPreservationFishMeat.canCarve,
+        OnCreate = TraditionalPreservationFishMeat.onCreateCarved,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.CountryHam] flags[ItemCount] mode:keep,
+        }
+        outputs
+        {
+            item 5 TraditionalPreservationFishMeat.CountryHamSlice,
+        }
+    }
+
+    /* The last of it (canCarveLast): the ham goes, all of it into the slices. */
+    craftRecipe CarveLastOfCountryHam
+    {
+        timedAction = SliceMeat_Surface,
+        time = 80,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        xpAward = Cooking:3,
+        OnTest = TraditionalPreservationFishMeat.canCarveLast,
+        OnCreate = TraditionalPreservationFishMeat.onCreateLastCarved,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.CountryHam] flags[ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 5 TraditionalPreservationFishMeat.CountryHamSlice,
+        }
     }
 
     /* Water back in and most of the salt out, so it spoils like fresh meat again. A little salt stays (ThirstChange),

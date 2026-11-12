@@ -1,5 +1,24 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.16
+- **Ageing (6c)**: Dry-Cured meat and the Country Ham age after they have dried, on the item's own food clock: a cut
+  **30 days**, a ham **90** (`F.AGE_CUT_DAYS`, `F.AGE_HAM_DAYS`, `F.agedness`; `modData.agedFrom`, older pieces
+  count all their days). The name gains **"(Aged)"** and the tooltip counts the tenths. Aged, a cut's mood goes from
+  -3 to **-8**, a Country Ham's from -10 (was -3) to **-40 with Boredom -20** (`F.applyAged`, by the share left).
+- **Left hanging it ages in three quarters of the time** (`F.HANG_AGE_SHARE`, `F.ageHanging`): a finished stack still
+  on the station where it dried. A piece taken down can't be hung again; a hanging one holds its stack.
+- **Slices**: **Slice Dry-Cured Meat** and **Slice Hot-Smoked Meat** (slices of about hunger 14, as many as the cut
+  holds: `F.sliceCount`, 2 to 6), **Carve Country Ham** (5 slices, the ham kept and lighter) and **Carve the Last of
+  the Country Ham**: 15 slices from a leg in three carvings (`...Slices.lua`). Slices are named by the piece
+  ("Suho Meso Slice", "Country Ham Slice (Aged)"), take its share of food and mood, keep half its days (60 / 90,
+  90 / 180, 3 / 7), and go into vanilla's Ham Slice dishes. Vanilla's Ham Slices icon and model.
+- **Hot smoking shows on the stack**: while a stoked run is cooking a stack its bar follows the cook when that is
+  ahead of the drying (`F.cookShare`, `F.stackProgress`), and a small Hot Smoked icon sits in the slot's bottom
+  left corner, where salt stacks show their salt. A run broken for over an hour drops both.
+- Sandbox: **Dry-cured meat ageing time** (30) and **Country Ham ageing time** (90).
+- Dev: `TPFM.mature(days)` ages carried dry-cured meat too; `TPFM.dryCured(n)`; `TPFM.food()` prints each carried
+  piece's hunger, unhappiness, boredom, thirst, age and ageing. Tests: `tests/test_aged.lua`.
+
 ## 0.4.15
 - **Dry curing without the Smokehouse**: Country Cured meat, pork too, hangs on a **Frame, Beam or Gantry under a
   roof, or a Frame or Beam in a room or a basement** (`F.meatRefusal`; not in the open) and dry cures there to air dried

@@ -13,6 +13,8 @@
   "IGUI_TraditionalPreservationFishMeat_Named": "%1 (%2)",
   "IGUI_TraditionalPreservationFishMeat_And": "%1, %2",
   "IGUI_TraditionalPreservationFishMeat_Ripe": "Matured",
+  "IGUI_TraditionalPreservationFishMeat_Aged": "Aged",
+  "IGUI_TraditionalPreservationFishMeat_SliceOf": "%1 Slice",
   "IGUI_TraditionalPreservationFishMeat_Unripe": "Unripe",
   "IGUI_TraditionalPreservationFishMeat_Method": "Method",
   "IGUI_TraditionalPreservationFishMeat_MethodSalt": "Salt drying",

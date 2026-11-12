@@ -37,10 +37,13 @@
   "TraditionalPreservationFishMeat.HotSmokedFishIngredient": "Hot Smoked Fish",
   "TraditionalPreservationFishMeat.HotSmokedMeat": "Hot-Smoked Meat",
   "TraditionalPreservationFishMeat.HotSmokedMeatIngredient": "Hot-Smoked Meat",
+  "TraditionalPreservationFishMeat.HotSmokedMeatSlice": "Hot-Smoked Meat Slice",
   "TraditionalPreservationFishMeat.ColdSmokedFish": "Cold Smoked Fish",
   "TraditionalPreservationFishMeat.ColdSmokedFishIngredient": "Cold Smoked Fish",
   "TraditionalPreservationFishMeat.DryCuredMeat": "Dry-Cured Meat",
   "TraditionalPreservationFishMeat.CountryHam": "Country Ham",
   "TraditionalPreservationFishMeat.DryCuredMeatIngredient": "Dry-Cured Meat",
+  "TraditionalPreservationFishMeat.DryCuredMeatSlice": "Dry-Cured Meat Slice",
+  "TraditionalPreservationFishMeat.CountryHamSlice": "Country Ham Slice",
   "TraditionalPreservationFishMeat.LegOfPork": "Leg of Pork"
 }
