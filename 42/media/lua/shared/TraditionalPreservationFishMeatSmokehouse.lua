@@ -425,7 +425,7 @@ function F.smokedItem(input, modData, fishType, meatType, airDried)
     local isMeat = input:getFullType() == F.CURED_MEAT
     local lost = modData.spoiled or 0
     if isMeat and not input:getModData().longCure then lost = lost + (modData.underSpoiled or 0) end
-    if lost >= 1 then return F.rottenStage(input) end
+    if lost >= 1 then return F.rottenStage(input, modData) end
     local hot = instanceItem(isMeat and smokedMeatType(input, meatType) or fishType)
     if hot:getFullType() == F.VANILLA_HAM then
         F.carryHam(input, hot)
@@ -471,5 +471,6 @@ end
 
 -- A stack that rotted on any station comes down as what was hung, rotten.
 function F.rottenOutputs(craftRecipeData, station)
-    return swapOutputs(craftRecipeData, station, F.rottenStage)
+    local modData = craftRecipeData:getModData()
+    return swapOutputs(craftRecipeData, station, function(input) return F.rottenStage(input, modData) end)
 end

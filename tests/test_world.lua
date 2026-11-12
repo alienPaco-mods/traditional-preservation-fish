@@ -53,8 +53,9 @@ local function square(x, z)
     return s
 end
 
-local function fish(fullType, modData)
-    return { getFullType = function() return fullType end, getModData = function() return modData or {} end }
+local function fish(fullType, modData, rotten)
+    return { getFullType = function() return fullType end, getModData = function() return modData or {} end,
+        isRotten = function() return rotten or false end }
 end
 
 local function recipeData(progress, style)
@@ -147,6 +148,33 @@ check("charque hangs from the meat tiles", table.concat(rack.sprites, " ") ==
 check("a beam's charque is its own run too", W.hangingSprite(T.HANGERS[408], T.STYLE_MEAT * T.DRYING_STAGES, 1, 1) == 797
     and W.hangingSprite(T.HANGERS[410], T.STYLE_MEAT * T.DRYING_STAGES + 4, 2, 0) == 836 + (4 * 2 + 1) * 2)
 check("fish keep theirs", W.hangingSprite(T.HANGERS[6], 4, 1, 0) == 8 + 4 * 8 * 2)
+
+-- Rotted stacks (0.4.21): one look a kind, on the third sheet.
+check("rotten tiles start the third sheet", W.hangingSprite(T.HANGERS[6], T.ROTTEN_STATE, 1, 0) == 880
+    and T.spriteName(880) == "traditionalpreservationfishmeat_03_0")
+check("and run to its 84th", W.hangingSprite(T.HANGERS[410], T.ROTTEN_STATE + T.ROTTEN_KINDS.MEAT, 2, 1) == 963
+    and T.spriteName(963) == "traditionalpreservationfishmeat_03_83" and T.spriteIndex("traditionalpreservationfishmeat_03_83") == 963)
+check("the first two sheets keep their names", T.spriteName(407) == "traditionalpreservationfishmeat_01_407"
+    and T.spriteName(408) == "traditionalpreservationfishmeat_02_0" and T.spriteIndex("traditionalpreservationfishmeat_02_471") == 879
+    and T.spriteIndex("traditionalpreservationfishmeat_04_0") == nil)
+check("a style's rotten kind", T.rottenKind(T.STYLE_SALT_HALF) == T.ROTTEN_KINDS.SALT and T.rottenKind(T.STYLE_HALF) == T.ROTTEN_KINDS.COLD
+    and T.rottenKind(T.STYLE_MEAT) == T.ROTTEN_KINDS.MEAT)
+local lost = recipeData(0.4, T.STYLE_GUTTED)
+lost.modData.spoiled = 1
+local spoiledFrame = station("traditionalpreservationfishmeat_01_6", 7, true, {},
+    { lost }, { fish(T.CURED_MEAT, { stackId = 3, style = T.STYLE_MEAT }), fish(T.CURED_MEAT, { stackId = 3, style = T.STYLE_MEAT }, true),
+        fish("TraditionalPreservationFishMeat.SaltDriedFish", { stackId = 4, style = T.STYLE_SALT }) })
+W.track(spoiledFrame)
+W.refresh(spoiledFrame)
+-- Slot 1: the finished meat stack with a rotten piece, meat kind (880 + (2 * 8) * 2); slot 2: the dried fish, done;
+-- slot 3: the running cold stack that rotted, cold kind (880 + (1 * 8 + 2) * 2).
+check("a rotted stack shows its kind, a finished one with any rotten piece", table.concat(spoiledFrame.sprites, " ") ==
+    "traditionalpreservationfishmeat_03_32 traditionalpreservationfishmeat_01_74 traditionalpreservationfishmeat_03_20")
+local mixed = recipeData(0.5, T.STYLE_MEAT)
+mixed.modData.underSpoiled, mixed.modData.spoiled = 1.5, 0
+check("a mixed stack whose Corned share rotted keeps drying, and its look", not T.stackRotten(mixed.modData))
+mixed.modData.allUnder = true
+check("all Corned, it is lost", T.stackRotten(mixed.modData))
 
 -- The Smokehouse: Sheltered wherever it stands, and nothing hangs in sight.
 local smoked = recipeData(0.5, T.STYLE_MEAT)

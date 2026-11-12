@@ -1,5 +1,14 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.21
+- **Rotted stacks look rotten** (2026-11-12, from the external review): a grey-green, mottled, mouldy look for each
+  kind (salt fish, cold dried fish, meat) on the Drying Frame, Hanging Beam and Gantry, 84 tiles on a new third tile
+  sheet (the first two keep their numbers, so saves keep their sprites). A running stack shows it when it is lost
+  as a whole; a mixed Corned and Country Cured stack dries on and keeps its look. A finished stack shows it when
+  any piece in it rotted. The Smokehouse shows nothing hanging, as before.
+- Fixed: a rotted piece lost its stack, so a finished mixed stack counted as two on the station and could block
+  its last spot.
+
 ## 0.4.20
 - **Fewer pieces a stack on the Hanging Beam and the Gantry** (2026-11-12, from the external review): a Beam stack
   takes 12 pieces and a Gantry stack 6, fish or meat alike; the weight caps (15, 50) stay. They are meant for bigger

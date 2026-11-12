@@ -42,8 +42,8 @@ local STACK_WEIGHTS = { frame = F.STACK_WEIGHT, medium = 15, large = 50, chamber
 local STACK_PIECES = { frame = 25, medium = 12, large = 6, chamber = 25 }
 F.HANGERS = {}
 for name, hanger in pairs(Tiles.HANGERS) do
-    local entry = { fishSprite = hanger.fishSprite, meatSprite = hanger.meatSprite, stacks = hanger.stacks, stackWeight = STACK_WEIGHTS[name],
-        stackPieces = STACK_PIECES[name], closed = hanger.closed }
+    local entry = { fishSprite = hanger.fishSprite, meatSprite = hanger.meatSprite, rottenSprite = hanger.rottenSprite,
+        stacks = hanger.stacks, stackWeight = STACK_WEIGHTS[name], stackPieces = STACK_PIECES[name], closed = hanger.closed }
     for _, base in ipairs(hanger.bases or { hanger.base }) do F.HANGERS[base] = entry end
 end
 
@@ -123,6 +123,16 @@ F.STYLE_SALT_HALF = Tiles.STYLES.SALT_HALF
 F.SALT_STYLES = { 0, 0, 3, 4 }
 F.COLD_STYLES = { 1, 1, 2 }
 F.STYLE_MEAT = Tiles.STYLES.MEAT
+-- A rotted stack shows one look a kind (0.4.21), numbered after the meat's stages: F.ROTTEN_STATE plus the kind.
+F.ROTTEN_KINDS = Tiles.ROTTEN_KINDS
+F.ROTTEN_STATE = (F.STYLE_MEAT + 1) * F.DRYING_STAGES
+
+-- The rotten look's kind for a stack's style: cold dried fish, meat, or salt fish.
+function F.rottenKind(style)
+    if style == F.STYLE_GUTTED or style == F.STYLE_HALF then return F.ROTTEN_KINDS.COLD end
+    if style == F.STYLE_MEAT then return F.ROTTEN_KINDS.MEAT end
+    return F.ROTTEN_KINDS.SALT
+end
 
 -- Air above DRY_AIR_HUMIDITY slows drying, down to DAMP_AIR_RATE in saturated air.
 F.DRY_AIR_HUMIDITY = 0.5
@@ -818,19 +828,29 @@ function F.hangKind(fullType)
 end
 
 -- A tileset can't hold more than 512 tiles, so everything from FIRST_SHEET_SIZE on is in a second
--- one. Sprites are numbered straight through both.
+-- one, and the rotten stacks in a third (0.4.21). Sprites are numbered straight through them.
 F.FIRST_SHEET_SIZE = Tiles.FIRST_SHEET_SIZE
+local SHEET_STARTS = {}
+do
+    local start = 0
+    for n, sheet in ipairs(Tiles.SHEETS) do
+        SHEET_STARTS[n] = start
+        start = start + sheet.tiles
+    end
+end
 
 function F.spriteName(index)
-    if index < F.FIRST_SHEET_SIZE then return Tiles.SHEETS[1].prefix .. index end
-    return Tiles.SHEETS[2].prefix .. (index - F.FIRST_SHEET_SIZE)
+    for n = #SHEET_STARTS, 1, -1 do
+        if index >= SHEET_STARTS[n] then return Tiles.SHEETS[n].prefix .. (index - SHEET_STARTS[n]) end
+    end
 end
 
 -- The number of one of this mod's sprites, or nil for any other.
 function F.spriteIndex(name)
-    local sheet, index = string.match(name or "", "^traditionalpreservationfishmeat_0([12])_(%d+)$")
-    if not sheet then return nil end
-    return tonumber(index) + (sheet == "2" and F.FIRST_SHEET_SIZE or 0)
+    local sheet, index = string.match(name or "", "^traditionalpreservationfishmeat_0(%d)_(%d+)$")
+    local start = sheet and SHEET_STARTS[tonumber(sheet)]
+    if not start then return nil end
+    return tonumber(index) + start
 end
 
 -- The number of a station's own sprite, or nil for anything that isn't one of this mod's stations. A table
@@ -972,10 +992,15 @@ function F.stackProgress(modData, hours)
     return progress
 end
 
+-- Whether a hanging stack is lost as a whole. Under-salting ends a stack only when every piece in it is Corned:
+-- Country Cured pieces dry on, and the stack keeps its drying look.
+function F.stackRotten(modData)
+    return (modData.spoiled or 0) + (modData.allUnder and modData.underSpoiled or 0) >= 1
+end
+
 local function showProgress(craftRecipeData, modData, hours)
     local time = craftRecipeData:getRecipe():getTime()
-    -- Under-salting ends a stack only when every piece in it is Corned: Country Cured pieces dry on.
-    local rotten = modData.spoiled + (modData.allUnder and modData.underSpoiled or 0) >= 1
+    local rotten = F.stackRotten(modData)
     local progress = (rotten or F.hotStations[modData.stackId]) and 1 or F.stackProgress(modData, hours)
     if progress >= 1 and modData.inShed and not F.smokeStations[modData.stackId] then progress = F.SHED_WAIT end
     -- A dry-curing stack on a frame waits for the World too, which swaps its Charque for dry-cured meat.
@@ -1685,7 +1710,9 @@ end
 -- fish hands its own values to one output.
 -- A hung piece that rotted before it was done: the same stage again, as it went up, rotten ("Corned Beef", not
 -- "Bresaola"; a Gutted Walleye, not a Stockfish).
-function F.rottenStage(source)
+-- stack is the stack's modData, if it came off a station: the piece keeps its stack, so the station still counts it
+-- and draws it with the rest.
+function F.rottenStage(source, stack)
     local rotten = instanceItem(source:getFullType())
     copyFood(source, rotten, 1)
     rotten:setActualWeight(source:getActualWeight())
@@ -1695,6 +1722,7 @@ function F.rottenStage(source)
     if sourceData.rinsed then F.applyRinse(rotten) end
     rotten:setModelIndex(source:getModelIndex())
     F.rename(rotten)
+    if stack then rottenData.stackId, rottenData.style = stack.stackId, stack.style end
     rotten:setAge(rotten:getOffAgeMax())
     return rotten
 end

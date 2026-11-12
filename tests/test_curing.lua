@@ -304,7 +304,7 @@ local function u32(at)
     local a, b, c, d = tiles:byte(at, at + 3)
     return a + b * 256 + c * 65536 + d * 16777216
 end
-check("the tile file has both sheets", u32(9) == 2)
+check("the tile file has all three sheets", u32(9) == 3)
 local sheetCount = u32(13 + #"traditionalpreservationfishmeat_01\ntraditionalpreservationfishmeat_01.png\n" + 12)
 check("the first sheet ends where the sprites say", sheetCount == T.FIRST_SHEET_SIZE and sheetCount <= 512)
 check("a medium beam takes 15 a stack on 4 hooks", T.frameRefusal(T.HANGERS[408], 3, 0, 15) == nil and T.frameRefusal(T.HANGERS[408], 0, 0, 15.1) == "IGUI_TraditionalPreservationFishMeat_TooHeavy" and T.frameRefusal(T.HANGERS[408], 4, 0, 1) == "IGUI_TraditionalPreservationFishMeat_FrameFull")
@@ -1395,6 +1395,9 @@ end)()
     local rottenFish = T.rottenStage(pressed)
     check("a rotted salt stack's fish is still the pressed fish", rottenFish.fullType == pressed.fullType and rottenFish.age == 180
         and rottenFish:getModData().fishName == "Walleye")
+    local kept = T.rottenStage(pressed, { stackId = 12, style = T.STYLE_SALT_HALF })
+    check("and keeps its stack, so the station counts and draws it with the rest", kept:getModData().stackId == 12
+        and kept:getModData().style == T.STYLE_SALT_HALF)
     local leg = cut(T.LEG_OF_PORK, { Calories = 1500, BaseHunger = -3, HungChange = -3, ActualWeight = 2.5 }, true)
     local countryHam = T.smokedItem(leg, {}, T.COLD_FISH_OUT, T.DRY_CURED, false)
     check("a leg dried in smoke is a Smoked Country Ham, an item of its own", countryHam.fullType == T.COUNTRY_HAM

@@ -17,10 +17,10 @@ local FRAME_SPRITE = Tiles.FRAME
 local STAGE_FRESH = 0
 
 -- How many fish, how many stacks, each stack's style, and the items in slot order (the last in last). Finished dry-cured meat still hanging (hangingSince, the
--- hour) ages faster as it is counted (F.ageHanging).
+-- hour) ages faster as it is counted (F.ageHanging). rotten[n] is true when any piece of the nth stack has rotted.
 local function countItems(resources, group, io, hangingSince)
     local count, stacks = 0, 0
-    local seen, styles, all = {}, {}, {}
+    local seen, styles, all, rotten = {}, {}, {}, {}
     local items = Station.itemSlots(resources, group, io)
     for i = 0, items:size() - 1 do
         local stored = items:get(i):getStoredItems()
@@ -30,25 +30,31 @@ local function countItems(resources, group, io, hangingSince)
             if hangingSince then F.ageHanging(stored:get(j), hangingSince) end
             local stackId = tostring(stored:get(j):getModData().stackId)
             if not seen[stackId] then
-                seen[stackId] = true
                 stacks = stacks + 1
+                seen[stackId] = stacks
                 table.insert(styles, F.fishStyle(stored:get(j)))
             end
+            if stored:get(j):isRotten() then rotten[seen[stackId]] = true end
         end
     end
-    return count, stacks, styles, all
+    return count, stacks, styles, all, rotten
 end
 
 -- One sprite per stack. Driest first: finished stacks, then running ones by progress, then the
--- stack waiting to start. Each style has its own run of stages.
-function TraditionalPreservationFishMeatWorld.fishStates(waitingStyle, batches, finishedStyles)
+-- stack waiting to start. Each style has its own run of stages. A rotted stack shows its kind's rotten look
+-- (F.ROTTEN_STATE on): a running one when it is lost as a whole, a finished one when any piece in it rotted.
+function TraditionalPreservationFishMeatWorld.fishStates(waitingStyle, batches, finishedStyles, finishedRotten)
     local stages = F.DRYING_STAGES
     local states = {}
-    for _, style in ipairs(finishedStyles) do table.insert(states, style * stages + stages - 1) end
+    for n, style in ipairs(finishedStyles) do
+        local rotten = finishedRotten and finishedRotten[n]
+        table.insert(states, rotten and F.ROTTEN_STATE + F.rottenKind(style) or style * stages + stages - 1)
+    end
 
     table.sort(batches, function(a, b) return a.progress > b.progress end)
     for _, batch in ipairs(batches) do
-        table.insert(states, batch.style * stages + F.dryingStage(batch.progress))
+        table.insert(states, batch.rotten and F.ROTTEN_STATE + F.rottenKind(batch.style)
+            or batch.style * stages + F.dryingStage(batch.progress))
     end
 
     if waitingStyle then table.insert(states, waitingStyle * stages + STAGE_FRESH) end
@@ -94,7 +100,8 @@ local function readBatches(station, entry, logic, uiLogic, place)
             if modData.stackId then F.smokeStations[modData.stackId] = station end
             if F.hotDone(modData) then F.hotStations[modData.stackId] = station end
         end
-        table.insert(batches, { progress = logic:getProgress(craftData), style = craftData:getModData().style or F.STYLE_SALT })
+        table.insert(batches, { progress = logic:getProgress(craftData), style = modData.style or F.STYLE_SALT,
+            rotten = F.stackRotten(modData) })
     end
     return batches
 end
@@ -111,16 +118,21 @@ local function refreshTub(tub, entry, faceIndex, waiting, _, batches, finishedSt
     showSprites(tub, entry, tostring(sprite), sprite and { sprite + faceIndex } or {})
 end
 
--- The same numbering as fish_index in tools/build_tileset.py. Meat has its own run of tiles, one per stage.
+-- The same numbering as fish_index in tools/build_tileset.py. Meat has its own run of tiles, one per stage, and
+-- rotted stacks theirs, one per kind.
 function TraditionalPreservationFishMeatWorld.hangingSprite(hanger, state, slot, faceIndex)
     local first = hanger.fishSprite
     local meatState = F.STYLE_MEAT * F.DRYING_STAGES
-    if state >= meatState then first, state = hanger.meatSprite, state - meatState end
+    if state >= F.ROTTEN_STATE then
+        first, state = hanger.rottenSprite, state - F.ROTTEN_STATE
+    elseif state >= meatState then
+        first, state = hanger.meatSprite, state - meatState
+    end
     return first + (state * hanger.stacks + slot - 1) * FACE_COUNT + faceIndex
 end
 
-local function refreshFrame(frame, entry, faceIndex, _, waitingStyle, batches, finishedStyles)
-    local states = TraditionalPreservationFishMeatWorld.fishStates(waitingStyle, batches, finishedStyles)
+local function refreshFrame(frame, entry, faceIndex, _, waitingStyle, batches, finishedStyles, _, finishedRotten)
+    local states = TraditionalPreservationFishMeatWorld.fishStates(waitingStyle, batches, finishedStyles, finishedRotten)
     local sprites = {}
     for slot, state in ipairs(states) do
         table.insert(sprites, TraditionalPreservationFishMeatWorld.hangingSprite(entry.hanger, state, slot, faceIndex))
@@ -162,11 +174,11 @@ local function refresh(station, entry)
     if not uiLogic then return end
 
     local waiting, _, waitingStyles, waitingItems = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
-    local _, finishedStacks, finishedStyles = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output,
+    local _, finishedStacks, finishedStyles, _, finishedRotten = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output,
         entry.hanger and getGameTime():getWorldAgeHours())
     local batches = readBatches(station, entry, logic, uiLogic, entry.place or Weather.placeOf(station, true))
     entry.busyStacks = finishedStacks + #batches
-    entry.show(station, entry, entry.faceIndex, waiting, waitingStyles[1], batches, finishedStyles, waitingItems)
+    entry.show(station, entry, entry.faceIndex, waiting, waitingStyles[1], batches, finishedStyles, waitingItems, finishedRotten)
 end
 
 local function newEntry(station)

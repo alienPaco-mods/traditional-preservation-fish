@@ -495,6 +495,7 @@ Dry curing is the winter road for meat: a long salting in the cold, then weeks o
 - **Use the long cure.** *Country Cured* meat has salt for the whole hang. **Corned** meat hasn't: hung in the Smokehouse, a room or a basement it dry cures too, but its popup shows a red **Under-salted** line and it spoils by the temperature where it hangs, a fire's warmth included. Near freezing it comes out about half way through its keeping; at 10 C it rots in four weeks, in a basement (15 C) in under two, and a banked fire makes the shed 15 C warmer than the day.
 - **Corned meat has two good roads:** a hot cook in the Smokehouse (chapter 10), or the sun (chapter 8). Corned pork has only the first.
 - **A rotted stack comes down as what you hung:** *Corned Beef (Rotten)*, not Bresaola. In a mixed stack only the Corned pieces rot.
+- **You can see rot from across the yard** (0.4.21): a stack that is lost turns grey-green, mottled and mouldy on the Frame, Beam or Gantry, one look each for salt fish, cold dried fish and meat. A mixed stack whose Corned share rotted keeps its drying look while the Country Cured pieces dry on; once it is done, it shows rotten if any piece in it rotted. Sort it as you take it down.
 
 **Ageing**
 
@@ -971,6 +972,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Wanted Cold Smoked, got Salt Dried; wanted Suho Meso, got Bresaola | The stack was short of its hours of smoke (the popup's *Smoke* line), or the days were over 15 C (*Too warm to count*). Bank the Firebox more of the time, in a cooler month |
 | Meat in the shed says *Under-salted* and spoils | It is Corned. Give it its hot cook, or use Country Cure Salted Meat for meat that hangs |
 | A stack came down as *Corned Beef (Rotten)* or a rotten pressed fish | It rotted before it was done, so it is still what you hung |
+| A finished stack looks rotten but some pieces are fine | It shows rotten when any piece rotted: a mixed Corned and Country Cured stack. Take it down and sort it |
 | Meat in the shed takes months | Dry curing is slow in frost. A banked fire a few hours a day warms the shed; March and April are the quick months |
 | Wanted Charque, got Suho Meso or Bresaola | Meat hung in the Smokehouse is always dry-cured. For charque, use a frame in the sun |
 | Drying Rate didn't rise with the fire | Below about -2 C outdoors a banked fire can't lift salt fish off its slowest rate (27 days); stoke it, which helps from about -7 C. Over about 5 C banked is already at full speed, so stoking adds nothing to drying |

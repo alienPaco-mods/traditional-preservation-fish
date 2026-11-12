@@ -10,6 +10,10 @@ return {
             prefix = "traditionalpreservationfishmeat_02_",
             tiles = 472,
         },
+        {
+            prefix = "traditionalpreservationfishmeat_03_",
+            tiles = 88,
+        },
     },
     FIRST_SHEET_SIZE = 408,
     FACE_COUNT = 2,
@@ -46,18 +50,21 @@ return {
             base = 6,
             fishSprite = 8,
             meatSprite = 716,
+            rottenSprite = 880,
             stacks = 8,
         },
         medium = {
             base = 408,
             fishSprite = 412,
             meatSprite = 796,
+            rottenSprite = 928,
             stacks = 4,
         },
         large = {
             base = 410,
             fishSprite = 612,
             meatSprite = 836,
+            rottenSprite = 952,
             stacks = 2,
         },
         chamber = {
@@ -79,5 +86,10 @@ return {
         SALT_GUTTED = 3,
         SALT_HALF = 4,
         MEAT = 5,
+    },
+    ROTTEN_KINDS = {
+        SALT = 0,
+        COLD = 1,
+        MEAT = 2,
     },
 }
