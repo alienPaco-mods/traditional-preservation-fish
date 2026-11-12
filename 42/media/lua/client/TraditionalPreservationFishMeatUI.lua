@@ -54,10 +54,10 @@ local function refusal(slot, item, queued)
         return "IGUI_TraditionalPreservationFishMeat_MixedStack"
     end
     local hanger = F.hangerFor(spriteIndex(entity))
-    local porkRefused = F.meatRefusal(hanger, hanger.closed and "Sheltered" or Weather.placeOf(entity), item)
+    local porkRefused = F.meatRefusal(hanger, hanger.closed and "Enclosed" or Weather.placeOf(entity), item)
     if porkRefused then return porkRefused end
     if F.hangKind(item:getFullType()) == "cold" then
-        local coldRefused = F.coldRefusal(hanger.closed and "Sheltered" or Weather.placeOf(entity))
+        local coldRefused = F.coldRefusal(hanger.closed and "Enclosed" or Weather.placeOf(entity))
         if coldRefused then return coldRefused end
     end
     return F.frameRefusal(hanger, TraditionalPreservationFishMeatWorld.busyStacks(entity), waiting, weight,
@@ -105,12 +105,12 @@ local function drawStackTooltip(slot, tooltip, kind)
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Progress", UI.percent(status.progress))
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_TimeLeft", timeText(status.hoursLeft))
         local modData = slot.craftRecipeData:getModData()
-        local place = modData.basement and "Basement" or modData.loft and "Loft" or modData.sheltered and "Sheltered" or modData.covered and "Covered" or "Open"
+        local place = modData.inShed and "Enclosed" or modData.basement and "Basement" or modData.loft and "Loft"
+            or modData.sheltered and "Sheltered" or modData.covered and "Covered" or "Open"
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Place", UI.placeName(place))
         -- A basement, loft, room or roofed stack dries by that place's temperature (Core's); the Smokehouse and the
         -- open air go by the day's.
-        local own = place == "Basement" or place == "Loft" or place == "Sheltered" and not modData.inShed
-            or place == "Covered"
+        local own = place == "Basement" or place == "Loft" or place == "Sheltered" or place == "Covered"
         local celsius = own and F.ownTemperature(ledger, place) or ledger.temperature or 0
         local word = F.temperatureWord(isCold, celsius, place == "Open")
         if status.dryCuring then

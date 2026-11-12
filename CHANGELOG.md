@@ -1,5 +1,15 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.28
+- **The Smokehouse is *In a shed*** (2026-11-12; TP Core's new Enclosed place). Its window and its stacks' hovers
+  say *In a shed* where they said *Indoors*. Nothing else changes: it already went by the day's temperature, out of
+  the rain and wind, with no stockfish. In the code the chamber's World entry is `"Enclosed"` instead of
+  `"Sheltered"`, and the checks that read "Sheltered, but not the shed" now read the place. Stacks keep
+  `modData.sheltered` and `modData.inShed` and the ledger keeps its keys, so stacks already hanging keep counting.
+  The Flue's help text ("Out, they dry in the shed by the day's air"). Tests in `test_world.lua` (an old stack
+  keeps its marks) and `test_info.lua`. Guide (the places, the Smokehouse's table) and README. In-game step 105 of
+  `TESTING_GUIDE.md`.
+
 ## 0.4.27
 - **On TP Core's shared modules** (2026-11-12; nothing a player sees): the Crock of Potted Meat's portions, name,
   weight and empty vessel go through Core's `Portions` (its `onEat` in place of the mod's own wrap of the eat

@@ -231,7 +231,7 @@ F.HOT_MEAT = "TraditionalPreservationFishMeat.HotSmokedMeat"
 -- when it has dried (smoked-dried fish, balyk, suho meso: a few hours of smoke a day over the drying). The need is
 -- by the heaviest piece, as the cook's: a day or two of smoke for fish, a week or two of daily fires for meat (a
 -- Beef 60 hours, a Leg of Pork 120). Hours with the fire burning dry it in air warmed by the fire (F.BANKED_LIFT,
--- F.STOKED_LIFT), not at Sheltered's rate.
+-- F.STOKED_LIFT), not at the cold shed's rate (Enclosed: the day's temperature).
 F.SMOKE_FISH_HOURS = { { 1.1, 24 }, { 2.2, 48 } }
 F.SMOKE_MEAT_HOURS = { { 0.45, 60 }, { 2.25, 120 } }
 F.COLD_FISH_OUT = "TraditionalPreservationFishMeat.ColdSmokedFish"
@@ -276,7 +276,8 @@ function F.startSmoke(modData, items, isMeat)
     modData.smokeFrom, modData.smokeSession, modData.lastStoked, modData.lastBanked = nil, nil, nil, nil
 end
 
--- The ledger totals a stack's warmth reads: salt fish's drying Sheltered or meat's dry curing with the fire out, and
+-- The ledger totals a stack's warmth reads: salt fish's drying in the shed (the ledger's sheltered, by the day's
+-- temperature) or meat's dry curing with the fire out, and
 -- by a banked and by a stoked fire.
 local function warmthTotals(modData, ledger)
     if modData.smokeMeat then return ledger.dryCure or 0, ledger.dryCureBanked or 0, ledger.dryCureStoked or 0 end
@@ -298,7 +299,7 @@ local function underGains(modData, ledger, hours)
 end
 
 -- Since the stack's last look: the share of the hours that were cool enough for cold smoke, and how much more a stack
--- by a banked and by a stoked fire dried than a Sheltered one per hour, from the ledger's totals (a week away reads
+-- by a banked and by a stoked fire dried than one with the fire out per hour, from the ledger's totals (a week away reads
 -- the week's weather). With no hours between, the weather now and no gain. A stack from before the smoulder's
 -- warmth starts its warm totals at this look.
 local function sinceLast(modData, ledger)

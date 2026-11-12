@@ -247,7 +247,8 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 **Where it hangs** (the stack's *Place*):
 - **Open air**: no roof overhead. Walls with no roof are still the open air. Rain pauses drying until the wet has dried off.
 - **Under an open roof**: a porch, an open shed, a floor laid on the level above. Rain never reaches it, and it's **in the shade**: salt fish, charque, dry curing and stockfish go by the **average of the last ten days**, not the afternoon's heat or the night's frost: a warm afternoon in November stops stockfish in the open, not under a roof. A **Salting Tub in the open air** feels the day: afternoons over 20 C warm cure it (May to September), so give it a roof.
-- **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. A room goes by the **average of the last ten days**, and is **22 C while the power grid is on**, as vanilla keeps it: drying runs at summer speed all year, but so does spoiling (chapter 5). The **Smokehouse** is a shed in the outside air: it goes by **the day's temperature**, plus its fire. Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 11).
+- **Indoors**: inside a room, including one you built yourself with walls all round and a full roof. A room goes by the **average of the last ten days**, and is **22 C while the power grid is on**, as vanilla keeps it: drying runs at summer speed all year, but so does spoiling (chapter 5). Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 11).
+- **In a shed**: inside the Smokehouse, wherever it stands. A closed plank shed in the outside air: no rain and no wind, as indoors, but it goes by **the day's temperature**, plus its fire, and the power grid doesn't warm it. Salt fish dries at about two thirds of the speed, gutted fish is refused and meat dry cures, as in a room.
 - **Loft**: the top storey: a room upstairs with no room over it. Indoors, but at the **loft's own temperature**, not the day's: as indoors, plus three tenths of whatever the 10-day average is above 10 C: the sun on the roof (about 24 C in a 21 C July, no warmer than a room from October to April); 22 C while the power grid is on. Salt fish, charque and dry curing there go by it, and so does a Salting Tub: a summer loft is the worst place for a cure in the tub.
 - **Basement**: any level below ground. Indoors, but at the **cellar's own temperature**, not the day's: about 5 C from January to March, 13 C from July to September, a month behind the season. Whatever dries there goes by it, so salt fish crawls (about **27 days** a batch, all year): a cellar is for keeping salt fish, not drying it.
 
@@ -343,7 +344,7 @@ A plank shed two tiles long under one sloping roof, the door on the high end wit
 | Build | Carpentry 3: **14 planks, 20 nails**, hammer kept (Build menu, Furniture) |
 | Holds | **6 stacks** of up to **15 weight**, 25 pieces |
 | Takes | **Hang Salt Cured Fish** and **Hang Salted Meat** only; the one place Corned pork may hang |
-| Inside | always **Indoors**: no rain, no wind, wherever the shed stands |
+| Inside | always **In a shed**: no rain, no wind, the day's temperature, wherever it stands |
 | Stands | in the open or under an open roof, not inside a room; the tile in front of its door stays clear |
 
 1. **Build it** with the door facing where you'll walk up to it. Nothing can be built on the tile in front of the door afterwards.

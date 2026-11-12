@@ -19,7 +19,7 @@ module TraditionalPreservationFishMeat
                 Item@Output@200@StackAny,
             }
         }
-        /* The Hanging Beam's drying, with no fire yet: the shed is always Sheltered
+        /* The Hanging Beam's drying, with no fire yet: the shed is always Enclosed
            (TraditionalPreservationFishMeatWorld). Salt fish and charque only: cold drying needs open
            air, so it isn't offered. Two tiles, the slots on the engine's master tile. */
         component DryingCraftLogic

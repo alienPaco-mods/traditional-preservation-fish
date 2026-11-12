@@ -105,16 +105,18 @@ check("cured pieces wait in the tub", hasNote(cured, "Cured and waiting to be ta
 local shed = F.hangerFor(F.spriteIndex("traditionalpreservationfishmeat_02_448"))
 local cool = { temperature = 8, seasonTemperature = 6, dryCureRate = 0.7, dryCureStokedRate = 1, dryCureBankedRate = 0.9, saltSpoiling = false }
 local Hearth = require "TraditionalPreservationCore/Hearth"
-local smoking = Info.rows({ hanger = shed, place = "Sheltered", waiting = {}, finished = 0, finishedStacks = 0,
+local smoking = Info.rows({ hanger = shed, place = "Enclosed", waiting = {}, finished = 0, finishedStacks = 0,
     batches = { batch("HangMeatToDry", { dried = 100, spoiled = 0, underSpoiled = 0.1, inShed = true, sheltered = true, cureNeed = 504,
         underCured = true, burning = Hearth.STOKED, hot = 3, hotNeed = 8, cold = 12, smokeNeed = 60, smokeFrom = 7, smokeMeat = true }, 0.2) } },
     cool, 1000, "stoked")
 check("the Smokehouse's fire", valueOf(smoking, "InfoFire") == "Stoked (hot)" and valueOf(smoking, "Wind") == nil)
+check("the Smokehouse is in a shed, by the day's air", valueOf(smoking, "Place") == "In a shed"
+    and valueOf(smoking, "InfoAir") == "8 C now, 6 C over the season")
 check("meat in the shed dry cures", smoking.bars[1].text == "1. Dry cure")
 check("the cook is called out", hasNote(smoking, "Stack 1: Hot smoking, 3.0 of 8 h stoked in a row: it comes out Hot Smoked"))
 check("and the smoke so far", hasNote(smoking, "Stack 1: 12.0 of 60 h of smoke"))
 check("and the under-salting", hasNote(smoking, "Stack 1: Spoiling (28 C where it hangs)"))
-check("no fire joined", valueOf(Info.rows({ hanger = shed, place = "Sheltered", waiting = {}, finished = 0, finishedStacks = 0, batches = {} },
+check("no fire joined", valueOf(Info.rows({ hanger = shed, place = "Enclosed", waiting = {}, finished = 0, finishedStacks = 0, batches = {} },
     cool, 1000, "none"), "InfoFire") == "None joined")
 check("still no percentage passed to the translator", #H.textWarnings == 0)
 

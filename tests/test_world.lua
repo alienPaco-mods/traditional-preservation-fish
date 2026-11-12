@@ -176,13 +176,14 @@ check("a mixed stack whose Corned share rotted keeps drying, and its look", not 
 mixed.modData.allUnder = true
 check("all Corned, it is lost", T.stackRotten(mixed.modData))
 
--- The Smokehouse: Sheltered wherever it stands, and nothing hangs in sight.
+-- The Smokehouse: Enclosed wherever it stands (out of the rain, by the day's air), and nothing hangs in sight.
 local smoked = recipeData(0.5, T.STYLE_MEAT)
 local smokehouse = station("traditionalpreservationfishmeat_02_449", 6, true, { fish(T.CURED_MEAT) }, { smoked }, {})
 smokehouse.sprites = { "old" }
 W.track(smokehouse)
 W.refresh(smokehouse)
-check("a Smokehouse in the open is sheltered inside", smoked.modData.sheltered == true and smoked.modData.covered == false)
+check("a Smokehouse in the open is out of the rain inside, and marked as the shed", smoked.modData.sheltered == true
+    and smoked.modData.covered == false and smoked.modData.inShed == true and smoked.modData.loft == false)
 check("and shows no hanging stacks", #smokehouse.sprites == 0)
 check("it counts its busy stacks", W.busyStacks(smokehouse) == 1)
 check("one built before its own recipe tag gets it", smokehouse:getComponent("DryingCraftLogic").tag == "Smokehouse")
@@ -197,7 +198,16 @@ local seen = W.inspect(shed)
 check("a look at the frame: its hanger, place and contents", seen.hanger == T.HANGERS[6] and seen.place == "Sheltered"
     and #seen.waiting == 1 and seen.finished == 1 and seen.finishedStacks == 1)
 check("and its running batch with its progress", #seen.batches == 1 and seen.batches[1].data == running and seen.batches[1].progress == 0.5)
-check("a Smokehouse is sheltered to the window too", W.inspect(smokehouse).place == "Sheltered" and W.inspect(smokehouse).hanger.closed)
+check("a Smokehouse is Enclosed to the window too", W.inspect(smokehouse).place == "Enclosed" and W.inspect(smokehouse).hanger.closed)
+-- A stack hung before step J was last marked Sheltered with inShed: the next look marks it the same, so it keeps
+-- reading the same totals.
+local oldStack = recipeData(0.3, T.STYLE_MEAT)
+oldStack.modData.sheltered, oldStack.modData.inShed = true, true
+local oldShed = station("traditionalpreservationfishmeat_02_449", 6, true, {}, { oldStack }, {})
+W.track(oldShed)
+W.refresh(oldShed)
+check("an old Smokehouse stack keeps its marks", oldStack.modData.sheltered == true and oldStack.modData.inShed == true
+    and not oldStack.modData.basement and not oldStack.modData.covered)
 check("another mod's object gives nothing", W.inspect(station("carpentry_02_122", 4, true, {}, {}, {})) == nil)
 
 -- Tubs

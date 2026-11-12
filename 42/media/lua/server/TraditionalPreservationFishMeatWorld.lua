@@ -90,10 +90,11 @@ local function readBatches(station, entry, logic, uiLogic, place)
     local ledger = smoking and F.getLedger()
     for craftData, _ in pairs(uiLogic:getItemsInProgress()) do
         local modData = craftData:getModData()
+        -- Out of the rain: a room, a loft, a basement and the Smokehouse (Enclosed, marked inShed below).
         modData.sheltered = place ~= "Open" and place ~= "Covered"
         modData.covered = place == "Covered"
         modData.basement = place == "Basement"
-        -- A loft, like a basement, goes by its own temperature (never the Smokehouse: its place is Sheltered).
+        -- A loft, like a basement, goes by its own temperature.
         modData.loft = place == "Loft"
         if modData.stackId then F.stackStations[modData.stackId] = station end
         if smoking then
@@ -192,13 +193,13 @@ local function newEntry(station)
     local closed = hanger and hanger.closed
     local logic = closed and station:getComponent(ComponentType.DryingCraftLogic)
     if logic and logic:getRecipeTagQuery() ~= F.SMOKEHOUSE_RECIPES then logic:setRecipeTagQuery(F.SMOKEHOUSE_RECIPES) end
-    -- Inside the chamber's walls and roof it is always Sheltered, wherever the shed stands.
+    -- Inside the chamber's walls and roof it is always Enclosed (TP Core's shed in the outside air), wherever it stands.
     return {
         hanger = hanger,
         faceIndex = index % FACE_COUNT,
         logicType = isFrame and ComponentType.DryingCraftLogic or ComponentType.CraftLogic,
         show = closed and function() end or isFrame and refreshFrame or refreshTub,
-        place = closed and "Sheltered" or nil,
+        place = closed and "Enclosed" or nil,
     }
 end
 
