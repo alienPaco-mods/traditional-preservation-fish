@@ -8,7 +8,7 @@
 ## Contents
 1. What This Mod Does
 2. Quick Start
-3. The Larder at a Glance
+3. The Larder at a Glance: When, Where, How
 4. At the Cleaning Table: Fish, Heads and Fat
 5. The Salting Tub
 6. The Drying Stations
@@ -16,16 +16,18 @@
 8. Charque
 9. Stockfish
 10. The Smokehouse
-11. Lard, Tallow and Cracklings
-12. Potted Meat
-13. Stages at a Glance
-14. The Almanac (Seasons)
-15. The Logbook
-16. Secrets & Hidden Features
-17. Tips from the Docks and the Block
-18. Troubleshooting
-19. Sandbox Settings
-20. Appendix: The Tester's Toolkit
+11. Dry-Cured Meat and Country Ham
+12. Lard, Tallow and Cracklings
+13. Potted Meat
+14. Stages at a Glance
+15. The Almanac (Seasons)
+16. Three Larders
+17. The Logbook
+18. Secrets & Hidden Features
+19. Tips from the Docks and the Block
+20. Troubleshooting
+21. Sandbox Settings
+22. Appendix: The Tester's Toolkit
 
 ---
 
@@ -56,7 +58,9 @@ Fish and meat share one workshop. The same **Salting Tub** cures both, the same 
 - **Butchered a pig?** Render the fat → cook the meat in it → seal it in a clay jar: **Potted Meat**.
 - **Want it ready to eat?** Hang salt-cured fish or meat in a **Smokehouse** joined to a **Firebox** and keep the fire stoked for an afternoon: **Hot Smoked**.
 - **Want it ready to eat and to keep?** In the cool months, bank the same Firebox to a smoulder for a few hours a day: **Cold Smoked** fish after a day or two of smoke, and smoked dry-cured meat such as **Suho Meso** after a week or two of daily fires.
-- **A leg of pork?** Country cure it in the tub for three weeks in the cold months, then hang it in the Smokehouse for the rest of the winter: **Country Ham**.
+- **Winter beef, mutton or venison?** Country cure it in the tub for ten days, then hang it in the shade for a month or two: **Bresaola** and its kin, or **Suho Meso** with smoke.
+- **A leg of pork?** Country cure it in the tub for three weeks in the cold months, then hang it in the Smokehouse or a cellar for the rest of the winter: **Country Ham**.
+- **Not sure what to make this month?** Chapter 3 has every road on one page, chapter 15 the calendar, and chapter 16 three worked larders.
 
 | You need | For |
 |---|---|
@@ -68,19 +72,41 @@ Fish and meat share one workshop. The same **Salting Tub** cures both, the same 
 
 ---
 
-## 3. The Larder at a Glance
+## 3. The Larder at a Glance: When, Where, How
 
-| | Salt Dried fish | Stockfish | Charque | Hot Smoked | Cold Smoked / smoked dry-cured | Potted Meat |
-|---|---|---|---|---|---|---|
-| From | Any raw fish | Gutted whole fish, halves | Beef, Steak, Mutton Chop, Venison | Salt Cured fish, Corned meat | Salt Cured fish, Corned or Country Cured meat (pork too) | Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop |
-| Salt | 4 per half weight | **None** | 4 a cut | (already salted) | (already salted) | 1 a pot |
-| Stations | Tub, then any drying station | Frame, Beam or Gantry, **outdoors or under an open roof** | Tub, then any drying station | Tub, then a **Smokehouse with a Firebox** | Tub, then a **Smokehouse with a Firebox** | **None**: a pot, a fire, a clay jar |
-| Best season | Any (fastest in summer) | **November to mid-February** | **May to September** | Any | **Days of 15 C or less** | Any |
-| Time | 12 days at best | 32 days at best (50 to 55 in a Kentucky winter) | 5 days at best | 4 to 8 hours of fire | As salt drying, a little faster by the fire | 2 hours' cooking |
-| Keeps | 120 / 180 days | **365 / 540 days** | 120 / 180 days | 7 / 14 days | 120 / 180 days | By place: 14 to 120 days fresh |
-| Eat it | As it is (salty), or in soup | **Rehydrate first** | **Rehydrate first** | As it is | **As it is**, sliced thin | As it is, by the portion |
+Every road on one page. *Start* is when to begin it in Kentucky's weather; *Yield* is what's left of the fresh weight and of its food; *Keeps* is days fresh / days to rotten.
 
-**Rule of thumb:** salt fish in summer, stockfish in winter, charque in the hot months, Potted Meat whenever you butcher, hot smoke when you want something good to eat this week, and cold smoke in the cool months for something good to eat all winter.
+**Fish**
+
+| You make | Start | In the tub | Then where | Takes | Yield | Keeps | Eat it |
+|---|---|---|---|---|---|---|---|
+| **Salt Dried fish** | Any month; best **May to September** | 1 to 2 days | Any drying station; an open roof is best | 2 to 3 weeks in summer, 4 in winter | 37% weight, 90% food | 120 / 180 | As it is (salty), or in soup |
+| **Stockfish** | **November to mid-February** | No salt, no tub | Frame, Beam or Gantry in the open or under an open roof | 7 to 8 weeks, then 60 days maturing | 18% weight, 89% food | **365 / 540** | Soak, then cook |
+| **Hot Smoked fish** | Any month | 1 to 2 days | Smokehouse, Firebox stoked | 4 to 6 hours of fire | 63% weight, all the food | 7 / 14 | As it is |
+| **Cold Smoked fish** | **October to April** (days of 15 C or less) | 1 to 2 days | Smokehouse, Firebox banked | 2 to 4 weeks, with 1 to 2 days of smoke | 37% weight, 90% food | 120 / 180 | As it is |
+
+**Meat**
+
+| You make | Start | In the tub | Then where | Takes | Yield | Keeps | Eat it |
+|---|---|---|---|---|---|---|---|
+| **Charque** (beef, mutton, venison) | **May to September** | Corned, 1 to 2 days | Any drying station in the sun or under an open roof | 1 to 3 weeks | 50% weight, 90% food | 120 / 180 | Soak, then cook |
+| **Hot-Smoked meat**; pork becomes **Ham** | Any month | Corned, 1 to 2 days | Smokehouse, Firebox stoked | 6 to 8 hours of fire | 70% weight, all the food | 7 / 14 (Ham 5 / 10) | As it is |
+| **Dry-cured cuts**: Bresaola, Suho Meso and their kin | **October to April** | Country Cured, 10 days | Smokehouse, any station under a roof, or a Frame or Beam in a room or basement | 3 to 12 weeks | 50% weight, 90% food | 120 / 180 | As it is |
+| **Country Ham** (a Leg of Pork) | **October to March** | Country Cured, 21 days | The same | 6 weeks to 5 months | 50% weight, 90% food | **180 / 365** | As it is |
+| **Potted Meat** (any cut, pork too) | Any month; whenever you butcher | None | A pot, a fire, a clay jar | 2 hours | The meat and its fat | 14 to 120, by where it's kept | As it is |
+| **Lard, Tallow** | Whenever you butcher | None | A pot, or the Hearth's copper | 1 hour | 2 pieces of fat a block | Don't spoil | For cooking and potting |
+
+**What each road costs**
+
+| | Salt | Fuel | Built first |
+|---|---|---|---|
+| Salt Dried fish | **4 per half weight**: 160 for a full frame | None | Tub, a drying station (Carpentry 2) |
+| Stockfish | **None** | None | A drying station |
+| Charque, dry-cured meat | **4 a cut**, 10 a leg: 200 for a cow | None; a little wood for smoke | Tub, a drying station, or the Smokehouse |
+| Hot and cold smoking | As above | Wood, hours of it | Smokehouse (Carpentry 3) and Firebox (Masonry 2) |
+| Potted Meat | **1 a pot** | A cooking fire | A pot and a clay jar |
+
+**Rule of thumb:** salt fish in summer, stockfish in winter, charque in the hot months, dry-cured meat and ham from the autumn slaughter, Potted Meat whenever you butcher, and hot smoke when you want something good to eat this week.
 
 ---
 
@@ -127,7 +153,7 @@ In the base game a butchered animal gives no fat, and Lard is something you find
 | Cattle (cow, bull) | Beef Suet | 8 to 10 | 1 or 2 | Tallow |
 | Sheep (ewe, ram) | Mutton Fat | 2 to 4 | 1 | Tallow |
 
-Numbers are for an average animal and an unskilled butcher. A bigger or meatier animal gives more, Butchering skill raises the top end, and roadkill or an old carcass gives less: the game's own butchering rules, as for the meat. Piglets, calves, lambs and deer are too lean to give any. Raw fat keeps 2 / 4 days. What to do with it: chapter 11.
+Numbers are for an average animal and an unskilled butcher. A bigger or meatier animal gives more, Butchering skill raises the top end, and roadkill or an old carcass gives less: the game's own butchering rules, as for the meat. Piglets, calves, lambs and deer are too lean to give any. Raw fat keeps 2 / 4 days. What to do with it: chapter 12.
 
 ---
 
@@ -210,13 +236,15 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 | Recipe | Frame, Beam, Gantry | Smokehouse |
 |---|---|---|
 | **Hang Salt Cured Fish to Dry** | Yes | Yes |
-| **Hang Salted Meat to Dry** (charque: Corned beef, mutton, venison) | Yes | Yes, pork and Country Cured too |
+| **Hang Salted Meat to Dry**: Corned beef, mutton, venison (charque) | Yes, in the sun or under an open roof | Yes: a hot cook, never charque |
+| **Hang Salted Meat to Dry**: Country Cured meat, pork too (dry curing) | Yes, **in the shade only**: under a roof, in a room or a basement | Yes |
+| **Hang Salted Meat to Dry**: Corned pork | No | Yes: a hot cook |
 | **Hang Gutted Fish to Cold Dry** (stockfish) | Yes, never in a room | **No** |
 
 **Where it hangs** (the stack's *Place*):
 - **Open air**: no roof overhead. Walls with no roof are still the open air. Rain pauses drying until the wet has dried off.
 - **Under an open roof**: a porch, an open shed, a floor laid on the level above. Rain never reaches it, and it's **in the shade**.
-- **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 10, *Without a Smokehouse*).
+- **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 11).
 
 **Hover a stack** to see its method, progress, time left, place, the temperature, the wind, how wet it is and how fast it's drying right now, a warning if the season is spoiling it, and in a Smokehouse its smoke.
 
@@ -240,8 +268,8 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 
 Charque is the summer road for red meat: salted and cured in the tub like fish, then dried in the hot sun.
 
-1. **Pack Meat in Salt** and **Corn Salted Meat** (chapter 5). Out comes **Corned** meat (*Corned Steak*). Beef, mutton and venison only: pork and Country Cured meat never go on a frame.
-2. **Hang Salted Meat to Dry** on any drying station: **five days in hot sun (25 C and up) and a breeze**.
+1. **Pack Meat in Salt** and **Corn Salted Meat** (chapter 5). Out comes **Corned** meat (*Corned Steak*). Beef, mutton and venison only: pork is never charque, and Country Cured meat is for dry curing (chapter 11).
+2. **Hang Salted Meat to Dry** on any drying station **in the open or under an open roof**: **five days in hot sun (25 C and up) and a breeze**.
 3. Take down the **Charque** (*Beef Charque*, *Mutton Charque*, *Venison Charque*): about half the raw weight, 90% of the food, keeps **120 / 180 days** (rinsed 108 / 162).
 4. **Rehydrate Charque** (1 L of water) before you eat it: it's salty and as hard as leather. Soaked (*Beef Charque (Soaked)*) it's still a little salty, cooks like a steak in about 40 minutes, goes into soups, stews, pies and more, and spoils like fresh meat (2 / 4 days).
 
@@ -251,21 +279,21 @@ Charque is the summer road for red meat: salted and cured in the tub like fish, 
 - **Rain hurts.** An open station waits while the meat is wet, and every 6 hours of rain take back **a tenth** of what had dried. Under an open roof it dries as fast as in the open and is never rained on. **Not indoors**: charque is the sun's and the wind's. Corned meat hung in a room or a basement dry cures as in the Smokehouse, **under-salted**, and spoils as it hangs.
 - **Muggy summers** spoil it a little, under salt fish's rule.
 
-| Month | Open | Under an open roof | Indoors |
-|---|---|---|---|
-| Jan | 88–119 d | 51–86 d | 65–94 d |
-| Mar | 31–59 d | 20–36 d | 25–44 d |
-| Apr | 13–34 d | 11–24 d | 14–27 d |
-| May | 9–25 d | 7–12 d | 10–16 d |
-| Jun | 8–19 d | 7–9 d | 9–12 d |
-| Jul | 7–15 d | 7–10 d | 9–12 d |
-| Aug | 9–20 d | 7–11 d | 10–13 d |
-| Sep | 8–17 d | 7–17 d | 10–26 d |
-| Oct | — | 17–65 d | 25–70 d |
+| Month | Open | Under an open roof |
+|---|---|---|
+| Jan | 88–119 d | 51–86 d |
+| Mar | 31–59 d | 20–36 d |
+| Apr | 13–34 d | 11–24 d |
+| May | 9–25 d | 7–12 d |
+| Jun | 8–19 d | 7–9 d |
+| Jul | 7–15 d | 7–10 d |
+| Aug | 9–20 d | 7–11 d |
+| Sep | 8–17 d | 7–17 d |
+| Oct | — | 17–65 d |
 
-From November to February it barely dries at all: that's the season for stockfish and Potted Meat.
+From November to February it barely dries at all: that's the season for stockfish, Potted Meat and dry curing.
 
-> 📝 **Margin note:** why no pork charque? Its fat goes rancid in sun and wind, so pork has always been salted and then kept cool, smoked or put down in lard. A frame, Beam or Gantry refuses it; the Smokehouse takes it (chapter 10), and Potted Meat any day.
+> 📝 **Margin note:** why no pork charque? Its fat goes rancid in sun and wind, so pork has always been salted and then kept cool, smoked or put down in lard. Corned pork goes to the Smokehouse for a hot cook (chapter 10), Country Cured pork hangs in the shade (chapter 11), and Potted Meat takes it any day.
 
 > 📜 **Old names:** in the *charqueadas* of southern Brazil a quarter of beef was opened into thick sheets, *mantas*, salted in brine and then in piles for a few days, washed, and laid out on rails in the sun for four to six days, piled and covered each night. It was never eaten off the rail: cooks soaked it overnight in two or three changes of water first. The word comes from the Andes, where *ch'arki* was llama and alpaca.
 
@@ -280,7 +308,7 @@ Stockfish is unsalted fish dried by frost and wind. It needs no salt and no tub,
 3. **32 days** at best: between 0 and 5 C with a good wind. A Kentucky winter's wind is mostly light, so a batch hung November to January takes about 50 to 55 days. **Hang by mid-February at the latest.**
 4. Take down the **Stockfish** (*Walleye Stockfish*): about 18% of the fresh weight, 89% of the food, keeps **365 / 540 days**: enough to reach next winter's fish.
 5. **Let it mature**: stockfish matures in storage over **60 days**, in any container (a fridge slows it, a freezer stops it). Then the name reads *Walleye Stockfish (Matured)*; until then the tooltip shows how far along it is.
-6. **Rehydrate Fish** (1 L of water) before you eat or cook it (*Walleye Stockfish (Soaked)*): it's as hard as wood. Matured stockfish cheers you up (unhappiness -10), and so does the stew it goes into; unripe it's dull (+10); halfway it's neither. Rehydrated, it keeps 2 / 4 days.
+6. **Rehydrate Fish** (1 L of water) before you eat or cook it (*Walleye Stockfish (Soaked)*): it's as hard as wood. Matured stockfish cheers you up (unhappiness -10), and so does the stew it goes into; fresh off the rack it's dull (+10); halfway it's neither. Soaked, it keeps 2 / 4 days.
 
 **Weather**
 - Slower in frost (four fifths at -5 C, three fifths below), slower from 5 to 10 C, and it **stops above 10 C**.
@@ -289,8 +317,8 @@ Stockfish is unsalted fish dried by frost and wind. It needs no salt and no tub,
 - **Warm seasons rot it.** Once the last 10 days average above 10 C, a fresh stack spoils faster than it dries; a nearly dry one hardly suffers.
 
 **Storing it**
-- **Stockfish Pallet** (build menu: Carpentry 2; 3 planks, 6 nails; hammer and saw kept): stack your stockfish on it the way the warehouses did. In a **loft** (a room upstairs) it ripens **twice as fast** (30 days); in a **ground-floor room**, half as fast again (40 days). Covered, outdoors or in a damp basement it does no better than a shelf. It holds 20 weight; the stack on it grows from a third to full as you load it, as long as nothing but stockfish is on it. Right-click it to see its speed there.
-- **Stockfish Bale**: select stockfish, right-click, **Tie a Bale**. It takes one use of Twine (or a Rope) and ties up to 10 weight of fish, which then carry 30% lighter. A bale holds nothing but stockfish, and the fish inside keep ripening, on a pallet too. **Untie Bale** gives you the fish and your cord back.
+- **Stockfish Pallet** (build menu: Carpentry 2; 3 planks, 6 nails; hammer and saw kept): stack your stockfish on it the way the warehouses did. In a **loft** (a room upstairs) it matures **twice as fast** (30 days); in a **ground-floor room**, half as fast again (40 days). Covered, outdoors or in a damp basement it does no better than a shelf. It holds 20 weight; the stack on it grows from a third to full as you load it, as long as nothing but stockfish is on it. Right-click it to see its speed there.
+- **Stockfish Bale**: select stockfish, right-click, **Tie a Bale**. It takes one use of Twine (or a Rope) and ties up to 10 weight of fish, which then carry 30% lighter. A bale holds nothing but stockfish, and the fish inside keep maturing, on a pallet too. **Untie Bale** gives you the fish and your cord back.
 
 > ⚠ Cold drying **rots** if the season warms up. Hang from November to mid-February. See the Almanac.
 
@@ -310,7 +338,7 @@ A plank shed two tiles long under one sloping roof, the door on the high end wit
 
 1. **Build it** with the door facing where you'll walk up to it. Nothing can be built on the tile in front of the door afterwards.
 2. **Click either tile**: one window, **Smokehouse**, with the hanging recipes. Load it as you would a frame. Nothing hangs in sight: hover a stack in the window to see how it's doing.
-3. **With no fire it dries like a room**: salt fish at about **two thirds** of its open speed, never rained on. **Meat dry cures** here on its own slow clock (below), and never comes out Charque.
+3. **With no fire it dries like a room**: salt fish at about **two thirds** of its open speed, never rained on. **Meat dry cures** here on its own slow clock (chapter 11), and never comes out Charque.
 4. **No stockfish.** Gutted fish needs moving air, so the shed doesn't offer cold drying.
 5. **Moving it:** empty and unjoined, it picks up as one item and puts down again as both tiles.
 
@@ -347,7 +375,7 @@ Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank 
 - **Keep it going.** Adding wood, or banking it **for up to an hour**, doesn't break the run (the banked time doesn't count towards it either). Let it go out or banked for longer and the run is over: those hours count as **smoke** instead (the popup's *Smoke* line), and the next stoking starts from nothing.
 - **Away from home?** The fire burns its wood while you're gone: a fire with three hours of wood gives three hours, however long you stay away.
 - **Short of a cook, fish loses nothing.** The stack keeps drying as the shed always does, and comes out Salt Dried or Cold Smoked when it's dry.
-- **Corned meat must get its cook.** The short cure salts meat for days, not weeks: left to dry in the shed it is **under-salted** and spoils (see Dry curing, below). Meat for the long hang takes the long cure.
+- **Corned meat must get its cook.** The short cure salts meat for days, not weeks: left to dry in the shed it is **under-salted** and spoils (chapter 11). Meat for the long hang takes the long cure.
 - **Want Salt Dried fish instead?** Hang it with the fire out, or on a frame. **Charque** comes from the frames only.
 - The stack's popup shows **Hot Smoke: x of y h stoked in a row**, and the **Smoke** line for cold smoking (below).
 
@@ -370,7 +398,7 @@ Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank 
 **Bank** the joined Firebox and let it smoulder. The stacks dry as they always do, in smoky air, and the smoke is counted.
 
 - **Smoke** = the hours the Firebox smouldered, plus any stoked run that broke off before it cooked the stack. Only hours on a day of **15 C or less** count, whichever way the fire burned: on a warmer day the smoulder heats the meat past 30 C, which cooks it rather than cures it.
-- **When the stack is dry**, it looks at its smoke. With its **hours of smoke** it comes out **Cold Smoked**; short of them, fish is plain Salt Dried and meat is **air dried** (Bresaola and its kin, below). The hours go by the **heaviest piece**, and needn't come in a row:
+- **When the stack is dry**, it looks at its smoke. With its **hours of smoke** it comes out **Cold Smoked**; short of them, fish is plain Salt Dried and meat is **air dried** (Bresaola and its kin, chapter 11). The hours go by the **heaviest piece**, and needn't come in a row:
 
 | Stack | Hours of smoke |
 |---|---|
@@ -392,9 +420,33 @@ Light the joined Firebox and keep it going. A lit Firebox is **stoked**; **Bank 
 > 📏 *Days as if the fire burned every hour; a few hours a day lands between the two columns.*
 - The popup's **Smoke** line reads *x of y h of smoke*. Over 15 C it says **Too warm to count**.
 
-### Dry curing
+| | Cold Smoked Fish |
+|---|---|
+| Weight | about 37% of the fresh fish, as Salt Dried |
+| Food | 90% |
+| Keeps | **120 / 180 days** (rinsed 108 / 162) |
+| Eat it | **As it is**, sliced thin: a little salty, a small mood lift |
+| Cook with it | Soups, stews, rice, pasta, sandwiches, salads |
 
-Meat in the shed is never charque: charque is the sun's and the wind's. Here it **dry cures**, slowly, in cool air, and what it becomes goes by its animal and by whether it had its smoke. (No shed yet? See *Without a Smokehouse*, below.)
+**Meat in the smoke** takes the same fire and the same count, but it hangs for weeks, not days, and it has a chapter of its own: **Dry-Cured Meat and Country Ham**, next.
+
+> ✏ **Margin note:** cold smoke never cooks. The meat stays under about 30 C, so the smoke only flavours and guards the surface while the air does the drying, a few hours of smoke a day over weeks. That's why it belongs to the cool months, why the hours needn't come in a row, and why it keeps for months where hot smoked keeps for days.
+
+> 📜 **Old names:** across the Balkans, beef, mutton and pork loin are salted, then hung in the *pušnica* over a smouldering fire through the winter: *suho meso* in Bosnia, *suva pečenica* in Serbia; Spain's *cecina de León* is beef smoked over oak the same way. Scotland and Wales salted and smoked a leg of mutton as a *mutton ham*, and Norway air-dries one as *fenalår*. On the American frontier a deer was cut in strips, salted and dried over a slow smoky fire: *jerked venison*, a word settlers learned from the Quechua *ch'arki* by way of Spanish, the same root as charque. On the Volga the same treatment makes *balyk* from sturgeon backs and *kholodnogo kopcheniya* fish.
+
+---
+
+## 11. Dry-Cured Meat and Country Ham
+
+Dry curing is the winter road for meat: a long salting in the cold, then weeks of hanging in cool shade, with smoke or without. It gives meat you eat as it is, sliced thin, for months, and from a leg of pork the **Country Ham**.
+
+**The road, step by step**
+
+1. **Salt it in the cold months.** **Pack Meat in Salt**, then **Country Cure Salted Meat** in the tub (chapter 5): **10 days** for cuts, **21** with a Leg of Pork. Only while the last ten days average **10 C or less**, about **October to April**: warmer, the long cure spoils in the tub.
+2. **Hang it in the shade** with **Hang Salted Meat to Dry**: in the **Smokehouse**, on **any drying station under a roof**, or on a **Frame or Hanging Beam in a room or a basement**. Never in the open: sun and rain are for charque.
+3. **Smoke it, or don't.** In a Smokehouse with a Firebox, bank the fire a few hours a day until the stack has its hours of smoke: **60** for cuts, **120** with a leg, on days of 15 C or less (chapter 10). Anywhere else, or with no fire, it air dries.
+4. **Wait.** Three weeks for a cut and six for a leg at full speed; longer in the cold (below).
+5. **Take it down** and eat it as it is. What it's called goes by its animal and its smoke:
 
 | From | With its smoke | Air dried, no smoke |
 |---|---|---|
@@ -404,54 +456,46 @@ Meat in the shed is never charque: charque is the sun's and the wind's. Here it 
 | Pork, Pork Chop | **Smoked Dry-Cured Pork** | **Dry-Cured Pork** |
 | Leg of Pork | **Smoked Country Ham** | **Country Ham** |
 
-- **How long** goes by the heaviest piece: **3 weeks** for a Beef, Venison or Pork, a little less for a Steak or a chop, **6 weeks** for a Leg of Pork, at full speed.
-- **Full speed is a cellar's cool**: from **12 C** up. Colder air dries slower, down to **a quarter** of the speed in frost, and never stops. Damp air slows it as it does salt fish. There is no wind in the shed.
-- **The fire helps**, as it does fish: banked, the shed is 15 C warmer.
-
-| A Beef, dry day | Fire out | Banked |
+| | Dry-cured cuts | Country Ham |
 |---|---|---|
-| Frost | 12 weeks | 3 to 4 weeks |
-| 3 C | 12 weeks | 3 weeks |
-| 6 C | 6 weeks | 3 weeks |
-| 12 C and up | 3 weeks | 3 weeks |
-
-> 📏 *A leg takes twice as long. With a fire a few hours a day, a cut hung in December is done in about seven weeks and a leg in about three months; hung in March, a cut takes five weeks.*
-
-- **Use the long cure.** *Country Cured* meat has salt for the whole hang. **Corned** meat hasn't: its popup shows a red **Under-salted** line, and it spoils by the shed's temperature, the fire's warmth included. Near freezing it comes out about half way through its keeping; in a shed at 10 C it rots in four weeks, by a banked fire in midwinter in about nine days. A hot cook stops it: Corned meat is for **hot smoking** and for charque.
-- **A rotted stack comes down as what you hung**: *Corned Beef (Rotten)*, not Bresaola. In a mixed stack only the Corned pieces rot.
-- **A Country Ham** keeps **180 / 365 days**; the cuts keep 120 / 180.
-
-**Without a Smokehouse.** Air drying needs no shed, only shade. **Country Cured** meat, pork and the leg too, also hangs on any drying station that stands **in the shade**: a **Fish Drying Frame** or a **Hanging Beam** under a roof, in a room or in a basement, or a **Gantry** under an open roof (it can't be built indoors). There it dry cures to the air-dried meats: Bresaola, Dry-Cured Mutton, Venison and Pork, Country Ham.
-
-| Where a cut hangs | January | April | Notes |
-|---|---|---|---|
-| Frame, Beam or Gantry under a roof; Frame or Beam in a room | 12 weeks | 4 to 5 weeks | as the shed with the fire out |
-| Frame or Beam in a **basement** | **32 days** | **32 days** | the curing cellar: steady all year, whatever the weather |
-| Smokehouse, fire a few hours a day | 7 weeks | 4 weeks | and the only place for smoke |
-
-- A leg takes twice as long: about nine weeks in a basement.
-- **Not in the open.** Sun and rain are for charque. If a stack loses its roof it waits (*Stopped (Needs a roof)*).
-- **Corned meat indoors** (a room or a basement) dry cures too, but it is **under-salted** there as in the shed: the red line shows, and it spoils as it hangs. Under an open roof or in the sun it is still charque.
-- **The cellar is for the hang, not the salt.** The Salting Tub goes by the season wherever it stands: a long cure started in a basement in July spoils like any other. Salt in the cold months, then hang in the cellar the year round.
-- **No smoke out here.** Suho Meso, Mutton Ham, Jerked Venison and the smoked hams need the Smokehouse and its Firebox, and so does hot smoking. Corned pork has nowhere else to go.
-
-> 📜 **Old names:** the Italian *cantina* and the Alpine cellar are where *bresaola*, *coppa* and *lonza* hang: cool, still and a little damp, so the outside doesn't harden before the middle has dried.
-
-| | Cold Smoked Fish | Dry-cured meat, smoked or air dried |
-|---|---|---|
-| Weight | about 37% of the fresh fish, as Salt Dried | about 50% of the raw cut, as Charque |
+| Weight | about 50% of the raw cut | about 50% of the leg: 1.25 from a 2.5 leg |
 | Food | 90% | 90% |
-| Keeps | **120 / 180 days** (rinsed 108 / 162) | **120 / 180 days** (rinsed 108 / 162); a Country Ham **180 / 365** |
-| Eat it | **As it is**, sliced thin: a little salty, a small mood lift | **As it is**, sliced thin: a little salty, a small mood lift |
-| Cook with it | Soups, stews, rice, pasta, sandwiches, salads | Soups, stews, pies, rice, pasta, sandwiches, salads, tacos, burritos |
+| Keeps | **120 / 180 days** (rinsed 108 / 162) | **180 / 365 days** |
+| Eat it | **As it is**, sliced thin: a little salty, a small mood lift | **As it is** |
+| Cook with it | Soups, stews, pies, rice, pasta, sandwiches, salads, tacos, burritos | - |
 
-> ✏ **Margin note:** cold smoke never cooks. The meat stays under about 30 C, so the smoke only flavours and guards the surface while the air does the drying, a few hours of smoke a day over weeks. That's why it belongs to the cool months, why the hours needn't come in a row, and why it keeps for months where hot smoked keeps for days.
+**How fast it dries**
 
-> 📜 **Old names:** across the Balkans, beef, mutton and pork loin are salted, then hung in the *pušnica* over a smouldering fire through the winter: *suho meso* in Bosnia, *suva pečenica* in Serbia; Spain's *cecina de León* is beef smoked over oak the same way. Scotland and Wales salted and smoked a leg of mutton as a *mutton ham*, and Norway air-dries one as *fenalår*. On the American frontier a deer was cut in strips, salted and dried over a slow smoky fire: *jerked venison*, a word settlers learned from the Quechua *ch'arki* by way of Spanish, the same root as charque. On the Volga the same treatment makes *balyk* from sturgeon backs and *kholodnogo kopcheniya* fish. Italy's *bresaola* is beef salted and hung in cool mountain air with no smoke at all, and Kentucky hung its country hams smoked or plain, as the family liked them. Ageing, the next step, is still to come.
+- **By the heaviest piece:** **3 weeks** for a Beef, Venison or Pork, a little less for a Steak or a chop, **6 weeks** for a Leg of Pork, at full speed.
+- **Full speed is a cellar's cool:** from **12 C** up. Colder air dries slower, down to **a quarter** of the speed in frost, and never stops. Damp air slows it as it does salt fish. Wind plays no part.
+- **A fire helps**, in the Smokehouse only: banked, the shed is 15 C warmer.
+
+| Where a cut hangs | In frost | At 6 C | From 12 C | Smoke? |
+|---|---|---|---|---|
+| Smokehouse, fire out; any station under a roof; a Frame or Beam in a room | 12 weeks | 6 weeks | 3 weeks | no |
+| Smokehouse, fire banked all day | 3 to 4 weeks | 3 weeks | 3 weeks | yes |
+| Frame or Beam in a **basement** | **32 days** | **32 days** | **32 days** | no |
+
+> 📏 *A leg takes twice as long: about nine weeks in a basement. With a fire a few hours a day, a cut hung in the Smokehouse in December is done in about seven weeks and a leg in about three months; hung in March, a cut takes five weeks.*
+
+- **The basement is the curing cellar:** steady all year, whatever the weather. It is the quickest place for unsmoked meat in winter. The Gantry can't be built there.
+- **The cellar is for the hang, not the salt.** The Salting Tub goes by the season wherever it stands: a long cure started in a basement in July spoils like any other. Salt in the cold months, then hang in the cellar as late as you like.
+- **If a stack loses its roof** it waits (*Stopped (Needs a roof)*).
+- **No smoke outside the shed.** Suho Meso, Mutton Ham, Jerked Venison and the smoked hams need the Smokehouse and its Firebox.
+
+**Mind the salt**
+
+- **Use the long cure.** *Country Cured* meat has salt for the whole hang. **Corned** meat hasn't: hung in the Smokehouse, a room or a basement it dry cures too, but its popup shows a red **Under-salted** line and it spoils by the temperature where it hangs, a fire's warmth included. Near freezing it comes out about half way through its keeping; at 10 C it rots in four weeks, in a basement (15 C) in under two, and a banked fire makes the shed 15 C warmer than the day.
+- **Corned meat has two good roads:** a hot cook in the Smokehouse (chapter 10), or the sun (chapter 8). Corned pork has only the first.
+- **A rotted stack comes down as what you hung:** *Corned Beef (Rotten)*, not Bresaola. In a mixed stack only the Corned pieces rot.
+
+> ✏ **Margin note:** why does the cure want the cold when the hang doesn't? Salt takes weeks to reach the middle of a joint, and until it does the meat by the bone is as raw as the day it was cut. That is why every farm killed its hogs after the first hard frost. Once the salt is through, a ham hangs happily into summer: Kentucky calls it the "summer sweat", and it is where the flavour comes from.
+
+> 📜 **Old names:** the Italian *cantina* and the Alpine cellar are where *bresaola*, *coppa* and *lonza* hang: cool, still and a little damp, so the outside doesn't harden before the middle has dried. Bresaola is beef salted and hung in mountain air with no smoke at all, and Kentucky hung its country hams smoked or plain, as the family liked them. Ageing, the next step, is still to come.
 
 ---
 
-## 11. Lard, Tallow and Cracklings
+## 12. Lard, Tallow and Cracklings
 
 **Rendering, step by step**
 
@@ -502,7 +546,7 @@ Raw fat left in a cold copper goes **rancid** when its oldest piece would have r
 
 ---
 
-## 12. Potted Meat
+## 13. Potted Meat
 
 Potted Meat is the road for any season and any red meat, pork too: cuts cooked slowly in Lard or Tallow with salt, then packed into a clay jar under their own fat. No station: a pot, a fire and a jar.
 
@@ -541,7 +585,7 @@ A pantry, kitchen or shed is unheated: it follows the average of the last ten da
 
 ---
 
-## 13. Stages at a Glance
+## 14. Stages at a Glance
 
 **Fish** (weight compared with the whole fresh fish)
 
@@ -579,7 +623,7 @@ Each piece keeps its own weight and food through every stage. The name says what
 
 ---
 
-## 14. The Almanac (Seasons)
+## 15. The Almanac (Seasons)
 
 Drying runs on real weather, recorded every 10 minutes, **even while you're away**. Spoilage goes by the season, not the day: it follows the average temperature of the last 10 days, so a warm afternoon in January does nothing.
 
@@ -600,18 +644,135 @@ Drying runs on real weather, recorded every 10 minutes, **even while you're away
 
 December batches run past the end of the recorded forecasts, so they have no figure; expect about what January gives. *Keeping lost* is how much of a finished stockfish batch's keeping time early frost, early wet and a warm spell took, on average. *2-day cure lost* is what a warm cure takes from a batch of big fish (or Beef) cured that month. Charque's months are in chapter 8.
 
-**The year on a Kentucky farm**
+**The year, month by month**
 
-| Season | Fish | Meat |
+What to start, and what the base game is doing meanwhile.
+
+| Months | Fish | Meat | Garden and water |
+|---|---|---|---|
+| **Nov, Dec** | **Stockfish** on the racks; Cold Smoked on a banked fire | **Slaughter.** Render the fat; **Country Cure** the legs first (21 days), then cuts (10); Potted Meat into a cold pantry | Nothing grows. Fish bite at about half |
+| **Jan, Feb** | Stockfish, the last hung by **mid-February**; salt fish slowly, about 4 weeks | Hang the Country Cured meat: Smokehouse with a daily fire, or a cellar beam. A second long cure for beef or venison | Sowing starts in February |
+| **Mar, Apr** | Salt fish again, slowly; Cold Smoked on cool days; stockfish maturing on the pallet | The **last long cures** (April at the latest); hung meat finishes fastest now, 4 to 5 weeks | First radishes and greens. Fish bite at three quarters |
+| **May** | Salt fish, 2 to 3 weeks | The first **charque**; crocks move to the basement or the fridge | Harvests begin; full bite on warm days |
+| **Jun, Jul, Aug** | **Salt fish** under an open roof, fastest; mind a warm cure in July | **Charque** at its best, 1 to 2 weeks; no long cure; hot smoke for the week | Potatoes, tomatoes, cabbages. Fish bite best |
+| **Sep, Oct** | The last quick salt fish in September; the first stockfish in late October is a gamble | The last charque in September; the **long cure opens again** in October | The last harvests. Nothing is sown after summer |
+| **Any month** | Hot Smoked, for this week | Hot Smoked and Ham, for this week; Potted Meat | |
+
+**When each larder runs out**
+
+| Made | What | Lasts until |
 |---|---|---|
-| Winter (Nov to mid-Feb) | **Stockfish**; salt fish, slowly; **Cold Smoked** | **Potted Meat** in a cold pantry keeps four months; **country cure** the legs and cuts, then dry cure them in the Smokehouse with a daily fire |
-| Spring, autumn | Salt fish; Cold Smoked on cool days | Potted Meat in the basement; charque slowly, under a roof; dry-cured meat finishes fastest in the Smokehouse now, smoked on cool days |
-| Summer | Salt fish under a roof, fastest | **Charque**; Potted Meat only in the basement or fridge |
-| Any time | Hot Smoked, for this week's meals | Hot Smoked, for this week's meals |
+| June to September | Salt Dried fish, Charque (120 / 180 days) | December to March |
+| November to March | Stockfish (365 / 540) | The next winter |
+| January to April | Dry-cured cuts (120 / 180) | June to October |
+| February to May | Country Ham (180 / 365) | Autumn to the next spring |
+| At the slaughter | Potted Meat in a cold pantry or fridge (120 / 180) | March to May |
+
+Summer's food carries you to midwinter, and winter's carries you back to summer. The hungry months are **February to April**: the garden is empty, the fish bite poorly, and last summer's salt fish is running out. That is what the stockfish, the crocks and the hams are for.
+
+**What the base game gives, and when** (default settings)
+
+| | When | Keeps fresh |
+|---|---|---|
+| Most crops | Sown **February to July**; cabbages and greens take about 2 months, potatoes, carrots and tomatoes about 3 | A cabbage 2 days, a potato about 4 weeks |
+| The garden's dead months | **October to January**: nothing may be sown and little survives | |
+| Animals | Butchered whenever you choose; a carcass on the Butchering Hook gives far more than one on the ground | Raw meat 2 / 4 days |
+
+| Air temperature | Fish bite |
+|---|---|
+| 15 to 30 C | best |
+| 0 to 15 C, or over 30 C | three quarters as often |
+| -10 to 0 C | half as often |
+| Below -10 C | a quarter as often |
+
+So summer fish is cheap and wants **salt**; winter fish costs twice the hours, and **stockfish** is the one road that asks nothing else of you.
 
 ---
 
-## 15. The Logbook
+## 16. Three Larders
+
+Three ways to live, and what each should build. For a yardstick: a survivor needs something like **2,500 calories a day**; a Beef or a Venison is about 440, a Steak 220, a Pork 300, a chop 150 to 230, fresh fish about 400 for each 1.0 of weight, and a block of Lard or Tallow about 4,100.
+
+| A grown animal on the hook, about | Meat | Calories | Days of food | Salt to cure it all |
+|---|---|---|---|---|
+| Cow or bull | 25 Beef, 25 Steaks | 16,500 | 6 to 7 | 200 |
+| Pig | 19 Pork, 19 Pork Chops (one or two legs among them) | 8,500, and as much again in Lard | 3, or 7 with the Lard | about 150 |
+| Sheep | 22 Mutton Chops | 5,000 | 2 | 88 |
+| Deer | 26 Venison | 11,500 | 4 to 5 | 104 |
+
+> ✏ *Margin note:* these are middling animals and an unskilled butcher; a big one gives half as much again. The tub takes **35 pieces** at a time, so a cow is two loads, or two tubs.
+
+### The house with one freezer
+
+*A town house, a generator, one fridge-freezer, no land.*
+
+**The freezer is a waiting room, not a larder.** It holds only so much, it drinks fuel, and the day the generator stops you have about two days to save what's in it.
+
+- **Freeze what's waiting for the tub.** A deer is 26 cuts and the tub cures them in two days, but the frame may be full. Frozen meat keeps while it waits. **Thaw it before you pack it**: the salt refuses frozen meat and fish.
+- **Hot smoke once a week.** Corn a tub of meat or fish on Friday, stoke the Firebox on Sunday afternoon: a week or two of food that needs no power at all.
+- **Keep crocks in the fridge.** A Crock of Potted Meat keeps **120 days** in a powered fridge and holds about 5,000 calories. Six crocks are twelve days of food on one shelf.
+- **Dry the rest.** Summer: charque and salt fish on a frame under the porch roof. Winter: country cure, then a Hanging Beam in the basement.
+- **Don't freeze stockfish or crocks you want to age.** A freezer stops stockfish maturing. Frozen fish is fine to *hang* for stockfish, though.
+
+**The day the power dies**, work in this order:
+
+| Order | What | Buys you |
+|---|---|---|
+| 1 | Let it thaw. Cook and eat what you can today | 2 days |
+| 2 | **Pack in salt and corn** everything else, a tub at a time | 7 / 14 days as Corned meat or Salt Cured fish |
+| 3 | From the tub: **hot smoke** a batch, **pot** another under Lard | 1 to 2 weeks; weeks to months |
+| 4 | Hang the rest: fish to salt dry, red meat to charque in summer | 4 to 6 months |
+
+### The farm
+
+*Cattle, pigs and sheep, a garden, a basement, a Hearth in the yard.*
+
+The farm's year turns on two slaughters.
+
+- **Summer beef, June to August.** A cow is 50 cuts: two tub loads and **200 salt**, corned in two days each. One Fish Drying Frame in the sun takes the whole cow, five Beef to a stack: **charque** in one to two weeks, about 10 weight of it, good until December to February. The garden feeds you meanwhile.
+- **Hog killing, November**, once the nights are frosty.
+  1. **Render the fat** in the Hearth's copper the same day: two or three blocks of Lard.
+  2. **Legs into the long cure first**, 21 days; cuts follow for 10. The tub holds one cure at a time, so a second tub earns its keep here.
+  3. **Pot eight to twelve cuts** under the pig's own Lard: two or three crocks in the winter pantry, good until March.
+  4. **Corn a few cuts and hot smoke them**: Ham for the week of the slaughter.
+  5. **Mid-December: hang the Country Cured meat.** On a Hanging Beam in the basement the cuts are Dry-Cured Pork by mid-January and the legs **Country Ham** by mid-February. In the Smokehouse with a fire each day they take seven weeks and three months, and come out smoked.
+- **A winter steer or a few sheep, January to March**: country cure for 10 days, then the Smokehouse: **Suho Meso** and **Mutton Ham** for the spring.
+
+| Month | On the table |
+|---|---|
+| May to October | The garden, fresh meat, hot smoked meat, salt fish if there's a pond |
+| November to January | Potted Meat, summer's charque, potatoes from the cellar |
+| February to April | Dry-cured pork and beef, the last crocks; the garden is only just sown |
+| May onwards | The Country Hams, which keep until the next hog killing |
+
+> ✏ *Margin note:* salt is the farm's real cost. A cow and a pig together want about 350, seven Bags of Salt. The Salt mod's lick pays for itself in one autumn.
+
+### The river camp
+
+*A hunter and fisher: no power, no fields, no cellar. A Salting Tub and a Fish Drying Frame under a lean-to roof (Carpentry 2), and whatever the woods and the water give.*
+
+- **Summer: fish hard, and salt it.** The fish bite best now. A frame holds 20 weight of fish, about **8,000 calories**, three days of food, and takes **160 salt** and two to three weeks under the roof. One frame can't keep up with a good rod: build two or three, or a Hanging Beam (60 weight).
+- **A summer deer is charque.** 26 Venison, one tub load, 104 salt, two days of corning; the whole deer hangs on one frame and dries in one to two weeks to about 6.5 weight of **Venison Charque**: 10,000 calories you can carry.
+- **Winter: every fish is stockfish.** The bite is halved, so nothing is wasted: gut it and hang it the same day, no salt, no tub. A frame's 20 weight comes down in seven or eight weeks as 3.6 weight of stockfish, about 7,000 calories, and it keeps a year.
+- **A winter deer is dry-cured.** Country cure it for ten days, then hang it under the lean-to: twelve weeks in the frosts, five to seven from March. That's **Dry-Cured Venison**, eaten as it is. With a Smokehouse and a Firebox (Carpentry 3, Masonry 2) it's **Jerked Venison** in about seven weeks.
+- **No fat, no crocks.** Deer give no fat, so Potted Meat needs Lard you've found. A wild boar or a raided pig farm changes that.
+- **Hot smoke for the trail's first week**, if you have the shed: four hours of fire for fish.
+
+**What to carry**
+
+| In the pack | Calories for each 1.0 of weight |
+|---|---|
+| Fresh fish | about 400 |
+| Fresh venison | about 880 |
+| Salt Dried fish | about 975 |
+| Charque, Dry-Cured or Jerked Venison | about 1,600 |
+| Stockfish | about 2,000; a tied bale carries 30% lighter |
+
+Soak stockfish and charque at the camp-fire, not on the road: each wants a litre of water.
+
+---
+
+## 17. The Logbook
 
 *Found in a tackle box, the pages stiff with salt and smelling faintly of smoke.*
 
@@ -652,9 +813,9 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 ---
 
-## 16. Secrets & Hidden Features
+## 18. Secrets & Hidden Features
 
-- 🐟 **Fish keep their identity.** A *Small Largemouth Bass* stays one through every stage. Each fish keeps its own weight and calories, so a batch of mixed sizes comes out mixed too. Meat keeps its cut: *Venison (Charque)*.
+- 🐟 **Fish keep their identity.** A *Small Largemouth Bass* stays one through every stage. Each fish keeps its own weight and calories, so a batch of mixed sizes comes out mixed too. Meat keeps its cut in the tub (*Corned Steak*) and its animal after (*Beef Charque*, *Jerked Venison*).
 - 🎨 **Icons change with the cure.** Pale with salt when cured, browned when salt dried, grey when cold dried, gold when hot smoked, smoky bronze when cold smoked, darker again when rehydrated. Gutted fish are drawn **without their heads**, as stockfish were; halves show red flesh and a backbone. Meat goes from red to cured red-brown, charque nearly black, hot-smoked mahogany, Dry-Cured a deep burgundy.
 - 🪝 **Fish Guts are free chum.** Packing or gutting a whole fish over 0.6 weight gives Fish Guts weighing 10% of the fish.
 - 🔪 **Fillet at any stage.** A whole fish over 0.6 weight can still be cut into 2 fillets after it's been salted, dried or rehydrated, just like a fresh one. The fillets stay at the same stage.
@@ -667,13 +828,15 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 ---
 
-## 17. Tips from the Docks and the Block
+## 19. Tips from the Docks and the Block
 
 - **Fillets don't cheat the salt.** A vanilla fillet weighs 5% of its fish but holds half its food, so salted it pays and weighs as half the gutted fish.
 - **Big catch?** A fish heavier than a stack's limit won't fit. Split it in two, or hang it on the Beam or Gantry.
 - **An open shed beats a room.** A frame under a porch or lean-to roof dries salt fish and charque at full speed, rain or shine, in the shade.
 - **Winter is stockfish season.** Gut everything you catch in December and January. Turn the heads into stock the same day, as they spoil like fresh fish.
-- **Don't eat December's stockfish in January.** Give it the 60 days. A crate in the shed is enough, a pallet in the loft is better, and the freezer is the one place it won't ripen.
+- **Don't eat December's stockfish in January.** Give it the 60 days. A crate in the shed is enough, a pallet in the loft is better, and the freezer is the one place it won't mature.
+- **Kill hogs after the first frosts.** The long cure is only safe from October to April. Salt the legs first: they take 21 days in the tub and the tub holds one cure at a time.
+- **A cellar beam is a ham's best friend.** A Hanging Beam in a basement dries Country Cured meat in a month whatever the weather, with no fire to tend.
 - **Butcher on the hook.** The Butchering Hook gives nearly five times the fat of the ground.
 - **Cook four cuts to a crock**, and keep it in the basement or a winter pantry. Open it when you mean to finish it.
 - **Hot smoke what you'll eat this week**, and salt-dry the rest. A small batch of fish cooks in four hours of fire.
@@ -683,7 +846,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 ---
 
-## 18. Troubleshooting
+## 20. Troubleshooting
 
 | Problem | Why |
 |---|---|
@@ -725,7 +888,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 ---
 
-## 19. Sandbox Settings
+## 21. Sandbox Settings
 
 | Option | Default | Effect |
 |---|---|---|
@@ -743,7 +906,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 ---
 
-## 20. Appendix: The Tester's Toolkit
+## 22. Appendix: The Tester's Toolkit
 
 *For testers, modders and the curious. These commands exist only when the game is started in debug mode (Steam launch option `-debug`). Type them into the in-game **Command Console** and press Enter. `TPFM.help()` lists them in the game.*
 

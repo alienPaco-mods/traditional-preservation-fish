@@ -14,6 +14,7 @@
 - **Spoilage strictness** now reaches 0.4.14's two rules: under-salted Corned meat (`F.UNDER_CURE_HOURS`) and the long
   cure's cold rule (`F.LONG_CURE_ROT_HOURS`) are scaled as the older ones (off: never; forgiving x2; harsh x0.5).
 - Air dried meat's tooltip no longer speaks of smoke at all.
+- **Guide pass**: chapter 3 is every road on one page (when to start, the cure, where, how long, yield, keeping, and what it costs in salt and fuel); dry curing has its own chapter 11; the Almanac has the year month by month, when each larder runs out and what the base game's garden and fishing do; new chapter 16, Three Larders: a house with one freezer, a farm, a river camp. Charque's indoor column is gone (no charque indoors).
 - **The ham by the Smokehouse door** hangs on the door's other side, a third larger, a little past the shed's corner,
   with a slice taken off its round end (`paint_chamber_ham`; same tile numbers). Painted as vanilla's Ham icon is: a
   few tones in small patches, lit from one side, a pale mottled cut with a lighter middle, a dark line round it.
