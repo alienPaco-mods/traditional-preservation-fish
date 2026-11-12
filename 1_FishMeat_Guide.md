@@ -1015,6 +1015,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Command | What it does |
 |---|---|
 | `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness, the wind, the drying speeds, whether unsalted and salted fish are spoiling, and the running totals |
+| `TPFM.here()` | Which place you're standing in, as a station there would read it: Open, Covered (a roof, no room), Sheltered (a room) or Basement. |
 | `TPFM.wind()` | Starts a log of the live wind every 10 minutes; run it again to print it beside the forecast |
 | `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one, `TPFM.age(120)` a charque one |
 | `TPFM.rain(hours)` | Adds hours of rain (default 6) and wets the open stations: an open charque stack loses a tenth per 6 hours. Then `TPFM.dry()` |
@@ -1025,24 +1026,16 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | `TPFM.warmCure(hours)` | Adds hours of a warm cure at 25 C, to test a warm cure spoiling a running tub (24 hours take about a fifth) |
 | `TPFM.mature(days)` | Ages the stockfish and the dry cured meat you carry by this many days. Stockfish is Matured after 60, a cut Aged after 30, a Country Ham after 90 |
 | `TPFM.food()` | The cured fish and meat you carry, with the numbers the game rounds or hides: hunger, unhappiness, boredom, thirst, weight, age against its days, ageing |
-| `TPFM.dryCured(n)` | Spawns `n` each of the seven cuts dry cured, smoked and young, to age and slice |
 
 **Spawning**
 
 | Command | What it does |
 |---|---|
-| `TPFM.fish(name, weight, n)` | Spawns `n` whole fish at that weight, with food scaled to match, e.g. `TPFM.fish("Walleye", 4, 2)`. `TPFM.fish()` lists the names |
-| `TPFM.curedFish(name, n)` | Spawns `n` fish (default Walleye) already Salt Cured, ready to hang |
-| `TPFM.meat(n)` | Spawns `n` each of Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop and Leg of Pork |
-| `TPFM.cured(n, long)` | Spawns `n` each of those cuts already Corned (`long = true`: Country Cured), ready to hang |
-| `TPFM.salt(n)` | Spawns vanilla Salt shakers |
-| `TPFM.heads(n)` / `TPFM.stock()` | Spawns Fish Heads / a Pot of Fish Head Stock (default values) |
-| `TPFM.stockfish(n)` | Spawns young stockfish, as if fresh off the frame |
-| `TPFM.fat(n)` | Spawns `n` each of Pork Fat, Beef Suet and Mutton Fat |
-| `TPFM.fatPot(state)` | Spawns a Pot of Pork Fat, cooked (the default), `"burnt"` or `"raw"` |
-| `TPFM.potted()` | Spawns what Potted Meat takes: a Pot, Lard, Salt, four cuts and the three clay vessels |
-| `TPFM.crock(n)` | Spawns full Crocks of Potted Meat: four Steaks in Lard each, in a Glazed Clay Jar |
-| `TPFM.flueKit()` | Spawns both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel. With Core's `TPC.fireboxKit()` you can build and join a Firebox |
+| `TPFM.fish(name, n, weight, stage)` | Spawns `n` fish, at that weight if given (food scaled to match), e.g. `TPFM.fish("Walleye", 2, 4)`. A stage gives it further along: `"cured"` (Salt Cured, ready to hang) or `"stockfish"` (young, fresh off the frame), and may take the weight's place: `TPFM.fish("Walleye", 3, "cured")`. `TPFM.fish()` lists the names; `"all"` gives one of each |
+| `TPFM.meat(name, n, stage)` | Spawns `n` of a cut, e.g. `TPFM.meat("Steak", 2)`; `"all"` gives each of Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop and Leg of Pork. A stage gives it further along: `"corned"` (*Steak (Corned)*; no leg), `"country"` (Country Cured) or `"dryCured"` (dry cured, smoked and young, to age and slice). `TPFM.meat()` lists the names |
+| `TPFM.give(name, n, option)` | Spawns `n` of: `"head"` (Fish Head), `"stock"` (Pot of Fish Head Stock), `"salt"` (vanilla shaker), `"fat"` (one each of Pork Fat, Beef Suet and Mutton Fat), `"fatPot"` (a Pot of Pork Fat, cooked; option `"burnt"` or `"raw"`), `"crock"` (a full Crock of Potted Meat: four Steaks in Lard in a Glazed Clay Jar). Default food values. `TPFM.give()` lists them |
+| `TPFM.kit("potted")` | Spawns what Potted Meat takes: a Pot, Lard, Salt, four cuts and the three clay vessels |
+| `TPFM.kit("flue")` | Spawns both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel. With Core's `TPC.kit("firebox")` you can build and join a Firebox |
 
 **Looking things over**
 
@@ -1060,10 +1053,10 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.
 
 **Typical checks**
-- **Salt fish:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(10)` (each 4 weight walleye takes 28 salt), pack and cure, then hang the fish and `TPFM.age(288)`.
-- **Charque:** `TPFM.cured(2)`, hang the beef, mutton and venison on a frame (it refuses the pork), `TPFM.age(120)`, take them down and rehydrate one.
-- **Potted Meat:** `TPFM.potted()`, Put Meat in Lard or Tallow with the Steak, Add Meat to the Pot three times, cook it two hours, Pack Potted Meat into the Glazed Clay Jar, then eat a quarter.
-- **Hot smoking:** build a Smokehouse, `TPC.fireboxKit()` and `TPFM.flueKit()`, build a Firebox by a long side with its door turned away, Connect the Firebox, hang `TPFM.cured(2)` inside, light the Firebox, then `TPFM.stoke(8)`: Hot Smoked meat, and a ham by the door.
-- **Cold smoking:** in a cool month, the same Smokehouse and Firebox, hang `TPFM.curedFish("Walleye", 3)`, bank the Firebox, `TPFM.bank(50)`, then `TPFM.age(288)`: Cold Smoked Fish.
-- **Dry curing:** hang `TPFM.cured(1, true)` (Country Cured, with a leg) in the Smokehouse. `TPFM.age(1008)` with no fire: Bresaola, the Dry Cured meats and a Country Ham. With `TPFM.addSmoke(130)` first (or `TPFM.bank(130)` on a day of 15 C or less): Suho Meso, Mutton Ham, Jerked Venison, Smoked Dry Cured Pork and a Smoked Country Ham. Hang `TPFM.cured(1)` (Corned) and `TPFM.age(520)`: it comes down Corned and rotten, as it would after three weeks in a 12 C shed (`TPFM.underSalt(hours)` adds the spoiling alone). `TPFM.smoke()` lists each stack's hours.
-- **Heads:** `TPFM.fish("Walleye", 4)` and `TPFM.fish("Bluegill", 0.9)`, then Gut Fish on both. Only the walleye gives a head.
+- **Salt fish:** `TPFM.fish("Walleye", 3, 4)` and `TPFM.give("salt", 10)` (each 4 weight walleye takes 28 salt), pack and cure, then hang the fish and `TPFM.age(288)`.
+- **Charque:** `TPFM.meat("all", 2, "corned")`, hang the beef, mutton and venison on a frame (it refuses the pork), `TPFM.age(120)`, take them down and rehydrate one.
+- **Potted Meat:** `TPFM.kit("potted")`, Put Meat in Lard or Tallow with the Steak, Add Meat to the Pot three times, cook it two hours, Pack Potted Meat into the Glazed Clay Jar, then eat a quarter.
+- **Hot smoking:** build a Smokehouse, `TPC.kit("firebox")` and `TPFM.kit("flue")`, build a Firebox by a long side with its door turned away, Connect the Firebox, hang `TPFM.meat("all", 2, "corned")` inside, light the Firebox, then `TPFM.stoke(8)`: Hot Smoked meat, and a ham by the door.
+- **Cold smoking:** in a cool month, the same Smokehouse and Firebox, hang `TPFM.fish("Walleye", 3, "cured")`, bank the Firebox, `TPFM.bank(50)`, then `TPFM.age(288)`: Cold Smoked Fish.
+- **Dry curing:** hang `TPFM.meat("all", 1, "country")` (Country Cured, with a leg) in the Smokehouse. `TPFM.age(1008)` with no fire: Bresaola, the Dry Cured meats and a Country Ham. With `TPFM.addSmoke(130)` first (or `TPFM.bank(130)` on a day of 15 C or less): Suho Meso, Mutton Ham, Jerked Venison, Smoked Dry Cured Pork and a Smoked Country Ham. Hang `TPFM.meat("all", 1, "corned")` (Corned) and `TPFM.age(520)`: it comes down Corned and rotten, as it would after three weeks in a 12 C shed (`TPFM.underSalt(hours)` adds the spoiling alone). `TPFM.smoke()` lists each stack's hours.
+- **Heads:** `TPFM.fish("Walleye", 1, 4)` and `TPFM.fish("Bluegill", 1, 0.9)`, then Gut Fish on both. Only the walleye gives a head.

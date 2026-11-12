@@ -60,16 +60,17 @@ run("dry")
 check("dry clears the wetness", ledger.wetness == 0)
 
 check("fish with no name lists the fish", run("fish"):find("Fish: ", 1, true) ~= nil and #player.given == 0)
-run("fish", "Walleye", nil, 2)
+run("fish", "Walleye", 2)
 check("fish gives whole fish from Base", #player.given == 2 and player.given[1] == "Base.Walleye")
-run("heads", 2)
-run("stock")
-run("salt")
+run("give", "head", 2)
+run("give", "stock")
+run("give", "salt")
+check("give with no name lists the things", run("give"):find("fatPot", 1, true) ~= nil and #player.given == 6)
 check("heads, stock and salt land in the inventory", #player.given == 6
     and player.given[3] == "TraditionalPreservationFishMeat.FishHead"
     and player.given[5] == "TraditionalPreservationFishMeat.PotOfFishHeadStock" and player.given[6] == "Base.Salt")
 
-run("fat", 2)
+run("give", "fat", 2)
 check("fat gives each raw fat", #player.given == 12 and player.given[7] == "TraditionalPreservationFishMeat.PorkFat"
     and player.given[9] == "TraditionalPreservationFishMeat.BeefSuet" and player.given[11] == "TraditionalPreservationFishMeat.MuttonFat")
 check("fatRows says there are none before a world starts", run("fatRows"):find("sowlandrace: no row", 1, true) ~= nil)
@@ -96,15 +97,23 @@ player:getInventory().AddItem = function(_, fullType)
     return fish
 end
 local pots = #stamped
-run("fatPot")
-run("fatPot", "burnt")
+run("give", "fatPot")
+run("give", "fatPot", 1, "burnt")
 check("fatPot gives a cooked pot, or a burnt one", #stamped == pots + 2 and stamped[pots + 1].cooked and not stamped[pots + 1].burnt
     and stamped[pots + 2].burnt and stamped[pots + 1].fullType == "TraditionalPreservationFishMeat.PotOfPorkFat")
 stamped = {}
 H.installGetText()
-run("stockfish", 2)
+run("fish", "Walleye", 2, "stockfish")
 check("stockfish gives young stockfish", #stamped == 2 and stamped[1].fullType == "TraditionalPreservationFishMeat.ColdDriedFish"
     and stamped[1]:getModData().matureAge == 3 and stamped[1].name == "Walleye Stockfish")
+check("meat with no name lists the cuts and the stages", run("meat"):find("LegOfPork", 1, true) ~= nil and run("meat"):find("dryCured", 1, true) ~= nil)
+local before = #player.given
+run("meat", "all", 2)
+check("meat gives each cut", #player.given == before + 2 * #F.MEAT_CUTS and player.given[before + 1] == "Base.Beef")
+before = #player.given
+run("kit", "flue")
+check("kit gives the flue kits", #player.given == before + 10 and player.given[before + 1] == "Base.ClayPipeSegment")
+check("kit with no kind lists them", run("kit"):find("TPFM.kit(\"potted\")", 1, true) ~= nil and #player.given == before + 10)
 function getCell() return { getGridSquare = function() return nil end } end
 check("pallet says when there is none near", run("pallet"):find("No Stockfish Pallet", 1, true) ~= nil)
 

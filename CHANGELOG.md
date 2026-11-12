@@ -1,6 +1,12 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
 ## 0.4.22
+- **Debug console by the series' convention** (2026-11-12, consistency sweep; no old names kept, the mod was never
+  released): `TPFM.fish(name, n, weight, stage)` (the count now comes before the weight; stage `"cured"` or
+  `"stockfish"`; `"all"` gives each fish), `TPFM.meat(name, n, stage)` (`"all"`; stage `"corned"`, `"country"`,
+  `"dryCured"`), `TPFM.give(name, n, option)` (head, stock, salt, fat, fatPot, crock), `TPFM.kit("potted" | "flue")`
+  and `TPFM.here()`. Gone: `cured`, `curedFish`, `dryCured`, `stockfish`, `heads`, `stock`, `salt`, `fat`, `fatPot`,
+  `potted`, `crock(n)`, `flueKit`. Tests, DEVHELP, guide.
 - **Names follow one rule** (2026-11-12, consistency sweep): a state a piece passes through goes in brackets after
   its name, as vanilla's do, on meat as on fish: *Steak (Corned)*, *Steak (Country Cured)*, *Beef (Hot Smoked)*,
   *Beef Slice (Hot Smoked)*; finished goods keep their own names (Charque, Bresaola, Country Ham). No hyphens in a

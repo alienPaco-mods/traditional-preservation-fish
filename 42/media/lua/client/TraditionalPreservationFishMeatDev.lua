@@ -3,6 +3,7 @@
 if not isDebugEnabled() then return end
 
 local F = TraditionalPreservationFishMeat
+local Weather = require "TraditionalPreservationCore/Weather"
 TPFM = {}
 
 local function say(text) print("[TPFM] " .. text) end
@@ -16,6 +17,7 @@ end
 
 function TPFM.help()
     say("TPFM.weather()             the drying weather now: temperature, season, wetness, rates, spoilage and totals")
+    say("TPFM.here()                which place you're standing in: Open, Covered (a roof, no room), Sheltered (a room) or Basement")
     say("TPFM.wind()                start a log of live wind every 10 minutes; again to print it beside the forecast")
     say("TPFM.age(hours)            give every hanging stack this many hours of perfect drying weather (Corned meat in a Smokehouse spoils with it)")
     say("TPFM.spoil(hours)          add this many hours of spoiling weather, to test rotting stacks")
@@ -27,25 +29,15 @@ function TPFM.help()
     say("TPFM.dry()                 clear the wetness, so open and cold frames start drying again at once")
     say("TPFM.mature(days)          age the stockfish and dry cured meat you carry by this many days, to test maturing and ageing")
     say("TPFM.food()                the cured fish and meat you carry: hunger, unhappiness, boredom, thirst, age against its days, ageing")
-    say("TPFM.dryCured(n)           spawn n each of the seven cuts dry cured and young (smoked; a Country Ham from the leg), to age and slice")
-    say("TPFM.stockfish(n)          spawn n young stockfish (fresh off the frame), for the pallet")
+    say("TPFM.fish(name, n, weight, stage) spawn n fish, e.g. TPFM.fish(\"Walleye\", 2, 4); stage \"cured\" or \"stockfish\" (it may take weight's place); TPFM.fish() lists the names, \"all\" gives each")
+    say("TPFM.meat(name, n, stage)  spawn n of a cut, e.g. TPFM.meat(\"Steak\", 2) or TPFM.meat(\"all\", 1, \"corned\"); stage \"corned\", \"country\" or \"dryCured\"; TPFM.meat() lists the names")
+    say("TPFM.give(name, n, option) spawn n of: head, stock, salt, fat, fatPot (option \"burnt\" or \"raw\"), crock (full, four Steaks in Lard). TPFM.give() lists them")
+    say("TPFM.kit(kind)             the things a test needs: \"potted\" (Potted Meat) or \"flue\" (both flue kits and tools). TPFM.kit() lists the kinds")
     say("TPFM.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
-    say("TPFM.fish(name, weight, n) spawn n whole fish, e.g. TPFM.fish(\"Walleye\", 4, 2). TPFM.fish() lists the names")
-    say("TPFM.heads(n)              spawn n Fish Heads")
-    say("TPFM.stock()               spawn a Pot of Fish Head Stock")
-    say("TPFM.salt(n)               spawn n vanilla Salt shakers")
-    say("TPFM.fat(n)                spawn n each of Pork Fat, Beef Suet and Mutton Fat")
-    say("TPFM.meat(n)               spawn n each of the cuts that go in the salt: Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop, Leg of Pork")
-    say("TPFM.cured(n, long)        spawn n each of those cuts already Corned (long = true: Country Cured), ready to hang")
-    say("TPFM.curedFish(name, n)    spawn n fish (default Walleye) already Salt Cured, ready for the frame or Smokehouse")
     say("TPFM.rain(hours)           add this many hours of rain and wet the open frames, to test rain on open charque")
-    say("TPFM.fatPot(state)         spawn a Pot of Pork Fat: \"cooked\" (the default), \"burnt\" or \"raw\"")
     say("TPFM.fatRows()             the fat each vanilla animal's butchering table gives now")
-    say("TPFM.potted()              spawn a Pot, Lard, Salt, four cuts and the three clay vessels for Potted Meat")
-    say("TPFM.crock(count)          spawn full Crocks of Potted Meat (four Steaks in Lard each, in a Glazed Clay Jar)")
     say("TPFM.crocks()              each Crock of Potted Meat on you or within 4 tiles: place, keeping rate, days left")
     say("TPFM.keep(days)            age those crocks by this many days at their place's rate now")
-    say("TPFM.flueKit()             spawn both flue kits: 2 Clay Pipe Segments, 3 Flat Stones, 3 Clay, a trowel and a shovel")
     say("TPFM.smokehouse()          each Smokehouse tile within 3 tiles: facing, part, the Fireboxes beside it and why each can't join")
     say("TPFM.smoke()               the joined Firebox's fire record and each stack's hot and smoke hours, Smokehouses within 3 tiles")
     say("TPFM.stoke(hours)          add stoked hours to the running session of those joined Fireboxes (stoke it first)")
@@ -80,6 +72,10 @@ end
 
 -- Wind probe for the cold-drying wind curve: live wind every 10 minutes against the day's forecast.
 local windLog
+function TPFM.here()
+    say("You're in: " .. tostring(Weather.placeOf(getPlayer(), true)))
+end
+
 local function sampleWind()
     local climate = getClimateManager()
     local forecast = climate:getClimateForecaster():getForecast()
@@ -225,125 +221,157 @@ function TPFM.food()
     if count == 0 then say("No cured fish or meat on you.") end
 end
 
--- Each cut as the Smokehouse gives it after the long cure and its smoke, just dried: "Suho Meso", "Smoked Country Ham".
-function TPFM.dryCured(count)
-    local inventory = getPlayer():getInventory()
-    for _, cut in ipairs(F.MEAT_CUTS) do
-        for _ = 1, count or 1 do
-            local cured = instanceItem(F.CURED_MEAT)
-            cured:getModData().longCure = true
-            F.carry(instanceItem(cut), cured)
-            inventory:AddItem(F.smokedItem(cured, {}, F.COLD_FISH_OUT, F.DRY_CURED, false))
-        end
-    end
-    say("Gave " .. (count or 1) .. " each of the seven cuts, dry cured and young. TPFM.mature(days) ages them.")
-end
-
 function TPFM.dry()
     local ledger = F.getLedger()
     ledger.wetness, ledger.coldWetness = 0, 0
     say("Wetness cleared.")
 end
 
-function TPFM.fish(name, weight, count)
-    if not name then
-        local names = {}
-        for _, fullType in ipairs(F.FISH_ICONS) do table.insert(names, (fullType:gsub("^Base%.", ""))) end
-        return say("Fish: " .. table.concat(names, ", "))
+-- Scales a spawned fish to a weight, its food with it, as a caught fish's is.
+local function setWeight(fish, weight)
+    if not weight or fish:getActualWeight() <= 0 then return end
+    local scale = weight / fish:getActualWeight()
+    fish:setCalories(fish:getCalories() * scale)
+    fish:setProteins(fish:getProteins() * scale)
+    fish:setLipids(fish:getLipids() * scale)
+    fish:setCarbohydrates(fish:getCarbohydrates() * scale)
+    fish:setBaseHunger(fish:getBaseHunger() * scale)
+    fish:setHungChange(fish:getHungChange() * scale)
+    fish:setActualWeight(weight)
+    fish:setWeight(weight)
+    fish:setCustomWeight(true)
+end
+
+local function shortName(fullType)
+    return (fullType:gsub("^.*%.", ""))
+end
+
+-- The full types a spawn command's name stands for: one of the list by its short name, or all of it.
+local function named(list, name)
+    if name == "all" then return list end
+    for _, fullType in ipairs(list) do
+        if shortName(fullType) == name then return { fullType } end
     end
-    local fullType = name:find("%.") and name or "Base." .. name
-    for _, fish in ipairs(give(fullType, count)) do
-        if weight and fish:getActualWeight() > 0 then
-            -- Scales the food with the weight, as a caught fish's is.
-            local scale = weight / fish:getActualWeight()
-            fish:setCalories(fish:getCalories() * scale)
-            fish:setProteins(fish:getProteins() * scale)
-            fish:setLipids(fish:getLipids() * scale)
-            fish:setCarbohydrates(fish:getCarbohydrates() * scale)
-            fish:setBaseHunger(fish:getBaseHunger() * scale)
-            fish:setHungChange(fish:getHungChange() * scale)
-            fish:setActualWeight(weight)
-            fish:setWeight(weight)
-            fish:setCustomWeight(true)
-        end
-    end
-    say(string.format("Gave %d %s%s.", count or 1, fullType, weight and (" at weight " .. weight) or ""))
+    return nil
 end
 
-function TPFM.heads(count)
-    give("TraditionalPreservationFishMeat.FishHead", count)
-    say("Gave " .. (count or 1) .. " Fish Head(s). Spawned heads have the item's default food values.")
+local function listNames(label, list, stages)
+    local names = {}
+    for _, fullType in ipairs(list) do table.insert(names, shortName(fullType)) end
+    say(label .. ": " .. table.concat(names, ", ") .. ", or \"all\". Stages: " .. stages)
 end
 
-function TPFM.stock()
-    give("TraditionalPreservationFishMeat.PotOfFishHeadStock")
-    say("Gave a Pot of Fish Head Stock (default values, no head listed).")
-end
-
-function TPFM.salt(count)
-    give("Base.Salt", count)
-    say("Gave " .. (count or 1) .. " Salt shaker(s).")
-end
-
-function TPFM.fat(count)
-    for _, row in ipairs(F.FAT_ROWS) do give(row.item, count) end
-    say("Gave " .. (count or 1) .. " each of Pork Fat, Beef Suet and Mutton Fat.")
-end
-
-function TPFM.meat(count)
-    for _, cut in ipairs(F.MEAT_CUTS) do give(cut, count) end
-    say("Gave " .. (count or 1) .. " each of Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop and Leg of Pork.")
-end
-
--- Each cut as the short cure gives it ("Steak (Corned)"); long = true for the long cure ("Steak (Country Cured)").
-function TPFM.cured(count, long)
-    local inventory = getPlayer():getInventory()
-    for _, cut in ipairs(F.MEAT_CUTS) do
-        -- The short cure refuses a leg, so there is no Leg of Pork (Corned).
-        for _ = 1, (long == true or cut ~= F.LEG_OF_PORK) and (count or 1) or 0 do
-            local raw = instanceItem(cut)
-            local cured = inventory:AddItem(F.CURED_MEAT)
-            cured:getModData().longCure = long == true or nil
-            F.carry(raw, cured)
-        end
-    end
-    say("Gave " .. (count or 1) .. " each of the " .. (long == true and "seven cuts, Country Cured" or "six cuts, Corned (a leg takes the long cure only)") .. ". Pork hangs in the Smokehouse only.")
-end
-
--- A vanilla fish packed and cured as the tub would, ready for the frame or the Smokehouse ("Walleye (Salt Cured)").
-function TPFM.curedFish(name, count)
-    local inventory = getPlayer():getInventory()
-    local fullType = "Base." .. (name or "Walleye")
-    for _ = 1, count or 1 do
-        local packed = instanceItem(F.PACKED_FISH)
-        F.carry(instanceItem(fullType), packed)
+-- A fish as a stage gives it: whole, "cured" (packed and cured as the tub would: "Walleye (Salt Cured)") or
+-- "stockfish" (young, fresh off the frame).
+local FISH_STAGES = {
+    cured = function(inventory, fullType, weight)
+        local raw, packed = instanceItem(fullType), instanceItem(F.PACKED_FISH)
+        setWeight(raw, weight)
+        F.carry(raw, packed)
         F.carry(packed, inventory:AddItem("TraditionalPreservationFishMeat.SaltPressedFish"))
+    end,
+    stockfish = function(inventory, fullType)
+        local fish = inventory:AddItem("TraditionalPreservationFishMeat.ColdDriedFish")
+        fish:getModData().fishName = shortName(fullType)
+        fish:getModData().matureAge = fish:getAge()
+        F.rename(fish)
+    end,
+}
+
+-- The third argument may be the stage, for a fish at its own weight: TPFM.fish("Walleye", 3, "cured").
+function TPFM.fish(name, count, weight, stage)
+    if type(weight) == "string" then weight, stage = nil, weight end
+    local types = name and named(F.FISH_ICONS, name)
+    if not types or stage and not FISH_STAGES[stage] then return listNames("Fish", F.FISH_ICONS, "\"cured\", \"stockfish\"") end
+    local inventory = getPlayer():getInventory()
+    for _, fullType in ipairs(types) do
+        for _ = 1, count or 1 do
+            if stage then
+                FISH_STAGES[stage](inventory, fullType, weight)
+            else
+                setWeight(inventory:AddItem(fullType), weight)
+            end
+        end
     end
-    say("Gave " .. (count or 1) .. " " .. fullType .. ", Salt Cured.")
+    say(string.format("Gave %d %s%s%s.", count or 1, name == "all" and "of each fish" or name,
+        weight and (" at weight " .. weight) or "", stage and (", " .. stage) or ""))
 end
 
-function TPFM.fatPot(state)
-    local pot = give("TraditionalPreservationFishMeat.PotOfPorkFat")[1]
-    state = state or "cooked"
-    if state == "cooked" then pot:setCooked(true) end
-    if state == "burnt" then pot:setBurnt(true) end
-    say("Gave a Pot of Pork Fat (" .. state .. ").")
+-- A cut as a stage gives it: raw, "corned" (the short cure: "Steak (Corned)"), "country" (the long cure: "Steak
+-- (Country Cured)") or "dryCured" (as the Smokehouse gives it after the long cure and its smoke, young: "Suho Meso").
+local function curedCut(cut, long)
+    local cured = instanceItem(F.CURED_MEAT)
+    cured:getModData().longCure = long or nil
+    F.carry(instanceItem(cut), cured)
+    return cured
 end
 
--- What Potted Meat takes: a Pot, a Lard, salt, four cuts (two of them pork) and one of each clay vessel.
-function TPFM.potted()
-    for _, fullType in ipairs({ "Base.Pot", "Base.Lard", "Base.Salt", "Base.Steak", "Base.Beef", "Base.PorkChop",
-            "Base.Pork", "Base.ClayJar", "Base.ClayJarGlazed", "Base.ClayPot" }) do
-        give(fullType)
+local MEAT_SPAWNS = {
+    -- The short cure refuses a leg, so there is no Leg of Pork (Corned).
+    corned = function(inventory, cut) if cut ~= F.LEG_OF_PORK then inventory:AddItem(curedCut(cut, false)) end end,
+    country = function(inventory, cut) inventory:AddItem(curedCut(cut, true)) end,
+    dryCured = function(inventory, cut)
+        inventory:AddItem(F.smokedItem(curedCut(cut, true), {}, F.COLD_FISH_OUT, F.DRY_CURED, false))
+    end,
+}
+
+function TPFM.meat(name, count, stage)
+    local types = name and named(F.MEAT_CUTS, name)
+    if not types or stage and not MEAT_SPAWNS[stage] then
+        return listNames("Meat", F.MEAT_CUTS, "\"corned\", \"country\", \"dryCured\"")
     end
-    say("Gave a Pot, Lard, Salt, Steak, Beef, Pork Chop, Pork and a Clay Jar, Glazed Clay Jar and Clay Pot.")
+    local inventory = getPlayer():getInventory()
+    for _, cut in ipairs(types) do
+        for _ = 1, count or 1 do
+            if stage then MEAT_SPAWNS[stage](inventory, cut) else inventory:AddItem(cut) end
+        end
+    end
+    say(string.format("Gave %d %s%s.", count or 1, name == "all" and "of each cut" or name, stage and (", " .. stage) or ""))
 end
 
-function TPFM.crock(count)
-    local batch = F.newPottedBatch(nil)
-    for _ = 1, F.POTTED_MAX do F.addPottedCut(batch, instanceItem("Base.Steak")) end
-    for _, crock in ipairs(give(F.CROCK, count)) do F.fillCrock(crock, batch, "Base.ClayJarGlazed") end
-    say(string.format("Gave %d full Crock(s) of Potted Meat.", count or 1))
+-- The other things a test wants, by name. option is the fat pot's state: "cooked" (the default), "burnt" or "raw".
+local GIVES = {
+    head = function(count) give("TraditionalPreservationFishMeat.FishHead", count) end,
+    stock = function(count) give("TraditionalPreservationFishMeat.PotOfFishHeadStock", count) end,
+    salt = function(count) give("Base.Salt", count) end,
+    fat = function(count) for _, row in ipairs(F.FAT_ROWS) do give(row.item, count) end end,
+    fatPot = function(count, state)
+        for _, pot in ipairs(give("TraditionalPreservationFishMeat.PotOfPorkFat", count)) do
+            if state == "burnt" then pot:setBurnt(true) elseif state ~= "raw" then pot:setCooked(true) end
+        end
+    end,
+    crock = function(count)
+        local batch = F.newPottedBatch(nil)
+        for _ = 1, F.POTTED_MAX do F.addPottedCut(batch, instanceItem("Base.Steak")) end
+        for _, crock in ipairs(give(F.CROCK, count)) do F.fillCrock(crock, batch, "Base.ClayJarGlazed") end
+    end,
+}
+local GIVE_NAMES = "head, stock, salt, fat (one of each raw fat), fatPot (option \"burnt\" or \"raw\"), crock"
+
+function TPFM.give(name, count, option)
+    if not GIVES[name] then return say("Things: " .. GIVE_NAMES) end
+    GIVES[name](count or 1, option)
+    say(string.format("Gave %d %s%s. Spawned food has the item's default values.", count or 1, name, option and (" (" .. option .. ")") or ""))
+end
+
+-- What a test of kind needs.
+local KITS = {
+    potted = { about = "a Pot, Lard, Salt, a Steak, Beef, Pork Chop and Pork, and a Clay Jar, Glazed Clay Jar and Clay Pot, for Potted Meat",
+        "Base.Pot", "Base.Lard", "Base.Salt", "Base.Steak", "Base.Beef", "Base.PorkChop", "Base.Pork", "Base.ClayJar",
+        "Base.ClayJarGlazed", "Base.ClayPot" },
+    flue = { about = "both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel",
+        "Base.ClayPipeSegment", "Base.ClayPipeSegment", "Base.FlatStone", "Base.FlatStone", "Base.FlatStone", "Base.Clay",
+        "Base.Clay", "Base.Clay", "Base.MasonsTrowel", "Base.Shovel" },
+}
+
+function TPFM.kit(kind)
+    local kit = KITS[kind]
+    if not kit then
+        for name, entry in pairs(KITS) do say("TPFM.kit(\"" .. name .. "\"): " .. entry.about) end
+        return
+    end
+    for _, fullType in ipairs(kit) do give(fullType) end
+    say("Gave " .. kit.about .. ".")
 end
 
 -- Crocks carried, and in containers within CROCK_REACH tiles on the player's floor.
@@ -416,17 +444,7 @@ function TPFM.fatRows()
     end
 end
 
-function TPFM.stockfish(count)
-    for _, fish in ipairs(give("TraditionalPreservationFishMeat.ColdDriedFish", count)) do
-        fish:getModData().fishName = "Walleye"
-        fish:getModData().matureAge = fish:getAge()
-        F.rename(fish)
-    end
-    say(string.format("Gave %d young stockfish. Matured after %d days on a shelf.", count or 1, F.MATURE_DAYS))
-end
-
 function TPFM.pallet()
-    local Weather = require "TraditionalPreservationCore/Weather"
     local Tiles = require "TraditionalPreservationFishMeat/Tiles"
     local player = getPlayer()
     local px, py, z = math.floor(player:getX()), math.floor(player:getY()), math.floor(player:getZ())
@@ -452,14 +470,6 @@ function TPFM.pallet()
         end
     end
     say("No Stockfish Pallet within 3 tiles on this floor.")
-end
-
-function TPFM.flueKit()
-    for _, fullType in ipairs({ "Base.ClayPipeSegment", "Base.ClayPipeSegment", "Base.FlatStone", "Base.FlatStone",
-        "Base.FlatStone", "Base.Clay", "Base.Clay", "Base.Clay", "Base.MasonsTrowel", "Base.Shovel" }) do
-        give(fullType)
-    end
-    say("Gave both flue kits, a Mason's Trowel and a Shovel. Connect from the Firebox's menu or the Smokehouse's.")
 end
 
 local PARTS = { [0] = "back", [1] = "door" }
