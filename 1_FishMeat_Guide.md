@@ -665,6 +665,49 @@ A pantry, kitchen or shed is unheated: it follows the average of the last ten da
 
 Each piece keeps its own weight and food through every stage. The name says what it is now, with a bracket only for a state that changes: a fish keeps its size and species (*Small Largemouth Bass (Salt Dried)*), stockfish its species (*Walleye Stockfish (Matured)*), meat its cut in the tub (*Corned Steak*) and its animal after (*Beef Charque*, *Suho Meso*). A butcher's grade (*Prime Cut*) stays behind in the salt; the food remembers it. Freshness carries over as a share of each stage's fresh days, so a fish halfway to stale is still halfway when packed.
 
+### At the Table
+
+What each stage is good for once it's in your hands. *Cook* is its time on a stove, oven or fire, and when it burns. *Into* is the dishes it can go into, and *then* means only once it's cooked. *Recipe* is what turns it into the next thing.
+
+**Fish**
+
+| Stage | Eat as it is? | Cook | Into | Recipe |
+|---|---|---|---|---|
+| Salt Packed | No | Can't | - | Cure it in the tub |
+| Salt Cured | Cooked | 20 min (burns at 50) | - | Hang it to dry or smoke; Slice Fish |
+| **Salt Dried** | Yes, very salty | - | Soup, stew, rice, pasta | **Rehydrate Fish** (1 L of water); Slice Fish |
+| Soaked Salt Dried | Yes, better hot | 20 min (50) | Soup, stew, pie, pizza, stir fry, rice, pasta; then sandwich, burger, salad, taco, burrito | Slice Fish |
+| **Hot Smoked** | Yes | - | Soup, stew, rice, pasta, sandwich, salad | - |
+| **Cold Smoked** | Yes | - | Soup, stew, rice, pasta, sandwich, salad | - (it needs no soak) |
+| Gutted, half | Cooked | 20 min (50) | As soaked fish | Hang it to cold dry |
+| **Stockfish** | No: hard as wood | Can't | - | **Rehydrate Fish** (1 L); Slice Fish |
+| Stockfish (Soaked) | Yes, better hot | 20 min (50) | As soaked fish | Slice Fish |
+| Fish Head | Cooked, a little grim | 20 min (50) | Soup, stew, chum | **Create Fish Head Stock** (1.5 L) |
+| Fish Head Stock | Cooked | 70 min (140) | It's a stew already: add to it | Divide into 2 or 4 bowls |
+
+**Meat**
+
+| Stage | Eat as it is? | Cook | Into | Recipe |
+|---|---|---|---|---|
+| Leg of Pork | Cooked | 2½ hours (burns at 3½) | - | Pack Meat in Salt (10 salt) |
+| Pork Fat, Suet, Mutton Fat | Cooked, but it's for rendering | 20 min (50) | - | Put in a Pot, or the Hearth's copper |
+| Pot of fat | No | 60 min (150) | - | Pour Off, then Strain |
+| Lard, Tallow | As the game's Lard | - | Tallow: soup, stew, stir fry, pasta, sandwich, taco, burrito, toast; bakes wherever Lard does | Put Meat in Lard or Tallow |
+| Cracklings | Yes | - | Soup, stew, stir fry, sandwich, salad | - |
+| Salt Packed meat | No | Can't | - | Corn or country cure it in the tub |
+| Corned, Country Cured | Cooked | 25 min (60) | - | Hang it: charque, dry curing or smoke |
+| **Charque** | No | Can't | - | **Rehydrate Charque** (1 L) |
+| Charque (Soaked) | Cooked | 40 min (80) | Soup, stew, pie, stir fry, rice, pasta; then sandwich, burger, salad, taco, burrito | - |
+| **Hot-Smoked** meat | Yes | - | Soup, stew, pie, rice, pasta, sandwich, salad, taco, burrito | Slice Hot-Smoked Meat |
+| **Ham** (hot-smoked pork) | Yes | As the game's Ham | As the game's Ham | The game's Slice Ham |
+| **Suho Meso**, **Bresaola** and the other dry-cured meats | Yes | - | As Hot-Smoked meat | Slice Dry-Cured Meat |
+| **Country Ham**, **Smoked Country Ham** | Yes | - | Not whole | **Carve Country Ham** (5 slices at a time) |
+| Slices: dry-cured, Country Ham, Hot-Smoked | Yes | - | Soup, stew, pizza, omelette, sandwich, burger, salad, rice, pasta | - |
+| Pot of Meat in Fat | No | 2 hours (burns at 4) | - | **Pack Potted Meat** into a clay jar |
+| **Crock of Potted Meat** | Yes, a portion at a time | - | - | - |
+
+> ✏ *Margin note:* why does salt fish go straight into the soup when charque wants a soak first? A salt dried fish is a thin piece, and the soup's water draws its salt as it cooks. Charque is a thick slab of beef under a crust of salt: in Brazil it soaks overnight, the water changed, before it goes into the *feijoada*.
+
 ---
 
 ## 15. The Almanac (Seasons)

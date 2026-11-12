@@ -3,6 +3,8 @@
 ## Unreleased
 - A crock moved between places is looked at through TP Core's `Transfer.before` (2026-11-12) instead of Fish & Meat's
   own wrap of `transferItem`. No change in play.
+- Guide chapter 14, **At the Table** (2026-11-12): what each fish and meat stage is eaten as, its cook and burn
+  times, the dishes it goes into and the recipe that moves it on. README title says 0.4.17.
 
 ## 0.4.17
 - **The Salting Tub shows what is in it**: uncovered and waiting, a tub of meat no longer draws fish. Red cuts for
