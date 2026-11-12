@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Builds the Traditional Preservation (Fish & Meat) tileset (42/media/traditionalpreservationfishmeat.tiles and texturepacks/traditionalpreservationfishmeat.pack).
 
-Tiles 0 and 1 are the empty Salting Tub, 2 and 3 its filled overlay, 4 and 5 its weighted overlay. Tiles 6 and 7
+Tiles 0 and 1 are the empty Salting Tub, 2 and 3 its filled overlay, 4 and 5 its weighted overlay (the filled
+overlays for meat, pork and a leg are at TUB_MEAT, after everything else, so no tile number moves). Tiles 6 and 7
 are the Drying Frame. From tile 8 there is one hanging fish per frame slot, drying stage and face, made from vanilla's
 fish icons, which TraditionalPreservationFishMeatWorld.lua layers on top. In every pair the even tile is face S and the odd one face E.
 Workstations need their own sprite: the game refuses to load a world if two entities share one.
@@ -31,7 +32,7 @@ NAME = "traditionalpreservationfishmeat"
 # station with it. Tiles are numbered straight through both. The Lua reads these numbers from the generated Tiles.lua.
 TILESETS = [NAME + "_01", NAME + "_02"]
 COLUMNS = 8
-SHEET_ROWS = [51, 58]
+SHEET_ROWS = [51, 59]
 FIRST_SHEET_SIZE = COLUMNS * SHEET_ROWS[0]
 NAME_TITLE = "TraditionalPreservationFishMeat"
 PAGE_SIZE = 2048
@@ -90,6 +91,16 @@ HAM_FAT = (212, 184, 150)  # a thin rim under the cut
 HAM_LINE = (52, 28, 20)    # the dark line round it
 HAM_CORD = (196, 176, 136)
 HAM_BONE = (232, 222, 196)
+# The filled tub holding meat (step 82): one overlay per kind and face, as TUB_FILLED is for fish (tub_meat_index).
+TUB_MEAT = 870
+TUB_MEAT_KINDS = ["meat", "pork", "leg"]
+# Raw cuts lying in the salt: the lean, its dark edge and the fat along one side.
+BURIED_CUTS = {"meat": ((148, 50, 46), (98, 30, 32), (224, 206, 182)),
+               "pork": ((208, 136, 130), (158, 92, 92), (236, 222, 202))}
+BURIED_CUT_SPOTS = [(-11.0, -4.0, 21.0, 0.25), (11.0, -3.5, 19.0, 2.7), (0.0, 7.0, 23.0, -0.1)]  # x, y, length, angle
+BURIED_LEG = (1.0, 1.0, 46.0, 0.12)  # one Leg of Pork fills the tub
+BURIED_LEG_SKIN = (216, 176, 154)
+BURIED_LEG_EDGE = (150, 104, 92)
 JOIN = 0.02               # the back tile runs this far under the front one, so no seam shows
 PALLET_LEVELS = [3, 6, 10]  # layers of fish
 PALLET_SPRITE = "construction_01_5"  # vanilla's Empty Pallet, in Tiles2x.pack
@@ -322,6 +333,8 @@ for face_index, face in enumerate(FACES):
     TILE_PROPS[LARGE_BEAM + face_index] = station_props("BeamLarge", "Drying", face, "150")
     TILE_PROPS[TUB_FILLED + face_index] = [("Facing", face)]
     TILE_PROPS[TUB_WEIGHTED + face_index] = [("Facing", face)]
+    for kind in range(len(TUB_MEAT_KINDS)):
+        TILE_PROPS[TUB_MEAT + kind * len(FACES) + face_index] = [("Facing", face)]
     for slot in range(len(SLOTS)):
         for stage in range(FISH_STAGES * FISH_STYLES):
             TILE_PROPS[fish_index(face_index, slot, stage)] = [("Facing", face)]
@@ -466,8 +479,76 @@ def paint_buried_fish(draw, x, y, length, angle):
     draw.line(scaled(ridge), fill=BURIED_FISH_BACK + (255,), width=int(2.4 * SS))
 
 
-def salt_layer(seed, fish=False):
-    """A bed of salt just below the rim. Uncovered, the top layer of fish shows through it."""
+def lying_axes(x, y, angle):
+    """A point on something lying flat in the tub: u along it, v across."""
+    along = (math.cos(angle), math.sin(angle) * SQUASH)
+    across = (-math.sin(angle), math.cos(angle) * SQUASH)
+    return lambda u, v: (x + along[0] * u + across[0] * v, y + along[1] * u + across[1] * v)
+
+
+def paint_buried_cut(draw, rng, x, y, length, angle, tones):
+    """One raw cut lying in the salt, seen from above: a rounded slab with a dark edge and its fat along one side."""
+    lean, edge, fat = tones
+    at = lying_axes(x, y, angle)
+    half, width = length / 2, length * 0.34
+    wobble = [rng.uniform(0.9, 1.1) for _ in range(8)]
+
+    def outline(grow, v_from=-1.0):
+        points = []
+        for i in range(32):
+            t = i / 32 * math.tau
+            # A squared-off oval, uneven round its edge.
+            c, s = math.cos(t), math.sin(t)
+            r = wobble[i // 4] * 0.5 + wobble[(i // 4 + 1) % 8] * 0.5
+            u = (half + grow) * r * math.copysign(abs(c) ** 0.6, c)
+            v = (width + grow) * r * math.copysign(abs(s) ** 0.6, s)
+            points.append(at(u, max(v, (width + grow) * v_from)))
+        return points
+
+    draw.polygon(scaled(outline(1.0)), fill=edge + (255,))
+    draw.polygon(scaled(outline(0.0)), fill=fat + (255,))
+    draw.polygon(scaled(outline(-0.4, -0.62)), fill=lean + (255,))
+    seam = [at(-half * 0.55, width * 0.2), at(0, width * 0.05), at(half * 0.5, width * 0.3)]
+    draw.line(scaled(seam), fill=tint(lean, 0.82), width=int(1.4 * SS))
+
+
+def paint_buried_leg(draw, x, y, length, angle):
+    """A raw Leg of Pork lying in the salt: the round of it at one end with the cut face showing, narrowing to the
+    shank and the bone's knob."""
+    at = lying_axes(x, y, angle)
+    half = length / 2
+    lean, edge, fat = BURIED_CUTS["pork"]
+
+    def outline(grow):
+        side = []
+        for i in range(21):
+            t = i / 20
+            side.append((-half + length * t, (length * 0.3 + grow) * math.sin(math.pi * t ** 0.55) + length * 0.035 * t))
+        return [at(u, v) for u, v in side] + [at(u, -v) for u, v in reversed(side)]
+
+    draw.polygon(scaled(outline(1.0)), fill=BURIED_LEG_EDGE + (255,))
+    draw.polygon(scaled(outline(0.0)), fill=BURIED_LEG_SKIN + (255,))
+    fold = [at(-half * 0.1, length * 0.16), at(half * 0.35, length * 0.07), at(half * 0.8, length * 0.03)]
+    draw.line(scaled(fold), fill=tint(BURIED_LEG_SKIN, 0.86), width=int(1.6 * SS))
+    # The cut face at the thick end: fat round the lean, and the bone in it.
+    for size, colour in ((1.0, edge), (0.86, fat), (0.66, lean)):
+        face = [at(-half * 0.58 + length * 0.13 * size * math.cos(i / 16 * math.pi),
+                   length * 0.2 * size * math.sin(i / 16 * math.pi)) for i in range(32)]
+        draw.polygon(scaled(face), fill=colour + (255,))
+    bone = at(-half * 0.58, 0)
+    ellipse(draw, bone[0], bone[1], 1.6, 1.2, HAM_BONE + (255,))
+    knob = at(half + 1.0, 0)
+    ellipse(draw, knob[0], knob[1], 2.6, 2.0, BURIED_LEG_EDGE + (255,))
+    ellipse(draw, knob[0], knob[1], 1.9, 1.4, HAM_BONE + (255,))
+
+
+def tub_meat_index(kind, face_index):
+    return TUB_MEAT + TUB_MEAT_KINDS.index(kind) * len(FACES) + face_index
+
+
+def salt_layer(seed, fish=False, meat=None):
+    """A bed of salt just below the rim. Uncovered, the top layer of fish shows through it, or the meat's: cuts
+    ("meat", "pork") or one "leg"."""
     contents = new_layer()
     draw = ImageDraw.Draw(contents)
     rng = random.Random(seed)
@@ -476,7 +557,13 @@ def salt_layer(seed, fish=False):
     if fish:
         for x, y, length, angle in BURIED_FISH_SPOTS:
             paint_buried_fish(draw, FOOT[0] + x, cy + y, length, angle + rng.uniform(-0.15, 0.15))
-    for _ in range(130 if fish else 320):
+    if meat == "leg":
+        x, y, length, angle = BURIED_LEG
+        paint_buried_leg(draw, FOOT[0] + x, cy + y, length, angle + rng.uniform(-0.1, 0.1))
+    elif meat:
+        for x, y, length, angle in BURIED_CUT_SPOTS:
+            paint_buried_cut(draw, rng, FOOT[0] + x, cy + y, length, angle + rng.uniform(-0.15, 0.15), BURIED_CUTS[meat])
+    for _ in range(130 if fish or meat else 320):
         angle = rng.uniform(0, math.tau)
         reach = math.sqrt(rng.random()) * TUB_RIM_RX
         x, y = FOOT[0] + reach * math.cos(angle), cy + reach * SQUASH * math.sin(angle)
@@ -1400,6 +1487,8 @@ def build_tiles(game=GAME):
     for index, face in enumerate(FACES):
         tiles[TUB + index] = paint_tub(40 + index)
         tiles[TUB_FILLED + index] = weather(shrink(salt_layer(50 + index, fish=True)), 50 + index, SALT_WEATHER)
+        for kind in TUB_MEAT_KINDS:
+            tiles[tub_meat_index(kind, index)] = weather(shrink(salt_layer(50 + index, meat=kind)), 50 + index, SALT_WEATHER)
         tiles[TUB_WEIGHTED + index] = weather(shrink(paint_weighted(50 + index, face == "E", icons["Item_Boulder"].convert("RGBA"))), 60 + index, WOOD_WEATHER)
         tiles[FRAME + index] = paint_frame(face)
         for slot in range(len(SLOTS)):
@@ -1451,6 +1540,8 @@ def lua_tiles():
         "TUB": TUB,
         "TUB_FILLED": TUB_FILLED,
         "TUB_WEIGHTED": TUB_WEIGHTED,
+        # The filled overlay when the tub holds meat: each kind's first tile (face S), as TUB_FILLED is for fish.
+        "TUB_MEAT": {kind: tub_meat_index(kind, 0) for kind in TUB_MEAT_KINDS},
         "FRAME": FRAME,
         # Every station that hangs fish: its first sprite, its first hanging fish sprite and its stacks.
         "HANGERS": {

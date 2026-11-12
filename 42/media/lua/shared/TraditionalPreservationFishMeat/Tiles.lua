@@ -8,7 +8,7 @@ return {
         },
         {
             prefix = "traditionalpreservationfishmeat_02_",
-            tiles = 464,
+            tiles = 472,
         },
     },
     FIRST_SHEET_SIZE = 408,
@@ -35,6 +35,11 @@ return {
     TUB = 0,
     TUB_FILLED = 2,
     TUB_WEIGHTED = 4,
+    TUB_MEAT = {
+        meat = 870,
+        pork = 872,
+        leg = 874,
+    },
     FRAME = 6,
     HANGERS = {
         frame = {

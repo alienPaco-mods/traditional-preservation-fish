@@ -169,6 +169,26 @@ local tub = station("traditionalpreservationfishmeat_01_1", 3, true, {}, { recip
 W.track(tub)
 W.refresh(tub)
 check("a pressing tub shows its weights", table.concat(tub.sprites, " ") == "traditionalpreservationfishmeat_01_5")
+-- An uncovered tub shows its top layer: fish, or the meat by its kind (tiles 870-875, the second sheet from 408).
+local function meat(index)
+    local item = fish(T.PACKED_MEAT)
+    item.getModelIndex = function() return index end
+    return item
+end
+local filled = station("traditionalpreservationfishmeat_01_0", 9, true, { fish(T.PACKED_FISH) }, {}, {})
+W.track(filled)
+W.refresh(filled)
+check("a tub of fish waiting shows fish", table.concat(filled.sprites, " ") == "traditionalpreservationfishmeat_01_2")
+for _, case in ipairs({ { 0, "beef", "traditionalpreservationfishmeat_02_462" }, { 4, "pork", "traditionalpreservationfishmeat_02_464" },
+                         { T.LEG_INDEX, "a leg", "traditionalpreservationfishmeat_02_466" } }) do
+    local salted = station("traditionalpreservationfishmeat_01_0", 10 + case[1], true, { meat(case[1]) }, {}, {})
+    W.track(salted)
+    W.refresh(salted)
+    check("a tub of " .. case[2] .. " waiting shows it", table.concat(salted.sprites, " ") == case[3])
+end
+check("the kind of a fish is none", W.tubKind({ fish(T.PACKED_FISH) }) == nil and W.tubKind({}) == nil)
+check("mixed cuts show the last put in", W.tubKind({ meat(0), meat(4) }) == "pork" and W.tubKind({ meat(4), meat(3) }) == "meat")
+check("a leg shows wherever it is", W.tubKind({ meat(T.LEG_INDEX), meat(0), meat(3) }) == "leg")
 check("other mods' objects aren't tracked", W.track(station("carpentry_02_122", 4, true, {}, {}, {})) == nil)
 check("an untracked station is safe to ask", W.busyStacks({}) == 0)
 

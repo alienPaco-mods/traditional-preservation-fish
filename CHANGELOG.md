@@ -1,5 +1,12 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.17
+- **The Salting Tub shows what is in it**: uncovered and waiting, a tub of meat no longer draws fish. Red cuts for
+  beef, mutton and venison, pale pink for pork, and one Leg of Pork filling the tub, each lying in the salt
+  (`Tiles.TUB_MEAT`, tiles 870-875, `W.tubKind`). Mixed cuts show the last put in, the top layer;
+  a leg always shows, as it fills the tub. The board and stones still cover any
+  tub that is pressing or done. Tests in `tests/test_world.lua`.
+
 ## 0.4.16
 - **Ageing (6c)**: Dry-Cured meat and the Country Ham age after they have dried, on the item's own food clock: a cut
   **30 days**, a ham **90** (`F.AGE_CUT_DAYS`, `F.AGE_HAM_DAYS`, `F.agedness`; `modData.agedFrom`, older pieces

@@ -12,20 +12,21 @@ local F = TraditionalPreservationFishMeat
 
 local FACE_COUNT = Tiles.FACE_COUNT
 
-local TUB_FILLED_SPRITE, TUB_WEIGHTED_SPRITE = Tiles.TUB_FILLED, Tiles.TUB_WEIGHTED
+local TUB_FILLED_SPRITE, TUB_WEIGHTED_SPRITE, TUB_MEAT_SPRITES = Tiles.TUB_FILLED, Tiles.TUB_WEIGHTED, Tiles.TUB_MEAT
 local FRAME_SPRITE = Tiles.FRAME
 local STAGE_FRESH = 0
 
--- How many fish, how many stacks, and each stack's style. Finished dry-cured meat still hanging (hangingSince, the
+-- How many fish, how many stacks, each stack's style, and the items in slot order (the last in last). Finished dry-cured meat still hanging (hangingSince, the
 -- hour) ages faster as it is counted (F.ageHanging).
 local function countItems(resources, group, io, hangingSince)
     local count, stacks = 0, 0
-    local seen, styles = {}, {}
+    local seen, styles, all = {}, {}, {}
     local items = Station.itemSlots(resources, group, io)
     for i = 0, items:size() - 1 do
         local stored = items:get(i):getStoredItems()
         count = count + stored:size()
         for j = 0, stored:size() - 1 do
+            table.insert(all, stored:get(j))
             if hangingSince then F.ageHanging(stored:get(j), hangingSince) end
             local stackId = tostring(stored:get(j):getModData().stackId)
             if not seen[stackId] then
@@ -35,7 +36,7 @@ local function countItems(resources, group, io, hangingSince)
             end
         end
     end
-    return count, stacks, styles
+    return count, stacks, styles, all
 end
 
 -- One sprite per stack. Driest first: finished stacks, then running ones by progress, then the
@@ -54,10 +55,21 @@ function TraditionalPreservationFishMeatWorld.fishStates(waitingStyle, batches, 
     return states
 end
 
--- The board and stones stay on until the pressed fish is taken out.
-function TraditionalPreservationFishMeatWorld.tubSprite(waiting, batches, finished)
+-- What shows in an uncovered tub: fish (nil), or the meat on top, the last put in (a tub holds fish or meat, and
+-- cuts of any kind together). A leg always shows: it fills the tub.
+function TraditionalPreservationFishMeatWorld.tubKind(items)
+    local last = items[#items]
+    if not last or not F.isMeatStage(last:getFullType()) then return nil end
+    for _, item in ipairs(items) do
+        if F.isLeg(item) then return "leg" end
+    end
+    return F.isPork(last) and "pork" or "meat"
+end
+
+-- The board and stones stay on until the pressed fish is taken out. Before that the top layer shows: fish or meat.
+function TraditionalPreservationFishMeatWorld.tubSprite(waiting, batches, finished, kind)
     if #batches > 0 or finished > 0 then return TUB_WEIGHTED_SPRITE end
-    if waiting > 0 then return TUB_FILLED_SPRITE end
+    if waiting > 0 then return kind and TUB_MEAT_SPRITES[kind] or TUB_FILLED_SPRITE end
     return nil
 end
 
@@ -93,8 +105,9 @@ local function showSprites(station, entry, signature, sprites)
     Station.showSprites(station, entry, signature, names)
 end
 
-local function refreshTub(tub, entry, faceIndex, waiting, _, batches, finishedStyles)
-    local sprite = TraditionalPreservationFishMeatWorld.tubSprite(waiting, batches, #finishedStyles)
+local function refreshTub(tub, entry, faceIndex, waiting, _, batches, finishedStyles, waitingItems)
+    local sprite = TraditionalPreservationFishMeatWorld.tubSprite(waiting, batches, #finishedStyles,
+        TraditionalPreservationFishMeatWorld.tubKind(waitingItems))
     showSprites(tub, entry, tostring(sprite), sprite and { sprite + faceIndex } or {})
 end
 
@@ -148,12 +161,12 @@ local function refresh(station, entry)
     local uiLogic = Station.uiLogic(station, entry, logic)
     if not uiLogic then return end
 
-    local waiting, _, waitingStyles = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
+    local waiting, _, waitingStyles, waitingItems = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
     local _, finishedStacks, finishedStyles = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output,
         entry.hanger and getGameTime():getWorldAgeHours())
     local batches = readBatches(station, entry, logic, uiLogic, entry.place or Weather.placeOf(station, true))
     entry.busyStacks = finishedStacks + #batches
-    entry.show(station, entry, entry.faceIndex, waiting, waitingStyles[1], batches, finishedStyles)
+    entry.show(station, entry, entry.faceIndex, waiting, waitingStyles[1], batches, finishedStyles, waitingItems)
 end
 
 local function newEntry(station)
