@@ -82,9 +82,12 @@ HAM_A = -0.37             # across the end wall, on the door's far side from the
 HAM_TOP = 98              # px up to the bone's knob; the nail is above it
 HAM_SCALE = 1.35          # its width against the first ham's
 HAM_STEP = 6.6            # px between its outline's steps down (the first ham's were 5)
-HAM_MEAT = (198, 96, 98)  # the cut face: cured pink
-HAM_FAT = (232, 208, 176) # and the rim of fat round it
-HAM_COLOUR = (100, 52, 28)  # a shade under the Hot Smoked meat icons' mahogany: it hangs in the shade of the eave
+# Tones dark to light, taken from vanilla's Ham icon and pulled a little towards smoke: the glazed skin, and the
+# cut face's pale pinks with a lighter middle.
+HAM_SKIN_TONES = [(84, 42, 28), (108, 54, 32), (132, 70, 38), (158, 90, 46), (184, 112, 58)]
+HAM_CUT_TONES = [(170, 112, 114), (190, 134, 134), (204, 152, 150), (216, 172, 168), (226, 194, 190)]
+HAM_FAT = (212, 184, 150)  # a thin rim under the cut
+HAM_LINE = (52, 28, 20)    # the dark line round it
 HAM_CORD = (196, 176, 136)
 HAM_BONE = (232, 222, 196)
 JOIN = 0.02               # the back tile runs this far under the front one, so no seam shows
@@ -1289,44 +1292,94 @@ def paint_chamber_entry(kind, face, part):
     return pzart.hard_edges(shrink(layer).convert("RGBA"))
 
 
+def ham_tone(tones, level):
+    """One of a short run of tones, dark to light, for a level from 0 to 1: vanilla's food art is a few flat tones laid
+    in small patches, never a smooth blend."""
+    return tones[max(0, min(len(tones) - 1, int(level * len(tones))))]
+
+
 def paint_chamber_ham(face):
     """A smoked ham on a cord from a nail on the door's end wall, on the side away from the long wall the camera sees:
-    the shank up, the round of it at the bottom, a lighter face where the light falls, the bone's knob at the top,
-    and low on its face a slice taken off: pink meat inside a rim of fat, which gives it depth. It hangs a little
-    past the shed's corner."""
-    layer = new_layer()
-    draw = ImageDraw.Draw(layer)
+    the shank up, the round of it at the bottom, the bone's knob at the top, and low on its face a slice taken off,
+    which gives it depth. It hangs a little past the shed's corner. Painted as vanilla's Ham icon is: a few tones in
+    small patches, lit from the upper left, a pale mottled cut with a lighter middle, and a dark line round it."""
     h, a = CHAMBER_HALF, HAM_A
-    light = 1.0 if face == "S" else 0.72
+    light = 1.0 if face == "S" else 0.78
 
     def px(da, z, out=0.012):
         return chamber_px(face, 1, a + da, h + out, z)
 
+    # The outline down the ham, from the shank to the round bottom, rounded between its steps.
+    steps = [0.02, 0.026, 0.042, 0.07, 0.092, 0.102, 0.1, 0.088, 0.06, 0.028]
+    fine = 6
+    zs, ws = [], []
+    for i in range((len(steps) - 1) * fine + 1):
+        low, part = min(i // fine, len(steps) - 2), 0
+        part = i / fine - low
+        ease = (1 - math.cos(part * math.pi)) / 2
+        zs.append(HAM_TOP - 2 - HAM_STEP * min(i / fine, 8.5))
+        ws.append((steps[low] + (steps[low + 1] - steps[low]) * ease) * HAM_SCALE)
+    widest = max(ws)
+    cut_z, cut_w, centre = HAM_TOP - 2 - HAM_STEP * 6.2, widest * 0.72, widest * 0.14
+
+    def mask(points):
+        layer = Image.new("L", (TILE_W * SS, TILE_H * SS), 0)
+        ImageDraw.Draw(layer).polygon(points, fill=255)
+        return layer.resize((TILE_W, TILE_H), Image.LANCZOS).point(lambda v: 255 if v >= 128 else 0)
+
+    def oval(scale, lift=0.0):
+        return [px(centre + cut_w * scale * math.cos(t / 16 * math.pi),
+                   cut_z + lift + HAM_STEP * 1.7 * scale * math.sin(t / 16 * math.pi), 0.014) for t in range(32)]
+
+    body = mask([px(-w, z) for z, w in zip(zs, ws)] + [px(w, z) for z, w in reversed(list(zip(zs, ws)))])
+    cut, lip = mask(oval(1.0)), mask(oval(1.0, 2.0))
+    box = body.getbbox()
+    rng = random.Random(260 + FACES.index(face))
+    patches = Image.blend(pzart.soft_noise(rng, (TILE_W, TILE_H), 3, 3), pzart.soft_noise(rng, (TILE_W, TILE_H), 1, 2), 0.45)
+    cut_box = cut.getbbox()
+    cut_mid = ((cut_box[0] + cut_box[2]) / 2, (cut_box[1] + cut_box[3]) / 2)
+
+    tile = Image.new("RGBA", (TILE_W, TILE_H), (0, 0, 0, 0))
+    out = tile.load()
+    body_px, cut_px, lip_px, noise = body.load(), cut.load(), lip.load(), patches.load()
+    for y in range(box[1], box[3]):
+        row = [x for x in range(box[0], box[2]) if body_px[x, y]]
+        if not row:
+            continue
+        left, right = row[0], row[-1]
+        for x in row:
+            across = (x - left) / max(right - left, 1)             # 0 the lit edge, 1 the shaded one
+            down = (y - box[1]) / (box[3] - box[1])
+            speck = noise[x, y] / 255 - 0.5
+            if cut_px[x, y]:
+                near = math.hypot((x - cut_mid[0]) / max(cut_box[2] - cut_box[0], 1), (y - cut_mid[1]) / max(cut_box[3] - cut_box[1], 1))
+                colour = ham_tone(HAM_CUT_TONES, 0.95 - near * 1.5 + speck * 0.45)
+            elif lip_px[x, y]:
+                colour = HAM_SKIN_TONES[0]                          # the skin standing proud over the cut
+            else:
+                colour = ham_tone(HAM_SKIN_TONES, 0.82 - across * 0.62 - down * 0.12 + speck * 0.5)
+            out[x, y] = tuple(tint(colour, light))[:3] + (255,)
+    # The dark line round it, as vanilla's icons have, and a thin rim of fat under the cut.
+    for y in range(box[1], box[3]):
+        for x in range(box[0], box[2]):
+            if not body_px[x, y]:
+                continue
+            edge = any(not (0 <= nx < TILE_W and 0 <= ny < TILE_H) or not body_px[nx, ny] for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)))
+            if edge:
+                out[x, y] = tuple(tint(HAM_LINE, light))[:3] + (255,)
+            elif cut_px[x, y] and not cut_px[x, y + 1] and body_px[x, y + 1]:
+                out[x, y] = tuple(tint(HAM_FAT, light))[:3] + (255,)
+
+    over = new_layer()
+    draw = ImageDraw.Draw(over)
     nail = HAM_TOP + 9
     draw.line([px(0, nail), px(0, HAM_TOP)], fill=tint(HAM_CORD, light), width=SS)
     draw.ellipse([px(0, nail)[0] - 1.2 * SS, px(0, nail)[1] - 1.2 * SS, px(0, nail)[0] + 1.2 * SS, px(0, nail)[1] + 1.2 * SS],
                  fill=tint(IRON, 1.0))
-    # Half-widths (in tiles) down the ham, from the shank to the round bottom.
-    zs = [HAM_TOP - 2 - HAM_STEP * i for i in range(9)] + [HAM_TOP - 2 - HAM_STEP * 8.5]
-    ws = [w * HAM_SCALE for w in (0.02, 0.026, 0.042, 0.07, 0.092, 0.102, 0.1, 0.088, 0.06, 0.028)]
-    outline = [px(-w, z) for z, w in zip(zs, ws)] + [px(w, z) for z, w in reversed(list(zip(zs, ws)))]
-    draw.polygon(outline, fill=tint(HAM_COLOUR, light * 0.78))
-    inner = [px(-w * 0.7 - 0.006, z) for z, w in zip(zs[2:-1], ws[2:-1])] + [px(w * 0.45, z) for z, w in reversed(list(zip(zs[2:-1], ws[2:-1])))]
-    draw.polygon(inner, fill=tint(HAM_COLOUR, light * 1.08))
-    # The cut: a slice taken off the round end, low and towards the door: pink meat in a thin rim of fat, the bone's
-    # end showing, and a darker lip above it where the skin stands proud.
-    cut_z, cut_w = HAM_TOP - 2 - HAM_STEP * 6.3, ws[6] * 0.74
-    centre = ws[6] * 0.16
-    oval = lambda scale, lift=0: [px(centre + cut_w * scale * math.cos(t / 12 * math.pi),
-                                     cut_z + lift + HAM_STEP * 1.75 * scale * math.sin(t / 12 * math.pi), 0.014) for t in range(24)]
-    draw.polygon(oval(1.0, 1.2), fill=tint(HAM_COLOUR, light * 0.6))
-    draw.polygon(oval(1.0), fill=tint(HAM_FAT, light))
-    draw.polygon(oval(0.86), fill=tint(HAM_MEAT, light))
-    marrow = px(centre - cut_w * 0.25, cut_z + HAM_STEP * 0.5, 0.014)
-    draw.ellipse([marrow[0] - 1.1 * SS, marrow[1] - 0.9 * SS, marrow[0] + 1.1 * SS, marrow[1] + 0.9 * SS], fill=tint(HAM_BONE, light))
     knob = px(0, HAM_TOP)
-    draw.ellipse([knob[0] - 2.4 * SS, knob[1] - 1.9 * SS, knob[0] + 2.4 * SS, knob[1] + 1.9 * SS], fill=tint(HAM_BONE, light))
-    return pzart.hard_edges(shrink(layer).convert("RGBA"))
+    draw.ellipse([knob[0] - 2.2 * SS, knob[1] - 1.7 * SS, knob[0] + 2.2 * SS, knob[1] + 1.7 * SS], fill=tint(HAM_BONE, light))
+    tile.alpha_composite(pzart.hard_edges(shrink(over).convert("RGBA")))
+    return tile
 
 
 def chamber_icon(tiles, face_index=0):

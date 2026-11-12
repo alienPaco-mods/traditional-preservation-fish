@@ -13,7 +13,8 @@
   in the Smokehouse. Charque is the open air's and the open roof's.
 - Air dried meat's tooltip no longer speaks of smoke at all.
 - **The ham by the Smokehouse door** hangs on the door's other side, a third larger, a little past the shed's corner,
-  with a slice taken off its round end: pink meat in a rim of fat (`paint_chamber_ham`; same tile numbers).
+  with a slice taken off its round end (`paint_chamber_ham`; same tile numbers). Painted as vanilla's Ham icon is: a
+  few tones in small patches, lit from one side, a pale mottled cut with a lighter middle, a dark line round it.
 
 ## 0.4.14
 - **Dry curing in the Smokehouse** (phase 6b): meat hung in the shed never comes out Charque. It dries on its own
