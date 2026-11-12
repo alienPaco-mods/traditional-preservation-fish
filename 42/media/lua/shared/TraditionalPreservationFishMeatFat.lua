@@ -1,7 +1,7 @@
 -- Traditional Preservation (Fish & Meat): fat. Vanilla butchering gives no fat and Lard is loot only, so pigs,
 -- cattle and sheep get a fat row in vanilla's butchering parts tables, and the recipes in
--- TraditionalPreservationFishMeat_Meat.txt render it. Raw fat is an item; over heat it becomes a fluid, Melted Lard
--- or Melted Tallow, and that is strained to a block and its Cracklings. Two pieces cook in a pot (which can burn)
+-- TraditionalPreservationFishMeat_Meat.txt render it. Raw fat is an item; over heat it becomes a fluid, Lard (Melted)
+-- or Tallow (Melted), and that is strained to a block and its Cracklings. Two pieces cook in a pot (which can burn)
 -- and are poured off as a pot of melted fat; TP Core's Hearth melts many pieces at once in its copper.
 require "Definitions/animal/AnimalPartsDefinitions"
 local Hearth = require "TraditionalPreservationCore/Hearth"

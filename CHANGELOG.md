@@ -1,5 +1,15 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.22
+- **Names follow one rule** (2026-11-12, consistency sweep): a state a piece passes through goes in brackets after
+  its name, as vanilla's do, on meat as on fish: *Steak (Corned)*, *Steak (Country Cured)*, *Beef (Hot Smoked)*,
+  *Beef Slice (Hot Smoked)*; finished goods keep their own names (Charque, Bresaola, Country Ham). No hyphens in a
+  state: Hot Smoked, Dry Cured. Fluids *Lard (Melted)*, *Tallow (Melted)*, *Fat (Rancid)*; *Salt Dried Fish
+  (Soaked)*; the recipes are **Soak Fish** and **Soak Charque**. Display text only: no item, fluid or save key
+  changed. Tests, README, guide, Workshop text.
+- Guide (external review): the stockfish row no longer says it must be cooked; charque's opening says an open roof
+  does as well as the sun; the salt table's column is the salting weight, with why a fillet counts as half its fish.
+
 ## 0.4.21
 - **Rotted stacks look rotten** (2026-11-12, from the external review): a grey-green, mottled, mouldy look for each
   kind (salt fish, cold dried fish, meat) on the Drying Frame, Hanging Beam and Gantry, 84 tiles on a new third tile

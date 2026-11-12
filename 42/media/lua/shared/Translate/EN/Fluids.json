@@ -1,7 +1,7 @@
 {
   "Fluid_Name_RawPorkFat": "Pork Fat (Raw)",
   "Fluid_Name_RawSuet": "Suet (Raw)",
-  "Fluid_Name_MeltedLard": "Melted Lard",
-  "Fluid_Name_MeltedTallow": "Melted Tallow",
-  "Fluid_Name_RancidFat": "Rancid Fat"
+  "Fluid_Name_MeltedLard": "Lard (Melted)",
+  "Fluid_Name_MeltedTallow": "Tallow (Melted)",
+  "Fluid_Name_RancidFat": "Fat (Rancid)"
 }

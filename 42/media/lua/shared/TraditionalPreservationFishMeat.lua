@@ -208,7 +208,7 @@ F.HEAT_DAMAGE = 0.05
 -- fresh-off-the-frame one lowers it as much; halfway is neither. A dish takes on the share it gets.
 F.MATURE_DAYS = 60
 F.MATURE_UNHAPPY = 10
--- Dry-cured meat ages after it has dried (6c), on its own food clock as stockfish matures: a cut AGE_CUT_DAYS, a
+-- Dry cured meat ages after it has dried (6c), on its own food clock as stockfish matures: a cut AGE_CUT_DAYS, a
 -- Country Ham AGE_HAM_DAYS. Left hanging where it dried it takes HANG_AGE_SHARE of that; once down it can't go
 -- back up. It is good to eat before; Aged, a whole cut lifts the mood by AGED_CUT_UNHAPPY and a whole ham by
 -- AGED_HAM_UNHAPPY, and the ham takes AGED_HAM_BOREDOM off the boredom: the ham's reward, with its slices.
@@ -335,10 +335,10 @@ F.STAGES = {
     ["TraditionalPreservationFishMeat.HotSmokedMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_HotSmoked", weight = 0.78, nutrition = 1, hunger = 1, salty = true },
     ["TraditionalPreservationFishMeat.SoakedCharque"] = { name = "IGUI_TraditionalPreservationFishMeat_SoakedCharque", weight = 1.6, nutrition = 1, hunger = 1 / 0.7, salty = true },
     -- Cold smoked (the Smokehouse, 5d): dried in smoky air, as dry as Salt Dried fish or charque. Meat smoked so is no
-    -- longer charque but the start of the Dry-Cured line, named by the animal ("Dry-Cured Beef (Cold Smoked)").
+    -- longer charque but the start of the Dry Cured line, named by the animal ("Dry Cured Beef (Cold Smoked)").
     ["TraditionalPreservationFishMeat.ColdSmokedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdSmoked", weight = 0.45, nutrition = 0.9, hunger = 0.7, salty = true },
     ["TraditionalPreservationFishMeat.DryCuredMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdSmoked", weight = 0.55, nutrition = 0.9, hunger = 0.7, salty = true, dryCured = true, ages = true },
-    -- A Leg of Pork dried in the Smokehouse (6b): Dry-Cured meat's shares, an item of its own for its longer keeping.
+    -- A Leg of Pork dried in the Smokehouse (6b): Dry Cured meat's shares, an item of its own for its longer keeping.
     ["TraditionalPreservationFishMeat.CountryHam"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdSmoked", weight = 0.55, nutrition = 0.9, hunger = 0.7, salty = true, dryCured = true, ages = true, ham = true },
     -- Slices (6c, TraditionalPreservationFishMeatSlices.lua): named by the piece they were cut from (modData.cut).
     ["TraditionalPreservationFishMeat.HotSmokedMeatSlice"] = { slice = true, hot = true },
@@ -1003,7 +1003,7 @@ local function showProgress(craftRecipeData, modData, hours)
     local rotten = F.stackRotten(modData)
     local progress = (rotten or F.hotStations[modData.stackId]) and 1 or F.stackProgress(modData, hours)
     if progress >= 1 and modData.inShed and not F.smokeStations[modData.stackId] then progress = F.SHED_WAIT end
-    -- A dry-curing stack on a frame waits for the World too, which swaps its Charque for dry-cured meat.
+    -- A dry-curing stack on a frame waits for the World too, which swaps its Charque for dry cured meat.
     if progress >= 1 and not modData.inShed and F.dryCuring(modData) and not F.stackStations[modData.stackId] then progress = F.SHED_WAIT end
     craftRecipeData:setElapsedTime(progress * time)
 end
@@ -1541,14 +1541,14 @@ function F.ripeness(item)
     return math.max(0, math.min((item:getAge() - modData.matureAge) / F.MATURE_DAYS, 1))
 end
 
--- The days a piece of dry-cured meat takes to age, nil for anything that doesn't.
+-- The days a piece of dry cured meat takes to age, nil for anything that doesn't.
 function F.ageDays(item)
     local stage = F.STAGES[item:getFullType()]
     if not stage or not stage.ages then return nil end
     return stage.ham and F.AGE_HAM_DAYS or F.AGE_CUT_DAYS
 end
 
--- How far a piece of dry-cured meat has aged, 0 to 1, by the days on its food clock since it dried (agedFrom; one
+-- How far a piece of dry cured meat has aged, 0 to 1, by the days on its food clock since it dried (agedFrom; one
 -- from before 6c counts all its days). Once Aged it stays so.
 function F.agedness(item)
     local days = F.ageDays(item)
@@ -1599,7 +1599,7 @@ function F.wasGutted(item)
     return index >= count and index < count * 2
 end
 
--- Names (6a): the name says what it is now, a permanent fact in front ("Corned Beef", "Suho Meso"); a bracket only
+-- Names (6a): the name says what it is now, a permanent fact in front ("Beef (Corned)", "Suho Meso"); a bracket only
 -- holds a state that changes or wants acting on, one at most, before vanilla's freshness.
 -- The finished meat of each animal, by how it dried: smoked (the default) or air dried (modData.airDried, 6b).
 -- The leg has its own, Country Ham.
@@ -1631,7 +1631,7 @@ local function meatStageName(item)
     elseif fullType == "TraditionalPreservationFishMeat.HotSmokedMeat" then
         return getText("IGUI_TraditionalPreservationFishMeat_HotSmokedOf", animal)
     elseif stage.hot then
-        return getText("IGUI_TraditionalPreservationFishMeat_SliceOf", getText("IGUI_TraditionalPreservationFishMeat_HotSmokedOf", animal))
+        return getText("IGUI_TraditionalPreservationFishMeat_HotSmokedOf", getText("IGUI_TraditionalPreservationFishMeat_SliceOf", animal))
     end
     local name = getText((modData.airDried and "IGUI_TraditionalPreservationFishMeat_AirDried_" or "IGUI_TraditionalPreservationFishMeat_Smoked_") .. meatKind(index))
     local aged = F.agedness(item) >= 1
@@ -1692,7 +1692,7 @@ function F.rename(item)
         item:setName(name)
         item:setCustomName(true)
     end
-    -- Dry-cured meat's tooltip says how far it has aged, a key per tenth as stockfish; air dried meat's has no
+    -- Dry cured meat's tooltip says how far it has aged, a key per tenth as stockfish; air dried meat's has no
     -- smoke in it.
     if ages then
         local agedness = F.agedness(item)
@@ -1708,7 +1708,7 @@ end
 
 -- InheritFood would copy the first fish onto all of them, and a batch can mix sizes, so each
 -- fish hands its own values to one output.
--- A hung piece that rotted before it was done: the same stage again, as it went up, rotten ("Corned Beef", not
+-- A hung piece that rotted before it was done: the same stage again, as it went up, rotten ("Beef (Corned)", not
 -- "Bresaola"; a Gutted Walleye, not a Stockfish).
 -- stack is the stack's modData, if it came off a station: the piece keeps its stack, so the station still counts it
 -- and draws it with the rest.
@@ -1900,7 +1900,7 @@ end
 
 -- Marks the fish of a stack, so a frame can tell its finished stacks apart, and ages it by what
 -- the season took out of it. A stack hot smoked in the Smokehouse comes out Hot Smoked instead, and one that had
--- its hours of smoke there (F.smokeHours) Cold Smoked. Meat dried in the shed is Dry-Cured either way, never Charque.
+-- its hours of smoke there (F.smokeHours) Cold Smoked. Meat dried in the shed is Dry Cured either way, never Charque.
 function F.onCreateDried(craftRecipeData)
     local modData = craftRecipeData:getModData()
     local hung = modData.stackId and F.stackStations[modData.stackId]
@@ -1920,7 +1920,7 @@ function F.onCreateDried(craftRecipeData)
     if station then F.smokeStations[modData.stackId] = nil end
     if station then
         local smoked = F.coldDone(modData)
-        -- Meat from the shed is always Dry-Cured, smoked or air dried (6b); fish only with its share of smoke.
+        -- Meat from the shed is always Dry Cured, smoked or air dried (6b); fish only with its share of smoke.
         if (smoked or modData.smokeMeat) and F.smokedOutputs(craftRecipeData, station, F.COLD_FISH_OUT, F.DRY_CURED, not smoked) then return end
     end
     F.onCreateCured(craftRecipeData)

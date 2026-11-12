@@ -2,7 +2,7 @@
 -- English: cuts cooked slowly in Lard or Tallow with salt, packed into a clay jar or pot and sealed under the fat.
 -- A pot takes a cut, a block of fat (or a pot of melted fat, 0.5 L, the same block) and salt, and up to three more
 -- cuts (Add Meat to the Pot: hand crafts can't take a varying count); cooked on any stove or fire it can burn, and packed it gives a Crock of Potted Meat of a portion a cut, which is eaten from as
--- Dairy's Jar of Yoghurt is: vanilla's Eat, Eat Half and Eat Quarter take portions, and the last bite gives the
+-- Dairy's Jar of Yogurt is: vanilla's Eat, Eat Half and Eat Quarter take portions, and the last bite gives the
 -- jar or pot back.
 TraditionalPreservationFishMeat = TraditionalPreservationFishMeat or {}
 local F = TraditionalPreservationFishMeat

@@ -281,7 +281,7 @@ module TraditionalPreservationFishMeat
         }
     }
 
-    /* A cooked pot's fat has melted: pouring it off gives the pot back holding 0.5 L of Melted Lard or Melted
+    /* A cooked pot's fat has melted: pouring it off gives the pot back holding 0.5 L of Lard (Melted) or
        Tallow (onPourOffLard, onPourOffTallow fill it), for Strain Lard or Strain Tallow, a bigger container or
        the Hearth's copper. IsCookedFoodItem lets burnt food through, so canPourOff refuses a burnt pot. */
     craftRecipe PourOffLard
@@ -547,7 +547,7 @@ module TraditionalPreservationFishMeat
         }
     }
 
-    /* The long cure (6a), for the Smokehouse's dry-cured meat and country ham: Country Cured meat, LONG_CUT_HOURS
+    /* The long cure (6a), for the Smokehouse's dry cured meat and country ham: Country Cured meat, LONG_CUT_HOURS
        for cuts, LONG_LEG_HOURS if a leg is in the batch (onPressStart). time is the leg's. Same item as the short
        cure, marked longCure (onCreateLongCured). */
     craftRecipe CountryCureMeat
@@ -596,8 +596,8 @@ module TraditionalPreservationFishMeat
     }
 
     /* Cold smoked in the Smokehouse (5d): salt cured meat dried in smoky air over a banked Firebox for a third of its
-       time or more. No longer charque (sun and wind only) but the start of the Dry-Cured line, suho meso's family:
-       named by the animal ("Dry-Cured Beef (Cold Smoked)", F.stageName), keeps as charque does and is eaten as it is,
+       time or more. No longer charque (sun and wind only) but the start of the Dry Cured line, suho meso's family:
+       named by the animal ("Dry Cured Beef (Cold Smoked)", F.stageName), keeps as charque does and is eaten as it is,
        sliced thin. Phase 6 adds ripening. Food from the cut (carry); the values here are placeholders. */
     item DryCuredMeat
     {
@@ -625,7 +625,7 @@ module TraditionalPreservationFishMeat
     }
 
     /* A Leg of Pork, country cured and dried in the Smokehouse (6b): Smoked Country Ham with a third of its time in
-       smoke, Country Ham without. Dry-Cured meat's shares of the leg; it keeps half a year to a year. The script's
+       smoke, Country Ham without. Dry Cured meat's shares of the leg; it keeps half a year to a year. The script's
        values are a 2.5 leg's; its icon and model are the leg's (index 6), as the other meat stages list them.
        Both age (6c, F.applyAged): Aged, the ham's mood goes from -10 to -40 with -20 boredom, a cut's from -3 to -8. */
     item CountryHam
@@ -743,7 +743,7 @@ module TraditionalPreservationFishMeat
         Proteins = 9.5,
         StaticModel = HamSlice,
         WorldStaticModel = HamSlice,
-        EvolvedRecipeName = Dry-Cured Meat,
+        EvolvedRecipeName = Dry Cured Meat,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_DryCuredSlice,
     }
 
@@ -1044,7 +1044,7 @@ module TraditionalPreservationFishMeat
         }
     }
 
-    /* A pot of Melted Lard or Tallow from Pour Off (or ladled from the copper): its 0.5 L is a block. */
+    /* A pot of Lard (Melted) or Tallow from Pour Off (or ladled from the copper): its 0.5 L is a block. */
     craftRecipe PutMeatInMeltedFat
     {
         timedAction = MixingBowl,

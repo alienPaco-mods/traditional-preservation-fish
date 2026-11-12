@@ -1,5 +1,5 @@
--- Traditional Preservation (Fish & Meat): slices, phase 6c. Hot-Smoked meat and dry-cured cuts slice into as many
--- slices of about SLICE_HUNGER as they hold, MIN_SLICES at least (a Hot-Smoked Beef six, a dry-cured chop two). A
+-- Traditional Preservation (Fish & Meat): slices, phase 6c. Hot Smoked meat and dry cured cuts slice into as many
+-- slices of about SLICE_HUNGER as they hold, MIN_SLICES at least (a Beef (Hot Smoked) six, a dry cured chop two). A
 -- Country Ham is carved: CARVE_SLICES slices of CARVE_HUNGER in all come off and the ham stays, lighter, on its own
 -- long clock, until the last carving takes what is left: fifteen slices from a leg in three carvings. A
 -- slice takes its share of the piece's food and mood, keeps half the piece's days (its script) and starts as far
@@ -94,7 +94,7 @@ local function created(craftRecipeData)
     return slices
 end
 
--- Slice Hot-Smoked Meat and Slice Dry-Cured Meat: the whole cut, in as many slices as it holds. The recipe makes
+-- Slice Hot Smoked Meat and Slice Dry Cured Meat: the whole cut, in as many slices as it holds. The recipe makes
 -- MIN_SLICES; the rest go straight to the character.
 function F.onCreateMeatSliced(craftRecipeData, character)
     local piece = craftRecipeData:getAllInputItemsWithFlag("ItemCount"):get(0)

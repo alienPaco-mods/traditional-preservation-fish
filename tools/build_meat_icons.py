@@ -3,7 +3,7 @@
 
 Raw Pork Fat, Beef Suet and Mutton Fat are vanilla's loin icons pulled towards a fat colour, Tallow is vanilla's
 Lard block yellowed, and the pots of fat are vanilla's full pots with the soup recoloured; Potted Meat's pots and
-crocks are painted the same way, the Hot Smoked fish and meat (5c), and Cold Smoked fish and Dry-Cured meat (5d). Cracklings use vanilla's
+crocks are painted the same way, the Hot Smoked fish and meat (5c), and Cold Smoked fish and Dry Cured meat (5d). Cracklings use vanilla's
 Pork Rinds icon as it is. Kept apart from build_tileset.py so the fish art doesn't rebuild with it.
 
 Usage: python3 tools/build_meat_icons.py [path/to/ProjectZomboid/projectzomboid]
@@ -39,11 +39,11 @@ SALTED = {"SaltPacked": ((236, 232, 224), 0.35), "SaltCured": ((128, 54, 44), 0.
           # Charque (phase 3c) dark and dry, as its last hanging stage; soaked it is paler but never red again.
           "Charque": ((78, 40, 26), 0.85), "SoakedCharque": ((138, 82, 64), 0.6)}
 # Hot Smoked (5c): meat is the cut pulled to a smoked mahogany; fish is our own Salt Dried icons (build_tileset.py's,
-# whole, gutted and half for every species) pulled to the gold of hot-smoked fish skin.
+# whole, gutted and half for every species) pulled to the gold of hot smoked fish skin.
 HOT_MEAT = ((122, 64, 34), 0.8)
 HOT_FISH = ((204, 136, 56), 0.55)
 HOT_FISH_STAGES = {"Dried_": "HotSmoked_", "DriedGutted_": "HotSmokedGutted_", "DriedHalf_": "HotSmokedHalf_"}
-# Cold Smoked (5d): fish to a darker smoky bronze than hot smoking's gold; Dry-Cured meat to a deep burgundy, darker
+# Cold Smoked (5d): fish to a darker smoky bronze than hot smoking's gold; Dry Cured meat to a deep burgundy, darker
 # and redder than charque's brown.
 COLD_FISH = ((140, 88, 48), 0.6)
 COLD_FISH_STAGES = {"Dried_": "ColdSmoked_", "DriedGutted_": "ColdSmokedGutted_", "DriedHalf_": "ColdSmokedHalf_"}
@@ -52,7 +52,7 @@ DRY_CURED = ((96, 34, 34), 0.85)
 POTS = {"PotOfFat": "Item_PotFull", "PotForgedFat": "Item_Pot_Forged_Stew"}
 FAT_IN_POT = (244, 232, 196)
 # Potted Meat (phase 4): the same pots with brown meat in the fat, and vanilla's clay jars (a Clay Pot shares the
-# unglazed jar's icon) with the dark of the mouth turned to set white fat, as Dairy's yoghurt jars are painted.
+# unglazed jar's icon) with the dark of the mouth turned to set white fat, as Dairy's yogurt jars are painted.
 MEAT_POTS = {"PotOfMeatInFat": "Item_PotFull", "PotForgedMeatInFat": "Item_Pot_Forged_Stew"}
 MEAT_IN_FAT = (150, 92, 60)
 CROCKS = {"PottedMeat_Clay": "Item_ClayJar_Fired", "PottedMeat_Glazed": "Item_ClayJar_Glazed_Fired"}

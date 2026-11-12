@@ -1,11 +1,11 @@
 name=Traditional Preservation (Fish & Meat)
 id=TraditionalPreservationFishMeat
 author=alienPaco
-modversion=0.4.21
+modversion=0.4.22
 versionMin=42.20
 require=\TraditionalPreservationCore
 loadModAfter=\TraditionalPreservationCore
-description=Salt, dry and smoke fish and meat the old way: salt fish, stockfish, charque, potted meat, a Smokehouse, dry-cured meat and country ham. B42 prototype.
+description=Salt, dry and smoke fish and meat the old way: salt fish, stockfish, charque, potted meat, a Smokehouse, dry cured meat and country ham. B42 prototype.
 icon=icon.png
 pack=traditionalpreservationfishmeat
 tiledef=traditionalpreservationfishmeat 5129

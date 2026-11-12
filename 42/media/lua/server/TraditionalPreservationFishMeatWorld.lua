@@ -16,7 +16,7 @@ local TUB_FILLED_SPRITE, TUB_WEIGHTED_SPRITE, TUB_MEAT_SPRITES = Tiles.TUB_FILLE
 local FRAME_SPRITE = Tiles.FRAME
 local STAGE_FRESH = 0
 
--- How many fish, how many stacks, each stack's style, and the items in slot order (the last in last). Finished dry-cured meat still hanging (hangingSince, the
+-- How many fish, how many stacks, each stack's style, and the items in slot order (the last in last). Finished dry cured meat still hanging (hangingSince, the
 -- hour) ages faster as it is counted (F.ageHanging). rotten[n] is true when any piece of the nth stack has rotted.
 local function countItems(resources, group, io, hangingSince)
     local count, stacks = 0, 0

@@ -139,7 +139,7 @@ for _, fat in ipairs(F.COPPER_FATS) do
         check(item .. " is a raw fat item", block("item", item:match("%.(%w+)$")) ~= nil)
     end
 end
-check("Rancid Fat is a fluid with a name", fluids:find("\n    fluid RancidFat\n", 1, true) ~= nil and H.texts.Fluid_Name_RancidFat ~= nil)
+check("Fat (Rancid) is a fluid with a name", fluids:find("\n    fluid RancidFat\n", 1, true) ~= nil and H.texts.Fluid_Name_RancidFat ~= nil)
 local copper = {}
 check("an empty copper has room for 240 pieces", F.copperFatRoom(copper, "RawPorkFat") == 240)
 check("six pieces of pork fat go in as a litre and a half", F.putFatInCopper(copper, "RawPorkFat", { 96, 30, 96, 96, 96, 96 }, 10) == 6
@@ -154,7 +154,7 @@ copper.fireUntil = 100
 Hearth.advance(copper, 12 + Hearth.hoursToHot(copper) + 0.9, 20)
 check("not yet melted short of the hour", copper.fluid == "RawPorkFat")
 Hearth.advance(copper, 15, 20)
-check("an hour steaming melts it to Melted Lard, which ladles out and keeps", copper.fluid == "MeltedLard" and Hearth.poursOut(copper)
+check("an hour steaming melts it to Lard (Melted), which ladles out and keeps", copper.fluid == "MeltedLard" and Hearth.poursOut(copper)
     and copper.offAt == nil)
 check("seven pieces are three blocks and a half", copper.ml / 500 == 3.5)
 check("melted fat takes no raw", F.copperFatRoom(copper, "RawPorkFat") == 0)
@@ -180,9 +180,9 @@ local function poured(onCreate)
     return pot
 end
 local potOfLard, potOfTallow = poured(F.onPourOffLard), poured(F.onPourOffTallow)
-check("a pot poured off holds half a litre of Melted Lard, hot: one block's worth, as two pieces are in the copper",
+check("a pot poured off holds half a litre of Lard (Melted), hot: one block's worth, as two pieces are in the copper",
     potOfLard.fluids.MeltedLard == 0.5 and potOfLard.heat > 1.4 and F.POT_FAT_ML == 2 * F.FAT_PIECE_ML)
-check("a pot of suet pours off as Melted Tallow", potOfTallow.fluids.MeltedTallow == 0.5 and potOfTallow.fluids.MeltedLard == nil)
+check("a pot of suet pours off as Tallow (Melted)", potOfTallow.fluids.MeltedTallow == 0.5 and potOfTallow.fluids.MeltedLard == nil)
 check("a litre of melted fat is worth two blocks", tonumber(fluids:match("fluid MeltedLard.-Calories = ([%d%.]+)")) == 2 * lard
     and tonumber(fluids:match("fluid MeltedTallow.-Calories = ([%d%.]+)")) == 2 * lard)
 for _, key in ipairs({ "FatHelp", "NoFat", "FatNoRoom", "FatRendering", "FatMelted", "FatRancid" }) do

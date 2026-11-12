@@ -229,14 +229,14 @@ check("the drying when that is ahead", near(F.stackProgress({ dried = 200, hotNe
 check("a broken run drops the bar back to the drying", near(F.stackProgress({ dried = 10, hotNeed = 6, hot = 0 }, 288), 10 / 288))
 check("the cook never ends the stack by the bar alone", F.stackProgress({ dried = 10, hotNeed = 6, hot = 6 }, 288) == F.SHED_WAIT)
 
--- Dry-Cured meat is named by the animal its cut came from.
+-- Dry Cured meat is named by the animal its cut came from.
 local function meatItem(index)
     return { getFullType = function() return F.DRY_CURED end, getModelIndex = function() return index end,
         getAge = function() return 0 end, getModData = function() return { fishName = "Steak" } end }
 end
 check("a smoked steak is Suho Meso", F.stageName(meatItem(1)) == "Suho Meso")
 check("a mutton chop is Mutton Ham, venison Jerked Venison", F.stageName(meatItem(2)) == "Mutton Ham" and F.stageName(meatItem(3)) == "Jerked Venison")
-check("pork is Smoked Dry-Cured Pork, a leg Smoked Country Ham", F.stageName(meatItem(5)) == "Smoked Dry-Cured Pork" and F.stageName(meatItem(6)) == "Smoked Country Ham")
+check("pork is Smoked Dry Cured Pork, a leg Smoked Country Ham", F.stageName(meatItem(5)) == "Smoked Dry Cured Pork" and F.stageName(meatItem(6)) == "Smoked Country Ham")
 
 check("air dried, beef is Bresaola and a leg plain Country Ham", F.stageName({ getFullType = function() return F.DRY_CURED end,
     getModelIndex = function() return 0 end, getAge = function() return 0 end, getModData = function() return { airDried = true } end }) == "Bresaola"

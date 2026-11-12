@@ -14,7 +14,7 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.heat(hours)` | Adds hours of hot sun (above 25 C). An open salt stack under half dried loses 5% of its keeping per 24 hours, times how wet it still is, at most a quarter. |
 | `TPFM.warmCure(hours)` | Adds hours of a warm cure at 25 C (1.5 x hours to `warmCure`). A batch in the tub loses about 0.8% of its keeping per hour. |
 | `TPFM.dry()` | Clears the wetness, so open and cold frames start drying again at once after rain. |
-| `TPFM.mature(days)` | Ages the stockfish and the dry-cured meat you carry by this many days. Stockfish is Matured after 60; a dry-cured cut is Aged after 30, a Country Ham after 90. |
+| `TPFM.mature(days)` | Ages the stockfish and the dry cured meat you carry by this many days. Stockfish is Matured after 60; a dry cured cut is Aged after 30, a Country Ham after 90. |
 | `TPFM.food()` | Each cured fish or meat item you carry, with the numbers the game's tooltip rounds or hides: hunger, unhappiness, boredom, thirst, weight, age against its fresh / rotten days, and how far it has aged. |
 | `TPFM.dryCured(n)` | Spawns `n` each of the seven cuts dry cured, smoked and young ("Suho Meso", "Mutton Ham", "Smoked Country Ham"), to age and slice. |
 | `TPFM.stockfish(n)` | Spawns n young stockfish, as if fresh off the frame, for the pallet. |
@@ -25,7 +25,7 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.salt(n)` | Spawns vanilla Salt shakers. |
 | `TPFM.fat(n)` | Spawns `n` each of Pork Fat, Beef Suet and Mutton Fat (default food values). |
 | `TPFM.meat(n)` | Spawns `n` each of the cuts Pack Meat in Salt takes: Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop, Leg of Pork. |
-| `TPFM.cured(n, long)` | Spawns `n` each of those cuts already Corned ("Corned Steak"; `long = true`: "Country Cured Steak"), ready to hang. Frames refuse the pork. |
+| `TPFM.cured(n, long)` | Spawns `n` each of those cuts already Corned ("Steak (Corned)"; `long = true`: "Steak (Country Cured)"), ready to hang. Frames refuse the pork. |
 | `TPFM.curedFish(name, n)` | Spawns `n` fish (default Walleye) already Salt Cured ("Walleye (Salt Cured)"), ready for a frame or the Smokehouse. |
 | `TPFM.rain(hours)` | Adds this many hours of rain (default 6) and wets the open frames: an open charque stack loses a tenth of its progress per 6 hours. `TPFM.dry()` dries the frames off again. |
 | `TPFM.fatPot(state)` | Spawns a Pot of Pork Fat: `"cooked"` (the default, ready to pour off), `"burnt"` (only Scrape Out Burnt Fat takes it) or `"raw"`. |
@@ -46,7 +46,7 @@ The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't s
 
 **Typical check of the whole salt route:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(10)` (each 4 weight walleye takes 28 salt, and a shaker holds 10), pack and cure, then hang the fish and `TPFM.age(288)`.
 
-**Typical check of rendering:** `TPFM.fat(2)`, a Pot, Put Pork Fat in a Pot, cook it on any stove or fire (60 minutes), Pour Off Lard: the pot holds 0.5 L Melted Lard; Strain Lard (with a Rag or other cloth, or a Strainer): one Lard, one Cracklings, the pot kept.
+**Typical check of rendering:** `TPFM.fat(2)`, a Pot, Put Pork Fat in a Pot, cook it on any stove or fire (60 minutes), Pour Off Lard: the pot holds 0.5 L Lard (Melted); Strain Lard (with a Rag or other cloth, or a Strainer): one Lard, one Cracklings, the pot kept.
 
 **Typical check of Potted Meat:** `TPFM.potted()`, Put Meat in Lard or Tallow (the Steak), Add Meat to the Pot three times (a fifth is refused), cook it on any stove or fire (120 minutes), Pack Potted Meat into the Glazed Clay Jar: "Crock of Potted Meat (4 portions)", glazed look, the pot back. Eat a quarter: 3 portions, lighter. Eat the rest: the Glazed Clay Jar comes back.
 

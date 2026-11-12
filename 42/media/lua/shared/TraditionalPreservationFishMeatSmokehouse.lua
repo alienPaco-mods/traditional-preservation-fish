@@ -218,7 +218,7 @@ end
 -- Firebox's fire on two counters: hot, the hours of the stoked session now running (TP Core's Hearth.logFire), and
 -- cold, banked hours and the hours of stoked sessions that broke off. Hot reaching the stack's need finishes it at
 -- once as Hot Smoked; short of that it dries on as the Smokehouse always does, and keeps cold for Cold Smoked (5d).
--- The need goes by the heaviest piece, as the press does: a cook is one unbroken run (real hot-smoked fish must reach
+-- The need goes by the heaviest piece, as the press does: a cook is one unbroken run (real hot smoked fish must reach
 -- 63 C inside and hold it).
 F.HOT_FISH_HOURS = { { 1.1, 4 }, { 2.2, 6 } }
 F.HOT_MEAT_HOURS = { { 0.3, 6 }, { 0.5, 8 } }
@@ -236,7 +236,7 @@ F.SMOKE_FISH_HOURS = { { 1.1, 24 }, { 2.2, 48 } }
 F.SMOKE_MEAT_HOURS = { { 0.45, 60 }, { 2.25, 120 } }
 F.COLD_FISH_OUT = "TraditionalPreservationFishMeat.ColdSmokedFish"
 F.DRY_CURED = "TraditionalPreservationFishMeat.DryCuredMeat"
--- 6b: a Leg of Pork dries to a Country Ham and never takes a hot cook (a hot-smoked whole ham is a wet-cured city
+-- 6b: a Leg of Pork dries to a Country Ham and never takes a hot cook (a hot smoked whole ham is a wet-cured city
 -- ham, another product); the other pork cuts hot smoke to vanilla's Ham.
 F.COUNTRY_HAM = "TraditionalPreservationFishMeat.CountryHam"
 F.VANILLA_HAM = "Base.Ham"
@@ -411,8 +411,8 @@ end
 F.hotStations = {}
 
 -- Swaps a finished stack's outputs, already in the chamber's slots (the engine makes them before OnCreate), for
--- smoked ones made from its inputs: fishType for fish, meatType for meat (Hot Smoked, or Cold Smoked and Dry-Cured).
--- Of the meat, hot smoked pork is vanilla's Ham and a dried leg a Country Ham; airDried marks Dry-Cured meat that
+-- smoked ones made from its inputs: fishType for fish, meatType for meat (Hot Smoked, or Cold Smoked and Dry Cured).
+-- Of the meat, hot smoked pork is vanilla's Ham and a dried leg a Country Ham; airDried marks Dry Cured meat that
 -- had too little smoke (Bresaola, plain Country Ham). Corned pieces take the stack's under-salted spoilage.
 local function smokedMeatType(input, meatType)
     if meatType == F.HOT_MEAT then return F.isPork(input) and not F.isLeg(input) and F.VANILLA_HAM or meatType end
@@ -436,7 +436,7 @@ function F.smokedItem(input, modData, fishType, meatType, airDried)
         hot:getModData().style = modData.style
     end
     hot:setAge(hot:getOffAge() * lost)
-    -- Dry-cured meat ages from here (6c).
+    -- Dry cured meat ages from here (6c).
     if F.ageDays(hot) then hot:getModData().agedFrom = hot:getAge() end
     return hot
 end

@@ -1,4 +1,4 @@
--- Checks ageing dry-cured meat and the slices (6c) outside the game. Run from the mod folder: luajit tests/test_aged.lua
+-- Checks ageing dry cured meat and the slices (6c) outside the game. Run from the mod folder: luajit tests/test_aged.lua
 local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
 local check, near = H.check, H.near
 H.useModPaths()
@@ -100,7 +100,7 @@ local character = { getInventory = function() return inventory end }
 function instanceItem(fullType) return food(fullType) end
 local piece = food(F.DRY_CURED, { ModelIndex = 0, Age = 60, Calories = 396, Proteins = 30, Lipids = 9, BaseHunger = -0.56, HungChange = -0.54,
     ActualWeight = 0.25, UnhappyChange = -3, ThirstChange = 0.24 }, { agedFrom = 0, airDried = true })
-check("a dry-cured Beef is four slices, a chop two, a Hot-Smoked Beef six", F.sliceCount(piece) == 4
+check("a dry cured Beef is four slices, a chop two, a Beef (Hot Smoked) six", F.sliceCount(piece) == 4
     and F.sliceCount(food(F.DRY_CURED, { HungChange = -0.21 })) == 2 and F.sliceCount(food(F.HOT_MEAT, { HungChange = -0.8 })) == 6
     and F.sliceCount(food(F.HOT_MEAT, { HungChange = -0.05 })) == 2)
 local data, slices = recipe(piece, "TraditionalPreservationFishMeat.DryCuredMeatSlice", F.MIN_SLICES)
@@ -118,7 +118,7 @@ given = {}
 local hot = food(F.HOT_MEAT, { ModelIndex = 3, Age = 3.5, HungChange = -0.8, BaseHunger = -0.8 })
 data, slices = recipe(hot, "TraditionalPreservationFishMeat.HotSmokedMeatSlice", F.MIN_SLICES)
 F.onCreateMeatSliced(data, character)
-check("hot smoked venison: six slices of about 13", #given == 4 and slices[2].values.Name == "Hot-Smoked Venison Slice"
+check("hot smoked venison: six slices of about 13", #given == 4 and slices[2].values.Name == "Venison Slice (Hot Smoked)"
     and near(slices[2].values.Age, 1.5) and near(given[4].values.HungChange, -0.8 / 6))
 
 -- Carving a ham: 15 slices of hunger 14 from a leg, in three carvings

@@ -25,7 +25,7 @@ function TPFM.help()
     say("TPFM.warmCure(hours)       add this many hours of a warm cure at 25 C, to test a warm cure spoiling a running tub")
     say("TPFM.longCure(hours)       add this many hours of a 15 C season (default 168) to a running Country Cure, which wants 10 C or less")
     say("TPFM.dry()                 clear the wetness, so open and cold frames start drying again at once")
-    say("TPFM.mature(days)          age the stockfish and dry-cured meat you carry by this many days, to test maturing and ageing")
+    say("TPFM.mature(days)          age the stockfish and dry cured meat you carry by this many days, to test maturing and ageing")
     say("TPFM.food()                the cured fish and meat you carry: hunger, unhappiness, boredom, thirst, age against its days, ageing")
     say("TPFM.dryCured(n)           spawn n each of the seven cuts dry cured and young (smoked; a Country Ham from the leg), to age and slice")
     say("TPFM.stockfish(n)          spawn n young stockfish (fresh off the frame), for the pallet")
@@ -204,7 +204,7 @@ function TPFM.mature(days)
         end
         meat = meat + items:size()
     end
-    say(string.format("Aged %d dry-cured pieces by %d days. A cut is Aged after %d, a Country Ham after %d.", meat, days, F.AGE_CUT_DAYS, F.AGE_HAM_DAYS))
+    say(string.format("Aged %d dry cured pieces by %d days. A cut is Aged after %d, a Country Ham after %d.", meat, days, F.AGE_CUT_DAYS, F.AGE_HAM_DAYS))
 end
 
 -- The numbers the game's tooltip rounds or hides, for every stage item in the main inventory.
@@ -295,11 +295,11 @@ function TPFM.meat(count)
     say("Gave " .. (count or 1) .. " each of Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop and Leg of Pork.")
 end
 
--- Each cut as the short cure gives it ("Corned Steak"); long = true for the long cure ("Country Cured Steak").
+-- Each cut as the short cure gives it ("Steak (Corned)"); long = true for the long cure ("Steak (Country Cured)").
 function TPFM.cured(count, long)
     local inventory = getPlayer():getInventory()
     for _, cut in ipairs(F.MEAT_CUTS) do
-        -- The short cure refuses a leg, so there is no Corned Leg of Pork.
+        -- The short cure refuses a leg, so there is no Leg of Pork (Corned).
         for _ = 1, (long == true or cut ~= F.LEG_OF_PORK) and (count or 1) or 0 do
             local raw = instanceItem(cut)
             local cured = inventory:AddItem(F.CURED_MEAT)
