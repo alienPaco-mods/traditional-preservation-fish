@@ -252,7 +252,7 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 
 **Hover a stack** to see its method, progress, time left, place, the temperature, the wind, how wet it is and how fast it's drying right now, a warning if the season is spoiling it, and in a Smokehouse its smoke.
 
-**The station's own window tells you the rest.** Under *In Progress*, *Done* and *Take All*, every station (the Salting Tub and the Smokehouse too) lists the place, how many stacks are in use, the air now and over the season, and a bar for every running batch with its share, its time left or the reason it stands still. Under the bars it lists what wants your eye: a batch that is spoiling, a hot cook under way, the smoke so far, pieces loaded but never started, finished ones waiting to be taken.
+**The station's own window tells you the rest.** Under *In Progress*, *Done* and *Take All*, every station (the Salting Tub and the Smokehouse too) lists the place, how many stacks are in use, the air now and over the season (below ground, the basement's own temperature), and a bar for every running batch with its share, its time left or the reason it stands still. Under the bars it lists what wants your eye: a batch that is spoiling, a hot cook under way, the smoke so far, pieces loaded but never started, finished ones waiting to be taken.
 
 > ✏ *Margin note:* the times left assume today's weather holds. Nobody on the Volga could promise that either.
 

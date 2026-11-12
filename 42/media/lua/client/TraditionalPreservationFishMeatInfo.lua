@@ -6,6 +6,7 @@
 local UI = require "TraditionalPreservationCore/UI"
 local StationInfo = require "TraditionalPreservationCore/StationInfo"
 local Hearth = require "TraditionalPreservationCore/Hearth"
+local Weather = require "TraditionalPreservationCore/Weather"
 local F = TraditionalPreservationFishMeat
 
 TraditionalPreservationFishMeatInfo = TraditionalPreservationFishMeatInfo or {}
@@ -87,8 +88,13 @@ function Info.rows(found, ledger, now, fire)
             tostring(F.TUB_CAPACITY), tostring(#found.waiting), tostring(F.TUB_MAX_ITEMS)) })
     end
     local temperature = ledger.temperature or 0
-    table.insert(rows, { KEY .. "InfoAir", UI.say(KEY .. "InfoAirValue", UI.degrees(temperature),
-        UI.degrees(ledger.seasonTemperature or temperature)) })
+    -- Below ground the stacks and the tub go by the basement's own temperature, not the day's.
+    if found.place == "Basement" then
+        table.insert(rows, { KEY .. "InfoAir", UI.placeText("Basement", Weather.placeTemperature(ledger, "Basement")) })
+    else
+        table.insert(rows, { KEY .. "InfoAir", UI.say(KEY .. "InfoAirValue", UI.degrees(temperature),
+            UI.degrees(ledger.seasonTemperature or temperature)) })
+    end
     -- Wind and rain reach a hanger in the open or under an open roof; the tub goes by the season alone.
     if hanger and (found.place == "Open" or found.place == "Covered") then
         table.insert(rows, { KEY .. "Wind", getText(F.windWord(ledger.wind)) })

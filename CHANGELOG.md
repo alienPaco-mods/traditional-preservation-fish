@@ -13,6 +13,8 @@
 - **Fix:** the stack popup's Place line showed a raw translation key since 0.4.23 (Fish & Meat's own place keys
   were removed with step C). It uses TP Core's place words now, Basement included, and a basement stack's
   temperature word reads the basement.
+- Station Info's **Air** row below ground shows the basement's own temperature ("13 C (Basement)"), not the day's
+  and the season's.
 - Guide (places, dry curing, the tub, the year), README, Workshop text, tests.
 
 ## 0.4.23

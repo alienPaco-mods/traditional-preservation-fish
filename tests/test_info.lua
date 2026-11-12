@@ -79,6 +79,8 @@ check("under a roof: wind, no wetness", valueOf(covered, "Wind") ~= nil and valu
 check("an empty station says so", #covered.bars == 0 and hasNote(covered, "Nothing in it."))
 local cellar = Info.rows({ hanger = beam, place = "Basement", waiting = {}, finished = 0, finishedStacks = 0, batches = {} }, ledger, 1000)
 check("a basement: its name, no wind", valueOf(cellar, "Place") == "Basement" and valueOf(cellar, "Wind") == nil)
+check("its air is the basement's own, not the day's", valueOf(cellar, "InfoAir") == require("TraditionalPreservationCore/UI").placeText("Basement",
+    10 + 0.4 * (ledger.seasonTemperature - 10)))
 
 -- The tub: what waits against its limits, then a long cure in a warm season.
 local tub = Info.rows({ place = "Sheltered", waiting = { piece(0.5), piece(2.5) }, finished = 0, finishedStacks = 0, batches = {} }, ledger, 1000)
