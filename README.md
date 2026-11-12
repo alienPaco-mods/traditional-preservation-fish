@@ -1,4 +1,4 @@
-# Traditional Preservation (Fish & Meat) — Build 42 prototype (v0.4.19)
+# Traditional Preservation (Fish & Meat) — Build 42 prototype (v0.4.20)
 
 **Status: experimental.** The stations build, open and hang fish and meat in the game, but a full year hasn't been played. Back up your save before enabling.
 
@@ -51,10 +51,10 @@ Each press of Craft hangs one stack, which dries on its own timer and keeps its 
 
 | Station | Build (hammer kept) | Holds | Where |
 |---|---|---|---|
-| **Drying Frame** | Carpentry 2, Fishing 2: 6 long sticks, 3 nails, 4 twine | 8 stacks of 2.5 weight | Anywhere |
-| **Hanging Beam** | Carpentry 4, Fishing 2: 6 planks, 6 nails, 1 large hook | 4 stacks of 15 | Open air or under an open roof |
-| **Gantry** | Carpentry 6, Fishing 2: 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks of 50 | Open air or under an open roof |
-| **Smokehouse** | Carpentry 3: 14 planks, 20 nails | 6 stacks of 15 | Open air or under an open roof; two tiles |
+| **Drying Frame** | Carpentry 2, Fishing 2: 6 long sticks, 3 nails, 4 twine | 8 stacks of 2.5 weight, 25 pieces | Anywhere |
+| **Hanging Beam** | Carpentry 4, Fishing 2: 6 planks, 6 nails, 1 large hook | 4 stacks of 15, 12 pieces | Open air or under an open roof |
+| **Gantry** | Carpentry 6, Fishing 2: 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks of 50, 6 pieces | Open air or under an open roof |
+| **Smokehouse** | Carpentry 3: 14 planks, 20 nails | 6 stacks of 15, 25 pieces | Open air or under an open roof; two tiles |
 
 The frame, Beam and Gantry take **Hang Salt Cured Fish to Dry**, **Hang Salted Meat to Dry** and **Hang Gutted Fish to Cold Dry**; the Smokehouse takes the first two. **Country Cured meat, pork too, hangs in the shade** (0.4.15, `F.meatRefusal`): in the Smokehouse, or on a **Frame, Beam or Gantry under a roof**, or a **Frame or Beam in a room or a basement**, where it dry cures to air dried meat (below); never in the open (sun and rain are charque's). **Corned pork hangs in the Smokehouse only**, for its hot cook. A frame, Beam or Gantry takes Corned beef, mutton and venison anywhere, for charque. Beam and Gantry fish hang larger on their hooks. A fish heavier than a stack's limit has to be sliced or split, or hung on a bigger station. Hover a stack for its method, progress, time left, place, temperature, wind, wetness, drying rate, smoke and any spoilage. **Station info** (0.4.19): every station's own window, the tub's and the Smokehouse's too, shows under In Progress, Done and Take All the place, the stacks in use, the air now and over the season, the Firebox's fire, a bar for each running batch (share, time left, or why it stands still) and notes on spoilage, a cook under way, smoke, pieces not started and finished ones waiting.
 

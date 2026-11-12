@@ -229,10 +229,10 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 
 | Station | Skill | Materials (hammer kept) | Holds | Where |
 |---|---|---|---|---|
-| **Drying Frame** | Carpentry 2, Fishing 2 | 6 long sticks, 3 nails, 4 twine | 8 stacks × 2.5 weight | Anywhere, a room too |
-| **Hanging Beam** | Carpentry 4, Fishing 2 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight | Anywhere: open air, under a roof, in a room or a basement |
-| **Gantry** | Carpentry 6, Fishing 2 | 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks × 50 weight | Open air or under an open roof |
-| **Smokehouse** | Carpentry 3 | 14 planks, 20 nails | 6 stacks × 15 weight | Open air or under an open roof; two tiles; chapter 10 |
+| **Drying Frame** | Carpentry 2, Fishing 2 | 6 long sticks, 3 nails, 4 twine | 8 stacks × 2.5 weight, 25 pieces | Anywhere, a room too |
+| **Hanging Beam** | Carpentry 4, Fishing 2 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight, 12 pieces | Anywhere: open air, under a roof, in a room or a basement |
+| **Gantry** | Carpentry 6, Fishing 2 | 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks × 50 weight, 6 pieces | Open air or under an open roof |
+| **Smokehouse** | Carpentry 3 | 14 planks, 20 nails | 6 stacks × 15 weight, 25 pieces | Open air or under an open roof; two tiles; chapter 10 |
 
 | Recipe | Frame, Beam, Gantry | Smokehouse |
 |---|---|---|
@@ -336,7 +336,7 @@ A plank shed two tiles long under one sloping roof, the door on the high end wit
 | | |
 |---|---|
 | Build | Carpentry 3: **14 planks, 20 nails**, hammer kept (Build menu, Furniture) |
-| Holds | **6 stacks** of up to **15 weight** |
+| Holds | **6 stacks** of up to **15 weight**, 25 pieces |
 | Takes | **Hang Salt Cured Fish** and **Hang Salted Meat** only; the one place Corned pork may hang |
 | Inside | always **Indoors**: no rain, no wind, wherever the shed stands |
 | Stands | in the open or under an open roof, not inside a room; the tile in front of its door stays clear |
@@ -949,7 +949,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | A Country Cure spoils in the tub in May | The long cure is safe at a ten-day average of 10 C or less: start it between October and April |
 | Country Cured meat won't hang on a frame | It dries in the shade: put the station under a roof, indoors or in a basement, or use the Smokehouse. For charque, corn it |
 | Pack Meat in Salt missing | Salting meat may be off in the sandbox |
-| A station refuses a fish or cut | It takes only Salt Cured fish or meat, or Gutted Fish and halves. Raw, rotten, frozen salted and cooked pieces are refused, and a frame stack holds 2.5 weight at most |
+| A station refuses a fish or cut | It takes only Salt Cured fish or meat, or Gutted Fish and halves. Raw, rotten, frozen salted and cooked pieces are refused, and a frame stack holds 2.5 weight at most. A Hanging Beam stack holds 12 pieces and a Gantry stack 6, fish or meat: they are for bigger pieces, not more of them |
 | A station refuses meat (or fish) | The stack waiting to start is the other kind: one stack is one kind. Craft it first, then load the next |
 | Station indoors refuses gutted fish | It has no moving air. Cold drying needs the open or an open roof |
 | Not drying | Rain on an open station (cold fish too, until it dries off); a stockfish stack hung indoors before 0.4.7; or charque at or below freezing |

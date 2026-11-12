@@ -60,7 +60,8 @@ local function refusal(slot, item, queued)
         local coldRefused = F.coldRefusal(hanger.closed and "Sheltered" or Weather.placeOf(entity, true))
         if coldRefused then return coldRefused end
     end
-    return F.frameRefusal(hanger, TraditionalPreservationFishMeatWorld.busyStacks(entity), waiting, weight)
+    return F.frameRefusal(hanger, TraditionalPreservationFishMeatWorld.busyStacks(entity), waiting, weight,
+        stored:size() + #queued)
 end
 
 -- A tub or a drying station, with whether it's a tub. Asking about one starts tracking it.

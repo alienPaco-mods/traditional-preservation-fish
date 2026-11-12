@@ -37,10 +37,13 @@ F.MAX_STACKS = Tiles.HANGERS.frame.stacks
 -- (from Tiles.lua), and the weight of each stack.
 -- The Smokehouse chamber is closed (nothing hangs in sight) and its facings are two tiles apart, so it lists both.
 local STACK_WEIGHTS = { frame = F.STACK_WEIGHT, medium = 15, large = 50, chamber = 15 }
+-- And the most pieces in each stack, fish or meat alike (0.4.20): the Beam and the Gantry are for bigger fish, not
+-- more of them. 25 is the slot every station is built with.
+local STACK_PIECES = { frame = 25, medium = 12, large = 6, chamber = 25 }
 F.HANGERS = {}
 for name, hanger in pairs(Tiles.HANGERS) do
     local entry = { fishSprite = hanger.fishSprite, meatSprite = hanger.meatSprite, stacks = hanger.stacks, stackWeight = STACK_WEIGHTS[name],
-        closed = hanger.closed }
+        stackPieces = STACK_PIECES[name], closed = hanger.closed }
     for _, base in ipairs(hanger.bases or { hanger.base }) do F.HANGERS[base] = entry end
 end
 
@@ -860,11 +863,13 @@ function F.hangerFor(spriteIndex)
 end
 
 -- Why a fish can't join the stack waiting on a frame, as a translation key, or nil if it can.
--- busyStacks is what is already hanging: running stacks and finished ones not yet taken.
-function F.frameRefusal(hanger, busyStacks, waitingWeight, weight)
+-- busyStacks is what is already hanging: running stacks and finished ones not yet taken. waitingPieces is how many
+-- pieces already wait in the stack (nil counts as none).
+function F.frameRefusal(hanger, busyStacks, waitingWeight, weight, waitingPieces)
     if busyStacks >= hanger.stacks then return "IGUI_TraditionalPreservationFishMeat_FrameFull" end
     if weight > hanger.stackWeight then return "IGUI_TraditionalPreservationFishMeat_TooHeavy" end
-    if not F.hasRoom(hanger.stackWeight, waitingWeight, weight) then
+    if (waitingPieces or 0) >= hanger.stackPieces
+            or not F.hasRoom(hanger.stackWeight, waitingWeight, weight) then
         return "IGUI_TraditionalPreservationFishMeat_StackFull"
     end
     return nil

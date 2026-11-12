@@ -309,6 +309,14 @@ local sheetCount = u32(13 + #"traditionalpreservationfishmeat_01\ntraditionalpre
 check("the first sheet ends where the sprites say", sheetCount == T.FIRST_SHEET_SIZE and sheetCount <= 512)
 check("a medium beam takes 15 a stack on 4 hooks", T.frameRefusal(T.HANGERS[408], 3, 0, 15) == nil and T.frameRefusal(T.HANGERS[408], 0, 0, 15.1) == "IGUI_TraditionalPreservationFishMeat_TooHeavy" and T.frameRefusal(T.HANGERS[408], 4, 0, 1) == "IGUI_TraditionalPreservationFishMeat_FrameFull")
 check("a large beam takes 50 a stack on 2 hooks", T.frameRefusal(T.HANGERS[410], 1, 0, 50) == nil and T.frameRefusal(T.HANGERS[410], 2, 0, 1) == "IGUI_TraditionalPreservationFishMeat_FrameFull")
+local FULL = "IGUI_TraditionalPreservationFishMeat_StackFull"
+check("a Hanging Beam stack takes 12 pieces", T.frameRefusal(T.HANGERS[408], 0, 11, 0.5, 11) == nil
+    and T.frameRefusal(T.HANGERS[408], 0, 6, 0.5, 12) == FULL)
+check("a Gantry stack takes 6 pieces, however light", T.frameRefusal(T.HANGERS[410], 0, 30, 5, 5) == nil
+    and T.frameRefusal(T.HANGERS[410], 0, 3, 0.5, 6) == FULL)
+check("the Drying Frame and the Smokehouse keep 25", T.frameRefusal(T.HANGERS[6], 0, 0, 0.05, 24) == nil
+    and T.frameRefusal(T.HANGERS[6], 0, 0, 0.05, 25) == FULL
+    and T.frameRefusal(T.HANGERS[856], 0, 0, 0.5, 24) == nil and T.frameRefusal(T.HANGERS[856], 0, 0, 0.5, 25) == FULL)
 
 -- Drying
 local DRY_TIME = T.DRY_HOURS * 3600

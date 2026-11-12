@@ -1,5 +1,11 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.20
+- **Fewer pieces a stack on the Hanging Beam and the Gantry** (2026-11-12, from the external review): a Beam stack
+  takes 12 pieces and a Gantry stack 6, fish or meat alike; the weight caps (15, 50) stay. They are meant for bigger
+  fish, not more fish. The Drying Frame and the Smokehouse keep 25. A full stack says "This stack is full: press
+  Craft to hang it".
+
 ## 0.4.19
 - **Station info in the station's own window** (2026-11-12, from the external review): the Salting Tub, the Drying
   Frame, the Hanging Beam, the Gantry and the Smokehouse show, under In Progress, Done and Take All: the place, the
