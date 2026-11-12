@@ -248,6 +248,7 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 - **Open air**: no roof overhead. Walls with no roof are still the open air. Rain pauses drying until the wet has dried off.
 - **Under an open roof**: a porch, an open shed, a floor laid on the level above. Rain never reaches it, and it's **in the shade**.
 - **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 11).
+- **Loft**: the top storey: a room upstairs with no room over it. Indoors, but at the **loft's own temperature**, not the day's: as indoors, plus three tenths of whatever the 10-day average is above 10 C: the sun on the roof (about 24 C in a 21 C July, no warmer than a room from October to April); 22 C while the power grid is on. Salt fish, charque and dry curing there go by it, and so does a Salting Tub: a summer loft is the worst place for a cure in the tub.
 - **Basement**: any level below ground. Indoors, but at the **cellar's own temperature**, not the day's: about 5 C from January to March, 13 C from July to September, a month behind the season. Whatever dries there goes by it, so salt fish crawls (about **27 days** a batch, all year): a cellar is for keeping salt fish, not drying it.
 
 **Hover a stack** to see its method, progress, time left, place, the temperature, the wind, how wet it is and how fast it's drying right now, a warning if the season is spoiling it, and in a Smokehouse its smoke.
@@ -325,7 +326,7 @@ Stockfish is unsalted fish dried by frost and wind. It needs no salt and no tub,
 - **Warm seasons rot it.** Once the last 10 days average above 10 C, a fresh stack spoils faster than it dries; a nearly dry one hardly suffers.
 
 **Storing it**
-- **Stockfish Pallet** (build menu: Carpentry 2; 3 planks, 6 nails; hammer and saw kept): stack your stockfish on it the way the warehouses did. In a **loft** (a room upstairs) it matures **twice as fast** (30 days); in a **ground-floor room**, half as fast again (40 days). Covered, outdoors or in a damp basement it does no better than a shelf. It holds 20 weight; the stack on it grows from a third to full as you load it, as long as nothing but stockfish is on it. Right-click it to see its speed there.
+- **Stockfish Pallet** (build menu: Carpentry 2; 3 planks, 6 nails; hammer and saw kept): stack your stockfish on it the way the warehouses did. In a **loft** (the top storey: a room upstairs with no room over it) it matures **twice as fast** (30 days); in **any other room above ground**, half as fast again (40 days). Covered, outdoors or in a damp basement it does no better than a shelf. It holds 20 weight; the stack on it grows from a third to full as you load it, as long as nothing but stockfish is on it. Right-click it to see its speed there.
 - **Stockfish Bale**: select stockfish, right-click, **Tie a Bale**. It takes one use of Twine (or a Rope) and ties up to 10 weight of fish, which then carry 30% lighter. A bale holds nothing but stockfish, and the fish inside keep maturing, on a pallet too. **Untie Bale** gives you the fish and your cord back.
 
 > **Warning:** Cold drying **rots** if the season warms up. Hang from November to mid-February. See the Almanac.
@@ -1003,7 +1004,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Salt drying time (days) | 12 | Salt fish in the best weather. Kentucky's weather makes it 15 to 34 |
 | Slowest salt drying (days) | 27 | The longest cold or damp weather can stretch salt drying to. Rain pauses come on top |
 | Stockfish drying time (days) | 32 | Cold drying at the best temperature and wind. Hung from late October to January, about 50 to 55 outdoors; the real Lofoten takes about 90 |
-| Stockfish maturing time (days) | 60 | Ripening in storage. A pallet in a loft halves it, in a ground-floor room it takes two thirds |
+| Stockfish maturing time (days) | 60 | Ripening in storage. A pallet in a loft halves it, in any other room above ground it takes two thirds |
 | Dry cured meat ageing time (days) | 30 | A dry cured cut, after it has dried. Left hanging, three quarters of it |
 | Country Ham ageing time (days) | 90 | A Country Ham, after it has dried. Left hanging, three quarters of it. Real ones age six months to a year |
 | Salt cure time (days) | 2 | In the tub, for a batch with a big fish or a Beef. Small fish take half as long |

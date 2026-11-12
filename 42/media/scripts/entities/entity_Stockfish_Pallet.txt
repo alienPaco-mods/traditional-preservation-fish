@@ -1,7 +1,7 @@
 module TraditionalPreservationFishMeat
 {
     /* Where stockfish ripens after the frame, stacked as in the warehouses: a 20 weight container from the tile
-       (container = stockfishpallet). It ripens Cold Dried fish faster in a loft or a ground-floor room
+       (container = stockfishpallet). It ripens Cold Dried fish faster in a loft or another room above ground
        (TraditionalPreservationFishMeatPallet.lua). Anything can go on it; the stack shows only for stockfish. */
     entity Stockfish_Pallet
     {

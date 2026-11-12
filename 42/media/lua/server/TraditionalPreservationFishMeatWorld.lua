@@ -93,6 +93,8 @@ local function readBatches(station, entry, logic, uiLogic, place)
         modData.sheltered = place ~= "Open" and place ~= "Covered"
         modData.covered = place == "Covered"
         modData.basement = place == "Basement"
+        -- A loft, like a basement, goes by its own temperature (never the Smokehouse: its place is Sheltered).
+        modData.loft = place == "Loft"
         if modData.stackId then F.stackStations[modData.stackId] = station end
         if smoking then
             F.smokeStep(modData, fire, ledger)

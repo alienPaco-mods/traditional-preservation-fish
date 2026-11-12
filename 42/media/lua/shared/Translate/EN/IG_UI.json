@@ -62,7 +62,7 @@
   "IGUI_TraditionalPreservationFishMeat_Rinsed": "Rinsed",
   "IGUI_ContainerTitle_stockfishpallet": "Stockfish Pallet",
   "IGUI_TraditionalPreservationFishMeat_PalletLoft": "loft",
-  "IGUI_TraditionalPreservationFishMeat_PalletGround": "ground-floor room",
+  "IGUI_TraditionalPreservationFishMeat_PalletGround": "a room below the top storey",
   "IGUI_TraditionalPreservationFishMeat_FatHelp": "All of it goes in, as far as there is room. Kept steaming for an hour over a lit fire it melts; then fill a pot or bucket from the copper and strain it. It can't burn here.",
   "IGUI_TraditionalPreservationFishMeat_NoFat": "You have no raw fat.",
   "IGUI_TraditionalPreservationFishMeat_FatNoRoom": "The copper has no room for it, or holds something else. Empty it first.",

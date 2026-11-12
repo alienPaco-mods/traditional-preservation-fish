@@ -227,8 +227,8 @@ F.RINSED_KEEPING = 0.9
 F.RINSE_REACH = 3
 F.RINSE_TICKS = 60
 
--- The Stockfish Pallet: stockfish on it ripens faster where the warehouses kept it, dry and airy. A loft (a room
--- upstairs) PALLET_LOFT times the food clock, a ground-floor room PALLET_GROUND; covered, outdoors or a basement
+-- The Stockfish Pallet: stockfish on it ripens faster where the warehouses kept it, dry and airy. A loft (TP Core's:
+-- the top storey) PALLET_LOFT times the food clock, any other room above ground PALLET_GROUND; covered, outdoors or a basement
 -- ("too damp") no faster than a shelf. Its stack shows a third, two thirds or full by the weight on it.
 F.PALLET_LOFT = 2
 F.PALLET_GROUND = 1.5
@@ -435,13 +435,15 @@ end
 -- and charque's drying in a Smokehouse warmed by a banked or a stoked fire, and dry curing's drying and under-salted
 -- meat's spoiling there with the fire out, banked and stoked. A basement has its own: salt fish's, charque's and dry
 -- curing's drying, under-salted meat's spoiling and a tub's warm and long cures, all by the basement's temperature.
+-- A loft (TP Core's: the top storey) has the same set, by the loft's temperature.
 function F.newLedger(now)
     return { lastHour = now, wetness = 0, coldWetness = 0, open = 0, sheltered = 0, covered = 0, cold = 0, coldCovered = 0, rawSpoil = 0, saltSpoil = 0,
         hardFrost = 0, coldWet = 0, warmCure = 0, heat = 0, charque = 0, charqueCovered = 0, charqueSheltered = 0, charqueRain = 0,
         clock = 0, smokeCool = 0, smokeBanked = 0, smokeStoked = 0, charqueBanked = 0, charqueStoked = 0,
         dryCure = 0, dryCureBanked = 0, dryCureStoked = 0, underCure = 0, underCureBanked = 0, underCureStoked = 0,
         longCureSpoil = 0, dryCureBasement = 0, underCureBasement = 0, basementSheltered = 0, charqueBasement = 0,
-        warmCureBasement = 0, longCureBasement = 0 }
+        warmCureBasement = 0, longCureBasement = 0,
+        dryCureLoft = 0, underCureLoft = 0, loftSheltered = 0, charqueLoft = 0, warmCureLoft = 0, longCureLoft = 0 }
 end
 
 -- A tub's warm cure and long cure at this temperature, into the totals named: whether each is spoiling now.
@@ -453,6 +455,16 @@ local function addCureSpoil(ledger, celsius, hours, warmKey, longKey)
         ledger[longKey] = (ledger[longKey] or 0) + longWarmth / (F.LONG_CURE_ROT_AT - F.LONG_CURE_ABOVE) / F.LONG_CURE_ROT_HOURS * hours
     end
     return warmth > 0, longWarmth > 0
+end
+
+-- A stack's or batch's place when it goes by a temperature of its own, as the World marked it.
+function F.ownPlace(modData)
+    return modData.basement and "Basement" or modData.loft and "Loft" or nil
+end
+
+-- That place's temperature: TP Core's, the same figure every mod reads there.
+function F.ownTemperature(ledger, place)
+    return Weather.placeTemperature(ledger, place)
 end
 
 -- Adds one stretch of weather to the totals. Open frames dry nothing until the rain has gone
@@ -543,6 +555,17 @@ function F.advance(ledger, now, weather)
     ledger.dryCureBasement = ledger.dryCureBasement + ledger.dryCureBasementRate * hours
     ledger.underCureBasement = ledger.underCureBasement + F.underCureRate(basement) * hours
     ledger.basementWarmCuring, ledger.basementLongCuring = addCureSpoil(ledger, basement, hours, "warmCureBasement", "longCureBasement")
+    -- A loft (sweep step H) the same by its own, TP Core's figure as every mod reads it: a room's season mean with
+    -- the roof's summer warmth on top, 22 C while the grid is on. Dry curing has a room's air, not a cellar's.
+    local loft = Weather.placeTemperature(ledger, "Loft")
+    ledger.loftShelteredRate = math.max(F.temperatureRate(loft) * air * F.SHELTERED_RATE, minRate)
+    ledger.loftSheltered = (ledger.loftSheltered or 0) + ledger.loftShelteredRate * hours
+    ledger.charqueLoftRate = F.charqueWarmRate(loft) * air * F.CHARQUE_INDOORS_RATE
+    ledger.charqueLoft = (ledger.charqueLoft or 0) + ledger.charqueLoftRate * hours
+    ledger.dryCureLoftRate = F.dryCureRate(loft)
+    ledger.dryCureLoft = (ledger.dryCureLoft or 0) + ledger.dryCureLoftRate * hours
+    ledger.underCureLoft = (ledger.underCureLoft or 0) + F.underCureRate(loft) * hours
+    ledger.loftWarmCuring, ledger.loftLongCuring = addCureSpoil(ledger, loft, hours, "warmCureLoft", "longCureLoft")
     ledger.saltSpoiling = ledger.seasonTemperature > F.SALT_SPOIL_ABOVE and ledger.seasonHumidity > F.SALT_SPOIL_HUMIDITY
     if ledger.saltSpoiling then
         ledger.saltSpoil = ledger.saltSpoil + hours
@@ -572,7 +595,7 @@ function F.stackStatus(isCold, modData, ledger)
         if rate <= 0 then reason = "Rain" end
     elseif modData.sheltered then
         -- A burning Firebox warms a Smokehouse stack's air (F.smokeStep).
-        rate = (modData.basement and ledger.basementShelteredRate or ledger.shelteredRate) or 0
+        rate = (modData.basement and ledger.basementShelteredRate or modData.loft and ledger.loftShelteredRate or ledger.shelteredRate) or 0
         if modData.burning then
             rate = math.max(rate, (modData.burning == Hearth.STOKED and ledger.stokedRate or ledger.bankedRate) or 0)
         end
@@ -629,6 +652,8 @@ function F.charqueStatus(modData, ledger)
     local curePlace = curing and F.curePlace(modData)
     if curePlace == "Basement" then
         rate = ledger.dryCureBasementRate or 0
+    elseif curePlace == "Loft" then
+        rate = ledger.dryCureLoftRate or 0
     elseif curePlace == "Open" then
         rate, reason = 0, "NeedsRoof"
     elseif curing then
@@ -640,6 +665,8 @@ function F.charqueStatus(modData, ledger)
         end
     elseif modData.basement then
         rate = ledger.charqueBasementRate or 0
+    elseif modData.loft then
+        rate = ledger.charqueLoftRate or 0
     elseif modData.sheltered then
         rate = ledger.charqueShelteredRate or 0
         if modData.burning then
@@ -664,7 +691,8 @@ function F.charqueStatus(modData, ledger)
         dryCuring = curing,
         -- Corned meat in the shed, and the shed's temperature it spoils by.
         underSalted = curing and modData.underCured == true,
-        shedTemperature = curePlace == "Basement" and Weather.placeTemperature(ledger, "Basement") or (ledger.temperature or 0) + lift,
+        shedTemperature = (curePlace == "Basement" or curePlace == "Loft") and F.ownTemperature(ledger, curePlace)
+            or (ledger.temperature or 0) + lift,
     }
 end
 
@@ -695,8 +723,9 @@ end
 function F.getLedger()
     local data = ModData.getOrCreate(F.MOD_DATA_KEY)
     -- cold, hardFrost, covered, warmCure, heat, the charque, the smoke, the smoulder's, dry curing's, the long
-    -- cure's and the basement's totals came after the first release, so a save can have the rest without them.
-    if not data.longCureBasement then
+    -- cure's, the basement's and the loft's totals came after the first release, so a save can have the rest
+    -- without them.
+    if not data.longCureLoft then
         local ledger = F.newLedger(getGameTime():getWorldAgeHours())
         for key, value in pairs(ledger) do
             if data[key] == nil then data[key] = value end
@@ -724,7 +753,9 @@ function F.onPressStart(craftRecipeData)
     local ledger = F.getLedger()
     craftRecipeData:getModData().lastWarmCure = ledger.warmCure
     craftRecipeData:getModData().lastWarmCureBasement = ledger.warmCureBasement
+    craftRecipeData:getModData().lastWarmCureLoft = ledger.warmCureLoft
     craftRecipeData:getModData().lastLongCure, craftRecipeData:getModData().lastLongCureBasement = nil, nil
+    craftRecipeData:getModData().lastLongCureLoft = nil
     local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
     local heaviest, meat, leg = 0, false, false
     for i = 0, fish:size() - 1 do
@@ -739,6 +770,7 @@ function F.onPressStart(craftRecipeData)
         hours = F.longCureHours(leg)
         craftRecipeData:getModData().lastLongCure = ledger.longCureSpoil
         craftRecipeData:getModData().lastLongCureBasement = ledger.longCureBasement
+        craftRecipeData:getModData().lastLongCureLoft = ledger.longCureLoft
     end
     craftRecipeData:getModData().pressHours = hours
 end
@@ -774,18 +806,21 @@ function F.onCreateLongCured(craftRecipeData)
     end
 end
 
--- Whether a tub batch goes by the basement's totals: a tub in a basement, pressed since 0.4.24 (older ones have no
--- basement mark and keep the season's).
-local function inBasementTub(modData)
-    return modData.basement == true and modData.lastWarmCureBasement ~= nil
+-- The place whose totals a tub batch goes by, or nil for the season's: a tub in a basement or a loft, pressed since
+-- that place got its totals (0.4.24, 0.4.25; older batches have no mark for it and keep the season's).
+local function tubPlace(modData)
+    if modData.basement == true and modData.lastWarmCureBasement ~= nil then return "Basement" end
+    if modData.loft == true and modData.lastWarmCureLoft ~= nil then return "Loft" end
+    return nil
 end
 
 -- The share of its keeping a batch has lost to a warm cure so far. A press started before this counts from now.
 function F.cureSpoiled(modData, ledger)
     local warmTotal, warmMark, longTotal, longMark = ledger.warmCure, modData.lastWarmCure, ledger.longCureSpoil, modData.lastLongCure
-    if inBasementTub(modData) then
-        warmTotal, warmMark = ledger.warmCureBasement or 0, modData.lastWarmCureBasement
-        longTotal, longMark = ledger.longCureBasement or 0, modData.lastLongCureBasement
+    local place = tubPlace(modData)
+    if place then
+        warmTotal, warmMark = ledger["warmCure" .. place] or 0, modData["lastWarmCure" .. place]
+        longTotal, longMark = ledger["longCure" .. place] or 0, modData["lastLongCure" .. place]
     end
     local warm = warmTotal - (warmMark or warmTotal)
     -- A long cure (its mark is set at its start) also minds a place over LONG_CURE_ABOVE.
@@ -795,10 +830,13 @@ end
 
 -- Whether a tub batch is spoiling now: a warm cure, or a long cure over LONG_CURE_ABOVE, by its place.
 function F.tubSpoiling(modData, ledger)
-    local basement = inBasementTub(modData)
-    local warm = basement and ledger.basementWarmCuring or not basement and ledger.warmCuring
-    local long = basement and ledger.basementLongCuring or not basement and ledger.longCuring
-    local isLong = (basement and modData.lastLongCureBasement or not basement and modData.lastLongCure) ~= nil
+    local place = tubPlace(modData)
+    local warm, long, isLong = ledger.warmCuring, ledger.longCuring, modData.lastLongCure ~= nil
+    if place == "Basement" then
+        warm, long, isLong = ledger.basementWarmCuring, ledger.basementLongCuring, modData.lastLongCureBasement ~= nil
+    elseif place == "Loft" then
+        warm, long, isLong = ledger.loftWarmCuring, ledger.loftLongCuring, modData.lastLongCureLoft ~= nil
+    end
     return warm == true or isLong and long == true
 end
 
@@ -990,6 +1028,7 @@ local function startStack(craftRecipeData)
     modData.lastOpen = ledger.open
     modData.lastSheltered = ledger.sheltered
     modData.lastBasementSheltered = ledger.basementSheltered
+    modData.lastLoftSheltered = ledger.loftSheltered
     modData.lastCovered = ledger.covered
     modData.lastCold = ledger.cold
     modData.lastColdCovered = ledger.coldCovered
@@ -1002,10 +1041,12 @@ local function startStack(craftRecipeData)
     modData.lastCharqueCovered = ledger.charqueCovered
     modData.lastCharqueSheltered = ledger.charqueSheltered
     modData.lastCharqueBasement = ledger.charqueBasement
+    modData.lastCharqueLoft = ledger.charqueLoft
     modData.lastCharqueRain = ledger.charqueRain
     modData.lastDryCure, modData.lastUnderCure = ledger.dryCure, ledger.underCure
     modData.lastCureBasement, modData.lastUnderBasement = ledger.dryCureBasement, ledger.underCureBasement
-    modData.basement, modData.longStack = nil, nil
+    modData.lastCureLoft, modData.lastUnderLoft = ledger.dryCureLoft, ledger.underCureLoft
+    modData.basement, modData.loft, modData.longStack = nil, nil, nil
     modData.sheltered = nil
     modData.covered = nil
     -- Recipe data is pooled with its ModData (ENGINE_NOTES): a stack mustn't inherit an old one's shed or smoke.
@@ -1074,6 +1115,9 @@ function F.saltStep(modData, ledger)
     if modData.basement then
         local total = ledger.basementSheltered or 0
         modData.dried = modData.dried + total - (modData.lastBasementSheltered or total)
+    elseif modData.loft then
+        local total = ledger.loftSheltered or 0
+        modData.dried = modData.dried + total - (modData.lastLoftSheltered or total)
     elseif modData.sheltered then
         modData.dried = modData.dried + ledger.sheltered - modData.lastSheltered
     elseif modData.covered then
@@ -1087,6 +1131,7 @@ function F.saltStep(modData, ledger)
     modData.lastOpen = ledger.open
     modData.lastSheltered = ledger.sheltered
     modData.lastBasementSheltered = ledger.basementSheltered
+    modData.lastLoftSheltered = ledger.loftSheltered
     modData.lastCovered = ledger.covered
     modData.lastSaltSpoil = ledger.saltSpoil
     modData.lastHeat = ledger.heat
@@ -1161,11 +1206,12 @@ function F.onCharqueStart(craftRecipeData)
     craftRecipeData:getModData().style = F.STYLE_MEAT
 end
 
--- Where a dry-curing stack hangs: "Shed", "Basement", "Shade" (a Frame or Beam under a roof or indoors) or "Open"
+-- Where a dry-curing stack hangs: "Shed", "Basement", "Loft", "Shade" (a Frame or Beam under a roof or indoors) or "Open"
 -- (its roof is gone: it waits).
 function F.curePlace(modData)
     if modData.inShed then return "Shed" end
     if modData.basement then return "Basement" end
+    if modData.loft then return "Loft" end
     return (modData.sheltered or modData.covered) and "Shade" or "Open"
 end
 
@@ -1179,6 +1225,9 @@ local function dryCureStep(modData, ledger)
     if place == "Basement" then
         dried = (ledger.dryCureBasement or 0) - (modData.lastCureBasement or ledger.dryCureBasement or 0)
         under = (ledger.underCureBasement or 0) - (modData.lastUnderBasement or ledger.underCureBasement or 0)
+    elseif place == "Loft" then
+        dried = (ledger.dryCureLoft or 0) - (modData.lastCureLoft or ledger.dryCureLoft or 0)
+        under = (ledger.underCureLoft or 0) - (modData.lastUnderLoft or ledger.underCureLoft or 0)
     elseif place == "Open" then
         dried = 0
     end
@@ -1186,6 +1235,7 @@ local function dryCureStep(modData, ledger)
     if modData.underCured then modData.underSpoiled = (modData.underSpoiled or 0) + under end
     modData.lastDryCure, modData.lastUnderCure = ledger.dryCure, ledger.underCure
     modData.lastCureBasement, modData.lastUnderBasement = ledger.dryCureBasement, ledger.underCureBasement
+    modData.lastCureLoft, modData.lastUnderLoft = ledger.dryCureLoft, ledger.underCureLoft
 end
 
 -- Adds what the weather has done to a charque stack since it was last looked at, by the frame's place now. Rain on
@@ -1197,6 +1247,9 @@ function F.charqueStep(modData, ledger)
     elseif modData.basement then
         local total = ledger.charqueBasement or 0
         modData.dried = modData.dried + total - (modData.lastCharqueBasement or total)
+    elseif modData.loft then
+        local total = ledger.charqueLoft or 0
+        modData.dried = modData.dried + total - (modData.lastCharqueLoft or total)
     elseif modData.sheltered then
         modData.dried = modData.dried + ledger.charqueSheltered - modData.lastCharqueSheltered
     elseif modData.covered then
@@ -1210,6 +1263,7 @@ function F.charqueStep(modData, ledger)
     modData.lastCharqueCovered = ledger.charqueCovered
     modData.lastCharqueSheltered = ledger.charqueSheltered
     modData.lastCharqueBasement = ledger.charqueBasement
+    modData.lastCharqueLoft = ledger.charqueLoft
     modData.lastCharqueRain = ledger.charqueRain
     modData.lastSaltSpoil = ledger.saltSpoil
 end
@@ -1438,11 +1492,12 @@ function F.onCreateRinsed(craftRecipeData)
     end
 end
 
--- How much faster a pallet ripens stockfish than a shelf: place is Weather.placeOf's, z the floor.
-function F.palletSpeed(place, z)
-    if place ~= "Sheltered" then return 1 end
-    if z >= 1 then return F.PALLET_LOFT end
-    return F.PALLET_GROUND
+-- How much faster a pallet ripens stockfish than a shelf: place is Weather.placeOf's (a Loft is TP Core's, a room
+-- above the ground floor).
+function F.palletSpeed(place)
+    if place == "Loft" then return F.PALLET_LOFT end
+    if place == "Sheltered" then return F.PALLET_GROUND end
+    return 1
 end
 
 function F.isStockfish(item)

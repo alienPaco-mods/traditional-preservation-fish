@@ -105,10 +105,10 @@ local function drawStackTooltip(slot, tooltip, kind)
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Progress", UI.percent(status.progress))
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_TimeLeft", timeText(status.hoursLeft))
         local modData = slot.craftRecipeData:getModData()
-        local place = modData.basement and "Basement" or modData.sheltered and "Sheltered" or modData.covered and "Covered" or "Open"
+        local place = modData.basement and "Basement" or modData.loft and "Loft" or modData.sheltered and "Sheltered" or modData.covered and "Covered" or "Open"
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Place", UI.placeName(place))
-        -- A basement stack dries by the basement's temperature, not the day's.
-        local celsius = place == "Basement" and Weather.placeTemperature(ledger, "Basement") or ledger.temperature or 0
+        -- A basement or loft stack dries by that place's temperature, not the day's.
+        local celsius = (place == "Basement" or place == "Loft") and F.ownTemperature(ledger, place) or ledger.temperature or 0
         local word = F.temperatureWord(isCold, celsius, place == "Open")
         if status.dryCuring then
             word = F.dryCureTemperatureWord(status.shedTemperature)
@@ -364,8 +364,7 @@ local function onFillPalletMenu(playerNum, context, worldobjects, test)
         local sprite = object:getSprite()
         if sprite and sprite:getName() == Tiles.PALLET then
             if test then return end
-            local square = object:getSquare()
-            local speed = F.palletSpeed(Weather.placeOf(object), square and square:getZ() or 0)
+            local speed = F.palletSpeed(Weather.placeOf(object))
             local text = PALLET_PLACES[speed]
                 and getText("ContextMenu_TraditionalPreservationFishMeat_PalletSpeed", tostring(speed), getText(PALLET_PLACES[speed]))
                 or getText("ContextMenu_TraditionalPreservationFishMeat_PalletNoSpeed")

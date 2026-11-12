@@ -372,6 +372,38 @@ check("a tub in a basement has no warm cure in a 30 C season, only the long cure
     and F.tubSpoiling(cellarTub, hot) and F.tubSpoiling(upstairsTub, hot))
 check("a basement tub pressed before step D keeps the season's totals", F.cureSpoiled(oldCellarTub, hot) == F.cureSpoiled(upstairsTub, hot))
 
+-- Sweep step H: a loft the same, by TP Core's loft temperature (the season's mean and the roof's summer warmth).
+local loftC = Weather.placeTemperature(hot, "Loft")
+check("the loft reads Core's figure, warmer than the room in a 30 C season", loftC > Weather.placeTemperature(hot, "Sheltered"))
+local loftFish = { dried = 0, spoiled = 0, loft = true, sheltered = true, lastOpen = hot.open, lastSheltered = hot.sheltered,
+    lastCovered = hot.covered, lastSaltSpoil = hot.saltSpoil, lastHeat = hot.heat, lastLoftSheltered = hot.loftSheltered }
+local loftMeat = { dried = 0, spoiled = 0, loft = true, sheltered = true, lastSaltSpoil = hot.saltSpoil,
+    lastCharqueRain = hot.charqueRain, lastCharqueLoft = hot.charqueLoft }
+local loftCure = { cureNeed = 504, longStack = true, underCured = true, loft = true, sheltered = true, dried = 0, spoiled = 0,
+    lastDryCure = hot.dryCure, lastUnderCure = hot.underCure, lastCureLoft = hot.dryCureLoft, lastUnderLoft = hot.underCureLoft,
+    lastSaltSpoil = hot.saltSpoil, lastCharqueRain = hot.charqueRain }
+F.advance(hot, 72, summer)
+loftC = Weather.placeTemperature(hot, "Loft")
+F.saltStep(loftFish, hot)
+F.charqueStep(loftMeat, hot)
+F.charqueStep(loftCure, hot)
+check("salt fish in a loft dries indoors by the loft's temperature", near(hot.loftShelteredRate,
+    math.max(F.temperatureRate(loftC) * F.airRate(0.3) * F.SHELTERED_RATE, F.MIN_DRY_RATE))
+    and near(loftFish.dried, 24 * hot.loftShelteredRate) and F.stackStatus(false, loftFish, hot).rate == hot.loftShelteredRate)
+check("so does charque", near(loftMeat.dried, 24 * F.charqueWarmRate(loftC) * F.airRate(0.3) * F.CHARQUE_INDOORS_RATE)
+    and near(F.charqueStatus(loftMeat, hot).rate, hot.charqueLoftRate))
+check("dry curing there goes by the loft with a room's air, and Corned meat spoils by it", F.curePlace(loftCure) == "Loft"
+    and near(loftCure.dried, 24 * F.dryCureRate(loftC)) and near(loftCure.underSpoiled, 24 * F.underCureRate(loftC))
+    and F.charqueStatus(loftCure, hot).shedTemperature == loftC)
+local loftTub = { loft = true, lastWarmCure = 0, lastWarmCureLoft = 0, lastLongCure = 0, lastLongCureLoft = 0 }
+local oldLoftTub = { loft = true, lastWarmCure = 0, lastLongCure = 0 }
+check("a tub in a loft minds the loft: more warm cure than downstairs in a 30 C season",
+    F.cureSpoiled(loftTub, hot) >= F.cureSpoiled(upstairsTub, hot) and hot.warmCureLoft > hot.warmCure and F.tubSpoiling(loftTub, hot))
+check("a loft tub pressed before step H keeps the season's totals", F.cureSpoiled(oldLoftTub, hot) == F.cureSpoiled(upstairsTub, hot))
+hot.gridOn = true
+check("while the grid is on the loft is the grid's 22 C here too", Weather.placeTemperature(hot, "Loft") == Weather.GRID_ROOM_C)
+hot.gridOn = nil
+
 -- A leg's stoked hours are smoke at once.
 local legFire = {}
 Hearth.logFire(legFire, 700, nil, nil)

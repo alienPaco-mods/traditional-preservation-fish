@@ -1,5 +1,17 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.25
+- **The loft goes by its own temperature** (2026-11-12, consistency sweep step H, TP Core's new place: the top
+  storey). Salt fish, charque and dry curing hung there dry by the loft's temperature, not the day's (`loftSheltered`,
+  `charqueLoft`, `dryCureLoft`; dry curing with a room's air, no cellar's two thirds), Corned meat spoils by it
+  (`underCureLoft`), and a Salting Tub there minds it for its warm and long cures (`warmCureLoft`, `longCureLoft`; a
+  batch started before keeps the season's). While the grid is on a loft is 22 C, as Core says. The popup's Place and
+  the station window's Air row say Loft. Potted Meat keeps by it through Core (about 15 days in a July loft against
+  20 in a room).
+- **Stockfish Pallet**: its x2 is Core's loft now (`F.palletSpeed(place)`), so only the top storey counts; any other
+  room above ground gives x1.5 (the menu line reads "a room below the top storey"). `TPFM.weather()` prints a Loft
+  line, `TPFM.age` moves loft stacks. Tests, README, guide, tooltip.
+
 ## 0.4.24
 - Debug console (2026-11-12): `TPFM.fish` takes the stages `"dried"`, `"hotSmoked"` and `"coldSmoked"`, `TPFM.meat`
   `"charque"` and `"hotSmoked"`, each made as its station makes it from a cured piece. Test, DEVHELP, guide.

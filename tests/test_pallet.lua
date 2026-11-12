@@ -47,10 +47,10 @@ local function bale(items)
 end
 
 -- Where it ripens faster
-check("a loft ripens twice as fast", F.palletSpeed("Sheltered", 1) == 2 and F.palletSpeed("Sheltered", 2) == 2)
-check("a ground-floor room half as fast again", F.palletSpeed("Sheltered", 0) == 1.5)
-check("covered, outdoors and a basement no faster than a shelf", F.palletSpeed("Covered", 1) == 1 and F.palletSpeed("Open", 0) == 1
-    and F.palletSpeed("Basement", -1) == 1)
+check("a loft ripens twice as fast", F.palletSpeed("Loft") == 2)
+check("a ground-floor room half as fast again", F.palletSpeed("Sheltered") == 1.5)
+check("covered, outdoors and a basement no faster than a shelf", F.palletSpeed("Covered") == 1 and F.palletSpeed("Open") == 1
+    and F.palletSpeed("Basement") == 1)
 
 -- The stack
 check("an empty pallet shows no stack", F.palletLevel(container({})) == nil)
@@ -163,17 +163,16 @@ check("and given back whole", inv:getFirstEvalRecurse(function(item) return item
 Events = Events or {}
 function isClient() return false end
 MapObjects = { OnLoadWithSprite = function() end }
-local placeOf = "Sheltered"
+local placeOf = "Loft"
 package.loaded["TraditionalPreservationCore/Weather"].placeOf = function() return placeOf end
 local hours = 100
 function getGameTime() return { getWorldAgeHours = function() return hours end } end
 dofile("42/media/lua/server/TraditionalPreservationFishMeatPallet.lua")
 local shown
 local onIt = stockfish(0)
-local floor = 1
 local pallet = { modData = {} }
 function pallet:getContainer() return container({ onIt }) end
-function pallet:getSquare() return { getZ = function() return floor end } end
+function pallet:getSquare() return {} end
 function pallet:getModData() return self.modData end
 function pallet:clearAttachedAnimSprite() shown = {} end
 function pallet:addAttachedAnimSpriteByName(name) table.insert(shown, name) end
@@ -188,7 +187,7 @@ check("less than an hour waits", pallet.modData.palletHour == 100 and onIt:getMo
 hours = 124
 refresh(pallet, entry)
 check("a day in a loft gives a day more", pallet.modData.palletHour == 124 and near(onIt:getModData().matureAge, -1))
-floor, hours = 0, 148
+placeOf, hours = "Sheltered", 148
 refresh(pallet, entry)
 check("a day in a ground-floor room half a day more", near(onIt:getModData().matureAge, -1.5))
 placeOf, hours = "Basement", 172

@@ -17,7 +17,7 @@ end
 
 function TPFM.help()
     say("TPFM.weather()             the drying weather now: temperature, season, wetness, rates, spoilage and totals")
-    say("TPFM.here()                which place you're standing in: Open, Covered (a roof, no room), Sheltered (a room) or Basement")
+    say("TPFM.here()                which place you're standing in: Open, Covered (a roof, no room), Sheltered (a room), Loft (a room upstairs) or Basement")
     say("TPFM.wind()                start a log of live wind every 10 minutes; again to print it beside the forecast")
     say("TPFM.age(hours)            give every hanging stack this many hours of perfect drying weather (Corned meat in a Smokehouse spoils with it)")
     say("TPFM.spoil(hours)          add this many hours of spoiling weather, to test rotting stacks")
@@ -60,6 +60,9 @@ function TPFM.weather()
     say("Basement (" .. n(Weather.placeTemperature(ledger, "Basement")) .. " C): salt fish " .. n(ledger.basementShelteredRate)
         .. ", charque " .. n(ledger.charqueBasementRate) .. ", dry cure " .. n(ledger.dryCureBasementRate)
         .. "; a tub there: warm cure " .. tostring(ledger.basementWarmCuring == true) .. ", long cure " .. tostring(ledger.basementLongCuring == true))
+    say("Loft (" .. n(Weather.placeTemperature(ledger, "Loft")) .. " C): salt fish " .. n(ledger.loftShelteredRate)
+        .. ", charque " .. n(ledger.charqueLoftRate) .. ", dry cure " .. n(ledger.dryCureLoftRate)
+        .. "; a tub there: warm cure " .. tostring(ledger.loftWarmCuring == true) .. ", long cure " .. tostring(ledger.loftLongCuring == true))
     say("Spoiling now: unsalted " .. tostring(ledger.rawSpoiling == true) .. ", salted " .. tostring(ledger.saltSpoiling == true)
         .. ", warm cure " .. tostring(ledger.warmCuring == true) .. ", hot sun " .. tostring((ledger.temperature or 0) > F.HEAT_ABOVE))
     say("Totals (hours at full speed): open " .. n(ledger.open) .. ", covered " .. n(ledger.covered) .. ", indoors " .. n(ledger.sheltered)
@@ -122,6 +125,8 @@ function TPFM.age(hours)
     ledger.underCure, ledger.underCureBanked, ledger.underCureStoked = ledger.underCure + under, ledger.underCureBanked + under, ledger.underCureStoked + under
     ledger.dryCureBasement, ledger.underCureBasement = (ledger.dryCureBasement or 0) + hours, (ledger.underCureBasement or 0) + under
     ledger.basementSheltered, ledger.charqueBasement = (ledger.basementSheltered or 0) + hours, (ledger.charqueBasement or 0) + hours
+    ledger.dryCureLoft, ledger.underCureLoft = (ledger.dryCureLoft or 0) + hours, (ledger.underCureLoft or 0) + under
+    ledger.loftSheltered, ledger.charqueLoft = (ledger.loftSheltered or 0) + hours, (ledger.charqueLoft or 0) + hours
     say(string.format("Added %.0f hours of perfect drying weather. Stacks update within a few seconds. Corned meat in a Smokehouse spoiled %.0f%% (a 12 C shed).", hours, under * 100))
 end
 
@@ -172,7 +177,7 @@ function TPFM.warmCure(hours)
     hours = hours or 24
     local ledger = F.getLedger()
     ledger.warmCure = ledger.warmCure + hours * 1.5
-    say(string.format("Added %.0f hours of a warm cure at 25 C: about %.0f%% off a batch in a tub above ground (a basement tub goes by its own).",
+    say(string.format("Added %.0f hours of a warm cure at 25 C: about %.0f%% off a batch in a tub above ground (a basement or loft tub goes by its own).",
         hours, hours * 1.5 * F.WARM_CURE_SHARE / F.RAW_SPOIL_HOURS * 100))
 end
 
@@ -182,7 +187,7 @@ function TPFM.longCure(hours)
     hours = hours or 168
     local ledger = F.getLedger()
     ledger.longCureSpoil = (ledger.longCureSpoil or 0) + hours / F.LONG_CURE_ROT_HOURS
-    say(string.format("Added %.0f hours of a 15 C season to running Country Cures above ground: %.0f%% spoiled (a basement tub goes by its own).", hours, hours / F.LONG_CURE_ROT_HOURS * 100))
+    say(string.format("Added %.0f hours of a 15 C season to running Country Cures above ground: %.0f%% spoiled (a basement or loft tub goes by its own).", hours, hours / F.LONG_CURE_ROT_HOURS * 100))
 end
 
 function TPFM.mature(days)
@@ -494,7 +499,7 @@ function TPFM.pallet()
                         ripest = math.max(ripest, F.ripeness(fish))
                     end)
                     say(string.format("Pallet at %d,%d floor %d: %s, ripens x%.1f (%d days to ripe). Stack: %s. %d stockfish, ripest %.0f%%.",
-                        x, y, z, place, F.palletSpeed(place, z), F.MATURE_DAYS / F.palletSpeed(place, z),
+                        x, y, z, place, F.palletSpeed(place), F.MATURE_DAYS / F.palletSpeed(place),
                         tostring(F.palletLevel(object:getContainer()) or "none"), count, ripest * 100))
                     return
                 end
