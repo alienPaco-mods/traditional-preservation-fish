@@ -66,7 +66,7 @@ Fish and meat share one workshop. The same **Salting Tub** cures both, the same 
 |---|---|
 | Sharp knife or meat cleaver (kept) | Packing fish, gutting, splitting, slicing (meat needs no knife) |
 | 2 salt per quarter weight of fish; 4 per half-weight cut of meat, 2 per Steak or chop; 10 per leg of pork | Salting |
-| Carpentry 2, Fishing 2 | Tub and frame |
+| Carpentry 2 | Tub and frame |
 | A pot and any fire | Rendering fat, Potted Meat |
 | 1 L water | Rehydrating a dried fish or a piece of charque |
 
@@ -125,7 +125,7 @@ Every road on one page. *Start* is when to begin it in Kentucky's weather; *Yiel
 - **Fish Guts** weigh 10% of the fish and go in chum. Smaller fish, fillets and salmon give none.
 - **A Fish Head** weighs 10% of the fish and takes 6% of its food with it. It spoils like fresh fish (3 / 6 days), makes you sick raw, is a little grim even cooked, and can't be dried. It goes in a soup, a stew, chum, or best of all a stock.
 
-**Fish Head Stock.** **Create Fish Head Stock** (Craft menu of the head or the pot, anywhere): a Cooking Pot or Forged Pot with **1.5 L of water** + a Fish Head. It's a stew from the start and the head takes no slot, so you still get **6 stew ingredients** plus seasonings. It starts with a plain stew's mood boost (-20 unhappiness) and is named for what you add: *Fish Head Stock with Fish and Carrots*, or plain *Fish Head Stock* past 3 kinds. Cook it, then **Divide Food into 4 Bowls** or **2 Bowls** at a table or counter. Keeps 3 / 5 days.
+**Fish Head Stock.** **Make Fish Head Stock** (Craft menu of the head or the pot, anywhere): a Cooking Pot or Forged Pot with **1.5 L of water** + a Fish Head. It's a stew from the start and the head takes no slot, so you still get **6 stew ingredients** plus seasonings. It starts with a plain stew's mood boost (-20 unhappiness) and is named for what you add: *Fish Head Stock with Fish and Carrots*, or plain *Fish Head Stock* past 3 kinds. Cook it, then **Divide Food into 4 Bowls** or **2 Bowls** at a table or counter. Keeps 3 / 5 days.
 
 ### Meat
 
@@ -159,7 +159,7 @@ Numbers are for an average animal and an unskilled butcher. A bigger or meatier 
 
 ## 5. The Salting Tub
 
-**Build:** Carpentry 2, Fishing 2: 4 planks, 6 nails, 2 twine; hammer and saw kept. Holds **50 weight or 35 items**, **fish or meat, never both at once**.
+**Build:** Carpentry 2: 4 planks, 6 nails, 2 twine; hammer and saw kept. Holds **50 weight or 35 items**, **fish or meat, never both at once**.
 
 ### Step 1. Pack in salt (crafting menu)
 
@@ -231,9 +231,9 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 
 | Station | Skill | Materials (hammer kept) | Holds | Where |
 |---|---|---|---|---|
-| **Drying Frame** | Carpentry 2, Fishing 2 | 6 long sticks, 3 nails, 4 twine | 8 stacks × 2.5 weight, 25 pieces | Anywhere, a room too |
-| **Hanging Beam** | Carpentry 4, Fishing 2 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight, 12 pieces | Anywhere: open air, under a roof, in a room or a basement |
-| **Gantry** | Carpentry 6, Fishing 2 | 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks × 50 weight, 6 pieces | Open air or under an open roof |
+| **Drying Frame** | Carpentry 2 | 6 long sticks, 3 nails, 4 twine | 8 stacks × 2.5 weight, 25 pieces | Anywhere, a room too |
+| **Hanging Beam** | Carpentry 4 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight, 12 pieces | Anywhere: open air, under a roof, in a room or a basement |
+| **Gantry** | Carpentry 6 | 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks × 50 weight, 6 pieces | Open air or under an open roof |
 | **Smokehouse** | Carpentry 3 | 14 planks, 20 nails | 6 stacks × 15 weight, 25 pieces | Open air or under an open roof; two tiles; chapter 10 |
 
 | Recipe | Frame, Beam, Gantry | Smokehouse |
@@ -709,7 +709,7 @@ What each stage is good for once it's in your hands. *Cook* is its time on a sto
 | Gutted, half | Cooked | 20 min (50) | As soaked fish | Hang it to cold dry |
 | **Stockfish** | No: hard as wood | Can't | - | **Soak Fish** (1 L); Slice Fish |
 | Stockfish (Soaked) | Yes, better hot | 20 min (50) | As soaked fish | Slice Fish |
-| Fish Head | Cooked, a little grim | 20 min (50) | Soup, stew, chum | **Create Fish Head Stock** (1.5 L) |
+| Fish Head | Cooked, a little grim | 20 min (50) | Soup, stew, chum | **Make Fish Head Stock** (1.5 L) |
 | Fish Head Stock | Cooked | 70 min (140) | It's a stew already: add to it | Divide into 2 or 4 bowls |
 
 **Meat**
@@ -984,7 +984,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Time Remaining looks wrong in the window | The window shows the time in the best weather, or the longest cure. Hover the stack or the curing batch for the real time left |
 | No Eat option on stockfish or charque | They're too hard to eat as they are. Rehydrate them first |
 | No Fish Head from gutting | The fish was 1.0 weight or less, or it was packed in salt (salted fish keep their heads) |
-| Create Fish Head Stock missing | The pot needs the full 1.5 L of water |
+| Make Fish Head Stock missing | The pot needs the full 1.5 L of water |
 | Can't divide the stock into bowls | Like vanilla stew, it needs a table or counter nearby, and enough bowls |
 | Smokehouse or Firebox won't build there | Something stands in front of its door (or of a Hearth's or Firebox's door next to it), or a wall is on that edge. Turn it, or clear the tile |
 | Connect the Firebox is greyed out | It stands at the shed's door end, its own door faces the shed, the shed already has a Firebox, or the fire is lit or banked. Hover it for the reason |

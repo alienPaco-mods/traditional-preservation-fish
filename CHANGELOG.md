@@ -1,5 +1,13 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.29
+- **Carpentry only** (2026-11-12, sweep step F): the Salting Tub, Drying Frame, Hanging Beam and Gantry no longer ask
+  Fishing 2 (it dated from when the mod was fish only; a charque maker needed it for a tub). The Smokehouse gives 15
+  Carpentry XP (was 30), five a level as the other stations.
+- **Make Fish Head Stock** (was Create Fish Head Stock), the series' verb for a recipe that makes a thing; the
+  recipe's id is unchanged.
+- Needs Build 42.22 or newer (`versionMin`, was 42.20: everything is checked on 42.22). Guide, README, Workshop text.
+
 ## 0.4.28
 - **The Smokehouse is *In a shed*** (2026-11-12; TP Core's new Enclosed place). Its window and its stacks' hovers
   say *In a shed* where they said *Indoors*. Nothing else changes: it already went by the day's temperature, out of

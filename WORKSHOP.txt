@@ -2,7 +2,7 @@
 
 Preserve your catch and your kill the old way, with salt, wood, fat, smoke and the weather. One workshop for both: the same Salting Tub cures fish and meat, the same drying stations hang both, a Smokehouse smokes both, and butchering gives the fat that seals meat away in a clay jar. It all keeps for weeks, months or even years, with no fridge and no power.
 
-[b]Build 42 only (42.20 or newer). This is an early release, so back up your save before enabling it. Singleplayer only: multiplayer is not supported.[/b]
+[b]Build 42 only (42.22 or newer). This is an early release, so back up your save before enabling it. Singleplayer only: multiplayer is not supported.[/b]
 
 [b]Requires Traditional Preservation (Core)[/b]: subscribe to it too, and enable it in the Mods menu (it loads first).
 
@@ -31,7 +31,7 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 
 [h2]Salting (fish and meat)[/h2]
 [list]
-[*][b]Salting Tub:[/b] Carpentry 2, Fishing 2. 4 planks, 6 nails, 2 twine, hammer and saw kept. Holds 50 weight or 35 pieces, fish or meat, never both at once.
+[*][b]Salting Tub:[/b] Carpentry 2. 4 planks, 6 nails, 2 twine, hammer and saw kept. Holds 50 weight or 35 pieces, fish or meat, never both at once.
 [*][b]Pack Fish in Salt:[/b] a raw fish or fillet and a sharp knife or meat cleaver (kept). 2 salt for each quarter weight, about 15%, as on the Volga: a small panfish takes 2, a 4.5 weight walleye 32. A fish over 4.5 weight is too thick to salt whole: gut and split it first.
 [*][b]Pack Meat in Salt:[/b] a Beef, Steak, Mutton Chop, Venison, Pork or Pork Chop as the butcher gives it, with 4 salt, or a whole Leg of Pork with 10. No knife needed. Pork never hangs in the open: its fat goes rancid in sun and wind.
 [*][b]Leg of Pork:[/b] a grown pig gives some of its Pork as whole legs for country ham, one or two on a Butchering Hook. Five Pork make a leg, so the pig's meat stays the same.
@@ -43,9 +43,9 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [h2]Drying stations[/h2]
 Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate, smoke and any spoilage. Weights are inventory weight, not kilograms.
 [list]
-[*][b]Drying Frame:[/b] Carpentry 2, Fishing 2. 6 long sticks, 3 nails, 4 twine, hammer kept. 8 stacks of 2.5 weight. It can stand in a room or a basement, as the Hanging Beam can.
-[*][b]Hanging Beam:[/b] Carpentry 4, Fishing 2. 6 planks, 6 nails, 1 large hook, hammer kept. 4 stacks of 15. Open air or under an open roof.
-[*][b]Gantry:[/b] Carpentry 6, Fishing 2. 2 logs, 2 planks, 8 nails, 2 large hooks, hammer kept. 2 stacks of 50. Open air or under an open roof.
+[*][b]Drying Frame:[/b] Carpentry 2. 6 long sticks, 3 nails, 4 twine, hammer kept. 8 stacks of 2.5 weight. It can stand in a room or a basement, as the Hanging Beam can.
+[*][b]Hanging Beam:[/b] Carpentry 4. 6 planks, 6 nails, 1 large hook, hammer kept. 4 stacks of 15. Open air or under an open roof.
+[*][b]Gantry:[/b] Carpentry 6. 2 logs, 2 planks, 8 nails, 2 large hooks, hammer kept. 2 stacks of 50. Open air or under an open roof.
 [*][b]Smokehouse:[/b] Carpentry 3. 14 planks, 20 nails, hammer kept. 6 stacks of 15. Two tiles; open air or under an open roof. Salt fish and meat only.
 [/list]
 

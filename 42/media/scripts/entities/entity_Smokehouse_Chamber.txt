@@ -55,7 +55,7 @@ module TraditionalPreservationFishMeat
             timedAction = BuildWoodenStructureMedium,
             time = 400,
             SkillRequired = Woodwork:3,
-            xpAward = Woodwork:30,
+            xpAward = Woodwork:15,
             category = Furniture,
             Tags = Carpentry;Furniture,
             Tooltip = Tooltip_craft_smokehouseChamberDesc,

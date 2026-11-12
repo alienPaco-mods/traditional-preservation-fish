@@ -52,7 +52,7 @@ module TraditionalPreservationFishMeat
         {
             timedAction = BuildWoodenStructureMedium,
             time = 250,
-            SkillRequired = Woodwork:6;Fishing:2,
+            SkillRequired = Woodwork:6,
             xpAward = Woodwork:30,
             category = Furniture,
             Tags = Carpentry;Furniture,
