@@ -360,6 +360,8 @@ T.applySandbox()
 check("salt drying days set salt drying alone", T.DRY_HOURS == 576 and T.COLD_DRY_HOURS == 768)
 check("the slowest days set the lowest rate", near(T.MIN_DRY_RATE, 0.5))
 check("harsh spoilage halves the limits", T.RAW_SPOIL_HOURS == 24 and T.SALT_SPOIL_HOURS == 240)
+check("the under-salted and the long cure's too", T.UNDER_CURE_HOURS == 336 and T.LONG_CURE_ROT_HOURS == 252
+    and near(T.underCureRate(10) * 336, 1))
 SandboxVars.TraditionalPreservationFishMeat = { ColdDryDays = 90, MatureDays = 30, PressDays = 4 }
 T.applySandbox()
 check("stockfish drying has its own days", T.COLD_DRY_HOURS == 2160)
@@ -370,12 +372,21 @@ SandboxVars.TraditionalPreservationFishMeat = { DryDays = 30, MaxDryDays = 10, S
 T.applySandbox()
 check("the slowest can't beat the fastest", T.MIN_DRY_RATE == 1)
 check("spoilage can be turned off", T.RAW_SPOIL_HOURS == math.huge and T.SALT_SPOIL_HOURS == math.huge and T.FREEZE_DAMAGE_HOURS == math.huge and T.WET_DAMAGE_HOURS == math.huge)
+do
+    local off = T.newLedger(0)
+    off.seasonTemperature = 25
+    T.advance(off, 500, { temperature = 25, humidity = 0.3, precipitation = 0 })
+    check("off, Corned meat in the shed and a warm long cure lose nothing", T.underCureRate(25) == 0 and off.underCure == 0
+        and off.underCureBanked == 0 and off.underCureBasement == 0 and off.longCureSpoil == 0
+        and T.cureSpoiled({ lastWarmCure = 0, lastLongCure = 0 }, off) == 0)
+end
 SandboxVars.TraditionalPreservationFishMeat = { DryDays = 30, MaxDryDays = 10, Spoilage = 9 }
 check("a spoilage value out of range loads as normal", pcall(T.applySandbox) and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
 SandboxVars.TraditionalPreservationFishMeat = { DryDays = 12, MaxDryDays = 27, ColdDryDays = 32, MatureDays = 60, PressDays = 2, Spoilage = 3 }
 T.applySandbox()
 check("the defaults put it all back", T.DRY_HOURS == 288 and T.COLD_DRY_HOURS == 768 and T.MATURE_DAYS == 60
-    and T.PRESS_HOURS == 48 and T.PRESS_MIN_HOURS == 24 and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480)
+    and T.PRESS_HOURS == 48 and T.PRESS_MIN_HOURS == 24 and T.RAW_SPOIL_HOURS == 48 and T.SALT_SPOIL_HOURS == 480
+    and T.UNDER_CURE_HOURS == 672 and T.LONG_CURE_ROT_HOURS == 504)
 SandboxVars = nil
 
 -- What a stack's popup reports

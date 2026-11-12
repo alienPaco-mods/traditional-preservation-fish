@@ -734,7 +734,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Stockfish drying time (days) | 32 | Cold drying at the best temperature and wind. Hung from late October to January, about 50 to 55 outdoors; the real Lofoten takes about 90 |
 | Stockfish maturing time (days) | 60 | Ripening in storage. A pallet in a loft halves it, in a ground-floor room it takes two thirds |
 | Salt cure time (days) | 2 | In the tub, for a batch with a big fish or a Beef. Small fish take half as long |
-| Spoilage strictness | Normal | Off / Forgiving / Normal / Harsh |
+| Spoilage strictness | Normal | Off / Forgiving / Normal / Harsh. Covers every way a batch spoils while it cures or dries: the wrong season on a station, a warm cure, a long cure above 10 C, and under-salted Corned meat. Off, none of them bite |
 | Butchering gives fat | On | Off, butchering gives no fat and Lard is loot only, as in the base game |
 | Butchering gives legs of pork | On | Off, a pig gives all its Pork as Pork, as in the base game |
 | Charque | On | Off, meat can't be packed in salt or hung |

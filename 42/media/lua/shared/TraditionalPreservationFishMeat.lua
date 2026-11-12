@@ -1792,6 +1792,7 @@ end
 local SPOILAGE_SCALES = { math.huge, 2, 1, 0.5 }
 local RAW_SPOIL_HOURS, SALT_SPOIL_HOURS = F.RAW_SPOIL_HOURS, F.SALT_SPOIL_HOURS
 local FREEZE_DAMAGE_HOURS, WET_DAMAGE_HOURS, HEAT_DAMAGE_HOURS = F.FREEZE_DAMAGE_HOURS, F.WET_DAMAGE_HOURS, F.HEAT_DAMAGE_HOURS
+local UNDER_CURE_HOURS, LONG_CURE_ROT_HOURS = F.UNDER_CURE_HOURS, F.LONG_CURE_ROT_HOURS
 -- Small fish press for the same share of the biggest fish's time, whatever the sandbox sets it to.
 local PRESS_MIN_SHARE = F.PRESS_MIN_HOURS / F.PRESS_HOURS
 
@@ -1817,6 +1818,9 @@ function F.applySandbox()
     F.FREEZE_DAMAGE_HOURS = FREEZE_DAMAGE_HOURS * scale
     F.WET_DAMAGE_HOURS = WET_DAMAGE_HOURS * scale
     F.HEAT_DAMAGE_HOURS = HEAT_DAMAGE_HOURS * scale
+    -- Under-salted Corned meat and the long cure's cold rule (0.4.14) go by the setting too: off, they never spoil.
+    F.UNDER_CURE_HOURS = UNDER_CURE_HOURS * scale
+    F.LONG_CURE_ROT_HOURS = LONG_CURE_ROT_HOURS * scale
 end
 
 local function applyRecipeTime(name, hours)

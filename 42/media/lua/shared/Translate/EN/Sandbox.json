@@ -11,7 +11,7 @@
   "Sandbox_TraditionalPreservationFishMeat_PressDays": "Salt cure time (days)",
   "Sandbox_TraditionalPreservationFishMeat_PressDays_tooltip": "Days in the tub for a batch with a big fish (over 2.2 weight). Small fish take half as long, and sizes between are in between.",
   "Sandbox_TraditionalPreservationFishMeat_Spoilage": "Spoilage strictness",
-  "Sandbox_TraditionalPreservationFishMeat_Spoilage_tooltip": "How quickly the wrong season spoils fish on a drying station.",
+  "Sandbox_TraditionalPreservationFishMeat_Spoilage_tooltip": "How quickly the wrong season or the wrong cure spoils fish and meat: on a drying station, in the Salting Tub and in the Smokehouse. Off, nothing spoils while it cures or dries.",
   "Sandbox_TraditionalPreservationFishMeat_Spoilage_option1": "Off",
   "Sandbox_TraditionalPreservationFishMeat_Spoilage_option2": "Forgiving",
   "Sandbox_TraditionalPreservationFishMeat_Spoilage_option3": "Normal",

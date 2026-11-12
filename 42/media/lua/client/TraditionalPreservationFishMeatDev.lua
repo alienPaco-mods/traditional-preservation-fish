@@ -136,7 +136,7 @@ function TPFM.underSalt(hours)
     local ledger = F.getLedger()
     local share = hours / F.UNDER_CURE_HOURS
     ledger.underCure, ledger.underCureBanked, ledger.underCureStoked = ledger.underCure + share, ledger.underCureBanked + share, ledger.underCureStoked + share
-    say(string.format("Added %.0f hours of a 10 C shed for Corned meat in the Smokehouse. It rots after %d.", hours, F.UNDER_CURE_HOURS))
+    say(string.format("Added %.0f hours of a 10 C shed for Corned meat in the Smokehouse. It rots after %.0f.", hours, F.UNDER_CURE_HOURS))
 end
 
 function TPFM.frost(hours)

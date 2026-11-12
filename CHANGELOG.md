@@ -11,6 +11,8 @@
   outdoors: `Tiles.OUTDOOR`, with `Tiles.DOOR_KEPT` for the door rule).
 - **No charque indoors**: in a room or a basement every meat stack dry cures; Corned meat there is under-salted, as
   in the Smokehouse. Charque is the open air's and the open roof's.
+- **Spoilage strictness** now reaches 0.4.14's two rules: under-salted Corned meat (`F.UNDER_CURE_HOURS`) and the long
+  cure's cold rule (`F.LONG_CURE_ROT_HOURS`) are scaled as the older ones (off: never; forgiving x2; harsh x0.5).
 - Air dried meat's tooltip no longer speaks of smoke at all.
 - **The ham by the Smokehouse door** hangs on the door's other side, a third larger, a little past the shed's corner,
   with a slice taken off its round end (`paint_chamber_ham`; same tile numbers). Painted as vanilla's Ham icon is: a

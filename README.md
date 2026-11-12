@@ -182,7 +182,7 @@ Humidity stays low in the game all year, mostly 20 to 45%, so it barely changes 
 
 ## Sandbox options
 
-Under Traditional Preservation (Fish & Meat): **Salt drying time** (12 days), **Slowest salt drying** (27), **Stockfish drying time** (32), **Stockfish maturing time** (60), **Salt cure time** (2 days for a batch with a big fish or a 0.5 cut; small fish half), **Spoilage strictness** (Off, Forgiving, Normal, Harsh), **Butchering gives fat** (on; off: no fat rows, Lard is loot only), **Butchering gives legs of pork** (on; off: all Pork, as vanilla), **Charque** (on; off: meat can't be packed in salt or hung), **Charque drying time** (5 days), **Potted Meat keeps by place** (on; off: 60 / 90 days anywhere and opening costs nothing). Options are read when the world loads. Hot smoking has no option yet.
+Under Traditional Preservation (Fish & Meat): **Salt drying time** (12 days), **Slowest salt drying** (27), **Stockfish drying time** (32), **Stockfish maturing time** (60), **Salt cure time** (2 days for a batch with a big fish or a 0.5 cut; small fish half), **Spoilage strictness** (Off, Forgiving, Normal, Harsh: it scales every rule that spoils a curing or drying batch, the under-salted and the long cure's cold rule included; `F.applySandbox`), **Butchering gives fat** (on; off: no fat rows, Lard is loot only), **Butchering gives legs of pork** (on; off: all Pork, as vanilla), **Charque** (on; off: meat can't be packed in salt or hung), **Charque drying time** (5 days), **Potted Meat keeps by place** (on; off: 60 / 90 days anywhere and opening costs nothing). Options are read when the world loads. Hot smoking has no option yet.
 
 ## For modders
 
