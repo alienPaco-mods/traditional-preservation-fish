@@ -244,6 +244,32 @@ check("air dried, beef is Bresaola and a leg plain Country Ham", F.stageName({ g
     and F.stageName({ getFullType = function() return F.COUNTRY_HAM end, getModelIndex = function() return F.LEG_INDEX end,
         getAge = function() return 0 end, getModData = function() return { airDried = true } end }) == "Country Ham")
 
+-- What a hanging stack comes out as now (the popup's line): the recipe's output names only one of its ends.
+getItemNameFromFullType = getItemNameFromFullType or function(fullType) return (fullType:gsub("^[^.]*%.", "")) end
+local function hung(index, longCure)
+    return { getFullType = function() return F.CURED_MEAT end, getModelIndex = function() return index end,
+        getModData = function() return { longCure = longCure } end }
+end
+local function list(...)
+    local items = { ... }
+    return { size = function() return #items end, get = function(_, i) return items[i + 1] end }
+end
+check("Corned beef on a frame in the open is Beef Charque", F.stackOutcome({ dried = 0 }, list(hung(0)), "meat") == "Beef Charque")
+check("Country Cured beef under a roof is Bresaola, a leg Country Ham",
+    F.stackOutcome({ dried = 0, longStack = true, cureNeed = 504 }, list(hung(0, true), hung(F.LEG_INDEX, true)), "meat") == "Bresaola, Country Ham")
+check("Corned mutton in a room dry cures", F.stackOutcome({ dried = 0, sheltered = true, cureNeed = 504 }, list(hung(2)), "meat") == "Dry Cured Mutton")
+check("in the Smokehouse with a stoked run counting: Hot Smoked, pork vanilla's Ham",
+    F.stackOutcome({ dried = 0, inShed = true, cureNeed = 504, hotNeed = 6, hot = 2 }, list(hung(3), hung(4)), "meat") == "Venison (Hot Smoked), Ham")
+check("with its hours of smoke: Suho Meso", F.stackOutcome({ dried = 0, inShed = true, cureNeed = 504, smokeNeed = 60, cold = 60 }, list(hung(1, true)), "meat") == "Suho Meso")
+check("short of them: Bresaola", F.stackOutcome({ dried = 0, inShed = true, cureNeed = 504, smokeNeed = 60, cold = 20 }, list(hung(1, true)), "meat") == "Bresaola")
+check("each name once", F.stackOutcome({ dried = 0 }, list(hung(0), hung(1), hung(0)), "meat") == "Beef Charque")
+check("a Corned piece lost to under-salting is Rotten, the Country Cured dries on",
+    F.stackOutcome({ dried = 0, inShed = true, cureNeed = 504, underSpoiled = 1 }, list(hung(0), hung(0, true)), "meat") == "Rotten, Bresaola")
+check("a lost stack is Rotten", F.stackOutcome({ dried = 0, spoiled = 1 }, list(hung(0)), "meat") == "Rotten")
+check("fish: Salt Dried, Hot or Cold Smoked in the shed, Stockfish cold dried",
+    F.stackOutcome({ dried = 0 }, nil, "salt") == "SaltDriedFish" and F.stackOutcome({ inShed = true, hotNeed = 4, hot = 1 }, nil, "salt") == "HotSmokedFish"
+    and F.stackOutcome({ inShed = true, smokeNeed = 24, cold = 24 }, nil, "salt") == "ColdSmokedFish" and F.stackOutcome({}, nil, "cold") == "ColdDriedFish")
+
 -- Dry curing (6b): meat in the shed dries in cool air on its own need, by the heaviest piece.
 check("full from 12 C, a quarter in frost", F.dryCureRate(12) == 1 and F.dryCureRate(25) == 1 and near(F.dryCureRate(6), 0.5)
     and F.dryCureRate(0) == 0.25 and F.dryCureRate(-15) == 0.25)

@@ -1852,6 +1852,58 @@ local function meatStageName(item)
     return name
 end
 
+-- What one piece of meat comes down as: "charque", "hot", "smoked" or "airDried", named for its cut as the finished
+-- item will be. A cut spawned without one gets the item's own name.
+local function meatOutcomeName(input, way)
+    local index = input:getModelIndex()
+    local cut = index and F.MEAT_CUTS[index + 1]
+    if way == "hot" and F.isPork(input) and not F.isLeg(input) then return getItemNameFromFullType(F.VANILLA_HAM) end
+    if not cut then
+        local fullType = way == "charque" and "TraditionalPreservationFishMeat.Charque" or way == "hot" and F.HOT_MEAT
+            or F.isLeg(input) and F.COUNTRY_HAM or F.DRY_CURED
+        return getItemNameFromFullType(fullType)
+    end
+    local animal = getText("IGUI_TraditionalPreservationFishMeat_Animal" .. F.MEAT_ANIMALS[index + 1])
+    if way == "charque" then return getText("IGUI_TraditionalPreservationFishMeat_CharqueOf", animal) end
+    if way == "hot" then return getText("IGUI_TraditionalPreservationFishMeat_HotSmokedOf", animal) end
+    return getText((way == "airDried" and "IGUI_TraditionalPreservationFishMeat_AirDried_" or "IGUI_TraditionalPreservationFishMeat_Smoked_") .. meatKind(index))
+end
+
+-- What a hanging stack would come down as if it were done now, by F.onCreateDried's rules: a stoked run counting in
+-- the Smokehouse makes it Hot Smoked, its hours of smoke Cold Smoked, else it is air dried there; on a frame meat
+-- is charque unless it dry cures. The names of its pieces' products, each once ("Rotten" for a lost piece). The
+-- likeliest result, not a promise: the next stoking, banking or move can change it. For the stack's popup.
+function F.stackOutcome(modData, items, kind)
+    if (modData.spoiled or 0) >= 1 then return getText("IGUI_TraditionalPreservationFishMeat_OutcomeRotten") end
+    local way
+    if modData.inShed then
+        way = (F.cookShare(modData) or F.hotStations[modData.stackId]) and "hot" or F.coldDone(modData) and "smoked" or "airDried"
+    elseif kind == "meat" then
+        way = F.dryCuring(modData) and "airDried" or "charque"
+    end
+    if kind ~= "meat" then
+        local fullType = kind == "cold" and "TraditionalPreservationFishMeat.ColdDriedFish" or way == "hot" and F.HOT_FISH
+            or way == "smoked" and F.COLD_FISH_OUT or "TraditionalPreservationFishMeat.SaltDriedFish"
+        return getItemNameFromFullType(fullType)
+    end
+    local names, seen = {}, {}
+    for i = 0, items and items:size() - 1 or -1 do
+        local input = items:get(i)
+        local name
+        if not input:getModData().longCure and (modData.spoiled or 0) + (modData.underSpoiled or 0) >= 1 then
+            name = getText("IGUI_TraditionalPreservationFishMeat_OutcomeRotten")
+        else
+            name = meatOutcomeName(input, way)
+        end
+        if not seen[name] then
+            seen[name] = true
+            table.insert(names, name)
+        end
+    end
+    if #names == 0 then return getText("IGUI_TraditionalPreservationFishMeat_Outcome_" .. way) end
+    return table.concat(names, ", ")
+end
+
 -- Stockfish is named by its species alone ("Walleye Stockfish"): no size, nor Gutted, which nearly all of it is.
 -- One from another mod's fish (no icon of ours) keeps the name it came with. Matured once ripe; Soaked, rehydrated.
 local function stockfishName(item, fishName)

@@ -29,6 +29,7 @@ ISItemSlot = {}
 instanceof = function() return true end
 local progressSlots = {}
 ISWidgetCraftLogicOutputProgress = { updateProgressItems = function() end }
+ISWidgetCraftLogicInputControl = { createChildren = function(self) self.outputItems = {} end, updateOutputItems = function(self) self.remade = true end }
 function ISItemSlot:defaultVerifyItem() return vanillaVerdict end
 function ISItemSlot:onMouseUp() vanillaUps = vanillaUps + 1 end
 
@@ -234,11 +235,13 @@ check("meat and fish dragged in together are refused at the fish", #entityList =
 
 -- A hanging stack's popup
 local function stackLines(recipeName, modData, ledger)
+    getItemNameFromFullType = getItemNameFromFullType or function(fullType) return (fullType:gsub("^[^.]*%.", "")) end
     TraditionalPreservationFishMeat.getLedger = function() return ledger end
     local slot = {
         craftRecipeData = {
             getRecipe = function() return { getName = function() return recipeName end } end,
             getModData = function() return modData end,
+            getAllInputItemsWithFlag = function() return { size = function() return 0 end } end,
         },
         drawTooltip = "vanilla",
     }
@@ -274,6 +277,7 @@ check("a cold stack says so", coldLines["IGUI_TraditionalPreservationFishMeat_Me
 check("and shows its real rate and progress", coldLines["IGUI_TraditionalPreservationFishMeat_Rate:"] == "100%" and coldLines["IGUI_TraditionalPreservationFishMeat_Progress:"] == "50%")
 check("with no warning in a cold season", coldLines["IGUI_TraditionalPreservationFishMeat_Spoilage:"] == nil)
 local saltLines = stackLines("HangFishToDry", { dried = 144 }, winter)
+check("and what it comes out as", coldLines["IGUI_TraditionalPreservationFishMeat_ComesOutAs:"] == "ColdDriedFish")
 check("a salt stack shows its own rate", saltLines["IGUI_TraditionalPreservationFishMeat_Method:"] == "IGUI_TraditionalPreservationFishMeat_MethodSalt" and saltLines["IGUI_TraditionalPreservationFishMeat_Rate:"] == "44%")
 local warm = { wetness = 0, temperature = 18, coldRate = 0, openRate = 0.8, shelteredRate = 0.52, rawSpoiling = true, rawSpoilingOpen = true }
 local warmLines = stackLines("HangFishToColdDry", { dried = 10, spoiled = 0.4 }, warm)
@@ -281,6 +285,28 @@ check("a warm season stops cold drying", warmLines["IGUI_TraditionalPreservation
 check("and warns of spoilage", warmLines["IGUI_TraditionalPreservationFishMeat_Spoilage:"] == "IGUI_TraditionalPreservationFishMeat_SpoilingWarm")
 check("and has no time left to give", warmLines["IGUI_TraditionalPreservationFishMeat_TimeLeft:"] == "IGUI_TraditionalPreservationFishMeat_Paused")
 check("other recipes are left alone", stackLines("DryCorn", {}, winter) == nil)
+
+-- The window's Output slot lists every end of a Hang recipe; other recipes keep vanilla's popup.
+local function outputWidget(recipeName)
+    local widget = setmetatable({ recipe = { getName = function() return recipeName end } }, { __index = ISWidgetCraftLogicInputControl })
+    widget:createChildren()
+    return widget
+end
+local meatWidget = outputWidget("TraditionalPreservationFishMeat.HangMeatToDry")
+check("Hang Salted Meat's Output slot gets its own popup, the slots made again", type(meatWidget.outputItems.drawTooltip) == "function" and meatWidget.remade)
+check("another recipe's keeps vanilla's", outputWidget("TraditionalPreservationFishMeat.HangFishToColdDry").outputItems.drawTooltip == nil)
+local drawn = {}
+local listTip = { width = 50 }
+function listTip:getFont() return "font" end
+function listTip:getLineSpacing() return 20 end
+function listTip:adjustWidth() end
+function listTip:DrawText(_, text) table.insert(drawn, text) end
+function listTip:setHeight(value) self.height = value end
+function listTip:getWidth() return self.width end
+function listTip:setWidth(value) self.width = value end
+meatWidget.outputItems.drawTooltip({}, listTip)
+check("it lists the five ends under its title", #drawn == 6 and drawn[1] == "IGUI_TraditionalPreservationFishMeat_ComesOutAs"
+    and drawn[2] == "IGUI_TraditionalPreservationFishMeat_Ends_Charque")
 
 -- The game can't format a bare %, so a line's own percent sign belongs in the value it is given.
 local translations = io.open("42/media/lua/shared/Translate/EN/IG_UI.json"):read("*a")

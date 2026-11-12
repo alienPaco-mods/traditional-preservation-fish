@@ -27,7 +27,8 @@
 19. Tips from the Docks and the Block
 20. Troubleshooting
 21. Sandbox Settings
-22. Appendix: The Tester's Toolkit
+22. The Yearly Plan
+23. Appendix: The Tester's Toolkit
 
 ---
 
@@ -239,7 +240,7 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 | Recipe | Frame, Beam, Gantry | Smokehouse |
 |---|---|---|
 | **Hang Salt Cured Fish to Dry** | Yes | Yes |
-| **Hang Salted Meat to Dry**: Corned beef, mutton, venison (charque) | Yes, in the sun or under an open roof | Yes: a hot cook, never charque |
+| **Hang Salted Meat to Dry**: Corned beef, mutton, venison (charque) | Yes, in the sun or under an open roof | Yes: a hot cook, never charque; with no fire it dry cures, under-salted |
 | **Hang Salted Meat to Dry**: Country Cured meat, pork too (dry curing) | Yes, **in the shade only**: under a roof, in a room or a basement | Yes |
 | **Hang Salted Meat to Dry**: Corned pork | No | Yes: a hot cook |
 | **Hang Gutted Fish to Cold Dry** (stockfish) | Yes, never in a room | **No** |
@@ -252,7 +253,7 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 - **Loft**: the top storey: a room upstairs with no room over it. Indoors, but at the **loft's own temperature**, not the day's: as indoors, plus three tenths of whatever the 10-day average is above 10 C: the sun on the roof (about 24 C in a 21 C July, no warmer than a room from October to April); 22 C while the power grid is on. Salt fish, charque and dry curing there go by it, and so does a Salting Tub: a summer loft is the worst place for a cure in the tub.
 - **Basement**: any level below ground. Indoors, but at the **cellar's own temperature**, not the day's: about 5 C from January to March, 13 C from July to September, a month behind the season. Whatever dries there goes by it, so salt fish crawls (about **27 days** a batch, all year): a cellar is for keeping salt fish, not drying it.
 
-**Hover a stack** to see its method, progress, time left, place, the temperature, the wind, how wet it is and how fast it's drying right now, a warning if the season is spoiling it, and in a Smokehouse its smoke.
+**Hover a stack** to see its method, what it **comes out as** if it came down now (the recipe's output picture always shows Charque or Salt Dried; chapter 22 has every end), progress, time left, place, the temperature, the wind, how wet it is and how fast it's drying right now, a warning if the season is spoiling it, and in a Smokehouse its smoke.
 
 **The station's own window tells you the rest.** Under *In Progress*, *Done* and *Take All*, every station (the Salting Tub and the Smokehouse too) lists the place, how many stacks are in use, the air now and over the season (below ground, the basement's own temperature), and a bar for every running batch with its share, its time left or the reason it stands still. Under the bars it lists what wants your eye: a batch that is spoiling, a hot cook under way, the smoke so far, pieces loaded but never started, finished ones waiting to be taken.
 
@@ -1026,7 +1027,40 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 ---
 
-## 22. Appendix: The Tester's Toolkit
+## 22. The Yearly Plan
+
+Laid out as the game's planting seasons: the months a process works, its best and poor months, and the months it is out of season. One recipe, **Hang Salted Meat to Dry**, does most of the meat processes: what comes down depends on the cure, the place and the fire, not on the recipe's output picture, which always shows Charque. Hover over a hanging stack and its **Comes out as** line says what it would be if it came down now. The days are a Kentucky year from the game's own forecasts (the Almanac, chapter 15).
+
+| Process | Season | Best months | Poor months | Out of season | Where, at its best | Takes, at its best |
+|---|---|---|---|---|---|---|
+| **Cold drying**: Stockfish (Gut Fish, no salt) | October to March | November, December, January | October and March (under a roof only), February | April to September: it rots | Frame, Beam or Gantry in the open | 50 to 55 days, then 60 maturing (30 on a pallet in a loft) |
+| **Salt drying**: Salt Dried fish (cured 1 to 2 days) | All year | June, July, August | December, January, February (about 4 weeks) | None | Under an open roof; never a July loft (muggy) | 12 to 16 days |
+| **Charque**: Beef, Mutton, Venison (Corned) | April to October | June, July, August, September | April (13 to 34 days), May (9 to 25); October (under a roof only, 11 to 29) | November to March: it barely dries | Under an open roof, or the open air on dry weeks | 7 to 10 days |
+| **The long cure**: Country Cured meat | October to April; a basement tub November to May | November to March | October, April | May to September: it spoils in the tub | Any tub in the cold | 10 days for cuts, 21 with a Leg of Pork |
+| **Smoked dry curing**: Suho Meso, Mutton Ham, Jerked Venison, Smoked Dry Cured Pork, Smoked Country Ham (Country Cured) | October to April | December, January, February, March | October, November, April | May to September: over 15 C the smoke doesn't count, the meat air dries | Smokehouse, Firebox banked | Cuts 3 to 4 weeks banked all day, about 7 with a fire a few hours a day; a leg about 3 months |
+| **Air dry curing**: Bresaola, Dry Cured Mutton, Venison, Pork, Country Ham (Country Cured) | All year | May (under a roof); June to October (a basement) | December, January, February: 12 weeks in frost | None | Under a roof in May; the Smokehouse with the fire out; a basement in summer | Cuts about 3 weeks, a leg about 6; a basement 4½ to 5 and 9 to 11 |
+| **Cold smoking**: Cold Smoked Fish (cured) | October to April | October, April | November to March (17 to 27 days banked all day) | May to September: over 15 C the smoke doesn't count | Smokehouse, Firebox banked | About 12 days from 5 C; 21 at 0 C |
+| **Hot smoking**: Hot Smoked Fish; Beef, Mutton, Venison (Hot Smoked); pork becomes Ham | All year | Any | None | None | Smokehouse, Firebox stoked; never a leg | Fish 4 to 6 hours in a row, Steaks and chops 6, a Beef or Venison 7½ |
+| **Potting and rendering**: Potted Meat, Lard, Tallow | All year | Whenever you butcher | None | None | A pot and a fire (Potted Meat then a clay jar, kept in a cellar) | 2 hours; rendering 1 |
+
+**A powered room** (22 C while the grid is on) dry cures a cut in 3 weeks and a leg in 6, any month.
+
+**What a stack turns into, by where it hangs**
+
+| Where | Corned meat | Country Cured meat | Salt Cured fish |
+|---|---|---|---|
+| In the open | **Charque** (pork refused) | Refused | Salt Dried |
+| Under an open roof | **Charque**; dry cured if a Country Cured piece shares the stack | **Dry cured**, Country Ham from a leg | Salt Dried |
+| A room, a loft or a basement | **Dry cured**, under-salted: it spoils as it hangs | **Dry cured** | Salt Dried |
+| Smokehouse, Firebox stoked | **Hot Smoked**; pork becomes Ham | **Hot Smoked**; a leg never cooks | Hot Smoked |
+| Smokehouse, with its hours of smoke | **Smoked dry cured** (Suho Meso and kin), under-salted | **Smoked dry cured** | Cold Smoked |
+| Smokehouse, fire out | **Air dried** (Bresaola and kin), under-salted | **Air dried** | Salt Dried |
+
+> *Margin note:* the days are a Kentucky year read from the game's own forecasts, at full speed where the line says "about". A cold snap, a wet week or a few hours less fire stretch them; the stack's popup always has the real time left.
+
+---
+
+## 23. Appendix: The Tester's Toolkit
 
 *For testers, modders and the curious. These commands exist only when the game is started in debug mode (Steam launch option `-debug`). Type them into the in-game **Command Console** and press Enter. `TPFM.help()` lists them in the game.*
 

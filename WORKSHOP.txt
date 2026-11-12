@@ -41,7 +41,7 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [/list]
 
 [h2]Drying stations[/h2]
-Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate, smoke and any spoilage. Weights are inventory weight, not kilograms.
+Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, what it will come out as, drying rate, smoke and any spoilage. Weights are inventory weight, not kilograms.
 [list]
 [*][b]Drying Frame:[/b] Carpentry 2. 6 long sticks, 3 nails, 4 twine, hammer kept. 8 stacks of 2.5 weight. It can stand anywhere, a room or a basement too.
 [*][b]Hanging Beam:[/b] Carpentry 4. 6 planks, 6 nails, 1 large hook, hammer kept. 4 stacks of 15. Anywhere, a room or a basement too.

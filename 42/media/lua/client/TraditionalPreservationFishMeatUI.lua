@@ -102,6 +102,9 @@ local function drawStackTooltip(slot, tooltip, kind)
         or F.stackStatus(isCold, slot.craftRecipeData:getModData(), ledger)
     UI.drawTooltip(tooltip, function(layout)
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Method", getText(status.dryCuring and "IGUI_TraditionalPreservationFishMeat_MethodDryCure" or METHODS[kind]))
+        -- The recipe's output says Charque or Salt Dried whatever the stack is; this says what it is turning into.
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_ComesOutAs", F.stackOutcome(slot.craftRecipeData:getModData(),
+            slot.craftRecipeData:getAllInputItemsWithFlag("ItemCount"), kind))
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Progress", UI.percent(status.progress))
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_TimeLeft", timeText(status.hoursLeft))
         local modData = slot.craftRecipeData:getModData()
@@ -176,6 +179,19 @@ UI.progressTooltips({
     HangFishToColdDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "cold") end,
     HangMeatToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "meat") end,
 })
+
+-- The window's Output slot shows the script's one output whatever the stack will be: its popup lists every end
+-- instead (the stack's own popup says which, F.stackOutcome).
+local OUTCOMES = {
+    HangMeatToDry = { "Charque", "DryCured", "CountryHam", "HotSmokedMeat", "SmokedDryCured" },
+    HangFishToDry = { "SaltDried", "HotSmokedFish", "ColdSmokedFish" },
+}
+local function drawOutcomes(tooltip, name)
+    local lines = {}
+    for _, key in ipairs(OUTCOMES[name]) do table.insert(lines, getText("IGUI_TraditionalPreservationFishMeat_Ends_" .. key)) end
+    UI.drawListTooltip(tooltip, getText("IGUI_TraditionalPreservationFishMeat_ComesOutAs"), lines)
+end
+UI.outputTooltips({ HangMeatToDry = drawOutcomes, HangFishToDry = drawOutcomes })
 
 -- A badge in the bottom left corner, as the inventory marks frozen food: a little salt tells salt stacks from cold
 -- ones at a glance, and while a stoked run is cooking a stack (F.cookShare) it shows what the stack is turning
