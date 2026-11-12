@@ -42,7 +42,7 @@ The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't s
 
 **Typical check of Potted Meat:** `TPFM.kit("potted")`, Put Meat in Lard or Tallow (the Steak), Add Meat to the Pot three times (a fifth is refused), cook it on any stove or fire (120 minutes), Pack Potted Meat into the Glazed Clay Jar: "Crock of Potted Meat (4 portions)", glazed look, the pot back. Eat a quarter: 3 portions, lighter. Eat the rest: the Glazed Clay Jar comes back.
 
-**Typical check of keeping by place (4c):** three crocks, one in a powered fridge, one in a basement, one in a room upstairs; stand by each and `TPFM.crocks()`: Fridge x0.50 (120 days), Basement x1.00 (60), the room by the season mean (x0.5 at 4 C and below, x1 at 15 C, x4.29 at 25 C and up). `TPFM.keep(30)` by each: about 15, 30 and up to 128 days old. Eat a quarter of one: it loses a third of its days to stale once (`opened`); a second bite costs nothing.
+**Typical check of keeping by place (4c):** three crocks, one in a powered fridge, one in a basement, one in a room upstairs; stand by each and `TPFM.crocks()`: Fridge x0.50 (120 days), Basement by its damped temperature (x0.55 at 5 C in January, x0.94 at 14 C in July), the room by the season mean (22 C while the grid is on) (x0.5 at 4 C and below, x1 at 15 C, x4.29 at 25 C and up). `TPFM.keep(30)` by each: about 15, 30 and up to 128 days old. Eat a quarter of one: it loses a third of its days to stale once (`opened`); a second bite costs nothing.
 
 **Typical check of the copper:** `TPFM.give("fat", 6)`, a lit Hearth, Put Fat in the Copper (Pork Fat), wait for it to steam and an hour more, Fill from Copper into a pot, Strain Lard three times.
 

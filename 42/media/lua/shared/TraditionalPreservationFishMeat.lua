@@ -287,8 +287,9 @@ F.DRY_CURE_HOURS = { { 0.45, 504 }, { 2.25, 1008 } }
 F.DRY_CURE_FULL_HEAT = 12
 F.DRY_CURE_FROST_RATE = 0.25
 -- Country Cured meat also dry cures on a Frame, Beam or Gantry in the shade (0.4.15): under a roof or indoors as in the shed
--- with the fire out, and in a basement, the curing cellar, at a steady DRY_CURE_BASEMENT_RATE all year (its 15 C is
--- full heat; the still air takes a third). Always air dried: smoke is the Smokehouse's.
+-- with the fire out, and in a basement, the curing cellar, at a steady DRY_CURE_BASEMENT_RATE all year (the still air
+-- takes a third; sweep step D ties it to the basement's own temperature). An under-salted stack there spoils by that
+-- temperature (Weather.basementTemperature). Always air dried: smoke is the Smokehouse's.
 F.DRY_CURE_BASEMENT_RATE = 2 / 3
 -- Under-salted (6b): Corned meat has salt for a few days, not for weeks in the shed. Until a hot cook is done it
 -- picks up spoilage by the shed's temperature: rotten in UNDER_CURE_HOURS at UNDER_CURE_AT, UNDER_CURE_TENFOLD times
@@ -490,7 +491,7 @@ function F.advance(ledger, now, weather)
     ledger.dryCureBanked = ledger.dryCureBanked + ledger.dryCureBankedRate * hours
     ledger.dryCureStoked = ledger.dryCureStoked + ledger.dryCureStokedRate * hours
     ledger.dryCureBasement = ledger.dryCureBasement + F.DRY_CURE_BASEMENT_RATE * hours
-    ledger.underCureBasement = ledger.underCureBasement + F.underCureRate(Weather.BASEMENT_TEMPERATURE) * hours
+    ledger.underCureBasement = ledger.underCureBasement + F.underCureRate(Weather.basementTemperature(ledger.seasonTemperature or weather.temperature)) * hours
     ledger.underCure = ledger.underCure + F.underCureRate(weather.temperature) * hours
     ledger.underCureBanked = ledger.underCureBanked + underBanked * hours
     ledger.underCureStoked = ledger.underCureStoked + underStoked * hours
@@ -645,7 +646,7 @@ function F.charqueStatus(modData, ledger)
         dryCuring = curing,
         -- Corned meat in the shed, and the shed's temperature it spoils by.
         underSalted = curing and modData.underCured == true,
-        shedTemperature = curePlace == "Basement" and Weather.BASEMENT_TEMPERATURE or (ledger.temperature or 0) + lift,
+        shedTemperature = curePlace == "Basement" and Weather.placeTemperature(ledger, "Basement") or (ledger.temperature or 0) + lift,
     }
 end
 
@@ -800,7 +801,7 @@ function F.fishRefusal(isTub, fullType)
     return nil
 end
 
--- Meat a drying station refuses, by where it stands (Weather.placeOf with Covered). The Smokehouse (closed) takes
+-- Meat a drying station refuses, by where it stands (Weather.placeOf). The Smokehouse (closed) takes
 -- all. Country Cured meat, pork too, dry cures in the shade: a Frame, Beam or Gantry under a roof, a Frame or Beam
 -- indoors or in a basement, never in the open (sun and rain are charque's). Corned pork has only its hot cook: in
 -- sun and wind its fat goes rancid, and it has too little salt to hang.
@@ -895,7 +896,7 @@ function F.frameRefusal(hanger, busyStacks, waitingWeight, weight, waitingPieces
     return nil
 end
 
--- Cold drying needs moving air: a room, a basement or the Smokehouse (place is Weather.placeOf's, with Covered)
+-- Cold drying needs moving air: a room, a basement or the Smokehouse (place is Weather.placeOf's)
 -- refuses gutted fish. The Smokehouse doesn't list the recipe either.
 function F.coldRefusal(place)
     if place ~= "Open" and place ~= "Covered" then return "IGUI_TraditionalPreservationFishMeat_NoColdIndoors" end
@@ -1386,7 +1387,7 @@ function F.onCreateRinsed(craftRecipeData)
     end
 end
 
--- How much faster a pallet ripens stockfish than a shelf: place is Weather.placeOf's (with Covered), z the floor.
+-- How much faster a pallet ripens stockfish than a shelf: place is Weather.placeOf's, z the floor.
 function F.palletSpeed(place, z)
     if place ~= "Sheltered" then return 1 end
     if z >= 1 then return F.PALLET_LOFT end

@@ -249,11 +249,8 @@ function F.pottedLedger()
     return Weather.getLedger(F.POTTED_LEDGER_KEY, F.newPottedLedger)
 end
 
--- A crock's temperature at a Weather place. A room is the season's mean, not Weather's season plus ten: a pantry
--- or a shed isn't heated, and the shared rule (made for the drying stations) would make every room above ground
--- 25 C from spring to autumn (user, 2026-11-11). Outdoors and a basement as Weather has them.
+-- A crock's temperature at a Weather place: Weather's own (a room or an open roof is the season's mean).
 function F.pottedTemperature(ledger, place)
-    if place == "Sheltered" then return ledger.seasonTemperature or ledger.temperature or 0 end
     return Weather.placeTemperature(ledger, place)
 end
 

@@ -25,7 +25,7 @@ function TraditionalPreservationFishMeatPallet.refresh(pallet, entry, now)
     local last = modData.palletHour or now
     if not modData.palletHour or now - last >= 1 then
         modData.palletHour = now
-        local speed = F.palletSpeed(Weather.placeOf(pallet, true), square:getZ())
+        local speed = F.palletSpeed(Weather.placeOf(pallet), square:getZ())
         F.ripenOnPallet(container, (now - last) / 24 * (speed - 1))
     end
 

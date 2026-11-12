@@ -73,7 +73,7 @@ end
 -- Wind probe for the cold-drying wind curve: live wind every 10 minutes against the day's forecast.
 local windLog
 function TPFM.here()
-    say("You're in: " .. tostring(Weather.placeOf(getPlayer(), true)))
+    say("You're in: " .. tostring(Weather.placeOf(getPlayer())))
 end
 
 local function sampleWind()
@@ -455,7 +455,7 @@ function TPFM.pallet()
             for i = 0, objects and objects:size() - 1 or -1 do
                 local object = objects:get(i)
                 if object:getSprite() and object:getSprite():getName() == Tiles.PALLET and object:getContainer() then
-                    local place = Weather.placeOf(object, true)
+                    local place = Weather.placeOf(object)
                     local count, ripest = 0, 0
                     F.eachStockfish(object:getContainer(), function(fish)
                         count = count + 1

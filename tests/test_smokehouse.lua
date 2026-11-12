@@ -328,15 +328,17 @@ F.advance(cellar, 72, { temperature = 0, humidity = 0.3, precipitation = 0, wind
 F.charqueStep(shade, cellar)
 check("in a basement at two thirds, whatever the weather", near(shade.dried, 24 * 0.25 + 24 * 2 / 3) and F.curePlace(shade) == "Basement")
 local cellarStatus = F.charqueStatus(shade, cellar)
-check("its popup reads the cellar's 15 C and steady rate", near(cellarStatus.rate, 2 / 3) and cellarStatus.shedTemperature == 15
+check("its popup reads the cellar's temperature and steady rate", near(cellarStatus.rate, 2 / 3)
+    and cellarStatus.shedTemperature == 10 + 0.35 * (cellar.seasonTemperature - 10)
     and cellarStatus.dryCuring and not cellarStatus.underSalted)
 check("a basement cut takes about 32 days, a leg 63", near(504 / (2 / 3) / 24, 31.5) and near(1008 / (2 / 3) / 24, 63))
 local cellarCorned = { cureNeed = 504, longStack = true, underCured = true, basement = true, sheltered = true, dried = 0, spoiled = 0,
     lastSaltSpoil = cellar.saltSpoil, lastDryCure = cellar.dryCure, lastUnderCure = cellar.underCure,
     lastCureBasement = cellar.dryCureBasement, lastUnderBasement = cellar.underCureBasement }
+local cellarC = 10 + 0.35 * (cellar.seasonTemperature - 10)
 F.advance(cellar, 96, { temperature = -10, humidity = 0.3, precipitation = 0, wind = 0 })
 F.charqueStep(cellarCorned, cellar)
-check("a Corned piece in a basement stack spoils as at 15 C", near(cellarCorned.underSpoiled, 24 * F.underCureRate(15)))
+check("a Corned piece in a basement stack spoils at the basement's temperature", near(cellarCorned.underSpoiled, 24 * F.underCureRate(cellarC)))
 
 -- A leg's stoked hours are smoke at once.
 local legFire = {}

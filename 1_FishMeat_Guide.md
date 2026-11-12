@@ -622,11 +622,12 @@ Potted Meat is the road for any season and any red meat, pork too: cuts cooked s
 | Place | Fresh | Rotten |
 |---|---|---|
 | Powered fridge, or 4 C and colder outdoors | **120 days** | 180 days |
-| Basement (15 C all year) | **60 days** | 90 days |
+| Basement (about 5 C in January, 14 C in July) | **110 to 64 days** | 165 to 96 days |
 | A room, by the season | **120 to 14 days** | 180 to 21 days |
+| A room while the grid is on (22 C) | **18 days** | 27 days |
 | Powered freezer | stops | stops |
 
-A pantry, kitchen or shed is unheated: it follows the average of the last ten days outdoors, on any floor. A winter pantry keeps it like a fridge, a spring or autumn one about two months, a July one barely two weeks. **The first portion you take** lets air under the fat: a third of the time the crock has left goes at once, only that once. Open it when you mean to eat it out.
+A pantry, kitchen or shed is unheated once the power's gone: it follows the average of the last ten days outdoors, on any floor. While the grid is on, a room is 22 C, as vanilla keeps it. A winter pantry keeps it like a fridge, a spring or autumn one about two months, a July one barely two weeks. **The first portion you take** lets air under the fat: a third of the time the crock has left goes at once, only that once. Open it when you mean to eat it out.
 
 **The fat counts.** A Lard that has been used in cooking only gives what is left of it: a tenth of a block covers one cut with a tenth of the fat, and the next cut gets none.
 

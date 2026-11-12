@@ -176,7 +176,7 @@ local function refresh(station, entry)
     local waiting, _, waitingStyles, waitingItems = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
     local _, finishedStacks, finishedStyles, _, finishedRotten = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output,
         entry.hanger and getGameTime():getWorldAgeHours())
-    local batches = readBatches(station, entry, logic, uiLogic, entry.place or Weather.placeOf(station, true))
+    local batches = readBatches(station, entry, logic, uiLogic, entry.place or Weather.placeOf(station))
     entry.busyStacks = finishedStacks + #batches
     entry.show(station, entry, entry.faceIndex, waiting, waitingStyles[1], batches, finishedStyles, waitingItems, finishedRotten)
 end
@@ -238,7 +238,7 @@ function TraditionalPreservationFishMeatWorld.inspect(station)
         table.insert(batches, { data = craftData, progress = logic:getProgress(craftData) })
     end
     table.sort(batches, function(a, b) return a.progress > b.progress end)
-    return { station = station, hanger = entry.hanger, place = entry.place or Weather.placeOf(station, true),
+    return { station = station, hanger = entry.hanger, place = entry.place or Weather.placeOf(station),
         waiting = waiting, finished = finished, finishedStacks = finishedStacks, batches = batches }
 end
 

@@ -12,7 +12,8 @@ TraditionalPreservationFishMeatInfo = TraditionalPreservationFishMeatInfo or {}
 local Info = TraditionalPreservationFishMeatInfo
 
 local KEY = "IGUI_TraditionalPreservationFishMeat_"
-local PLACES = { Open = KEY .. "PlaceOpen", Covered = KEY .. "PlaceCovered", Basement = KEY .. "PlaceBasement" }
+-- Places with a word of their own (TP Core's); anything else under a roof reads as indoors.
+local PLACES = { Open = true, Covered = true, Sheltered = true, Basement = true }
 -- A running batch's kind, by its recipe's short name.
 local KINDS = { HangFishToDry = "salt", HangFishToColdDry = "cold", HangMeatToDry = "meat",
     PressSaltedFish = "fishCure", PressSaltedMeat = "corn", [F.LONG_CURE_RECIPE] = "long" }
@@ -75,7 +76,7 @@ end
 function Info.rows(found, ledger, now, fire)
     local hanger = found.hanger
     local rows, bars, notes = {}, {}, {}
-    table.insert(rows, { KEY .. "Place", getText(PLACES[found.place] or KEY .. "PlaceIndoors") })
+    table.insert(rows, { KEY .. "Place", UI.placeName(PLACES[found.place] and found.place or "Sheltered") })
     if hanger then
         table.insert(rows, { KEY .. "InfoHolds", UI.say(KEY .. "InfoStacks", tostring(found.finishedStacks + #found.batches),
             tostring(hanger.stacks), tostring(hanger.stackWeight)) })

@@ -54,10 +54,10 @@ local function refusal(slot, item, queued)
         return "IGUI_TraditionalPreservationFishMeat_MixedStack"
     end
     local hanger = F.hangerFor(spriteIndex(entity))
-    local porkRefused = F.meatRefusal(hanger, hanger.closed and "Sheltered" or Weather.placeOf(entity, true), item)
+    local porkRefused = F.meatRefusal(hanger, hanger.closed and "Sheltered" or Weather.placeOf(entity), item)
     if porkRefused then return porkRefused end
     if F.hangKind(item:getFullType()) == "cold" then
-        local coldRefused = F.coldRefusal(hanger.closed and "Sheltered" or Weather.placeOf(entity, true))
+        local coldRefused = F.coldRefusal(hanger.closed and "Sheltered" or Weather.placeOf(entity))
         if coldRefused then return coldRefused end
     end
     return F.frameRefusal(hanger, TraditionalPreservationFishMeatWorld.busyStacks(entity), waiting, weight,
@@ -363,7 +363,7 @@ local function onFillPalletMenu(playerNum, context, worldobjects, test)
         if sprite and sprite:getName() == Tiles.PALLET then
             if test then return end
             local square = object:getSquare()
-            local speed = F.palletSpeed(Weather.placeOf(object, true), square and square:getZ() or 0)
+            local speed = F.palletSpeed(Weather.placeOf(object), square and square:getZ() or 0)
             local text = PALLET_PLACES[speed]
                 and getText("ContextMenu_TraditionalPreservationFishMeat_PalletSpeed", tostring(speed), getText(PALLET_PLACES[speed]))
                 or getText("ContextMenu_TraditionalPreservationFishMeat_PalletNoSpeed")

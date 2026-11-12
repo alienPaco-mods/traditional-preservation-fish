@@ -1,5 +1,13 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.23
+- **TP Core's new places** (2026-11-12, consistency sweep step C): `Weather.placeOf` gives Covered by itself (the
+  `true` flag is gone from every call). Potted Meat keeps by Core's place temperature (`F.pottedTemperature` is a
+  plain call): a room the season's mean, 22 C while the grid is on, a basement about 5 C in January and 14 C in July
+  (110 to 64 days fresh). Under-salted meat in a basement stack spoils by the basement's own temperature, and its
+  popup shows it. Station Info's place words are Core's. Dry cure's basement rate is unchanged (step D). README,
+  guide, DEVHELP, sandbox tooltip.
+
 ## 0.4.22
 - **Debug console by the series' convention** (2026-11-12, consistency sweep; no old names kept, the mod was never
   released): `TPFM.fish(name, n, weight, stage)` (the count now comes before the weight; stage `"cured"` or
