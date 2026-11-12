@@ -21,7 +21,7 @@ function TPFM.help()
     say("TPFM.wind()                start a log of live wind every 10 minutes; again to print it beside the forecast")
     say("TPFM.age(hours)            give every hanging stack this many hours of perfect drying weather (Corned meat in a Smokehouse spoils with it)")
     say("TPFM.spoil(hours)          add this many hours of spoiling weather, to test rotting stacks")
-    say("TPFM.underSalt(hours)      add this many hours of a 10 C shed (default 168) for Corned meat hanging in a Smokehouse")
+    say("TPFM.underSalt(hours)      add this many hours of a 10 C shed (default 168) for Corned meat hanging in a Smokehouse, a room or under a roof")
     say("TPFM.frost(hours)          add this many hours of hard frost, to test early frost on fresh cold stacks")
     say("TPFM.heat(hours)           add this many hours of hot sun, to test it on fresh open salt stacks")
     say("TPFM.warmCure(hours)       add this many hours of a warm cure at 25 C, to test a warm cure spoiling a running tub")
@@ -63,6 +63,12 @@ function TPFM.weather()
     say("Loft (" .. n(Weather.placeTemperature(ledger, "Loft")) .. " C): salt fish " .. n(ledger.loftShelteredRate)
         .. ", charque " .. n(ledger.charqueLoftRate) .. ", dry cure " .. n(ledger.dryCureLoftRate)
         .. "; a tub there: warm cure " .. tostring(ledger.loftWarmCuring == true) .. ", long cure " .. tostring(ledger.loftLongCuring == true))
+    say("Room (" .. n(Weather.placeTemperature(ledger, "Sheltered")) .. " C): salt fish " .. n(ledger.roomShelteredRate)
+        .. ", charque " .. n(ledger.charqueRoomRate) .. ", dry cure " .. n(ledger.dryCureRoomRate)
+        .. "; a tub there: warm cure " .. tostring(ledger.roomWarmCuring == true) .. ", long cure " .. tostring(ledger.roomLongCuring == true))
+    say("Under a roof (" .. n(Weather.placeTemperature(ledger, "Covered")) .. " C): dry cure " .. n(ledger.dryCureCoveredRate)
+        .. "; a tub in the open air (the day's): warm cure " .. tostring(ledger.openWarmCuring == true) .. ", long cure "
+        .. tostring(ledger.openLongCuring == true) .. "; the Smokehouse's indoors figures above go by the day's temperature")
     say("Spoiling now: unsalted " .. tostring(ledger.rawSpoiling == true) .. ", salted " .. tostring(ledger.saltSpoiling == true)
         .. ", warm cure " .. tostring(ledger.warmCuring == true) .. ", hot sun " .. tostring((ledger.temperature or 0) > F.HEAT_ABOVE))
     say("Totals (hours at full speed): open " .. n(ledger.open) .. ", covered " .. n(ledger.covered) .. ", indoors " .. n(ledger.sheltered)
@@ -127,6 +133,9 @@ function TPFM.age(hours)
     ledger.basementSheltered, ledger.charqueBasement = (ledger.basementSheltered or 0) + hours, (ledger.charqueBasement or 0) + hours
     ledger.dryCureLoft, ledger.underCureLoft = (ledger.dryCureLoft or 0) + hours, (ledger.underCureLoft or 0) + under
     ledger.loftSheltered, ledger.charqueLoft = (ledger.loftSheltered or 0) + hours, (ledger.charqueLoft or 0) + hours
+    ledger.dryCureRoom, ledger.underCureRoom = (ledger.dryCureRoom or 0) + hours, (ledger.underCureRoom or 0) + under
+    ledger.roomSheltered, ledger.charqueRoom = (ledger.roomSheltered or 0) + hours, (ledger.charqueRoom or 0) + hours
+    ledger.dryCureCovered, ledger.underCureCovered = (ledger.dryCureCovered or 0) + hours, (ledger.underCureCovered or 0) + under
     say(string.format("Added %.0f hours of perfect drying weather. Stacks update within a few seconds. Corned meat in a Smokehouse spoiled %.0f%% (a 12 C shed).", hours, under * 100))
 end
 
@@ -134,16 +143,20 @@ function TPFM.spoil(hours)
     hours = hours or 24
     local ledger = F.getLedger()
     ledger.rawSpoil, ledger.saltSpoil = ledger.rawSpoil + hours, ledger.saltSpoil + hours
+    ledger.rawSpoilOpen = (ledger.rawSpoilOpen or 0) + hours
+    for _, place in ipairs({ "Room", "Loft", "Basement" }) do ledger["saltSpoil" .. place] = (ledger["saltSpoil" .. place] or 0) + hours end
     say(string.format("Added %.0f hours of spoiling weather. A fresh cold stack rots after %d.", hours, F.RAW_SPOIL_HOURS))
 end
 
--- Hours of a 10 C shed for under-salted (Corned) meat hanging in a Smokehouse: rotten after F.UNDER_CURE_HOURS.
+-- Hours of a 10 C shed for under-salted (Corned) meat hanging in a Smokehouse, a room or under a roof: rotten after
+-- F.UNDER_CURE_HOURS.
 function TPFM.underSalt(hours)
     hours = hours or 168
     local ledger = F.getLedger()
     local share = hours / F.UNDER_CURE_HOURS
     ledger.underCure, ledger.underCureBanked, ledger.underCureStoked = ledger.underCure + share, ledger.underCureBanked + share, ledger.underCureStoked + share
-    say(string.format("Added %.0f hours of a 10 C shed for Corned meat in the Smokehouse. It rots after %.0f.", hours, F.UNDER_CURE_HOURS))
+    ledger.underCureRoom, ledger.underCureCovered = (ledger.underCureRoom or 0) + share, (ledger.underCureCovered or 0) + share
+    say(string.format("Added %.0f hours at 10 C for Corned meat in the Smokehouse, a room or under a roof. It rots after %.0f.", hours, F.UNDER_CURE_HOURS))
 end
 
 function TPFM.frost(hours)
@@ -177,7 +190,9 @@ function TPFM.warmCure(hours)
     hours = hours or 24
     local ledger = F.getLedger()
     ledger.warmCure = ledger.warmCure + hours * 1.5
-    say(string.format("Added %.0f hours of a warm cure at 25 C: about %.0f%% off a batch in a tub above ground (a basement or loft tub goes by its own).",
+    ledger.warmCureRoom = (ledger.warmCureRoom or 0) + hours * 1.5
+    ledger.warmCureOpen = (ledger.warmCureOpen or 0) + hours * 1.5
+    say(string.format("Added %.0f hours of a warm cure at 25 C: about %.0f%% off a batch in a tub above ground or in a room (a basement or loft tub goes by its own).",
         hours, hours * 1.5 * F.WARM_CURE_SHARE / F.RAW_SPOIL_HOURS * 100))
 end
 
@@ -187,7 +202,9 @@ function TPFM.longCure(hours)
     hours = hours or 168
     local ledger = F.getLedger()
     ledger.longCureSpoil = (ledger.longCureSpoil or 0) + hours / F.LONG_CURE_ROT_HOURS
-    say(string.format("Added %.0f hours of a 15 C season to running Country Cures above ground: %.0f%% spoiled (a basement or loft tub goes by its own).", hours, hours / F.LONG_CURE_ROT_HOURS * 100))
+    ledger.longCureRoom = (ledger.longCureRoom or 0) + hours / F.LONG_CURE_ROT_HOURS
+    ledger.longCureOpen = (ledger.longCureOpen or 0) + hours / F.LONG_CURE_ROT_HOURS
+    say(string.format("Added %.0f hours of a 15 C season to running Country Cures above ground and in a room: %.0f%% spoiled (a basement or loft tub goes by its own).", hours, hours / F.LONG_CURE_ROT_HOURS * 100))
 end
 
 function TPFM.mature(days)

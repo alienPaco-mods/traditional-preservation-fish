@@ -107,8 +107,11 @@ local function drawStackTooltip(slot, tooltip, kind)
         local modData = slot.craftRecipeData:getModData()
         local place = modData.basement and "Basement" or modData.loft and "Loft" or modData.sheltered and "Sheltered" or modData.covered and "Covered" or "Open"
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Place", UI.placeName(place))
-        -- A basement or loft stack dries by that place's temperature, not the day's.
-        local celsius = (place == "Basement" or place == "Loft") and F.ownTemperature(ledger, place) or ledger.temperature or 0
+        -- A basement, loft, room or roofed stack dries by that place's temperature (Core's); the Smokehouse and the
+        -- open air go by the day's.
+        local own = place == "Basement" or place == "Loft" or place == "Sheltered" and not modData.inShed
+            or place == "Covered"
+        local celsius = own and F.ownTemperature(ledger, place) or ledger.temperature or 0
         local word = F.temperatureWord(isCold, celsius, place == "Open")
         if status.dryCuring then
             word = F.dryCureTemperatureWord(status.shedTemperature)

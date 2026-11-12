@@ -52,10 +52,10 @@ local function weatherAt(day, hour)
 end
 
 -- Each stack goes through the mod's own step every hour, as its spoilage depends on how far it has dried.
--- place is nil (open), "covered" (a roof, no room) or "sheltered" (indoors).
+-- place is nil (open), "covered" (a roof, no room) or "sheltered" (a room, by Core's room temperature).
 local function runSaltStack(start, snapshots, place)
     local first = snapshots[start]
-    local modData = { dried = 0, spoiled = 0, lastOpen = first.open, lastSheltered = first.sheltered, lastCovered = first.covered,
+    local modData = { dried = 0, spoiled = 0, lastOpen = first.open, lastSheltered = first.sheltered, lastRoomSheltered = first.roomSheltered, lastCovered = first.covered,
         lastSaltSpoil = first.saltSpoil, lastHeat = first.heat }
     if place then modData[place] = true end
     local index = start
@@ -69,8 +69,8 @@ end
 
 local function runColdStack(start, snapshots, place)
     local first = snapshots[start]
-    local modData = { dried = 0, spoiled = 0, lastCold = first.cold, lastColdCovered = first.coldCovered, lastRawSpoil = first.rawSpoil,
-        lastHardFrost = first.hardFrost, lastColdWet = first.coldWet }
+    local modData = { dried = 0, spoiled = 0, lastCold = first.cold, lastColdCovered = first.coldCovered, lastRawSpoil = first.rawSpoil, lastRawSpoilOpen = first.rawSpoilOpen,
+        lastHardFrost = first.hardFrost, lastHardFrostCovered = first.hardFrostCovered, lastColdWet = first.coldWet }
     if place then modData[place] = true end
     local index = start
     while snapshots[index + 1] do
@@ -91,9 +91,9 @@ local function report(worlds)
             for hour = 0, 23 do
                 local now = (index - 1) * 24 + hour + 1
                 T.advance(ledger, now, weatherAt(day, hour))
-                snapshots[now] = { open = ledger.open, sheltered = ledger.sheltered, covered = ledger.covered, cold = ledger.cold,
-                    coldCovered = ledger.coldCovered, rawSpoil = ledger.rawSpoil, saltSpoil = ledger.saltSpoil,
-                    hardFrost = ledger.hardFrost, coldWet = ledger.coldWet, heat = ledger.heat, warmCure = ledger.warmCure }
+                snapshots[now] = { open = ledger.open, sheltered = ledger.sheltered, roomSheltered = ledger.roomSheltered, covered = ledger.covered, cold = ledger.cold,
+                    coldCovered = ledger.coldCovered, rawSpoil = ledger.rawSpoil, rawSpoilOpen = ledger.rawSpoilOpen, saltSpoil = ledger.saltSpoil,
+                    hardFrost = ledger.hardFrost, hardFrostCovered = ledger.hardFrostCovered, coldWet = ledger.coldWet, heat = ledger.heat, warmCure = ledger.warmCure }
             end
         end
         for index, day in ipairs(days) do

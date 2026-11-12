@@ -275,7 +275,7 @@ check("and shows its real rate and progress", coldLines["IGUI_TraditionalPreserv
 check("with no warning in a cold season", coldLines["IGUI_TraditionalPreservationFishMeat_Spoilage:"] == nil)
 local saltLines = stackLines("HangFishToDry", { dried = 144 }, winter)
 check("a salt stack shows its own rate", saltLines["IGUI_TraditionalPreservationFishMeat_Method:"] == "IGUI_TraditionalPreservationFishMeat_MethodSalt" and saltLines["IGUI_TraditionalPreservationFishMeat_Rate:"] == "44%")
-local warm = { wetness = 0, temperature = 18, coldRate = 0, openRate = 0.8, shelteredRate = 0.52, rawSpoiling = true }
+local warm = { wetness = 0, temperature = 18, coldRate = 0, openRate = 0.8, shelteredRate = 0.52, rawSpoiling = true, rawSpoilingOpen = true }
 local warmLines = stackLines("HangFishToColdDry", { dried = 10, spoiled = 0.4 }, warm)
 check("a warm season stops cold drying", warmLines["IGUI_TraditionalPreservationFishMeat_Rate:"] == "IGUI_TraditionalPreservationFishMeat_StoppedTooWarm")
 check("and warns of spoilage", warmLines["IGUI_TraditionalPreservationFishMeat_Spoilage:"] == "IGUI_TraditionalPreservationFishMeat_SpoilingWarm")

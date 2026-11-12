@@ -489,7 +489,8 @@ for hour = 1, 12 do
     T.advance(mild, hours, { temperature = 15, humidity = 0.2, precipitation = 0 })
 end
 T.onColdDryUpdate(mildStack)
-check("a warm spell in winter doesn't spoil it", mildStack.modData.spoiled == 0)
+check("twelve warm hours in winter spoil an open stack, by the day's (step I), not the season's", mildStack.modData.spoiled > 0
+    and mild.rawSpoil == 0)
 
 local warmStack, warm = coldStack()
 warm.seasonTemperature = 20
@@ -517,7 +518,7 @@ check("an open shed dries cold fish at three quarters", near(shedStack.modData.d
 -- Early frost and wet add to the spoilage, the more the wetter the fish
 local function coldStep(dried, totals, sheltered, covered)
     local ledger = T.newLedger(0)
-    local modData = { dried = dried, spoiled = 0, lastCold = 0, lastRawSpoil = 0, lastHardFrost = 0, lastColdWet = 0, sheltered = sheltered, covered = covered }
+    local modData = { dried = dried, spoiled = 0, lastCold = 0, lastRawSpoil = 0, lastRawSpoilOpen = 0, lastHardFrost = 0, lastColdWet = 0, sheltered = sheltered, covered = covered }
     for key, value in pairs(totals) do ledger[key] = value end
     T.coldStep(modData, ledger)
     return modData
@@ -530,8 +531,11 @@ check("lying wet early harms it", near(coldStep(0, { coldWet = 48 }).spoiled, T.
 check("but not once it has a dry skin", coldStep(T.COLD_DRY_HOURS * 0.3, { coldWet = 48 }).spoiled == 0)
 check("a roof keeps the rain off", coldStep(0, { coldWet = 48 }, true).spoiled == 0 and coldStep(0, { coldWet = 48 }, nil, true).spoiled == 0)
 check("frost and wet together stop at the cap", coldStep(0, { hardFrost = 150, coldWet = 150 }).spoiled == T.DAMAGE_CAP)
-check("rot weighs by how wet it still is", near(coldStep(T.COLD_DRY_HOURS * 0.9, { rawSpoil = T.RAW_SPOIL_HOURS }).spoiled, 0.1))
-check("and still rots a fresh stack", near(coldStep(0, { rawSpoil = T.RAW_SPOIL_HOURS }).spoiled, 1))
+check("rot weighs by how wet it still is, squared (the skin, step I)", near(coldStep(T.COLD_DRY_HOURS * 0.5,
+    { rawSpoilOpen = T.RAW_SPOIL_HOURS }).spoiled, 0.25) and near(coldStep(T.COLD_DRY_HOURS * 0.9, { rawSpoil = T.RAW_SPOIL_HOURS },
+    nil, true).spoiled, 0.01))
+check("and still rots a fresh stack, in the open by the day's", near(coldStep(0, { rawSpoilOpen = T.RAW_SPOIL_HOURS }).spoiled, 1)
+    and coldStep(0, { rawSpoil = T.RAW_SPOIL_HOURS }).spoiled == 0)
 local older = { dried = 0, spoiled = 0, lastCold = 0, lastRawSpoil = 0 }
 local olderLedger = T.newLedger(0)
 olderLedger.hardFrost, olderLedger.coldWet = 500, 500
@@ -1270,7 +1274,8 @@ end)()
     local open, covered, indoors = stack("open"), stack("covered"), stack("indoors")
     check("a meat stack hangs as meat", open.modData.style == T.STYLE_MEAT and open.modData.dried == 0)
     shared.charque, shared.charqueCovered, shared.charqueSheltered = shared.charque + 60, shared.charqueCovered + 60, shared.charqueSheltered + 30
-    shared.dryCure, shared.underCure = shared.dryCure + 20, shared.underCure + 0.1
+    shared.dryCureRoom, shared.underCureRoom = shared.dryCureRoom + 20, shared.underCureRoom + 0.1
+    shared.dryCure, shared.underCure = shared.dryCure + 99, shared.underCure + 0.5
     for _, data in ipairs({ open, covered, indoors }) do T.onCharqueUpdate(data) end
     check("each place reads its own total", open.modData.dried == 60 and covered.modData.dried == 60)
     check("in a room there is no charque: Corned meat dry cures, under-salted (0.4.15)", near(indoors.modData.dried, 20)

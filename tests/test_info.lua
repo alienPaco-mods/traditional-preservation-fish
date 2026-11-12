@@ -53,7 +53,7 @@ local beam = F.hangerFor(F.spriteIndex("traditionalpreservationfishmeat_02_0"))
 -- A Beam in the open on a dry summer day: a salt stack two thirds dried, a stockfish stack that can't dry, and a
 -- finished stack waiting.
 local ledger = { temperature = 22, seasonTemperature = 19, wind = 0.3, wetness = 0, coldWetness = 0, openRate = 1,
-    coveredRate = 1, shelteredRate = 0.65, coldRate = 0, coldCoveredRate = 0, rawSpoiling = true, saltSpoiling = false }
+    coveredRate = 1, shelteredRate = 0.65, coldRate = 0, coldCoveredRate = 0, rawSpoiling = true, rawSpoilingOpen = true, saltSpoiling = false }
 local shown = Info.rows({ hanger = beam, place = "Open", waiting = { piece(1), piece(2) }, finished = 3, finishedStacks = 1,
     batches = { batch("HangFishToDry", { dried = 192, spoiled = 0 }, 0.67), batch("HangFishToColdDry", { dried = 0, spoiled = 0.2 }, 0) } },
     ledger, 1000)

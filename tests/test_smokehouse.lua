@@ -198,12 +198,12 @@ check("a stack from before the smoulder's warmth starts its warm totals now, gai
 check("a stack by a burning fire knows how it burns", cool.burning == Hearth.BANKED)
 local rates = { shelteredRate = 0.4, bankedRate = 0.6, stokedRate = 0.9, charqueShelteredRate = 0.3, charqueBankedRate = 0.5,
     charqueStokedRate = 0.8 }
-check("banked, its Drying Rate is the banked fire's", near(F.stackStatus(false, { sheltered = true, burning = Hearth.BANKED, dried = 0 }, rates).rate, 0.6)
-    and near(F.charqueStatus({ sheltered = true, burning = Hearth.BANKED, dried = 0 }, rates).rate, 0.5))
-check("stoked, the stoked fire's", near(F.stackStatus(false, { sheltered = true, burning = Hearth.STOKED, dried = 0 }, rates).rate, 0.9)
-    and near(F.charqueStatus({ sheltered = true, burning = Hearth.STOKED, dried = 0 }, rates).rate, 0.8))
-check("a stack saved burning before reads banked", near(F.stackStatus(false, { sheltered = true, burning = true, dried = 0 }, rates).rate, 0.6))
-check("with the fire out, Sheltered's", near(F.stackStatus(false, { sheltered = true, dried = 0 }, rates).rate, 0.4))
+check("banked, its Drying Rate is the banked fire's", near(F.stackStatus(false, { sheltered = true, inShed = true, burning = Hearth.BANKED, dried = 0 }, rates).rate, 0.6)
+    and near(F.charqueStatus({ sheltered = true, inShed = true, burning = Hearth.BANKED, dried = 0 }, rates).rate, 0.5))
+check("stoked, the stoked fire's", near(F.stackStatus(false, { sheltered = true, inShed = true, burning = Hearth.STOKED, dried = 0 }, rates).rate, 0.9)
+    and near(F.charqueStatus({ sheltered = true, inShed = true, burning = Hearth.STOKED, dried = 0 }, rates).rate, 0.8))
+check("a stack saved burning before reads banked", near(F.stackStatus(false, { sheltered = true, inShed = true, burning = true, dried = 0 }, rates).rate, 0.6))
+check("with the fire out, Sheltered's", near(F.stackStatus(false, { sheltered = true, inShed = true, dried = 0 }, rates).rate, 0.4))
 
 -- The smoulder's warmth: the shed reads BANKED_LIFT (15) / STOKED_LIFT (20) warmer, its humidity halved per 10 C, outdoor wind.
 local damp = { temperature = 5, humidity = 0.8, wind = F.WIND_GOOD, precipitation = 0 }
@@ -403,6 +403,88 @@ check("a loft tub pressed before step H keeps the season's totals", F.cureSpoile
 hot.gridOn = true
 check("while the grid is on the loft is the grid's 22 C here too", Weather.placeTemperature(hot, "Loft") == Weather.GRID_ROOM_C)
 hot.gridOn = nil
+
+-- Sweep step I: a room and a roof by Core's place temperature; the Smokehouse (a shed) keeps the day's.
+local roomFish = { dried = 0, spoiled = 0, sheltered = true, lastOpen = hot.open, lastSheltered = hot.sheltered,
+    lastCovered = hot.covered, lastSaltSpoil = hot.saltSpoil, lastHeat = hot.heat, lastRoomSheltered = hot.roomSheltered }
+local shedFish = { dried = 0, spoiled = 0, sheltered = true, inShed = true, lastOpen = hot.open, lastSheltered = hot.sheltered,
+    lastCovered = hot.covered, lastSaltSpoil = hot.saltSpoil, lastHeat = hot.heat, lastRoomSheltered = hot.roomSheltered }
+local roomCure = { cureNeed = 504, longStack = true, underCured = true, sheltered = true, dried = 0, spoiled = 0,
+    lastDryCure = hot.dryCure, lastUnderCure = hot.underCure, lastCureRoom = hot.dryCureRoom, lastUnderRoom = hot.underCureRoom,
+    lastSaltSpoil = hot.saltSpoil, lastCharqueRain = hot.charqueRain }
+local roofCure = { cureNeed = 504, longStack = true, underCured = true, covered = true, dried = 0, spoiled = 0,
+    lastDryCure = hot.dryCure, lastUnderCure = hot.underCure, lastCureCovered = hot.dryCureCovered,
+    lastUnderCovered = hot.underCureCovered, lastSaltSpoil = hot.saltSpoil, lastCharqueRain = hot.charqueRain }
+local cool = { temperature = 4, humidity = 0.3, precipitation = 0, wind = 0 }
+F.advance(hot, 96, cool)
+local roomC, roofC = Weather.placeTemperature(hot, "Sheltered"), Weather.placeTemperature(hot, "Covered")
+F.saltStep(roomFish, hot)
+F.saltStep(shedFish, hot)
+F.charqueStep(roomCure, hot)
+F.charqueStep(roofCure, hot)
+check("a room reads the season's mean, not a cold day's", roomC > cool.temperature and roomC == roofC)
+check("salt fish in a room dries by it", near(hot.roomShelteredRate, math.max(F.temperatureRate(roomC) * F.airRate(0.3) * F.SHELTERED_RATE,
+    F.MIN_DRY_RATE)) and near(roomFish.dried, 24 * hot.roomShelteredRate) and F.stackStatus(false, roomFish, hot).rate == hot.roomShelteredRate)
+check("in the Smokehouse by the day's", near(shedFish.dried, 24 * hot.shelteredRate) and shedFish.dried < roomFish.dried
+    and F.stackStatus(false, shedFish, hot).rate == hot.shelteredRate)
+check("under a roof by the season's mean too", near(hot.coveredRate, math.max(F.temperatureRate(roofC) * F.airRate(0.3), F.MIN_DRY_RATE))
+    and near(hot.charqueCoveredRate, F.charqueWarmRate(roofC) * F.airRate(0.3) * F.charqueWindRate(0)))
+check("dry curing in a room and under a roof go by their own, and Corned meat spoils by it",
+    near(roomCure.dried, 24 * F.dryCureRate(roomC) * F.airRate(0.3)) and near(roomCure.underSpoiled, 24 * F.underCureRate(roomC))
+    and near(roofCure.dried, 24 * F.dryCureRate(roofC) * F.airRate(0.3)) and F.charqueStatus(roomCure, hot).shedTemperature == roomC
+    and near(F.charqueStatus(roofCure, hot).rate, hot.dryCureCoveredRate))
+local spring = F.newLedger(0)
+F.advance(spring, 300, { temperature = 8, humidity = 0.3, precipitation = 0, wind = 0 })
+local roomTub = { sheltered = true, lastWarmCure = spring.warmCure, lastWarmCureRoom = spring.warmCureRoom,
+    lastLongCure = spring.longCureSpoil, lastLongCureRoom = spring.longCureRoom }
+local oldRoomTub = { sheltered = true, lastWarmCure = spring.warmCure, lastLongCure = spring.longCureSpoil }
+local shedTub = { covered = true, lastWarmCure = spring.warmCure, lastLongCure = spring.longCureSpoil }
+Weather.share({ gridOn = true })
+F.advance(spring, 324, { temperature = 8, humidity = 0.3, precipitation = 0, wind = 0 })
+Weather.share(nil)
+check("while the grid is on a room is 22 C: salt fish dries faster", near(spring.roomShelteredRate,
+    F.temperatureRate(Weather.GRID_ROOM_C) * F.airRate(0.3) * F.SHELTERED_RATE) and spring.roomShelteredRate > spring.coveredRate)
+check("and a tub in a room warm cures, one under a roof in an 8 C spring does not", F.cureSpoiled(roomTub, spring) > 0
+    and F.tubSpoiling(roomTub, spring) and F.cureSpoiled(shedTub, spring) == 0 and not F.tubSpoiling(shedTub, spring))
+check("a room tub pressed before step I keeps the season's totals", F.cureSpoiled(oldRoomTub, spring) == 0)
+
+-- Step I, 5 and 6 (user): stockfish under a roof by the season's mean; a tub in the open air by the day's.
+local autumn = F.newLedger(0)
+F.advance(autumn, 300, { temperature = 3, humidity = 0.3, precipitation = 0, wind = F.WIND_GOOD })
+local openTub = { lastWarmCure = autumn.warmCure, lastWarmCureOpen = autumn.warmCureOpen, lastLongCure = autumn.longCureSpoil,
+    lastLongCureOpen = autumn.longCureOpen }
+local roofTub = { covered = true, lastWarmCure = autumn.warmCure, lastWarmCureOpen = autumn.warmCureOpen,
+    lastLongCure = autumn.longCureSpoil, lastLongCureOpen = autumn.longCureOpen }
+local roofCold = { covered = true }
+F.advance(autumn, 306, { temperature = 24, humidity = 0.3, precipitation = 0, wind = F.WIND_GOOD })
+check("a warm afternoon stops cold drying in the open, not under a roof (the season's mean)", autumn.coldRate == 0
+    and near(autumn.coldCoveredRate, F.coldRate(autumn.seasonTemperature) * F.windRate(F.WIND_GOOD) * F.COVERED_COLD_RATE)
+    and F.stackStatus(true, roofCold, autumn).reason == nil and F.stackStatus(true, {}, autumn).reason == "TooWarm")
+check("and warm cures a tub in the open air, not one under a roof", F.cureSpoiled(openTub, autumn) > 0
+    and F.tubSpoiling(openTub, autumn) and F.cureSpoiled(roofTub, autumn) == 0 and not F.tubSpoiling(roofTub, autumn))
+
+-- Step I, 9 (user): a muggy season spoils salt fish and charque by the place's temperature; dry curing is spared.
+local july = F.newLedger(0)
+F.advance(july, 400, { temperature = 21, humidity = 0.6, precipitation = 0, wind = 0 })
+local function saltStack(extra)
+    local stack = { dried = 0, spoiled = 0, lastOpen = july.open, lastSheltered = july.sheltered, lastCovered = july.covered,
+        lastHeat = july.heat, lastBasementSheltered = july.basementSheltered, lastLoftSheltered = july.loftSheltered,
+        lastRoomSheltered = july.roomSheltered, lastSaltSpoil = july.saltSpoil, lastSaltSpoilRoom = july.saltSpoilRoom,
+        lastSaltSpoilLoft = july.saltSpoilLoft, lastSaltSpoilBasement = july.saltSpoilBasement }
+    for key, value in pairs(extra) do stack[key] = value end
+    return stack
+end
+local loftSalt, cellarSalt, porchSalt = saltStack({ loft = true, sheltered = true }), saltStack({ basement = true, sheltered = true }),
+    saltStack({ covered = true })
+local loftHam = saltStack({ loft = true, sheltered = true, cureNeed = 504, longStack = true, lastCureLoft = july.dryCureLoft,
+    lastUnderLoft = july.underCureLoft, lastCharqueRain = july.charqueRain })
+F.advance(july, 448, { temperature = 21, humidity = 0.6, precipitation = 0, wind = 0 })
+for _, stack in ipairs({ loftSalt, cellarSalt, porchSalt }) do F.saltStep(stack, july) end
+F.charqueStep(loftHam, july)
+check("a muggy July loft (over 22 C) spoils salt fish, a cellar and a 21 C porch don't", Weather.placeTemperature(july, "Loft") > 22
+    and near(loftSalt.spoiled, 48 / F.SALT_SPOIL_HOURS) and cellarSalt.spoiled == 0 and porchSalt.spoiled == 0
+    and F.stackStatus(false, loftSalt, july).spoiling and not F.stackStatus(false, cellarSalt, july).spoiling)
+check("dry curing in the same loft is spared", loftHam.spoiled == 0 and not F.charqueStatus(loftHam, july).spoiling)
 
 -- A leg's stoked hours are smoke at once.
 local legFire = {}

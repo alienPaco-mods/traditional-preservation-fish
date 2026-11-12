@@ -1,5 +1,24 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.26
+- **Rooms and roofs go by TP Core's temperature** (2026-11-12, consistency sweep step I; the user's rule, one place,
+  one temperature). A room is the season's mean, 22 C while the grid is on; under an open roof the season's mean.
+  Salt fish, charque and dry curing hung in a room (`roomSheltered`, `charqueRoom`, `dryCureRoom`) or under a roof
+  (`covered`, `charqueCovered`, `dryCureCovered`) dry by it, Corned meat spoils by it (`underCureRoom`,
+  `underCureCovered`), and a Salting Tub in a room minds it for its warm and long cures (`warmCureRoom`,
+  `longCureRoom`; a batch started before keeps the season's). On the grid a room dries everything at summer speed
+  but a press there warm cures (about 30% on two days) and a long cure rots: the tub's 20 C and 10 C limits are
+  kept (user). The Smokehouse is a shed in the outside air and keeps the day's temperature (user). Cold drying
+  under a roof goes by the season's mean too (user: 55 to 60 days, November and March hangs finish;
+  `hardFrostCovered`), and a tub in the open air by the day's (user: `warmCureOpen`, `longCureOpen`; afternoons
+  over 20 C warm cure it May to September). Gutted fish in the open air spoils by the day's temperature (user:
+  `rawSpoilOpen`), and every stockfish stack's warm rot is weighted by its wetness squared (the skin, user): open
+  frames November to February, a roof October to March. Muggy-season spoiling of salt fish and charque goes by the
+  place's temperature (user: `saltSpoilRoom`, `saltSpoilLoft`, `saltSpoilBasement`; a July loft spoils, a cellar never),
+  and dry curing is spared it. Popup and station window show the room's temperature; `TPFM.weather()` prints
+  Room and roof lines, `TPFM.age`, `warmCure` and `longCure` reach them. Season report golden updated, tests, README,
+  guide.
+
 ## 0.4.25
 - **The loft goes by its own temperature** (2026-11-12, consistency sweep step H, TP Core's new place: the top
   storey). Salt fish, charque and dry curing hung there dry by the loft's temperature, not the day's (`loftSheltered`,

@@ -210,7 +210,7 @@ Pick the cure, load the tub, press **Craft**. Until then the tub stands open and
 
 The clock runs while you're away. The tub stays closed until you've taken every piece out.
 
-- **Mind a warm spell.** When the last ten days average above 20 C, the flesh by the spine starts to spoil (bone taint) before the salt reaches it, and the finished batch keeps less long: about a seventh off for a day at 21 C, over a third for two days at 25 C. Hover the batch to see it (*Spoiling (Warm cure)*). Salt in spring and autumn, or cure small fish. **The long cure wants the cold**: its salt takes weeks to reach the bone, so it is safe only while the last ten days average **10 C or less**, about **October to April**. Warmer, it spoils in step: at 12 C a leg loses two fifths of its keeping and cuts a fifth; at 15 C a leg rots in the tub and cuts lose half. The short cure and fish only mind 20 C.
+- **Mind a warm spell.** When the last ten days average above 20 C, the flesh by the spine starts to spoil (bone taint) before the salt reaches it, and the finished batch keeps less long: about a seventh off for a day at 21 C, over a third for two days at 25 C. Hover the batch to see it (*Spoiling (Warm cure)*). Salt in spring and autumn, or cure small fish. **A tub in a room minds the room**: 22 C while the power grid is on, so in the first weeks a batch indoors loses about a third of its keeping on a two-day press and a long cure rots. Put the tub under an open roof, in an outbuilding or in a basement. **The long cure wants the cold**: its salt takes weeks to reach the bone, so it is safe only while the last ten days average **10 C or less**, about **October to April**. Warmer, it spoils in step: at 12 C a leg loses two fifths of its keeping and cuts a fifth; at 15 C a leg rots in the tub and cuts lose half. The short cure and fish only mind 20 C.
 - **Salt Cured** fish, **Corned** and **Country Cured** meat keep 7 / 14 days and are raw: cook them before eating, or hang them.
 
 > *Corned* is the old word for dry-salted with coarse grains of salt, "corns": corned beef was a short cure, boiled with cabbage, long before it came in tins. *Country cured* is what Kentucky still calls a ham rubbed in dry salt and left in the box: "a day and a half to the pound", hogs killed after the first hard frost so the meat cools before the salt reaches the bone.
@@ -246,8 +246,8 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 
 **Where it hangs** (the stack's *Place*):
 - **Open air**: no roof overhead. Walls with no roof are still the open air. Rain pauses drying until the wet has dried off.
-- **Under an open roof**: a porch, an open shed, a floor laid on the level above. Rain never reaches it, and it's **in the shade**.
-- **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 11).
+- **Under an open roof**: a porch, an open shed, a floor laid on the level above. Rain never reaches it, and it's **in the shade**: salt fish, charque, dry curing and stockfish go by the **average of the last ten days**, not the afternoon's heat or the night's frost: a warm afternoon in November stops stockfish in the open, not under a roof. A **Salting Tub in the open air** feels the day: afternoons over 20 C warm cure it (May to September), so give it a roof.
+- **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. A room goes by the **average of the last ten days**, and is **22 C while the power grid is on**, as vanilla keeps it: drying runs at summer speed all year, but so does spoiling (see the Salting Tub below). The **Smokehouse** is a shed in the outside air: it goes by **the day's temperature**, plus its fire. Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 11).
 - **Loft**: the top storey: a room upstairs with no room over it. Indoors, but at the **loft's own temperature**, not the day's: as indoors, plus three tenths of whatever the 10-day average is above 10 C: the sun on the roof (about 24 C in a 21 C July, no warmer than a room from October to April); 22 C while the power grid is on. Salt fish, charque and dry curing there go by it, and so does a Salting Tub: a summer loft is the worst place for a cure in the tub.
 - **Basement**: any level below ground. Indoors, but at the **cellar's own temperature**, not the day's: about 5 C from January to March, 13 C from July to September, a month behind the season. Whatever dries there goes by it, so salt fish crawls (about **27 days** a batch, all year): a cellar is for keeping salt fish, not drying it.
 
@@ -267,7 +267,7 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 4. **Eat it** as it is (very salty, and safe), toss it straight into soup, stew, rice or pasta, or **Soak Fish** (1 L of water, container kept) for a mild fish that cooks like fresh and keeps 2 / 4 days.
 
 - **Hot sun**: above 25 C, salt fish in the open air that is less than half dry takes a little off how long it keeps (the popup says *Too hot in the sun*). A few percent in a Kentucky summer; under an open roof it's spared.
-- **Muggy summers**: salt fish only loses keeping time when the last 10 days averaged over 22 C *and* the air is humid: a few days in a hot July, if any.
+- **Muggy summers**: salt fish only loses keeping time when the place is over 22 C *and* the air is humid: a few days in a hot July outdoors, if any, but a **July loft** (about 24 C under the roof) for weeks: a batch dried there loses about two thirds of its keeping. A cellar never. Dry cured meat doesn't mind: hams were aged through the summer heat.
 
 > **Warning:** Packed and cured fish are **not** safe uncooked. Drying is what makes salt fish safe.
 
@@ -314,22 +314,23 @@ Stockfish is unsalted fish dried by frost and wind. It needs no salt and no tub,
 
 1. **Gut Fish** (chapter 4). **Split Fish** if it's over 2.5 weight, or hang it whole on a Beam or Gantry.
 2. **Hang Gutted Fish to Cold Dry** on a frame, Beam or Gantry, **in the open or under an open roof**. Frozen fish is fine.
-3. **32 days** at best: between 0 and 5 C with a good wind. A Kentucky winter's wind is mostly light, so a batch hung November to January takes about 50 to 55 days. **Hang by mid-February at the latest.**
+3. **32 days** at best: between 0 and 5 C with a good wind. A Kentucky winter's wind is mostly light, so a batch hung November to January takes about 50 to 55 days in the open, 55 to 60 under a roof. **In the open, hang by the end of February; under a roof, by March.**
 4. Take down the **Stockfish** (*Walleye Stockfish*): about 18% of the fresh weight, 89% of the food, keeps **365 / 540 days**: enough to reach next winter's fish.
 5. **Let it mature**: stockfish matures in storage over **60 days**, in any container (a fridge slows it, a freezer stops it). Then the name reads *Walleye Stockfish (Matured)*; until then the tooltip shows how far along it is.
 6. **Soak Fish** (1 L of water) before you eat or cook it (*Walleye Stockfish (Soaked)*): it's as hard as wood. Matured stockfish cheers you up (unhappiness -10), and so does the stew it goes into; fresh off the rack it's dull (+10); halfway it's neither. Soaked, it keeps 2 / 4 days.
 
 **Weather**
-- Slower in frost (four fifths at -5 C, three fifths below), slower from 5 to 10 C, and it **stops above 10 C**.
+- Slower in frost (four fifths at -5 C, three fifths below), slower from 5 to 10 C, and it **stops above 10 C**. In the open that is the air now: a warm afternoon stops it. **Under an open roof** it goes by the last ten days' average, so a shed in the shade dries on through a mild spell.
 - **Wind** matters as much: still air halves the speed, a good breeze (the popup's *Good drying wind*) adds a fifth. Under an open roof, three quarters of the speed, but it never waits out the rain.
 - **Fresh fish is fragile.** Until a stack is about 30% dried it has no dry skin: hard frost (below -5 C) and lying wet above freezing each take a little off how long the finished fish keeps, a quarter at most.
-- **Warm seasons rot it.** Once the last 10 days average above 10 C, a fresh stack spoils faster than it dries; a nearly dry one hardly suffers.
+- **Warmth rots it, while it's wet.** In the open, every hour over 10 C eats into a fresh stack (blowflies wake at about that); under a roof, only once the last ten days average over 10 C. The drier the fish, the less it minds: half dry, a quarter of the harm; nearly dry, almost none. That is why Lofoten's racks can stand into May.
+- **Where and when:** in the open, hang from **November to February** (an October hang mostly rots on warm afternoons). Under an open roof, **October to March**, 55 to 60 days.
 
 **Storing it**
 - **Stockfish Pallet** (build menu: Carpentry 2; 3 planks, 6 nails; hammer and saw kept): stack your stockfish on it the way the warehouses did. In a **loft** (the top storey: a room upstairs with no room over it) it matures **twice as fast** (30 days); in **any other room above ground**, half as fast again (40 days). Covered, outdoors or in a damp basement it does no better than a shelf. It holds 20 weight; the stack on it grows from a third to full as you load it, as long as nothing but stockfish is on it. Right-click it to see its speed there.
 - **Stockfish Bale**: select stockfish, right-click, **Tie a Bale**. It takes one use of Twine (or a Rope) and ties up to 10 weight of fish, which then carry 30% lighter. A bale holds nothing but stockfish, and the fish inside keep maturing, on a pallet too. **Untie Bale** gives you the fish and your cord back.
 
-> **Warning:** Cold drying **rots** if the season warms up. Hang from November to mid-February. See the Almanac.
+> **Warning:** Cold drying **rots** in warm air while the fish is still wet. In the open, hang from November to February; under a roof, October to March. See the Almanac.
 
 ---
 
@@ -480,10 +481,12 @@ Dry curing is the winter road for meat: a long salting in the cold, then weeks o
 - **By the heaviest piece:** **3 weeks** for a Beef, Venison or Pork, a little less for a Steak or a chop, **6 weeks** for a Leg of Pork, at full speed.
 - **Full speed is a cellar's cool:** from **12 C** up. Colder air dries slower, down to **a quarter** of the speed in frost, and never stops. Damp air slows it as it does salt fish. Wind plays no part.
 - **A fire helps**, in the Smokehouse only: banked, the shed is 15 C warmer.
+- **Which temperature:** the Smokehouse goes by the day's, a roof and a room by the last ten days' average (a room 22 C while the grid is on), so a cold snap slows a shed more than a porch. Corned meat spoils by the same temperature, so an under-salted stack in a powered room rots in about four days.
 
 | Where a cut hangs | In frost | At 6 C | From 12 C | Smoke? |
 |---|---|---|---|---|
 | Smokehouse, fire out; any station under a roof; a Frame or Beam in a room | 12 weeks | 6 weeks | 3 weeks | no |
+| A Frame or Beam in a room while the grid is on (22 C) | 3 weeks | 3 weeks | 3 weeks | no |
 | Smokehouse, fire banked all day | 3 to 4 weeks | 3 weeks | 3 weeks | yes |
 
 A Frame or Beam in a **basement** goes by the cellar's own temperature, which runs a month behind the season, at two thirds of the speed (still air):
@@ -733,22 +736,24 @@ What each stage is good for once it's in your hands. *Cook* is its time on a sto
 
 ## 15. The Almanac (Seasons)
 
-Drying runs on real weather, recorded every 10 minutes, **even while you're away**. Spoilage goes by the season, not the day: it follows the average temperature of the last 10 days, so a warm afternoon in January does nothing.
+Drying runs on real weather, recorded every 10 minutes, **even while you're away**. Spoilage mostly goes by the season, not the day: it follows the average temperature of the last 10 days, so a warm afternoon in January does nothing to salt fish. The exception is **wet, unsalted fish in the open air**: a warm afternoon reaches it at once (chapter 9).
 
-| Month | Salt fish, open | Salt fish, covered | Salt fish, indoors | Stockfish, open | Stockfish, covered | Stockfish batches that rotted | Stockfish keeping lost | 2-day cure lost |
+| Month | Salt fish, open | Salt fish, covered | Salt fish, indoors | Stockfish, open | Stockfish, covered | Open stockfish that rotted | Open stockfish keeping lost | 2-day cure lost |
 |---|---|---|---|---|---|---|---|---|
-| Jan | 28–33 d | 27 d | 27 d | 51–55 d | 60–65 d | 0% | 20% | 0% |
-| Feb | 29–33 d | 27 d | 27 d | 52–93 d | 63–101 d | 3% | 16% | 0% |
-| Mar | 29–33 d | 26–27 d | 27 d | 74 d | — | 97% | 18% | 0% |
-| Apr | 22–30 d | 20–26 d | 24–27 d | — | — | 100% | — | 0% |
-| May | 16–25 d | 15–20 d | 22–25 d | — | — | 100% | — | 0% |
-| Jun | 16–20 d | 14–17 d | 21–23 d | — | — | 100% | — | 0% |
-| Jul | 15–18 d | 14–17 d | 21–23 d | — | — | 100% | — | 17% |
-| Aug | 17–24 d | 14–20 d | 22–25 d | — | — | 100% | — | 5% |
-| Sep | 17–34 d | 16–26 d | 23–27 d | — | — | 100% | — | 0% |
-| Oct | 30–34 d | 26–27 d | 27 d | 52–57 d | 65–69 d | 30% | 15% | 0% |
-| Nov | 29–30 d | 27 d | 27 d | 50–52 d | — | 0% | 10% | 0% |
+| Jan | 28–33 d | 27 d | 27 d | 51–55 d | 55–65 d | 0% | 21% | 0% |
+| Feb | 29–33 d | 27 d | 27 d | 52–83 d | 54–58 d | 8% | 46% | 0% |
+| Mar | 29–33 d | 27 d | 27 d | — | 56 d and up | 100% | — | 0% |
+| Apr | 22–30 d | 26–27 d | 27 d | — | — | 100% | — | 0% |
+| May | 16–25 d | 15–26 d | 23–27 d | — | — | 100% | — | 0% |
+| Jun | 16–20 d | 13–16 d | 20–24 d | — | — | 100% | — | 0% |
+| Jul | 15–18 d | 12–15 d | 19–22 d | — | — | 100% | — | 17% |
+| Aug | 17–24 d | 12–20 d | 20–27 d | — | — | 100% | — | 5% |
+| Sep | 17–34 d | 17–27 d | 26–27 d | — | — | 100% | — | 0% |
+| Oct | 30–34 d | 27 d | 27 d | 52–54 d | 56–60 d | 87% | 72% | 0% |
+| Nov | 29–30 d | 27 d | 27 d | 50–52 d | 57–58 d | 0% | 30% | 0% |
 | Dec | — | 27 d | 27 d | — | — | — | — | 0% |
+
+*Indoors* is a room with the power off; while the grid is on a room is 22 C and salt fish takes about 18 days in any month. Under a roof stockfish goes by the season's average, so it neither stops nor rots on a warm afternoon: October to March is the roofed shed's season.
 
 December batches run past the end of the recorded forecasts, so they have no figure; expect about what January gives. *Keeping lost* is how much of a finished stockfish batch's keeping time early frost, early wet and a warm spell took, on average. *2-day cure lost* is what a warm cure takes from a batch of big fish (or Beef) cured that month. Charque's months are in chapter 8.
 
@@ -759,11 +764,11 @@ What to start, and what the base game is doing meanwhile.
 | Months | Fish | Meat | Garden and water |
 |---|---|---|---|
 | **Nov, Dec** | **Stockfish** on the racks; Cold Smoked on a banked fire | **Slaughter.** Render the fat; **Country Cure** the legs first (21 days), then cuts (10); Potted Meat into a cold pantry | Nothing grows. Fish bite at about half |
-| **Jan, Feb** | Stockfish, the last hung by **mid-February**; salt fish slowly, about 4 weeks | Hang the Country Cured meat: Smokehouse with a daily fire, or a cellar beam. A second long cure for beef or venison | Sowing starts in February |
+| **Jan, Feb** | Stockfish, the last hung in the open by **the end of February**, under a roof into March; salt fish slowly, about 4 weeks | Hang the Country Cured meat: Smokehouse with a daily fire, or a cellar beam. A second long cure for beef or venison | Sowing starts in February |
 | **Mar, Apr** | Salt fish again, slowly; Cold Smoked on cool days; stockfish maturing on the pallet | The **last long cures** (April at the latest); hung meat finishes fastest now, 4 to 5 weeks | First radishes and greens. Fish bite at three quarters |
 | **May** | Salt fish, 2 to 3 weeks | The first **charque**; crocks move to the basement or the fridge | Harvests begin; full bite on warm days |
 | **Jun, Jul, Aug** | **Salt fish** under an open roof, fastest; mind a warm cure in July | **Charque** at its best, 1 to 2 weeks; no long cure; hot smoke for the week | Potatoes, tomatoes, cabbages. Fish bite best |
-| **Sep, Oct** | The last quick salt fish in September; the first stockfish in late October is a gamble | The last charque in September; the **long cure opens again** in October | The last harvests. Nothing is sown after summer |
+| **Sep, Oct** | The last quick salt fish in September; the first stockfish in October under a roof (in the open it rots on warm afternoons) | The last charque in September; the **long cure opens again** in October | The last harvests. Nothing is sown after summer |
 | **Any month** | Hot Smoked, for this week | Hot Smoked and Ham, for this week; Potted Meat | |
 
 **When each larder runs out**

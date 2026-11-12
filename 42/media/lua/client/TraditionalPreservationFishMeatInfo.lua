@@ -88,8 +88,9 @@ function Info.rows(found, ledger, now, fire)
             tostring(F.TUB_CAPACITY), tostring(#found.waiting), tostring(F.TUB_MAX_ITEMS)) })
     end
     local temperature = ledger.temperature or 0
-    -- Below ground and in a loft the stacks and the tub go by the place's own temperature, not the day's.
-    if found.place == "Basement" or found.place == "Loft" then
+    -- Below ground, in a loft and in a room the stacks and the tub go by the place's own temperature, not the day's
+    -- (the Smokehouse, Sheltered too, goes by the day's).
+    if found.place == "Basement" or found.place == "Loft" or found.place == "Sheltered" and not (hanger and hanger.closed) then
         table.insert(rows, { KEY .. "InfoAir", UI.placeText(found.place, F.ownTemperature(ledger, found.place)) })
     else
         table.insert(rows, { KEY .. "InfoAir", UI.say(KEY .. "InfoAirValue", UI.degrees(temperature),
