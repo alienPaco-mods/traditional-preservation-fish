@@ -17,9 +17,9 @@ local MONTH_DAYS = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 
 -- Stacks a station holds and the inventory weight of gutted fish each takes.
 local STATIONS = {
-    { "Fish Drying Frame (Carpentry 2)", 8, 2.5 },
-    { "Fish Hanging Beam (Carpentry 4)", 4, 15 },
-    { "Fish Gantry (Carpentry 6)", 2, 50 },
+    { "Drying Frame (Carpentry 2)", 8, 2.5 },
+    { "Hanging Beam (Carpentry 4)", 4, 15 },
+    { "Gantry (Carpentry 6)", 2, 50 },
 }
 
 local function monthOf(day)

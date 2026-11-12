@@ -43,9 +43,9 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [h2]Drying stations[/h2]
 Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate, smoke and any spoilage. Weights are inventory weight, not kilograms.
 [list]
-[*][b]Fish Drying Frame:[/b] Carpentry 2, Fishing 2. 6 long sticks, 3 nails, 4 twine, hammer kept. 8 stacks of 2.5 weight. It can stand in a room or a basement, as the Hanging Beam can.
-[*][b]Fish Hanging Beam:[/b] Carpentry 4, Fishing 2. 6 planks, 6 nails, 1 large hook, hammer kept. 4 stacks of 15. Open air or under an open roof.
-[*][b]Fish Gantry:[/b] Carpentry 6, Fishing 2. 2 logs, 2 planks, 8 nails, 2 large hooks, hammer kept. 2 stacks of 50. Open air or under an open roof.
+[*][b]Drying Frame:[/b] Carpentry 2, Fishing 2. 6 long sticks, 3 nails, 4 twine, hammer kept. 8 stacks of 2.5 weight. It can stand in a room or a basement, as the Hanging Beam can.
+[*][b]Hanging Beam:[/b] Carpentry 4, Fishing 2. 6 planks, 6 nails, 1 large hook, hammer kept. 4 stacks of 15. Open air or under an open roof.
+[*][b]Gantry:[/b] Carpentry 6, Fishing 2. 2 logs, 2 planks, 8 nails, 2 large hooks, hammer kept. 2 stacks of 50. Open air or under an open roof.
 [*][b]Smokehouse:[/b] Carpentry 3. 14 planks, 20 nails, hammer kept. 6 stacks of 15. Two tiles; open air or under an open roof. Salt fish and meat only.
 [/list]
 

@@ -5,7 +5,7 @@ module Base
         entity ES_DryingBeamLarge
         {
             LuaWindowClass = ISEntityWindow,
-            DisplayName = Fish Gantry,
+            DisplayName = Gantry,
             Icon = Item_DryingBeamLarge,
         }
     }

@@ -136,10 +136,8 @@ local function drawStackTooltip(slot, tooltip, kind)
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_ColdSmoke", getText("IGUI_TraditionalPreservationFishMeat_ColdSmokeNeed",
                 string.format("%.1f", modData.cold or 0), string.format("%.0f", F.coldNeed(modData))))
         end
-        if status.spoiling or status.scorching or status.spoiled > 0 then
-            local warning = "IGUI_TraditionalPreservationFishMeat_Spoiled"
-            if status.scorching then warning = "IGUI_TraditionalPreservationFishMeat_SpoilingSun" end
-            if status.spoiling then warning = isCold and "IGUI_TraditionalPreservationFishMeat_SpoilingWarm" or "IGUI_TraditionalPreservationFishMeat_SpoilingMuggy" end
+        local warning = F.spoilWarning(status, isCold)
+        if warning then
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Spoilage", UI.say(warning, UI.percent(status.spoiled)), UI.WARNING_COLOUR)
         end
         -- Corned meat left to dry in the shed: what the shed's warmth is taking from it.
@@ -167,6 +165,7 @@ end
 UI.progressTooltips({
     PressSaltedFish = drawPressTooltip,
     PressSaltedMeat = drawPressTooltip,
+    CountryCureMeat = drawPressTooltip,
     HangFishToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "salt") end,
     HangFishToColdDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "cold") end,
     HangMeatToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "meat") end,

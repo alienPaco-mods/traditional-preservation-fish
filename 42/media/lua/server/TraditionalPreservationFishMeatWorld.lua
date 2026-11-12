@@ -204,6 +204,32 @@ function TraditionalPreservationFishMeatWorld.busyStacks(station)
     return entry and entry.busyStacks or 0
 end
 
+-- What a station holds now, for its Info window: its hanger (nil for a tub) and place, the items waiting in its
+-- input slots, the finished ones and their stacks, and the running batches, furthest along first, each with its
+-- recipe data and progress. Either tile of a Smokehouse answers for the one with the slots. Nil for anything else,
+-- or before there is a player.
+function TraditionalPreservationFishMeatWorld.inspect(station)
+    for _, found in ipairs(F.chamberTiles(station)) do
+        if found[1]:getComponent(ComponentType.DryingCraftLogic) then station = found[1] end
+    end
+    local entry = tracker.track(station)
+    if not entry then return nil end
+    local resources = station:getComponent(ComponentType.Resources)
+    local logic = station:getComponent(entry.logicType)
+    local uiLogic = resources and logic and Station.uiLogic(station, entry, logic)
+    if not uiLogic then return nil end
+
+    local _, _, _, waiting = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
+    local finished, finishedStacks = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output)
+    local batches = {}
+    for craftData, _ in pairs(uiLogic:getItemsInProgress()) do
+        table.insert(batches, { data = craftData, progress = logic:getProgress(craftData) })
+    end
+    table.sort(batches, function(a, b) return a.progress > b.progress end)
+    return { station = station, hanger = entry.hanger, place = entry.place or Weather.placeOf(station, true),
+        waiting = waiting, finished = finished, finishedStacks = finishedStacks, batches = batches }
+end
+
 Weather.record(function(now, climate)
     F.advance(F.getLedger(), now, {
         temperature = climate:getTemperature(),

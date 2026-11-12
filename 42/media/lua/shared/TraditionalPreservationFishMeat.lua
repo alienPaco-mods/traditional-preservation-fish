@@ -564,6 +564,17 @@ function F.stackStatus(isCold, modData, ledger)
     }
 end
 
+-- The popup's Spoilage line for a hanging stack's status, a translation key taking the share spoiled, or nil with
+-- nothing to say: what is spoiling it now (the season, or hot sun), else just how much has gone.
+function F.spoilWarning(status, isCold)
+    if status.spoiling then
+        return isCold and "IGUI_TraditionalPreservationFishMeat_SpoilingWarm" or "IGUI_TraditionalPreservationFishMeat_SpoilingMuggy"
+    end
+    if status.scorching then return "IGUI_TraditionalPreservationFishMeat_SpoilingSun" end
+    if status.spoiled > 0 then return "IGUI_TraditionalPreservationFishMeat_Spoiled" end
+    return nil
+end
+
 -- The popup's word for the temperature, a translation key: good, cool, mild, too warm, frost or hard frost,
 -- or for salt fish in the sun, too hot (exposed: no roof over it).
 function F.temperatureWord(isCold, celsius, exposed)
@@ -746,11 +757,12 @@ function F.pressStatus(modData, now, ledger)
 end
 
 -- Craft timers tick at a fixed speed whatever Day Length says and stop when the area unloads,
--- so this replaces their count with the game clock. The recipe's time is the longest press, so
--- a lighter batch's bar runs faster to end on its own hours.
+-- so this replaces their count with the game clock. The recipe's time is the longest press (the long cure's: a
+-- leg's 21 days), so a lighter batch's bar runs faster to end on its own hours.
 function F.onPressUpdate(craftRecipeData)
     local hours = craftRecipeData:getModData().pressHours or OLD_PRESS_HOURS
-    Weather.showClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours(), F.PRESS_HOURS / hours)
+    local recipeHours = craftRecipeData:getRecipe():getTime() / SECONDS_PER_HOUR
+    Weather.showClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours(), recipeHours / hours)
 end
 
 -- A tub salts fish or meat, one batch at a time: what is waiting in it already sets the kind.

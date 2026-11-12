@@ -5,7 +5,7 @@ module Base
         entity ES_DryingBeamMedium
         {
             LuaWindowClass = ISEntityWindow,
-            DisplayName = Fish Hanging Beam,
+            DisplayName = Hanging Beam,
             Icon = Item_DryingBeamMedium,
         }
     }

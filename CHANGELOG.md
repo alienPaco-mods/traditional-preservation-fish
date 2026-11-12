@@ -1,5 +1,33 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.19
+- **Station info in the station's own window** (2026-11-12, from the external review): the Salting Tub, the Drying
+  Frame, the Hanging Beam, the Gantry and the Smokehouse show, under In Progress, Done and Take All: the place, the
+  stacks in use and what each may weigh (the tub: weight and pieces against its limits), the air now and over the
+  season, wind and wetness where they reach it, the joined Firebox's fire, then a bar for every running batch with
+  its share and time left or why it stands still, and under them what is spoiling a batch, a hot cook under way,
+  the smoke so far, pieces loaded but not started and finished ones waiting. The tub's one bar is named for its
+  cure (Fish cure, Corning, Country cure) and has no number. It reads the popups' own status
+  (`F.stackStatus`, `F.charqueStatus`, `F.pressStatus`; `Info.rows` in `client/TraditionalPreservationFishMeatInfo.lua`,
+  the World's `inspect`), so nothing is simulated twice. TP Core's new `StationInfo`. (A first build had it as a
+  separate window on the right-click; the user asked for it in the window.)
+- **The Fish Drying Frame, Fish Hanging Beam and Fish Gantry are the Drying Frame, the Hanging Beam and the Gantry**
+  (user: they hang meat too). Display names only; entities, sprites and saves are untouched.
+- Wording brought in line with the code (user: "for Corned, not Salt Cured, meat"): Hang Salted Meat to Dry's
+  tooltip (Corned meat for charque, Country Cured meat in the shade), the tub's, frame's, Beam's, Gantry's and
+  Smokehouse's build tooltips (fish or meat; the long cure), the cured fish, gutted fish, cured meat, rinse, Corn
+  and Country Cure tooltips, a Country Ham's (it need not dry in the Smokehouse), the refusals "Take the cured
+  batch out first", "It can't take that much" and "No spots left", the sandbox's Salt cure time tooltip, the
+  sandbox switch **Charque** renamed **Salting meat** (it turns all meat salting off; the option's key is
+  unchanged), and the mod's description in the mod list.
+- Fixed: **the long cure never finished on time** (since 0.4.14). The tub's bar ran at the short press's speed
+  against the long cure's 21-day recipe, so 10 days of cuts took about 105 and a leg's 21 about 220, spoiling all
+  the while. `F.onPressUpdate` now goes by the recipe's own time. A batch already in the tub finishes when its
+  hours are up (at once, if they are).
+- Fixed: a **Country Cure** batch in the tub had vanilla's popup, not the mod's (time left by its own hours, the warm
+  season's spoilage).
+- Internal: the popup's Spoilage line picks its text in `F.spoilWarning`.
+
 ## 0.4.18
 - **Salt by the quarter weight** (2026-11-12, the fish and meat against salt check): packing takes 2 salt for
   each quarter weight of the packed piece, to the nearest quarter and never under 2, where it took 4 for each

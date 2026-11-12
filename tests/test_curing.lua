@@ -1184,6 +1184,13 @@ check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnT
     local longLeg = newRecipeData(T.LONG_LEG_HOURS * 3600, { pork, packedLeg }, nil, T.LONG_CURE_RECIPE)
     T.onPressStart(longLeg)
     check("the long cure: 10 days for cuts, 21 with a leg", longCuts.modData.pressHours == 240 and longLeg.modData.pressHours == 504)
+    -- The recipe's time is the leg's 21 days, not the short press's 2: each batch's bar ends on its own hours.
+    hours = hours + 240
+    T.onPressUpdate(longCuts)
+    T.onPressUpdate(longLeg)
+    check("cuts are cured after their 10 days, a leg 10 days into its 21", near(longCuts.elapsed, T.LONG_LEG_HOURS * 3600)
+        and near(longLeg.elapsed, 240 * 3600))
+    hours = hours - 240
     local countryPork = newFood(T.CURED_MEAT, {})
     T.onCreateLongCured(newRecipeData(0, { pork }, { countryPork }))
     check("it comes out Country Cured", countryPork:getModData().longCure and countryPork.name == "Country Cured Pork")

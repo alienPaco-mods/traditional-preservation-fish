@@ -52,7 +52,7 @@ Fish and meat share one workshop. The same **Salting Tub** cures both, the same 
 
 > **Requires Traditional Preservation (Core)**, the series' shared mod (TP Core for short). Enable it alongside this one; it loads first.
 
-- **Summer catch?** Pack it in salt → cure it in a **Salting Tub** → hang it on a **Fish Drying Frame**.
+- **Summer catch?** Pack it in salt → cure it in a **Salting Tub** → hang it on a **Drying Frame**.
 - **Winter catch?** Gut it → hang it on the frame. No salt needed.
 - **Summer beef?** Pack it in salt → the same tub → the same frame, in the hot sun: **charque**.
 - **Butchered a pig?** Render the fat → cook the meat in it → seal it in a clay jar: **Potted Meat**.
@@ -229,9 +229,9 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 
 | Station | Skill | Materials (hammer kept) | Holds | Where |
 |---|---|---|---|---|
-| **Fish Drying Frame** | Carpentry 2, Fishing 2 | 6 long sticks, 3 nails, 4 twine | 8 stacks × 2.5 weight | Anywhere, a room too |
-| **Fish Hanging Beam** | Carpentry 4, Fishing 2 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight | Anywhere: open air, under a roof, in a room or a basement |
-| **Fish Gantry** | Carpentry 6, Fishing 2 | 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks × 50 weight | Open air or under an open roof |
+| **Drying Frame** | Carpentry 2, Fishing 2 | 6 long sticks, 3 nails, 4 twine | 8 stacks × 2.5 weight | Anywhere, a room too |
+| **Hanging Beam** | Carpentry 4, Fishing 2 | 6 planks, 6 nails, 1 large hook | 4 stacks × 15 weight | Anywhere: open air, under a roof, in a room or a basement |
+| **Gantry** | Carpentry 6, Fishing 2 | 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks × 50 weight | Open air or under an open roof |
 | **Smokehouse** | Carpentry 3 | 14 planks, 20 nails | 6 stacks × 15 weight | Open air or under an open roof; two tiles; chapter 10 |
 
 | Recipe | Frame, Beam, Gantry | Smokehouse |
@@ -248,6 +248,10 @@ Every drying station works the same way: pick a hanging recipe, load it, press *
 - **Indoors**: inside a room, including one you built yourself with walls all round and a full roof, and always inside the Smokehouse. Still air: salt fish dries at about **two thirds** of the speed, and **gutted fish is refused** (stockfish needs moving air). **Meat indoors is never charque**: it dry cures (chapter 11).
 
 **Hover a stack** to see its method, progress, time left, place, the temperature, the wind, how wet it is and how fast it's drying right now, a warning if the season is spoiling it, and in a Smokehouse its smoke.
+
+**The station's own window tells you the rest.** Under *In Progress*, *Done* and *Take All*, every station (the Salting Tub and the Smokehouse too) lists the place, how many stacks are in use, the air now and over the season, and a bar for every running batch with its share, its time left or the reason it stands still. Under the bars it lists what wants your eye: a batch that is spoiling, a hot cook under way, the smoke so far, pieces loaded but never started, finished ones waiting to be taken.
+
+> ✏ *Margin note:* the times left assume today's weather holds. Nobody on the Volga could promise that either.
 
 ---
 
@@ -817,7 +821,7 @@ Three ways to live, and what each should build. For a yardstick: a survivor need
 
 The farm's year turns on two slaughters.
 
-- **Summer beef, June to August.** A cow is 50 cuts: two tub loads and **200 salt**, corned in two days each. One Fish Drying Frame in the sun takes the whole cow, five Beef to a stack: **charque** in one to two weeks, about 10 weight of it, good until December to February. The garden feeds you meanwhile.
+- **Summer beef, June to August.** A cow is 50 cuts: two tub loads and **200 salt**, corned in two days each. One Drying Frame in the sun takes the whole cow, five Beef to a stack: **charque** in one to two weeks, about 10 weight of it, good until December to February. The garden feeds you meanwhile.
 - **Hog killing, November**, once the nights are frosty.
   1. **Render the fat** in the Hearth's copper the same day: two or three blocks of Lard.
   2. **Legs into the long cure first**, 21 days; cuts follow for 10. The tub holds one cure at a time, so a second tub earns its keep here.
@@ -837,7 +841,7 @@ The farm's year turns on two slaughters.
 
 ### The river camp
 
-*A hunter and fisher: no power, no fields, no cellar. A Salting Tub and a Fish Drying Frame under a lean-to roof (Carpentry 2), and whatever the woods and the water give.*
+*A hunter and fisher: no power, no fields, no cellar. A Salting Tub and a Drying Frame under a lean-to roof (Carpentry 2), and whatever the woods and the water give.*
 
 - **Summer: fish hard, and salt it.** The fish bite best now. A frame holds 20 weight of fish, about **8,000 calories**, three days of food, and takes **160 salt** and two to three weeks under the roof. One frame can't keep up with a good rod: build two or three, or a Hanging Beam (60 weight).
 - **A summer deer is charque.** 26 Venison, one tub load, 104 salt, two days of corning; the whole deer hangs on one frame and dries in one to two weeks to about 6.5 weight of **Venison Charque**: 10,000 calories you can carry.
@@ -944,7 +948,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Corn Salted Meat won't take a Leg of Pork | A leg is too thick for the short cure: take it out, or use Country Cure Salted Meat (21 days) |
 | A Country Cure spoils in the tub in May | The long cure is safe at a ten-day average of 10 C or less: start it between October and April |
 | Country Cured meat won't hang on a frame | It dries in the shade: put the station under a roof, indoors or in a basement, or use the Smokehouse. For charque, corn it |
-| Pack Meat in Salt missing | Charque may be off in the sandbox |
+| Pack Meat in Salt missing | Salting meat may be off in the sandbox |
 | A station refuses a fish or cut | It takes only Salt Cured fish or meat, or Gutted Fish and halves. Raw, rotten, frozen salted and cooked pieces are refused, and a frame stack holds 2.5 weight at most |
 | A station refuses meat (or fish) | The stack waiting to start is the other kind: one stack is one kind. Craft it first, then load the next |
 | Station indoors refuses gutted fish | It has no moving air. Cold drying needs the open or an open roof |
@@ -990,7 +994,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | Spoilage strictness | Normal | Off / Forgiving / Normal / Harsh. Covers every way a batch spoils while it cures or dries: the wrong season on a station, a warm cure, a long cure above 10 C, and under-salted Corned meat. Off, none of them bite |
 | Butchering gives fat | On | Off, butchering gives no fat and Lard is loot only, as in the base game |
 | Butchering gives legs of pork | On | Off, a pig gives all its Pork as Pork, as in the base game |
-| Charque | On | Off, meat can't be packed in salt or hung |
+| Salting meat | On | Off, meat can't be packed in salt or hung |
 | Charque drying time (days) | 5 | In hot sun and a breeze. Kentucky's summer makes it about 7 to 11 under a roof; the real charqueadas took 4 to 6 |
 | Potted Meat keeps by place | On | Off, a crock keeps 60 / 90 days anywhere, as plain food, and opening it costs nothing |
 

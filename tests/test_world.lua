@@ -164,6 +164,14 @@ W.refresh(done)
 check("a finished stack waiting hangs a ham by the door (tile 868)", table.concat(done.sprites, " ") == "traditionalpreservationfishmeat_02_460")
 check("a frame keeps the frame's", rack:getComponent("DryingCraftLogic").tag == "DryingFrame")
 
+-- What the Info window is told about a station.
+local seen = W.inspect(shed)
+check("a look at the frame: its hanger, place and contents", seen.hanger == T.HANGERS[6] and seen.place == "Sheltered"
+    and #seen.waiting == 1 and seen.finished == 1 and seen.finishedStacks == 1)
+check("and its running batch with its progress", #seen.batches == 1 and seen.batches[1].data == running and seen.batches[1].progress == 0.5)
+check("a Smokehouse is sheltered to the window too", W.inspect(smokehouse).place == "Sheltered" and W.inspect(smokehouse).hanger.closed)
+check("another mod's object gives nothing", W.inspect(station("carpentry_02_122", 4, true, {}, {}, {})) == nil)
+
 -- Tubs
 local tub = station("traditionalpreservationfishmeat_01_1", 3, true, {}, { recipeData(0.3) }, {})
 W.track(tub)
