@@ -286,20 +286,20 @@ Charque is the summer road for red meat: salted and cured in the tub like fish, 
 **Weather on the frame**
 - **Heat helps.** Full speed from 25 C, two fifths at 10 C, nothing at or below freezing. Unlike salt fish, charque takes no harm from the sun.
 - **Wind helps.** Still air dries at two thirds of the speed, a good breeze adds a fifth.
-- **Rain hurts.** An open station waits while the meat is wet, and every 6 hours of rain take back **a tenth** of what had dried. Under an open roof it dries as fast as in the open and is never rained on. **Not indoors**: charque is the sun's and the wind's. Corned meat hung in a room or a basement dry cures as in the Smokehouse, **under-salted**, and spoils as it hangs.
+- **Rain hurts.** An open station waits while the meat is wet, and every 6 hours of rain take back **a tenth** of what had dried. Under an open roof it is never rained on and goes by the average of the last ten days, not the afternoon: about as fast as the open in summer, slower in a cold spring, and the quicker place in October. **Not indoors**: charque is the sun's and the wind's. Corned meat hung in a room or a basement dry cures as in the Smokehouse, **under-salted**, and spoils as it hangs.
 - **Muggy summers** spoil it a little, under salt fish's rule.
 
 | Month | Open | Under an open roof |
 |---|---|---|
-| Jan | 88–119 d | 51–86 d |
-| Mar | 31–59 d | 20–36 d |
-| Apr | 13–34 d | 11–24 d |
-| May | 9–25 d | 7–12 d |
-| Jun | 8–19 d | 7–9 d |
+| Jan | 88–119 d | 80–111 d |
+| Mar | 31–59 d | 26–51 d |
+| Apr | 13–34 d | 14–27 d |
+| May | 9–25 d | 9–15 d |
+| Jun | 8–19 d | 8–10 d |
 | Jul | 7–15 d | 7–10 d |
-| Aug | 9–20 d | 7–11 d |
-| Sep | 8–17 d | 7–17 d |
-| Oct | — | 17–65 d |
+| Aug | 9–20 d | 7–10 d |
+| Sep | 8–17 d | 7–11 d |
+| Oct | — | 11–29 d |
 
 From November to February it barely dries at all: that's the season for stockfish, Potted Meat and dry curing.
 
@@ -642,10 +642,11 @@ Potted Meat is the road for any season and any red meat, pork too: cuts cooked s
 | Powered fridge, or 4 C and colder outdoors | **120 days** | 180 days |
 | Basement (about 5 C from January to March, 13 C from July to September) | **110 to 64 days** | 165 to 96 days |
 | A room, by the season | **120 to 17 days** (14 at 25 C and over) | 180 to 25 days (21) |
-| A room while the grid is on (22 C) | **18 days** | 27 days |
+| A loft (the top storey) | as a room from October to April; about **15 days** in July | about 23 days in July |
+| A room or a loft while the grid is on (22 C) | **18 days** | 27 days |
 | Powered freezer | stops | stops |
 
-A pantry, kitchen or shed is unheated once the power's gone: it follows the average of the last ten days outdoors, on any floor. While the grid is on, a room is 22 C, as vanilla keeps it. A winter pantry keeps it like a fridge, a spring or autumn one about two months, a July one under three weeks. **The first portion you take** lets air under the fat: a third of the time the crock has left goes at once, only that once. Open it when you mean to eat it out.
+A pantry, kitchen or shed is unheated once the power's gone: it follows the average of the last ten days outdoors, on any floor but the top one, where a loft's roof warms it in summer. While the grid is on, a room is 22 C, as vanilla keeps it. A winter pantry keeps it like a fridge, a spring or autumn one about two months, a July one under three weeks. **The first portion you take** lets air under the fat: a third of the time the crock has left goes at once, only that once. Open it when you mean to eat it out.
 
 **The fat counts.** A Lard that has been used in cooking only gives what is left of it: a tenth of a block covers one cut with a tenth of the fat, and the next cut gets none.
 
@@ -741,22 +742,22 @@ What each stage is good for once it's in your hands. *Cook* is its time on a sto
 
 Drying runs on real weather, recorded every 10 minutes, **even while you're away**. Spoilage mostly goes by the season, not the day: it follows the average temperature of the last 10 days, so a warm afternoon in January does nothing to salt fish. The exception is **wet, unsalted fish in the open air**: a warm afternoon reaches it at once (chapter 9).
 
-| Month | Salt fish, open | Salt fish, covered | Salt fish, indoors | Stockfish, open | Stockfish, covered | Open stockfish that rotted | Open stockfish keeping lost | 2-day cure lost |
-|---|---|---|---|---|---|---|---|---|
-| Jan | 28–33 d | 27 d | 27 d | 51–55 d | 55–65 d | 0% | 21% | 0% |
-| Feb | 29–33 d | 27 d | 27 d | 52–83 d | 54–58 d | 8% | 46% | 0% |
-| Mar | 29–33 d | 27 d | 27 d | — | 56 d and up | 100% | — | 0% |
-| Apr | 22–30 d | 26–27 d | 27 d | — | — | 100% | — | 0% |
-| May | 16–25 d | 15–26 d | 23–27 d | — | — | 100% | — | 0% |
-| Jun | 16–20 d | 13–16 d | 20–24 d | — | — | 100% | — | 0% |
-| Jul | 15–18 d | 12–15 d | 19–22 d | — | — | 100% | — | 17% |
-| Aug | 17–24 d | 12–20 d | 20–27 d | — | — | 100% | — | 5% |
-| Sep | 17–34 d | 17–27 d | 26–27 d | — | — | 100% | — | 0% |
-| Oct | 30–34 d | 27 d | 27 d | 52–54 d | 56–60 d | 87% | 72% | 0% |
-| Nov | 29–30 d | 27 d | 27 d | 50–52 d | 57–58 d | 0% | 30% | 0% |
-| Dec | — | 27 d | 27 d | — | — | — | — | 0% |
+| Month | Salt fish, open | Salt fish, covered | Salt fish, indoors | Salt fish, loft | Stockfish, open | Stockfish, covered | Open stockfish that rotted | Open stockfish keeping lost | 2-day cure lost |
+|---|---|---|---|---|---|---|---|---|---|
+| Jan | 28–33 d | 27 d | 27 d | 27 d | 51–55 d | 55–65 d | 0% | 21% | 0% |
+| Feb | 29–33 d | 27 d | 27 d | 27 d | 52–83 d | 54–58 d | 8% | 46% | 0% |
+| Mar | 29–33 d | 27 d | 27 d | 27 d | — | 56 d and up | 100% | — | 0% |
+| Apr | 22–30 d | 26–27 d | 27 d | 27 d | — | — | 100% | — | 0% |
+| May | 16–25 d | 15–26 d | 23–27 d | 19–27 d | — | — | 100% | — | 0% |
+| Jun | 16–20 d | 13–16 d | 20–24 d | 18–20 d | — | — | 100% | — | 0% |
+| Jul | 15–18 d | 12–15 d | 19–22 d | 19–20 d | — | — | 100% | — | 17% |
+| Aug | 17–24 d | 12–20 d | 20–27 d | 19–25 d | — | — | 100% | — | 5% |
+| Sep | 17–34 d | 17–27 d | 26–27 d | 21–27 d | — | — | 100% | — | 0% |
+| Oct | 30–34 d | 27 d | 27 d | 27 d | 52–54 d | 56–60 d | 87% | 72% | 0% |
+| Nov | 29–30 d | 27 d | 27 d | 27 d | 50–52 d | 57–58 d | 0% | 30% | 0% |
+| Dec | — | 27 d | 27 d | 27 d | — | — | — | — | 0% |
 
-*Indoors* is a room with the power off; while the grid is on a room is 22 C and salt fish takes about 18 days in any month. Under a roof stockfish goes by the season's average, so it neither stops nor rots on a warm afternoon: October to March is the roofed shed's season.
+*Indoors* and *loft* are the power off; while the grid is on both are 22 C and salt fish takes about 18 days in any month. A loft dries a few days faster than a room in summer, but a muggy July up there takes about **two thirds** of a batch's keeping (a tenth in June and August); a basement stays at the 27-day floor all year. Under a roof stockfish goes by the season's average, so it neither stops nor rots on a warm afternoon: October to March is the roofed shed's season.
 
 December batches run past the end of the recorded forecasts, so they have no figure; expect about what January gives. *Keeping lost* is how much of a finished stockfish batch's keeping time early frost, early wet and a warm spell took, on average. *2-day cure lost* is what a warm cure takes from a batch of big fish (or Beef) cured that month. Charque's months are in chapter 8.
 
@@ -1035,7 +1036,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 
 | Command | What it does |
 |---|---|
-| `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, the basement's temperature and its drying and tub rates, humidity, wetness, the wind, the drying speeds, whether unsalted and salted fish are spoiling, and the running totals |
+| `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, the basement's and the loft's temperatures and their drying and tub rates, humidity, wetness, the wind, the drying speeds, whether unsalted and salted fish are spoiling, and the running totals |
 | `TPFM.here()` | Which place you're standing in, as a station there would read it: Open, Covered (a roof, no room), Sheltered (a room), Loft or Basement |
 | `TPFM.wind()` | Starts a log of the live wind every 10 minutes; run it again to print it beside the forecast |
 | `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one, `TPFM.age(120)` a charque one |

@@ -1,6 +1,7 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
 ## 0.4.30
+- **Docs pass, sweep step G** (2026-11-12): `tools/season_report.lua` gains a loft column (salt fish days and keeping lost: two thirds in a July loft); `tools/charque_report.lua` now steps each stack through `F.charqueStep` on the ledger, so a roof goes by the season's mean as since step I (slower in winter, quicker in October); its room column is gone (meat there dry cures). Guide: loft column in the almanac, the charque table's roof column, a loft row for Potted Meat, `TPFM.weather()`'s loft line. README: season and charque tables from the tools, the Hanging Beam builds anywhere, `Weather.placeOf(station)`, the room-heating caveat. Workshop text: the Beam anywhere, the Smokehouse *In a shed*, Potted Meat 2 to 4 months in a basement.
 - **Fix: Eat 1/4 on a Crock of Potted Meat from the debug Item List ate the whole crock** (user, 2026-11-12). A
   crock not packed by Pack Potted Meat had no portion record, so after any bite it read as empty and the rest went
   with the jar. Such a crock now holds what its script gives, one portion in a plain Clay Jar, written down at its

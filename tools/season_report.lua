@@ -52,12 +52,15 @@ local function weatherAt(day, hour)
 end
 
 -- Each stack goes through the mod's own step every hour, as its spoilage depends on how far it has dried.
--- place is nil (open), "covered" (a roof, no room) or "sheltered" (a room, by Core's room temperature).
+-- place is nil (open), "covered" (a roof, no room), "sheltered" (a room, by Core's room temperature) or "loft" (the top
+-- storey, by Core's loft temperature; a loft stack is sheltered too, as the World marks it).
 local function runSaltStack(start, snapshots, place)
     local first = snapshots[start]
     local modData = { dried = 0, spoiled = 0, lastOpen = first.open, lastSheltered = first.sheltered, lastRoomSheltered = first.roomSheltered, lastCovered = first.covered,
-        lastSaltSpoil = first.saltSpoil, lastHeat = first.heat }
+        lastLoftSheltered = first.loftSheltered, lastSaltSpoil = first.saltSpoil, lastSaltSpoilRoom = first.saltSpoilRoom, lastSaltSpoilLoft = first.saltSpoilLoft,
+        lastHeat = first.heat }
     if place then modData[place] = true end
+    if place == "loft" then modData.sheltered = true end
     local index = start
     while snapshots[index + 1] do
         index = index + 1
@@ -82,7 +85,7 @@ local function runColdStack(start, snapshots, place)
 end
 
 local function report(worlds)
-    print("month  temp(mean) humidity(mean) rainy%  | salt days (open/covered/indoors) shelf-life lost (open/covered) | cold days (open/covered), rotted%, shelf-life lost | 2-day press lost")
+    print("month  temp(mean) humidity(mean) rainy%  | salt days (open/covered/indoors/loft) shelf-life lost (open/covered/loft) | cold days (open/covered), rotted%, shelf-life lost | 2-day press lost")
     local rows = {}
     for _, days in pairs(worlds) do
         local ledger = T.newLedger(0)
@@ -92,12 +95,13 @@ local function report(worlds)
                 local now = (index - 1) * 24 + hour + 1
                 T.advance(ledger, now, weatherAt(day, hour))
                 snapshots[now] = { open = ledger.open, sheltered = ledger.sheltered, roomSheltered = ledger.roomSheltered, covered = ledger.covered, cold = ledger.cold,
+                    loftSheltered = ledger.loftSheltered, saltSpoilRoom = ledger.saltSpoilRoom, saltSpoilLoft = ledger.saltSpoilLoft,
                     coldCovered = ledger.coldCovered, rawSpoil = ledger.rawSpoil, rawSpoilOpen = ledger.rawSpoilOpen, saltSpoil = ledger.saltSpoil,
                     hardFrost = ledger.hardFrost, hardFrostCovered = ledger.hardFrostCovered, coldWet = ledger.coldWet, heat = ledger.heat, warmCure = ledger.warmCure }
             end
         end
         for index, day in ipairs(days) do
-            local row = rows[day.month] or { n = 0, t = 0, h = 0, rain = 0, open = {}, covered = {}, roof = {}, lost = 0, coveredLost = 0, salts = 0,
+            local row = rows[day.month] or { n = 0, t = 0, h = 0, rain = 0, open = {}, covered = {}, roof = {}, loft = {}, loftLost = 0, lost = 0, coveredLost = 0, salts = 0,
                 coveredSalts = 0, cold = {}, coldCovered = {}, rotted = 0, stacks = 0, coldLost = 0, cure = 0, cures = 0 }
             rows[day.month] = row
             row.n, row.t, row.h = row.n + 1, row.t + (day.min + day.max) / 2, row.h + day.humidity
@@ -115,6 +119,11 @@ local function report(worlds)
                 row.coveredLost, row.coveredSalts = row.coveredLost + coveredSpoiled, row.coveredSalts + 1
             end
             if roofDays then table.insert(row.roof, roofDays) end
+            local loftDays, loftSpoiled = runSaltStack(start, snapshots, "loft")
+            if loftDays then
+                table.insert(row.loft, loftDays)
+                row.loftLost = row.loftLost + loftSpoiled
+            end
             local pressEnd = snapshots[start + T.PRESS_HOURS]
             if pressEnd then
                 row.cure, row.cures = row.cure + T.cureSpoiled({ lastWarmCure = snapshots[start].warmCure }, pressEnd), row.cures + 1
@@ -143,9 +152,9 @@ local function report(worlds)
         local r = rows[month]
         if r then
             local function share(total, count) return count > 0 and total / count * 100 or 0 end
-            print(string.format("%-5s %6.1f %8.2f %8.0f%%  | %7s / %-7s / %-7s %4.0f%% / %3.0f%%  | %7s / %-7s %5.0f%% %5.0f%%  | %4.0f%%", MONTHS[month],
-                r.t / r.n, r.h / r.n, r.rain / r.n * 100, span(r.open), span(r.covered), span(r.roof), share(r.lost, r.salts),
-                share(r.coveredLost, r.coveredSalts), span(r.cold), span(r.coldCovered), share(r.rotted, r.stacks), share(r.coldLost, #r.cold),
+            print(string.format("%-5s %6.1f %8.2f %8.0f%%  | %7s / %-7s / %-7s / %-7s %4.0f%% / %3.0f%% / %3.0f%%  | %7s / %-7s %5.0f%% %5.0f%%  | %4.0f%%", MONTHS[month],
+                r.t / r.n, r.h / r.n, r.rain / r.n * 100, span(r.open), span(r.covered), span(r.roof), span(r.loft), share(r.lost, r.salts),
+                share(r.coveredLost, r.coveredSalts), share(r.loftLost, #r.loft), span(r.cold), span(r.coldCovered), share(r.rotted, r.stacks), share(r.coldLost, #r.cold),
                 share(r.cure, r.cures)))
         end
     end

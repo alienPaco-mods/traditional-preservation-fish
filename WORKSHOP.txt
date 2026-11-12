@@ -43,8 +43,8 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [h2]Drying stations[/h2]
 Each press of Craft hangs one stack, which keeps its spot until collected. Hover a stack to see its method, drying rate, smoke and any spoilage. Weights are inventory weight, not kilograms.
 [list]
-[*][b]Drying Frame:[/b] Carpentry 2. 6 long sticks, 3 nails, 4 twine, hammer kept. 8 stacks of 2.5 weight. It can stand in a room or a basement, as the Hanging Beam can.
-[*][b]Hanging Beam:[/b] Carpentry 4. 6 planks, 6 nails, 1 large hook, hammer kept. 4 stacks of 15. Open air or under an open roof.
+[*][b]Drying Frame:[/b] Carpentry 2. 6 long sticks, 3 nails, 4 twine, hammer kept. 8 stacks of 2.5 weight. It can stand anywhere, a room or a basement too.
+[*][b]Hanging Beam:[/b] Carpentry 4. 6 planks, 6 nails, 1 large hook, hammer kept. 4 stacks of 15. Anywhere, a room or a basement too.
 [*][b]Gantry:[/b] Carpentry 6. 2 logs, 2 planks, 8 nails, 2 large hooks, hammer kept. 2 stacks of 50. Open air or under an open roof.
 [*][b]Smokehouse:[/b] Carpentry 3. 14 planks, 20 nails, hammer kept. 6 stacks of 15. Two tiles; open air or under an open roof. Salt fish and meat only.
 [/list]
@@ -60,7 +60,7 @@ Gut Fish (a big one also gives a Fish Head), split it if it's over 2.5 weight, a
 
 [h2]The Smokehouse: hot and cold smoking[/h2]
 [list]
-[*]Inside it's always indoors: no rain, no wind, about two thirds of the open drying speed. No stockfish: gutted fish need moving air. The tile in front of its door must stay clear.
+[*]Inside it's always [b]In a shed[/b]: no rain, no wind, the day's temperature (the power grid doesn't warm it), about two thirds of the open drying speed. No stockfish: gutted fish need moving air. The tile in front of its door must stay clear.
 [*][b]Connect the Firebox[/b] (from TP Core) on a tile beside it: a clay pipe (2 Clay Pipe Segments, 1 Clay, mason's trowel kept) or a stone trench (3 Flat Stones, 2 Clay, shovel kept). Not at the door end, not with the Firebox's door towards the shed, one Firebox a shed, and only with the fire out. Disconnect gives the pipe or stones back.
 [*][b]Hot smoking:[/b] keep the joined Firebox stoked and each salt stack inside counts the hours in a row: 4 to 6 for fish, 6 to 8 for meat, by the heaviest piece. Then it comes out Hot Smoked: cooked, ready to eat, 1 to 2 weeks' keeping. Banking the fire for up to an hour doesn't break the run. Pork comes out as a Ham you can slice. Stop sooner and fish dries on as Salt Dried; corned meat must get its cook, or it spoils in the shed.
 [*][b]Cold smoking:[/b] bank the Firebox to a smoulder. Banked hours, and stoked runs that broke off, count as smoke on days of 15 C or less. With its hours of smoke (a day or two for fish, 60 hours for cuts, 120 for a leg, by the heaviest piece) a stack comes out Cold Smoked fish, or the old smoked meats: Suho Meso from beef, Mutton Ham, Jerked Venison, Smoked Dry Cured Pork, Smoked Country Ham from a leg. Dry, ready to eat sliced thin, 4 to 6 months' keeping. A burning fire also warms the shed, so it dries faster even in frost.
@@ -78,7 +78,7 @@ Put Pork Fat (or Suet) in a Pot, cook it an hour on any fire, Pour Off the melte
 [*][b]Put Meat in Lard or Tallow:[/b] an empty pot, a block of Lard or Tallow, a cut and 1 salt. Or [b]Put Meat in the Melted Fat[/b] straight from rendering.
 [*][b]Add Meat to the Pot:[/b] up to four cuts. Beef, Steak, Mutton Chop, Venison, Pork and Pork Chop.
 [*]Cook it two hours on any fire. It can burn.
-[*][b]Pack Potted Meat[/b] into a Clay Jar, Glazed Clay Jar or Clay Pot: a Crock of Potted Meat, one portion a cut. Eat it by the portion; the jar comes back with the last bite. About 4 months in a fridge or the winter cold, 2 in a basement, 2 weeks in a summer pantry, and the first portion taken costs a third of what's left.
+[*][b]Pack Potted Meat[/b] into a Clay Jar, Glazed Clay Jar or Clay Pot: a Crock of Potted Meat, one portion a cut. Eat it by the portion; the jar comes back with the last bite. About 4 months in a fridge or the winter cold, 2 to 4 in a basement, 2 weeks in a summer pantry, and the first portion taken costs a third of what's left.
 [/list]
 
 [h2]Fish Guts, heads and stock[/h2]

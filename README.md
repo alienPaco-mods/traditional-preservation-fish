@@ -52,7 +52,7 @@ Each press of Craft hangs one stack, which dries on its own timer and keeps its 
 | Station | Build (hammer kept) | Holds | Where |
 |---|---|---|---|
 | **Drying Frame** | Carpentry 2: 6 long sticks, 3 nails, 4 twine | 8 stacks of 2.5 weight, 25 pieces | Anywhere |
-| **Hanging Beam** | Carpentry 4: 6 planks, 6 nails, 1 large hook | 4 stacks of 15, 12 pieces | Open air or under an open roof |
+| **Hanging Beam** | Carpentry 4: 6 planks, 6 nails, 1 large hook | 4 stacks of 15, 12 pieces | Anywhere |
 | **Gantry** | Carpentry 6: 2 logs, 2 planks, 8 nails, 2 large hooks | 2 stacks of 50, 6 pieces | Open air or under an open roof |
 | **Smokehouse** | Carpentry 3: 14 planks, 20 nails | 6 stacks of 15, 25 pieces | Open air or under an open roof; two tiles |
 
@@ -144,7 +144,7 @@ Drying usually takes 12 to 55 days, and the time of year decides how a batch goe
 - **Cold drying** takes 32 days at full speed: 0 to 5 C in a good breeze. Frost slows it (80% at -5 C, 60% below), so does warmth toward 10 C (67%), and it stops above 10 C. Wind sets the rest: 50% in still air, up to 120% at a wind intensity of 0.25. Live wind in a dry spell averages about 0.11, so a batch hung November to January takes about 50 to 55 days (a gameplay compromise: real stockfish hangs about three months).
 - **Fresh fish is fragile**: until a cold stack is 30% dried, hard frost below -5 C (a tenth of its keeping per 72 hours) and lying wet above 0 C (5% per 48 hours) add to its spoilage, scaled by how wet it still is, together never past a quarter. Rot from a warm season is scaled the same way.
 - **Rain**: open stations stop until it ends and the wet has dried off; progress is paused, not lost, except charque's tenth per 6 hours. Snow counts as rain for salt fish but doesn't bother cold drying. Cold fish waits to dry off after rain too.
-- **The places**, read from the station's square (the Smokehouse is TP Core's **Enclosed**, *In a shed*, set by its World entry) (Core's `Weather.placeOf(station, true)`):
+- **The places**, read from the station's square (the Smokehouse is TP Core's **Enclosed**, *In a shed*, set by its World entry) (Core's `Weather.placeOf(station)`):
   - **Open**: no roof overhead.
   - **Covered**: a roof overhead but not a room (a porch, an open shed, a floor above with no walls round it). Rain can't reach it. Salt fish and charque dry at the open rate in the shade, by Core's covered temperature (the season's mean; step I, 0.4.26); dry curing too (`dryCureCovered` / `underCureCovered`); cold drying at 75%, by the season's mean too (its hard frost as well: `hardFrostCovered`). A tub in the open air goes by the day's (`warmCureOpen`, `longCureOpen`), one under a roof by the season's.
   - **Indoors**: a room, either a map building's or one you built with walls all round and every square roofed. Salt fish at 65%, no wind. A room goes by Core's room temperature (the season's mean, 22 C while the grid is on; step I, 0.4.26: `roomSheltered`, `charqueRoom`, `dryCureRoom`, `underCureRoom`, `warmCureRoom`, `longCureRoom`); the Smokehouse (place Enclosed since 0.4.28; its stacks still carry `modData.sheltered` and `modData.inShed`, so stacks from before keep counting) is a shed in the outside air and keeps the day's (`sheltered`, `charqueSheltered`, `dryCure`, `underCure`, plus its fire); meat there dry cures and is never charque (0.4.15). Cold drying needs moving air, so gutted fish is refused (a stack hung before 0.4.7 stays, stopped).
@@ -159,26 +159,29 @@ Spoilage goes by the season, not the day: it follows the average temperature of 
 
 How a batch hung in each month went, on the game's own forecasts for default weather (rain timing is estimated, so treat the days as approximate). `tools/season_report.lua` prints this table, `tools/charque_report.lua` the charque one.
 
-| Month | Mean C | Mean humidity | Salt, open | Salt, covered | Salt, indoors | Salt keeping lost (open / covered) | Cold, open | Cold, covered | Cold batches rotted | Cold keeping lost | 2-day cure lost |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| Jan | -4 | 0.24 | 28–33 d | 27 d | 27 d | 0% / 0% | 51–55 d | 60–65 d | 0% | 20% | 0% |
-| Feb | -1 | 0.22 | 29–33 d | 27 d | 27 d | 0% / 0% | 52–93 d | 63–101 d | 3% | 16% | 0% |
-| Mar | 3 | 0.25 | 29–33 d | 26–27 d | 27 d | 0% / 0% | 74 d | — | 97% | 18% | 0% |
-| Apr | 8 | 0.30 | 22–30 d | 20–26 d | 24–27 d | 0% / 0% | — | — | 100% | — | 0% |
-| May | 15 | 0.34 | 16–25 d | 15–20 d | 22–25 d | 2% / 0% | — | — | 100% | — | 0% |
-| Jun | 19 | 0.35 | 16–20 d | 14–17 d | 21–23 d | 4% / 0% | — | — | 100% | — | 0% |
-| Jul | 21 | 0.45 | 15–18 d | 14–17 d | 21–23 d | 6% / 1% | — | — | 100% | — | 17% |
-| Aug | 18 | 0.35 | 17–24 d | 14–20 d | 22–25 d | 2% / 0% | — | — | 100% | — | 5% |
-| Sep | 15 | 0.33 | 17–34 d | 16–26 d | 23–27 d | 1% / 0% | — | — | 100% | — | 0% |
-| Oct | 8 | 0.27 | 30–34 d | 26–27 d | 27 d | 0% / 0% | 52–57 d | 65–69 d | 30% | 15% | 0% |
-| Nov | 0 | 0.24 | 29–30 d | 27 d | 27 d | 0% / 0% | 50–52 d | — | 0% | 10% | 0% |
-| Dec | -4 | 0.19 | — | 27 d | 27 d | 0% / 0% | — | — | — | — | 0% |
+| Month | Mean C | Mean humidity | Salt, open | Salt, covered | Salt, indoors | Salt, loft | Salt keeping lost (open / covered / loft) | Cold, open | Cold, covered | Cold batches rotted | Cold keeping lost | 2-day cure lost |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Jan | -4 | 0.24 | 28–33 d | 27 d | 27 d | 27 d | 0% / 0% / 0% | 51–55 d | 55–65 d | 0% | 21% | 0% |
+| Feb | -1 | 0.22 | 29–33 d | 27 d | 27 d | 27 d | 0% / 0% / 0% | 52–83 d | 54–58 d | 8% | 46% | 0% |
+| Mar | 3 | 0.25 | 29–33 d | 27 d | 27 d | 27 d | 0% / 0% / 0% | — | 56–214 d | 100% | — | 0% |
+| Apr | 8 | 0.30 | 22–30 d | 26–27 d | 27 d | 27 d | 0% / 0% / 0% | — | — | 100% | — | 0% |
+| May | 15 | 0.34 | 16–25 d | 15–26 d | 23–27 d | 19–27 d | 2% / 0% / 0% | — | — | 100% | — | 0% |
+| Jun | 19 | 0.35 | 16–20 d | 13–16 d | 20–24 d | 18–20 d | 4% / 0% / 9% | — | — | 100% | — | 0% |
+| Jul | 21 | 0.45 | 15–18 d | 12–15 d | 19–22 d | 19–20 d | 6% / 1% / 69% | — | — | 100% | — | 17% |
+| Aug | 18 | 0.35 | 17–24 d | 12–20 d | 20–27 d | 19–25 d | 2% / 0% / 10% | — | — | 100% | — | 5% |
+| Sep | 15 | 0.33 | 17–34 d | 17–27 d | 26–27 d | 21–27 d | 1% / 0% / 0% | — | — | 100% | — | 0% |
+| Oct | 8 | 0.27 | 30–34 d | 27 d | 27 d | 27 d | 0% / 0% / 0% | 52–54 d | 56–60 d | 87% | 72% | 0% |
+| Nov | 0 | 0.24 | 29–30 d | 27 d | 27 d | 27 d | 0% / 0% / 0% | 50–52 d | 57–58 d | 0% | 30% | 0% |
+| Dec | -4 | 0.19 | — | 27 d | 27 d | 27 d | 0% / 0% / 0% | — | — | — | — | 0% |
+
+*Indoors* and *loft* are the grid off; while it is on both are 22 C and salt fish takes about 18 days. A basement stays at the 27-day floor all year.
 
 | Charque | Jan | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct |
 |---|---|---|---|---|---|---|---|---|---|
 | Open | 88–119 d | 31–59 d | 13–34 d | 9–25 d | 8–19 d | 7–15 d | 9–20 d | 8–17 d | — |
-| Covered | 51–86 d | 20–36 d | 11–24 d | 7–12 d | 7–9 d | 7–10 d | 7–11 d | 7–17 d | 17–65 d |
-| Indoors | 65–94 d | 25–44 d | 14–27 d | 10–16 d | 9–12 d | 9–12 d | 10–13 d | 10–26 d | 25–70 d |
+| Covered | 80–111 d | 26–51 d | 14–27 d | 9–15 d | 8–10 d | 7–10 d | 7–10 d | 7–11 d | 11–29 d |
+
+Covered goes by the season's mean (step I); `tools/charque_report.lua` steps each stack through `F.charqueStep` on the ledger. A room has no charque row: meat hung there dry cures.
 
 Humidity stays low in the game all year, mostly 20 to 45%, so it barely changes drying. Blanks mean no batch hung that month finished inside the forecast data.
 
@@ -244,7 +247,7 @@ In debug mode, `TPFM.help()` in the Lua console lists commands for testing this 
 
 - **Not fully tested in play.** Building, the station windows and sprites, charque, Potted Meat, the Smokehouse, hot and cold smoking have been seen in game. Seasons, spoilage and the sandbox options haven't been played through.
 - A curing batch's and a hanging stack's hover popups are the mod's own, built from the same rules. Time Remaining assumes the weather holds; the window's Time Required line stays at the recipe's base time. The popup's layout is copied from vanilla, so compare the two after a game update.
-- A covered or indoor station uses the outdoor temperature, so heating the room doesn't speed it up.
+- A room is warmed only by the power grid (22 C, as vanilla keeps it); a generator or a fire in the room doesn't warm a drying station or a tub (only the Smokehouse's own Firebox warms it).
 - Vanilla's cutting can also give a roe sac in season. Gutting and packing only give guts, and gutting a head.
 - Vanilla's Divide Food into Bowls only knows vanilla's pots, so the stock has its own two copies of it. Compare them with vanilla's after a game update.
 - In a dish's "Contains" list, a fish or meat stage shows one icon for that stage, not its species or cut: the list records a stand-in item (`...Ingredient`). Dish names are unaffected.
