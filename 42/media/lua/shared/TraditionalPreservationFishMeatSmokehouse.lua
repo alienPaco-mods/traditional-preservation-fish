@@ -227,12 +227,19 @@ F.HOT_MAX_HOURS = 12
 F.HOT_FISH = "TraditionalPreservationFishMeat.HotSmokedFish"
 F.HOT_MEAT = "TraditionalPreservationFishMeat.HotSmokedMeat"
 
--- Cold smoke (5d): a stack whose cold counter reaches COLD_SMOKE_SHARE of its clock hours in the shed comes out Cold
--- Smoked when it has dried (smoked-dried fish, balyk, suho meso: a few hours of smoke a day over the drying). Hours
--- with the fire burning dry it in air warmed by the fire (F.BANKED_LIFT, F.STOKED_LIFT), not at Sheltered's rate.
-F.COLD_SMOKE_SHARE = 1 / 3
+-- Cold smoke (5d; fixed hours since 6b): a stack whose cold counter reaches its smoke need comes out Cold Smoked
+-- when it has dried (smoked-dried fish, balyk, suho meso: a few hours of smoke a day over the drying). The need is
+-- by the heaviest piece, as the cook's: a day or two of smoke for fish, a week or two of daily fires for meat (a
+-- Beef 60 hours, a Leg of Pork 120). Hours with the fire burning dry it in air warmed by the fire (F.BANKED_LIFT,
+-- F.STOKED_LIFT), not at Sheltered's rate.
+F.SMOKE_FISH_HOURS = { { 1.1, 24 }, { 2.2, 48 } }
+F.SMOKE_MEAT_HOURS = { { 0.45, 60 }, { 2.25, 120 } }
 F.COLD_FISH_OUT = "TraditionalPreservationFishMeat.ColdSmokedFish"
 F.DRY_CURED = "TraditionalPreservationFishMeat.DryCuredMeat"
+-- 6b: a Leg of Pork dries to a Country Ham and never takes a hot cook (a hot-smoked whole ham is a wet-cured city
+-- ham, another product); the other pork cuts hot smoke to vanilla's Ham.
+F.COUNTRY_HAM = "TraditionalPreservationFishMeat.CountryHam"
+F.VANILLA_HAM = "Base.Ham"
 
 -- The stoked hours a stack needs, by its heaviest piece: straight between the two points, on past them, clamped.
 function F.hotHours(isMeat, heaviest)
@@ -242,21 +249,48 @@ function F.hotHours(isMeat, heaviest)
     return math.max(F.HOT_MIN_HOURS, math.min(hours, F.HOT_MAX_HOURS))
 end
 
--- Sets a new stack's counters and need from its pieces (an ArrayList of items).
+-- Sets a new stack's counters and need from its pieces (an ArrayList of items). Meat also gets its dry-curing need
+-- for the Smokehouse; a stack with a leg never hot smokes, and one with Corned meat (no long cure) is under-salted.
 function F.startSmoke(modData, items, isMeat)
     local heaviest = 0
-    for i = 0, items:size() - 1 do heaviest = math.max(heaviest, items:get(i):getActualWeight()) end
+    modData.noHot, modData.underCured, modData.allUnder = nil, nil, isMeat or nil
+    for i = 0, items:size() - 1 do
+        local item = items:get(i)
+        heaviest = math.max(heaviest, item:getActualWeight())
+        if isMeat then
+            if F.isLeg(item) then modData.noHot = true end
+            if item:getModData().longCure then modData.allUnder = nil else modData.underCured = true end
+        end
+    end
     modData.heaviest = heaviest
+    modData.cureNeed = isMeat and F.dryCureHours(heaviest) or nil
+    modData.underSpoiled = 0
     modData.hotNeed = F.hotHours(isMeat, heaviest)
+    modData.smokeNeed = F.smokeHours(isMeat, heaviest)
     modData.hot, modData.hotCool, modData.cold = 0, 0, 0
     modData.smokeMeat = isMeat
     modData.smokeFrom, modData.smokeSession, modData.lastStoked, modData.lastBanked = nil, nil, nil, nil
 end
 
--- The ledger totals a stack's warmth reads: salt fish's or charque's drying Sheltered, by a banked and by a stoked fire.
+-- The ledger totals a stack's warmth reads: salt fish's drying Sheltered or meat's dry curing with the fire out, and
+-- by a banked and by a stoked fire.
 local function warmthTotals(modData, ledger)
-    if modData.smokeMeat then return ledger.charqueSheltered or 0, ledger.charqueBanked or 0, ledger.charqueStoked or 0 end
+    if modData.smokeMeat then return ledger.dryCure or 0, ledger.dryCureBanked or 0, ledger.dryCureStoked or 0 end
     return ledger.sheltered or 0, ledger.smokeBanked or 0, ledger.smokeStoked or 0
+end
+
+-- How much more under-salted meat spoiled an hour by a banked and by a stoked fire than with the fire out, since the
+-- stack's last look (hours of the ledger's clock), as sinceLast's gains.
+local function underGains(modData, ledger, hours)
+    local base, banked, stoked = ledger.underCure or 0, ledger.underCureBanked or 0, ledger.underCureStoked or 0
+    local bankedGain, stokedGain = 0, 0
+    if hours > 0 then
+        local plain = base - (modData.lastUnderBase or base)
+        bankedGain = (banked - (modData.lastUnderBanked or banked) - plain) / hours
+        stokedGain = (stoked - (modData.lastUnderStoked or stoked) - plain) / hours
+    end
+    modData.lastUnderBase, modData.lastUnderBanked, modData.lastUnderStoked = base, banked, stoked
+    return math.max(bankedGain, 0), math.max(stokedGain, 0)
 end
 
 -- Since the stack's last look: the share of the hours that were cool enough for cold smoke, and how much more a stack
@@ -267,6 +301,7 @@ local function sinceLast(modData, ledger)
     local sheltered, banked, stoked = warmthTotals(modData, ledger)
     local hours = (ledger.clock or 0) - (modData.lastClock or ledger.clock or 0)
     local coolShare, bankedGain, stokedGain = nil, 0, 0
+    local underBanked, underStoked = underGains(modData, ledger, hours)
     if hours > 0 then
         coolShare = ((ledger.smokeCool or 0) - (modData.lastSmokeCool or 0)) / hours
         local base = sheltered - (modData.lastDraughtSheltered or sheltered)
@@ -277,7 +312,17 @@ local function sinceLast(modData, ledger)
     end
     modData.lastClock, modData.lastSmokeCool = ledger.clock or 0, ledger.smokeCool or 0
     modData.lastDraughtSheltered, modData.lastDraughtBanked, modData.lastDraughtStoked = sheltered, banked, stoked
-    return math.max(0, math.min(coolShare, 1)), math.max(bankedGain, 0), math.max(stokedGain, 0)
+    return math.max(0, math.min(coolShare, 1)), math.max(bankedGain, 0), math.max(stokedGain, 0), underBanked, underStoked
+end
+
+-- A stack of meat hung in a shed before 6b dried on charque's clock: it gets its dry-curing need, keeps its share
+-- of progress and starts the new totals from this look.
+local function toDryCure(modData, ledger)
+    local need = F.dryCureHours(modData.heaviest or F.DRY_CURE_HOURS[1][1])
+    modData.dried = (modData.dried or 0) / F.CHARQUE_HOURS * need
+    modData.cureNeed = need
+    modData.lastDryCure, modData.lastUnderCure = ledger.dryCure, ledger.underCure
+    modData.lastDraughtSheltered, modData.lastDraughtBanked, modData.lastDraughtStoked = nil, nil, nil
 end
 
 -- Brings a stack's counters up to the fire's record (a Firebox's Hearth state), or none (not joined). A new or
@@ -294,8 +339,11 @@ end
 function F.smokeStep(modData, fire, ledger)
     if not modData.hotNeed then return end
     modData.burning = fire and fire.fireMode or nil
-    local coolShare, bankedGain, stokedGain = 1, 0, 0
-    if ledger then coolShare, bankedGain, stokedGain = sinceLast(modData, ledger) end
+    local coolShare, bankedGain, stokedGain, underBanked, underStoked = 1, 0, 0, 0, 0
+    if ledger then
+        if modData.smokeMeat and not modData.cureNeed then toDryCure(modData, ledger) end
+        coolShare, bankedGain, stokedGain, underBanked, underStoked = sinceLast(modData, ledger)
+    end
     if not fire or fire.fireId ~= modData.smokeFrom or (fire.stokedHours or 0) < (modData.lastStoked or 0) then
         hotToCold(modData)
         if fire and fire.fireId then
@@ -323,21 +371,35 @@ function F.smokeStep(modData, fire, ledger)
     banked = math.max(banked, 0)
     modData.cold = modData.cold + banked * coolShare
     if modData.dried then modData.dried = modData.dried + math.max(stoked, 0) * stokedGain + banked * bankedGain end
+    if modData.underCured then
+        modData.underSpoiled = (modData.underSpoiled or 0) + math.max(stoked, 0) * underStoked + banked * underBanked
+    end
     modData.lastStoked, modData.lastBanked = fire.stokedHours or 0, fire.bankedHours or 0
+    -- A stack with a leg takes no cook: its stoked hours are smoke at once.
+    if modData.noHot then hotToCold(modData) end
 end
 
 -- Whether a stack's hot counter has done its cook.
 function F.hotDone(modData)
-    return modData.hotNeed ~= nil and (modData.hot or 0) >= modData.hotNeed
+    return modData.hotNeed ~= nil and not modData.noHot and (modData.hot or 0) >= modData.hotNeed
 end
 
--- Whether a stack has had smoke for its share of the hours since it was hung (stackId is its start time).
-function F.coldNeed(modData, now)
-    return math.max(now - (modData.stackId or now), 0) * F.COLD_SMOKE_SHARE
+-- The hours of smoke a stack needs, by its heaviest piece: straight between the two points, never under the first
+-- nor over the second.
+function F.smokeHours(isMeat, heaviest)
+    local points = isMeat and F.SMOKE_MEAT_HOURS or F.SMOKE_FISH_HOURS
+    local low, high = points[1], points[2]
+    local hours = low[2] + (heaviest - low[1]) * (high[2] - low[2]) / (high[1] - low[1])
+    return math.max(low[2], math.min(hours, high[2]))
 end
 
-function F.coldDone(modData, now)
-    return (modData.cold or 0) > 0 and modData.cold >= F.coldNeed(modData, now)
+-- A stack's smoke need (one hung before 6b gets it from its heaviest piece), and whether it has had it.
+function F.coldNeed(modData)
+    return modData.smokeNeed or F.smokeHours(modData.smokeMeat == true, modData.heaviest or 0)
+end
+
+function F.coldDone(modData)
+    return (modData.cold or 0) > 0 and modData.cold >= F.coldNeed(modData)
 end
 
 -- Stacks whose cook is done, by stackId, with their chamber: the World sets them, the stack's OnUpdate finishes it,
@@ -346,30 +408,62 @@ F.hotStations = {}
 
 -- Swaps a finished stack's outputs, already in the chamber's slots (the engine makes them before OnCreate), for
 -- smoked ones made from its inputs: fishType for fish, meatType for meat (Hot Smoked, or Cold Smoked and Dry-Cured).
-function F.smokedOutputs(craftRecipeData, station, fishType, meatType)
-    local modData = craftRecipeData:getModData()
+-- Of the meat, hot smoked pork is vanilla's Ham and a dried leg a Country Ham; airDried marks Dry-Cured meat that
+-- had too little smoke (Bresaola, plain Country Ham). Corned pieces take the stack's under-salted spoilage.
+local function smokedMeatType(input, meatType)
+    if meatType == F.HOT_MEAT then return F.isPork(input) and not F.isLeg(input) and F.VANILLA_HAM or meatType end
+    return F.isLeg(input) and F.COUNTRY_HAM or meatType
+end
+
+-- One smoked piece from its input, by the stack's modData. A piece that rotted on the way comes down as what was
+-- hung (F.rottenStage).
+function F.smokedItem(input, modData, fishType, meatType, airDried)
+    local isMeat = input:getFullType() == F.CURED_MEAT
+    local lost = modData.spoiled or 0
+    if isMeat and not input:getModData().longCure then lost = lost + (modData.underSpoiled or 0) end
+    if lost >= 1 then return F.rottenStage(input) end
+    local hot = instanceItem(isMeat and smokedMeatType(input, meatType) or fishType)
+    if hot:getFullType() == F.VANILLA_HAM then
+        F.carryHam(input, hot)
+    else
+        if isMeat and airDried then hot:getModData().airDried = true end
+        F.carry(input, hot)
+        hot:getModData().stackId = modData.stackId
+        hot:getModData().style = modData.style
+    end
+    hot:setAge(hot:getOffAge() * lost)
+    return hot
+end
+
+-- Swaps a finished stack's outputs, already in the station's slots, for make(input) of each of its inputs.
+local function swapOutputs(craftRecipeData, station, make)
     local inputs = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
     local created = craftRecipeData:getAllCreatedItems()
     local logic = station:getComponent(ComponentType.DryingCraftLogic)
     local resources = station:getComponent(ComponentType.Resources)
     if not logic or not resources then return false end
     local slots = Station.itemSlots(resources, logic:getOutputsGroupName(), ResourceIO.Output)
-    local spoiled = modData.spoiled or 0
     for i = 0, math.min(inputs:size(), created:size()) - 1 do
-        local input, made = inputs:get(i), created:get(i)
-        local hot = instanceItem(input:getFullType() == F.CURED_MEAT and meatType or fishType)
-        F.carry(input, hot)
-        hot:getModData().stackId = modData.stackId
-        hot:getModData().style = modData.style
-        hot:setAge(spoiled >= 1 and hot:getOffAgeMax() or hot:getOffAge() * spoiled)
+        local made = created:get(i)
+        local swapped = make(inputs:get(i))
         for j = 0, slots:size() - 1 do
             local slot = slots:get(j)
             if slot:containsItem(made) then
                 slot:removeItem(made)
-                slot:offerItem(hot, true)
+                slot:offerItem(swapped, true)
                 break
             end
         end
     end
     return true
+end
+
+function F.smokedOutputs(craftRecipeData, station, fishType, meatType, airDried)
+    local modData = craftRecipeData:getModData()
+    return swapOutputs(craftRecipeData, station, function(input) return F.smokedItem(input, modData, fishType, meatType, airDried) end)
+end
+
+-- A stack that rotted on any station comes down as what was hung, rotten.
+function F.rottenOutputs(craftRecipeData, station)
+    return swapOutputs(craftRecipeData, station, F.rottenStage)
 end

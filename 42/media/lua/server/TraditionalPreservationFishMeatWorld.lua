@@ -72,6 +72,7 @@ local function readBatches(station, entry, logic, uiLogic, place)
         local modData = craftData:getModData()
         modData.sheltered = place ~= "Open" and place ~= "Covered"
         modData.covered = place == "Covered"
+        if modData.stackId then F.stackStations[modData.stackId] = station end
         if smoking then
             F.smokeStep(modData, fire, ledger)
             modData.inShed = true

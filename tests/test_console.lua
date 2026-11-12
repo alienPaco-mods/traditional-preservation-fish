@@ -49,6 +49,11 @@ local covered, heat, warmCure = ledger.covered, ledger.heat, ledger.warmCure
 run("age", 10)
 run("heat", 5)
 run("warmCure", 24)
+local under = ledger.underCure
+run("age", 100)
+check("age spoils Corned meat in a Smokehouse as a 12 C shed would", math.abs(ledger.underCure - under - 100 * F.underCureRate(12)) < 1e-9
+    and ledger.dryCure ~= nil)
+covered = ledger.covered - 10
 check("age feeds covered frames, heat and warmCure their totals", ledger.covered == covered + 10 and ledger.heat == heat + 5 and ledger.warmCure == warmCure + 36)
 ledger.wetness = 3
 run("dry")

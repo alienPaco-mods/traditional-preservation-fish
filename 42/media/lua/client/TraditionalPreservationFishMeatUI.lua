@@ -100,13 +100,18 @@ local function drawStackTooltip(slot, tooltip, kind)
     local status = isMeat and F.charqueStatus(slot.craftRecipeData:getModData(), ledger)
         or F.stackStatus(isCold, slot.craftRecipeData:getModData(), ledger)
     UI.drawTooltip(tooltip, function(layout)
-        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Method", getText(METHODS[kind]))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Method", getText(status.dryCuring and "IGUI_TraditionalPreservationFishMeat_MethodDryCure" or METHODS[kind]))
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Progress", UI.percent(status.progress))
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_TimeLeft", timeText(status.hoursLeft))
         local modData = slot.craftRecipeData:getModData()
         local place = modData.sheltered and "Indoors" or modData.covered and "Covered" or "Open"
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Place", getText("IGUI_TraditionalPreservationFishMeat_Place" .. place))
-        local word = isMeat and F.charqueTemperatureWord(ledger.temperature or 0) or F.temperatureWord(isCold, ledger.temperature or 0, place == "Open")
+        local word = F.temperatureWord(isCold, ledger.temperature or 0, place == "Open")
+        if status.dryCuring then
+            word = F.dryCureTemperatureWord(status.shedTemperature)
+        elseif isMeat then
+            word = F.charqueTemperatureWord(ledger.temperature or 0)
+        end
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Temperature", getText(word))
         if isCold or isMeat and not modData.sheltered then UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Wind", getText(F.windWord(ledger.wind))) end
         -- Wetness is rain left on open frames: indoors (a room, the Smokehouse) none reaches the stack.
@@ -119,23 +124,28 @@ local function drawStackTooltip(slot, tooltip, kind)
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Rate", UI.percent(status.rate))
         end
         -- In a Smokehouse joined to a Firebox: the stoked session's hours against the cook, and the smoke so far.
-        if modData.smokeFrom and modData.hotNeed then
+        if modData.smokeFrom and modData.hotNeed and not modData.noHot then
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_HotSmoke", getText("IGUI_TraditionalPreservationFishMeat_HotSmokeHours",
                 string.format("%.1f", modData.hot or 0), string.format("%.0f", modData.hotNeed)))
         end
-        -- Smoke so far against Cold Smoked's need (a third of the hours since the stack was hung), or why banked
+        -- Smoke so far against the stack's need (F.smokeHours, by its heaviest piece), or why banked
         -- hours don't count today.
         if modData.smokeFrom and (ledger.temperature or 0) > F.COLD_SMOKE_MAX then
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_ColdSmoke", getText("IGUI_TraditionalPreservationFishMeat_ColdSmokeTooWarm"), UI.SLOW_COLOUR)
         elseif modData.smokeFrom or (modData.cold or 0) > 0 then
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_ColdSmoke", getText("IGUI_TraditionalPreservationFishMeat_ColdSmokeNeed",
-                string.format("%.1f", modData.cold or 0), string.format("%.1f", F.coldNeed(modData, getGameTime():getWorldAgeHours()))))
+                string.format("%.1f", modData.cold or 0), string.format("%.0f", F.coldNeed(modData))))
         end
         if status.spoiling or status.scorching or status.spoiled > 0 then
             local warning = "IGUI_TraditionalPreservationFishMeat_Spoiled"
             if status.scorching then warning = "IGUI_TraditionalPreservationFishMeat_SpoilingSun" end
             if status.spoiling then warning = isCold and "IGUI_TraditionalPreservationFishMeat_SpoilingWarm" or "IGUI_TraditionalPreservationFishMeat_SpoilingMuggy" end
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Spoilage", UI.say(warning, UI.percent(status.spoiled)), UI.WARNING_COLOUR)
+        end
+        -- Corned meat left to dry in the shed: what the shed's warmth is taking from it.
+        if status.underSalted then
+            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_UnderSalted", UI.say("IGUI_TraditionalPreservationFishMeat_UnderSaltedShed",
+                string.format("%.0f", status.shedTemperature)), UI.WARNING_COLOUR)
         end
     end)
 end

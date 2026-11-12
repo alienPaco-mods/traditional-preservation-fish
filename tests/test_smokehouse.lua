@@ -78,7 +78,13 @@ check("never past 12", F.hotHours(false, 9) == F.HOT_MAX_HOURS and F.hotHours(tr
 
 local function pieces(...)
     local list = {}
-    for _, weight in ipairs({ ... }) do table.insert(list, { getActualWeight = function() return weight end }) end
+    for _, weight in ipairs({ ... }) do
+        -- A number is a country cured Beef of that weight; a table gives its own index and cure.
+        local piece = type(weight) == "table" and weight or { weight = weight, index = 0, longCure = true }
+        local modData = { longCure = piece.longCure }
+        table.insert(list, { getActualWeight = function() return piece.weight end, getFullType = function() return F.CURED_MEAT end,
+            getModelIndex = function() return piece.index end, getModData = function() return modData end })
+    end
     return { size = function() return #list end, get = function(_, i) return list[i + 1] end }
 end
 local stack = {}
@@ -148,8 +154,16 @@ ledger.clock, ledger.smokeCool, ledger.smokeBanked, ledger.smokeStoked, ledger.s
 Hearth.logFire(bankFire, 321, Hearth.BANKED, 400)
 F.smokeStep(cool, bankFire, ledger)
 check("a hot spell counts none", near(cool.cold, 5) and near(cool.dried, 3.5 + 10 * 0.3))
-check("Cold Smoked needs a third of the hours in the shed", near(F.coldNeed(cool, 15), 5) and F.coldDone(cool, 15) and not F.coldDone(cool, 16))
-check("no smoke, never Cold Smoked", not F.coldDone({ cold = 0, stackId = 0 }, 0))
+check("smoke by the heaviest piece: fish a day or two, a Beef 60 hours, a leg 120", F.smokeHours(false, 0.5) == 24
+    and F.smokeHours(false, 2.2) == 48 and near(F.smokeHours(false, 1.65), 36) and F.smokeHours(true, 0.3) == 60
+    and F.smokeHours(true, 0.45) == 60 and near(F.smokeHours(true, 1.35), 90) and F.smokeHours(true, 2.25) == 120 and F.smokeHours(true, 4) == 120)
+check("a small fish stack needs 24 hours of smoke, however long it hangs", cool.smokeNeed == 24 and F.coldNeed(cool) == 24 and not F.coldDone(cool))
+cool.cold = 24
+check("with them it is Cold Smoked", F.coldDone(cool))
+cool.cold = 5
+check("no smoke, never Cold Smoked", not F.coldDone({ cold = 0, heaviest = 1 }))
+check("a stack hung before the fixed hours takes its need from its heaviest piece", F.coldNeed({ smokeMeat = true, heaviest = 2.25 }) == 120
+    and F.coldNeed({ heaviest = 1.1 }) == 24)
 ledger.temperature = 25
 local warm = {}
 F.startSmoke(warm, pieces(0.3), true)
@@ -214,6 +228,84 @@ end
 check("a smoked steak is Suho Meso", F.stageName(meatItem(1)) == "Suho Meso")
 check("a mutton chop is Mutton Ham, venison Jerked Venison", F.stageName(meatItem(2)) == "Mutton Ham" and F.stageName(meatItem(3)) == "Jerked Venison")
 check("pork is Smoked Dry-Cured Pork, a leg Smoked Country Ham", F.stageName(meatItem(5)) == "Smoked Dry-Cured Pork" and F.stageName(meatItem(6)) == "Smoked Country Ham")
+
+check("air dried, beef is Bresaola and a leg plain Country Ham", F.stageName({ getFullType = function() return F.DRY_CURED end,
+    getModelIndex = function() return 0 end, getModData = function() return { airDried = true } end }) == "Bresaola"
+    and F.stageName({ getFullType = function() return F.COUNTRY_HAM end, getModelIndex = function() return F.LEG_INDEX end,
+        getModData = function() return { airDried = true } end }) == "Country Ham")
+
+-- Dry curing (6b): meat in the shed dries in cool air on its own need, by the heaviest piece.
+check("full from 12 C, a quarter in frost", F.dryCureRate(12) == 1 and F.dryCureRate(25) == 1 and near(F.dryCureRate(6), 0.5)
+    and F.dryCureRate(0) == 0.25 and F.dryCureRate(-15) == 0.25)
+check("a Beef needs three weeks, a leg six, a Steak a little less", near(F.dryCureHours(0.45), 504) and near(F.dryCureHours(2.25), 1008)
+    and near(F.dryCureHours(0.27), 453.6) and F.dryCureHours(5) == 1008)
+check("under-salted meat rots in four weeks at 10 C, five times slower at 0 C, five times faster at 20 C",
+    near(F.underCureRate(10) * 672, 1) and near(F.underCureRate(0) * 672, 0.2) and near(F.underCureRate(20) * 672, 5)
+    and F.underCureRate(40) == F.underCureRate(30))
+local cureLedger = F.newLedger(0)
+F.advance(cureLedger, 10, { temperature = 6, humidity = 0.3, precipitation = 0, wind = 0 })
+check("the ledger keeps dry curing's totals, the fire's above the shed's", near(cureLedger.dryCure, 5)
+    and near(cureLedger.dryCureBanked, 10) and near(cureLedger.dryCureStoked, 10) and near(cureLedger.dryCureRate, 0.5))
+check("and the under-salted's, warmer by the fire", near(cureLedger.underCure, 10 * F.underCureRate(6))
+    and near(cureLedger.underCureBanked, 10 * F.underCureRate(21)) and near(cureLedger.underCureStoked, 10 * F.underCureRate(26)))
+
+local ham = {}
+F.startSmoke(ham, pieces({ weight = 2.25, index = F.LEG_INDEX, longCure = true }, 0.45), true)
+check("a stack with a leg needs six weeks and takes no hot cook", near(ham.cureNeed, 1008) and ham.noHot and not ham.underCured)
+ham.hot = 99
+check("however long it is stoked", not F.hotDone(ham))
+local corned = {}
+F.startSmoke(corned, pieces({ weight = 0.45, index = 0 }, { weight = 0.3, index = 1 }), true)
+check("Corned meat is under-salted, and still hot smokes", corned.underCured and near(corned.cureNeed, 504) and not corned.noHot)
+check("only a stack that is all Corned can end by under-salting", corned.allUnder and not ham.allUnder)
+local mixed = {}
+F.startSmoke(mixed, pieces({ weight = 0.45, index = 0 }, 0.45), true)
+check("a mixed stack is under-salted but dries on", mixed.underCured and not mixed.allUnder)
+check("fish has no dry-curing need", cool.cureNeed == nil and not F.dryCuring(cool))
+
+-- A corned stack in the shed, a day with the fire out and a day banked: it dries and spoils by the shed's totals.
+local shed = F.newLedger(0)
+corned.dried, corned.spoiled, corned.stackId = 0, 0, 0
+corned.lastDryCure, corned.lastUnderCure, corned.lastSaltSpoil = 0, 0, 0
+corned.inShed = true
+local shedFire = {}
+Hearth.logFire(shedFire, 500, nil, nil)
+F.smokeStep(corned, shedFire, shed)
+F.advance(shed, 24, { temperature = 0, humidity = 0.3, precipitation = 0, wind = 0 })
+F.charqueStep(corned, shed)
+F.smokeStep(corned, shedFire, shed)
+check("with the fire out it dries at the frost rate", near(corned.dried, 24 * 0.25))
+check("and spoils as at 0 C", near(corned.underSpoiled, 24 * F.underCureRate(0)))
+Hearth.logFire(shedFire, 501, Hearth.BANKED, 600)
+Hearth.logFire(shedFire, 525, Hearth.BANKED, 600)
+F.advance(shed, 48, { temperature = 0, humidity = 0.3, precipitation = 0, wind = 0 })
+F.charqueStep(corned, shed)
+F.smokeStep(corned, shedFire, shed)
+check("banked, the shed is 15 C: full rate", near(corned.dried, 24 * 0.25 + 24 * 1))
+check("and the under-salted spoils as at 15 C", near(corned.underSpoiled, 24 * F.underCureRate(0) + 24 * F.underCureRate(15)))
+check("all its banked hours were smoke", near(corned.cold, 24))
+local status = F.charqueStatus(corned, shed)
+check("its popup reads dry curing, under-salted, the shed at 15 C", status.dryCuring and status.underSalted and status.shedTemperature == 15
+    and near(status.rate, 1) and near(status.progress, 30 / 504) and near(status.spoiled, corned.underSpoiled))
+check("the shed's words", F.dryCureTemperatureWord(15) == "IGUI_TraditionalPreservationFishMeat_TempGoodCure"
+    and F.dryCureTemperatureWord(-3) == "IGUI_TraditionalPreservationFishMeat_TempFrostSlow")
+check("on a frame it is still charque", not F.dryCuring({ cureNeed = 504 }) and F.meatHours({ cureNeed = 504 }) == F.CHARQUE_HOURS
+    and F.meatHours({ cureNeed = 504, inShed = true }) == 504)
+
+-- A leg's stoked hours are smoke at once.
+local legFire = {}
+Hearth.logFire(legFire, 700, nil, nil)
+F.smokeStep(ham, legFire)
+ham.hot, ham.hotCool = 0, 0
+Hearth.logFire(legFire, 701, Hearth.STOKED, 720)
+Hearth.logFire(legFire, 705, Hearth.STOKED, 720)
+F.smokeStep(ham, legFire)
+check("a leg's stoked hours are smoke, not a cook", ham.hot == 0 and near(ham.cold, 4))
+
+-- A stack hung before 6b keeps its share of progress on the new need.
+local before6b = { hotNeed = 8, hot = 0, cold = 0, smokeMeat = true, heaviest = 0.45, dried = 60, inShed = true }
+F.smokeStep(before6b, legFire, shed)
+check("an older stack halfway through charque's clock is halfway through its cure", near(before6b.cureNeed, 504) and near(before6b.dried, 252))
 
 -- The ham by the door (user's idea): the door's tile, by facing, only with finished stacks.
 check("the ham hangs on the door's tile while stacks wait", F.hamSprite(0, 1, true) == Tiles.CHAMBER_HAM and F.hamSprite(1, 1, true) == Tiles.CHAMBER_HAM + 1)

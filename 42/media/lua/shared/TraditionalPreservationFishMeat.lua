@@ -84,6 +84,7 @@ F.MEAT_STAGES = {
     ["TraditionalPreservationFishMeat.SaltPackedMeat"] = true, ["TraditionalPreservationFishMeat.SaltCuredMeat"] = true,
     ["TraditionalPreservationFishMeat.Charque"] = true, ["TraditionalPreservationFishMeat.SoakedCharque"] = true,
     ["TraditionalPreservationFishMeat.HotSmokedMeat"] = true, ["TraditionalPreservationFishMeat.DryCuredMeat"] = true,
+    ["TraditionalPreservationFishMeat.CountryHam"] = true,
 }
 
 function F.isMeatStage(fullType)
@@ -172,6 +173,13 @@ F.SALT_SPOIL_HOURS = 480
 -- 10 degrees more adds as much again. The pressed fish carries it onto the frame.
 F.WARM_CURE_ABOVE = 20
 F.WARM_CURE_SHARE = 0.25
+-- The long cure wants the cold (0.4.14): its salt takes weeks to reach the middle, so the meat sours at the bone
+-- unless the season stays cool, which is why hog killing waited for frost. Above LONG_CURE_ABOVE (the season's mean)
+-- a Country Cure batch spoils in step with the warmth, and is rotten after LONG_CURE_ROT_HOURS (a leg's cure) at
+-- LONG_CURE_ROT_AT. At 12 C a leg loses two fifths of its keeping and cuts a fifth. On top of the warm cure above.
+F.LONG_CURE_ABOVE = 10
+F.LONG_CURE_ROT_AT = 15
+F.LONG_CURE_ROT_HOURS = 504
 -- Salt fish hangs in the shade. In open sun above HEAT_ABOVE (the temperature now), until it is
 -- SALT_FRESH_UNTIL dried, the skin hardens over wet flesh and the fat rusts: HEAT_DAMAGE_HOURS of that on
 -- a fresh stack add HEAT_DAMAGE to its spoilage, scaled by how wet it still is, within DAMAGE_CAP.
@@ -223,6 +231,9 @@ F.COLD_SMOKE_MAX = 15
 F.BANKED_LIFT = 15
 F.STOKED_LIFT = 20
 F.smokeStations = {}
+-- Every hanging stack's station, by stackId, as the World last saw it (not saved): a stack that rots comes down as
+-- what was hung, not as the finished thing (F.rottenOutputs).
+F.stackStations = {}
 F.SHED_WAIT = 0.999
 
 -- Charque (phase 3c): Salt Cured meat dried in the summer sun, as in Brazil's charqueadas. CHARQUE_HOURS at a rate of
@@ -240,6 +251,23 @@ F.CHARQUE_REWET = 0.1
 F.CHARQUE_RAIN_HOURS = 6
 -- The sandbox's Charque switch: off, meat can't be packed in salt nor hung.
 F.CHARQUE_ON = true
+
+-- Dry curing (6b): meat hung in the Smokehouse never comes out Charque. It dries slowly in cool air, as a ham or a
+-- side of suho meso does: its need is by the heaviest piece (DRY_CURE_HOURS: three weeks at a rate of 1 for a Beef,
+-- six for a Leg of Pork, a Steak about 19 days), and its rate is full from DRY_CURE_FULL_HEAT (a cellar's
+-- 12 C) and never under DRY_CURE_FROST_RATE (frost only slows it), times the air's (airRate). The fire's warmth
+-- lifts the shed as it does for fish (F.liftedRates).
+F.DRY_CURE_HOURS = { { 0.45, 504 }, { 2.25, 1008 } }
+F.DRY_CURE_FULL_HEAT = 12
+F.DRY_CURE_FROST_RATE = 0.25
+-- Under-salted (6b): Corned meat has salt for a few days, not for weeks in the shed. Until a hot cook is done it
+-- picks up spoilage by the shed's temperature: rotten in UNDER_CURE_HOURS at UNDER_CURE_AT, UNDER_CURE_TENFOLD times
+-- faster for every 10 C more (and slower for less), no faster than at UNDER_CURE_MAX. Near freezing it ends about
+-- half spoiled; in a shed at 10 C and up, or by a banked fire, it rots before it has dried.
+F.UNDER_CURE_HOURS = 672
+F.UNDER_CURE_AT = 10
+F.UNDER_CURE_TENFOLD = 5
+F.UNDER_CURE_MAX = 30
 
 -- From DryingCraftLogic, so the frame's wetness readout tells the truth.
 local RAIN_WETTING = 0.001  -- per game second, at full intensity
@@ -280,6 +308,8 @@ F.STAGES = {
     -- longer charque but the start of the Dry-Cured line, named by the animal ("Dry-Cured Beef (Cold Smoked)").
     ["TraditionalPreservationFishMeat.ColdSmokedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdSmoked", weight = 0.45, nutrition = 0.9, hunger = 0.7, salty = true },
     ["TraditionalPreservationFishMeat.DryCuredMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdSmoked", weight = 0.55, nutrition = 0.9, hunger = 0.7, salty = true, dryCured = true },
+    -- A Leg of Pork dried in the Smokehouse (6b): Dry-Cured meat's shares, an item of its own for its longer keeping.
+    ["TraditionalPreservationFishMeat.CountryHam"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdSmoked", weight = 0.55, nutrition = 0.9, hunger = 0.7, salty = true, dryCured = true },
 }
 
 -- The animal each of MEAT_CUTS comes from, by model index, for the finished meat's names.
@@ -325,15 +355,36 @@ function F.charqueWarmRate(celsius)
     return math.max(0, math.min(celsius / F.CHARQUE_FULL_HEAT, 1))
 end
 
+-- Dry curing's rate by temperature: DRY_CURE_FROST_RATE at its lowest, full from DRY_CURE_FULL_HEAT.
+function F.dryCureRate(celsius)
+    return math.max(F.DRY_CURE_FROST_RATE, math.min(celsius / F.DRY_CURE_FULL_HEAT, 1))
+end
+
+-- The hours at a rate of 1 a stack of meat needs in the Smokehouse, by its heaviest piece: straight between the two
+-- points and on below them, no more than the leg's.
+function F.dryCureHours(heaviest)
+    local low, high = F.DRY_CURE_HOURS[1], F.DRY_CURE_HOURS[2]
+    local hours = low[2] + (heaviest - low[1]) * (high[2] - low[2]) / (high[1] - low[1])
+    return math.min(hours, high[2])
+end
+
+-- The share of itself under-salted meat loses an hour at this temperature in the shed.
+function F.underCureRate(celsius)
+    local warmth = (math.min(celsius, F.UNDER_CURE_MAX) - F.UNDER_CURE_AT) / 10
+    return F.UNDER_CURE_TENFOLD ^ warmth / F.UNDER_CURE_HOURS
+end
+
 -- What the wind does to charque: CHARQUE_CALM_RATE in still air, rising to CHARQUE_WINDY_RATE at WIND_GOOD.
 -- Salt fish's and charque's drying rates in air warmed by lift C (the Smokehouse with the fire burning): the
--- temperature lifted, the humidity halved for every 10 C of it, the wind as outdoors.
+-- temperature lifted, the humidity halved for every 10 C of it, the wind as outdoors. Then dry curing's rate and
+-- under-salted meat's spoiling in the same air (no wind in the shed).
 function F.liftedRates(weather, lift)
     local humidity = weather.humidity * 0.5 ^ (lift / 10)
     local air = F.airRate(humidity)
     local celsius = weather.temperature + lift
     return math.max(F.temperatureRate(celsius) * air, F.MIN_DRY_RATE),
-        F.charqueWarmRate(celsius) * air * F.charqueWindRate(weather.wind)
+        F.charqueWarmRate(celsius) * air * F.charqueWindRate(weather.wind),
+        F.dryCureRate(celsius) * air, F.underCureRate(celsius)
 end
 
 function F.charqueWindRate(wind)
@@ -346,11 +397,14 @@ end
 -- covered, charque open, covered and sheltered, hours of spoiling raw and salted,
 -- hours of hard frost and of cold fish lying wet above freezing, of a warm cure, of heat and of rain, the
 -- wetness rain left on open frames and on cold ones, for cold smoke (5d) all hours and the cool ones, and salt fish's
--- and charque's drying in a Smokehouse warmed by a banked or a stoked fire.
+-- and charque's drying in a Smokehouse warmed by a banked or a stoked fire, and dry curing's drying and under-salted
+-- meat's spoiling there with the fire out, banked and stoked.
 function F.newLedger(now)
     return { lastHour = now, wetness = 0, coldWetness = 0, open = 0, sheltered = 0, covered = 0, cold = 0, coldCovered = 0, rawSpoil = 0, saltSpoil = 0,
         hardFrost = 0, coldWet = 0, warmCure = 0, heat = 0, charque = 0, charqueCovered = 0, charqueSheltered = 0, charqueRain = 0,
-        clock = 0, smokeCool = 0, smokeBanked = 0, smokeStoked = 0, charqueBanked = 0, charqueStoked = 0 }
+        clock = 0, smokeCool = 0, smokeBanked = 0, smokeStoked = 0, charqueBanked = 0, charqueStoked = 0,
+        dryCure = 0, dryCureBanked = 0, dryCureStoked = 0, underCure = 0, underCureBanked = 0, underCureStoked = 0,
+        longCureSpoil = 0 }
 end
 
 -- Adds one stretch of weather to the totals. Open frames dry nothing until the rain has gone
@@ -394,8 +448,16 @@ function F.advance(ledger, now, weather)
     if raining then ledger.charqueRain = ledger.charqueRain + hours end
     ledger.clock = ledger.clock + hours
     if weather.temperature <= F.COLD_SMOKE_MAX then ledger.smokeCool = ledger.smokeCool + hours end
-    ledger.bankedRate, ledger.charqueBankedRate = F.liftedRates(weather, F.BANKED_LIFT)
-    ledger.stokedRate, ledger.charqueStokedRate = F.liftedRates(weather, F.STOKED_LIFT)
+    local underBanked, underStoked
+    ledger.bankedRate, ledger.charqueBankedRate, ledger.dryCureBankedRate, underBanked = F.liftedRates(weather, F.BANKED_LIFT)
+    ledger.stokedRate, ledger.charqueStokedRate, ledger.dryCureStokedRate, underStoked = F.liftedRates(weather, F.STOKED_LIFT)
+    ledger.dryCureRate = F.dryCureRate(weather.temperature) * F.airRate(weather.humidity)
+    ledger.dryCure = ledger.dryCure + ledger.dryCureRate * hours
+    ledger.dryCureBanked = ledger.dryCureBanked + ledger.dryCureBankedRate * hours
+    ledger.dryCureStoked = ledger.dryCureStoked + ledger.dryCureStokedRate * hours
+    ledger.underCure = ledger.underCure + F.underCureRate(weather.temperature) * hours
+    ledger.underCureBanked = ledger.underCureBanked + underBanked * hours
+    ledger.underCureStoked = ledger.underCureStoked + underStoked * hours
     ledger.smokeBanked = ledger.smokeBanked + ledger.bankedRate * hours
     ledger.smokeStoked = ledger.smokeStoked + ledger.stokedRate * hours
     ledger.charqueBanked = ledger.charqueBanked + ledger.charqueBankedRate * hours
@@ -422,6 +484,11 @@ function F.advance(ledger, now, weather)
     ledger.warmCuring = cureWarmth > 0
     if ledger.warmCuring then
         ledger.warmCure = ledger.warmCure + (1 + cureWarmth / 10) * hours
+    end
+    local longWarmth = ledger.seasonTemperature - F.LONG_CURE_ABOVE
+    ledger.longCuring = longWarmth > 0
+    if ledger.longCuring then
+        ledger.longCureSpoil = ledger.longCureSpoil + longWarmth / (F.LONG_CURE_ROT_AT - F.LONG_CURE_ABOVE) / F.LONG_CURE_ROT_HOURS * hours
     end
     ledger.saltSpoiling = ledger.seasonTemperature > F.SALT_SPOIL_ABOVE and ledger.seasonHumidity > F.SALT_SPOIL_HUMIDITY
     if ledger.saltSpoiling then
@@ -493,7 +560,16 @@ end
 -- How a hanging charque stack is doing right now, for its popup, as stackStatus.
 function F.charqueStatus(modData, ledger)
     local rate, reason
-    if modData.sheltered then
+    local curing = F.dryCuring(modData)
+    local lift = 0
+    if curing then
+        rate = ledger.dryCureRate or 0
+        if modData.burning then
+            local stoked = modData.burning == Hearth.STOKED
+            rate = math.max(rate, (stoked and ledger.dryCureStokedRate or ledger.dryCureBankedRate) or 0)
+            lift = stoked and F.STOKED_LIFT or F.BANKED_LIFT
+        end
+    elseif modData.sheltered then
         rate = ledger.charqueShelteredRate or 0
         if modData.burning then
             rate = math.max(rate, (modData.burning == Hearth.STOKED and ledger.charqueStokedRate or ledger.charqueBankedRate) or 0)
@@ -505,15 +581,19 @@ function F.charqueStatus(modData, ledger)
         if rate <= 0 and (ledger.wetness or 0) > 0 then reason = "Rain" end
     end
     if rate <= 0 and not reason then reason = "TooCold" end
-    local dried = modData.dried or 0
+    local dried, hours = modData.dried or 0, F.meatHours(modData)
     return {
-        progress = math.min(dried / F.CHARQUE_HOURS, 1),
+        progress = math.min(dried / hours, 1),
         rate = rate,
         reason = reason,
-        hoursLeft = rate > 0 and math.max(F.CHARQUE_HOURS - dried, 0) / rate or nil,
-        spoiled = math.min(modData.spoiled or 0, 1),
+        hoursLeft = rate > 0 and math.max(hours - dried, 0) / rate or nil,
+        spoiled = math.min((modData.spoiled or 0) + (modData.underSpoiled or 0), 1),
         spoiling = ledger.saltSpoiling == true,
         scorching = false,
+        dryCuring = curing,
+        -- Corned meat in the shed, and the shed's temperature it spoils by.
+        underSalted = curing and modData.underCured == true,
+        shedTemperature = (ledger.temperature or 0) + lift,
     }
 end
 
@@ -523,6 +603,13 @@ function F.charqueTemperatureWord(celsius)
     if celsius >= 15 then return "IGUI_TraditionalPreservationFishMeat_TempGoodWarm" end
     if celsius > 0 then return "IGUI_TraditionalPreservationFishMeat_TempCool" end
     return "IGUI_TraditionalPreservationFishMeat_TempTooCold"
+end
+
+-- The popup's word for the temperature on meat in the Smokehouse: cool air is right, frost only slows it.
+function F.dryCureTemperatureWord(celsius)
+    if celsius >= F.DRY_CURE_FULL_HEAT then return "IGUI_TraditionalPreservationFishMeat_TempGoodCure" end
+    if celsius > 0 then return "IGUI_TraditionalPreservationFishMeat_TempCool" end
+    return "IGUI_TraditionalPreservationFishMeat_TempFrostSlow"
 end
 
 -- The popup's word for the wind on a cold frame: calm, a light breeze or a good drying wind.
@@ -536,9 +623,9 @@ end
 -- The ledger is the mod's global ModData table itself, so its keys are the ones in every save.
 function F.getLedger()
     local data = ModData.getOrCreate(F.MOD_DATA_KEY)
-    -- cold, hardFrost, covered, warmCure, heat, the charque, the smoke and the smoulder's totals came after the first
-    -- release, so a save can have the rest without them.
-    if not data.smokeStoked then
+    -- cold, hardFrost, covered, warmCure, heat, the charque, the smoke, the smoulder's, dry curing's and the long
+    -- cure's totals came after the first release, so a save can have the rest without them.
+    if not data.longCureSpoil then
         local ledger = F.newLedger(getGameTime():getWorldAgeHours())
         for key, value in pairs(ledger) do
             if data[key] == nil then data[key] = value end
@@ -564,6 +651,7 @@ end
 function F.onPressStart(craftRecipeData)
     Weather.startClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours())
     craftRecipeData:getModData().lastWarmCure = F.getLedger().warmCure
+    craftRecipeData:getModData().lastLongCure = nil
     local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
     local heaviest, meat, leg = 0, false, false
     for i = 0, fish:size() - 1 do
@@ -574,7 +662,10 @@ function F.onPressStart(craftRecipeData)
     local hours = meat and F.meatPressHours(heaviest) or F.pressHours(heaviest)
     -- The engine gives the recipe's full name, module and all.
     local recipeName = string.gsub(craftRecipeData:getRecipe():getName(), "^.*%.", "")
-    if recipeName == F.LONG_CURE_RECIPE then hours = F.longCureHours(leg) end
+    if recipeName == F.LONG_CURE_RECIPE then
+        hours = F.longCureHours(leg)
+        craftRecipeData:getModData().lastLongCure = F.getLedger().longCureSpoil
+    end
     craftRecipeData:getModData().pressHours = hours
 end
 
@@ -612,7 +703,9 @@ end
 -- The share of its keeping a batch has lost to a warm cure so far. A press started before this counts from now.
 function F.cureSpoiled(modData, ledger)
     local warm = ledger.warmCure - (modData.lastWarmCure or ledger.warmCure)
-    return math.min(warm * F.WARM_CURE_SHARE / F.RAW_SPOIL_HOURS, 1)
+    -- A long cure (lastLongCure is set at its start) also minds a season over LONG_CURE_ABOVE.
+    local long = modData.lastLongCure and (ledger.longCureSpoil or 0) - modData.lastLongCure or 0
+    return math.min(warm * F.WARM_CURE_SHARE / F.RAW_SPOIL_HOURS + long, 1)
 end
 
 -- How far a batch in the tub is, for its popup.
@@ -620,7 +713,8 @@ function F.pressStatus(modData, now, ledger)
     local hours = modData.pressHours or OLD_PRESS_HOURS
     local done = math.max(now - (modData.pressStartHour or now), 0)
     return { progress = math.min(done / hours, 1), hoursLeft = math.max(hours - done, 0),
-        spoiled = F.cureSpoiled(modData, ledger), spoiling = ledger.warmCuring == true }
+        spoiled = F.cureSpoiled(modData, ledger),
+        spoiling = ledger.warmCuring == true or modData.lastLongCure ~= nil and ledger.longCuring == true }
 end
 
 -- Craft timers tick at a fixed speed whatever Day Length says and stop when the area unloads,
@@ -792,12 +886,16 @@ local function startStack(craftRecipeData)
     modData.lastCharqueCovered = ledger.charqueCovered
     modData.lastCharqueSheltered = ledger.charqueSheltered
     modData.lastCharqueRain = ledger.charqueRain
+    modData.lastDryCure, modData.lastUnderCure = ledger.dryCure, ledger.underCure
     modData.sheltered = nil
     modData.covered = nil
     -- Recipe data is pooled with its ModData (ENGINE_NOTES): a stack mustn't inherit an old one's shed or smoke.
     modData.inShed, modData.burning, modData.hotNeed, modData.heaviest = nil, nil, nil, nil
     modData.lastClock, modData.lastSmokeCool, modData.lastDraughtCovered, modData.lastDraughtSheltered = nil, nil, nil, nil
     modData.lastDraughtBanked, modData.lastDraughtStoked = nil, nil
+    modData.cureNeed, modData.noHot, modData.underCured, modData.underSpoiled, modData.allUnder = nil, nil, nil, nil, nil
+    modData.smokeNeed = nil
+    modData.lastUnderBase, modData.lastUnderBanked, modData.lastUnderStoked = nil, nil, nil
 end
 
 -- Shows a stack's progress, and ends it early if it has rotted or its hot smoking is done (the Smokehouse). A stack
@@ -805,7 +903,9 @@ end
 -- Smoked outputs (F.smokeStations).
 local function showProgress(craftRecipeData, modData, hours)
     local time = craftRecipeData:getRecipe():getTime()
-    local progress = (modData.spoiled >= 1 or F.hotStations[modData.stackId]) and 1 or math.min(modData.dried / hours, 1)
+    -- Under-salting ends a stack only when every piece in it is Corned: Country Cured pieces dry on.
+    local rotten = modData.spoiled + (modData.allUnder and modData.underSpoiled or 0) >= 1
+    local progress = (rotten or F.hotStations[modData.stackId]) and 1 or math.min(modData.dried / hours, 1)
     if progress >= 1 and modData.inShed and not F.smokeStations[modData.stackId] then progress = F.SHED_WAIT end
     craftRecipeData:setElapsedTime(progress * time)
 end
@@ -896,18 +996,40 @@ function F.onColdDryUpdate(craftRecipeData)
     showProgress(craftRecipeData, modData, F.COLD_DRY_HOURS)
 end
 
--- OnStart for Salt Cured meat on a frame: charque.
+-- Whether a stack of meat hangs in a Smokehouse (the World marks it, and F.smokeStep sets its need), and the hours
+-- at a rate of 1 a stack of meat needs where it hangs.
+function F.dryCuring(modData)
+    return modData.inShed == true and modData.cureNeed ~= nil
+end
+
+function F.meatHours(modData)
+    return F.dryCuring(modData) and modData.cureNeed or F.CHARQUE_HOURS
+end
+
+-- OnStart for Salt Cured meat on a frame (charque) or in the Smokehouse (dry curing).
 function F.onCharqueStart(craftRecipeData)
     startStack(craftRecipeData)
     F.startSmoke(craftRecipeData:getModData(), craftRecipeData:getAllInputItemsWithFlag("ItemCount"), true)
     craftRecipeData:getModData().style = F.STYLE_MEAT
 end
 
+-- Meat in the Smokehouse dry cures (6b): the shed's cool-air drying with the fire out (F.smokeStep adds the fire's
+-- hours), and for Corned meat the spoiling of the under-salted.
+local function dryCureStep(modData, ledger)
+    modData.dried = modData.dried + ledger.dryCure - (modData.lastDryCure or ledger.dryCure)
+    if modData.underCured then
+        modData.underSpoiled = (modData.underSpoiled or 0) + ledger.underCure - (modData.lastUnderCure or ledger.underCure)
+    end
+    modData.lastDryCure, modData.lastUnderCure = ledger.dryCure, ledger.underCure
+end
+
 -- Adds what the weather has done to a charque stack since it was last looked at, by the frame's place now. Rain on
 -- an open frame takes back a share of what it had first; it doesn't dry while wet anyway.
 function F.charqueStep(modData, ledger)
     local rain = ledger.charqueRain - (modData.lastCharqueRain or ledger.charqueRain)
-    if modData.sheltered then
+    if F.dryCuring(modData) then
+        dryCureStep(modData, ledger)
+    elseif modData.sheltered then
         modData.dried = modData.dried + ledger.charqueSheltered - modData.lastCharqueSheltered
     elseif modData.covered then
         modData.dried = modData.dried + ledger.charqueCovered - modData.lastCharqueCovered
@@ -927,7 +1049,7 @@ function F.onCharqueUpdate(craftRecipeData)
     local modData = craftRecipeData:getModData()
     if not modData.dried then return end
     F.charqueStep(modData, F.getLedger())
-    showProgress(craftRecipeData, modData, F.CHARQUE_HOURS)
+    showProgress(craftRecipeData, modData, F.meatHours(modData))
 end
 
 -- A fish from another mod isn't in the list, and keeps the stage's own icon.
@@ -1342,7 +1464,7 @@ local function meatStageName(item)
 end
 
 -- Stockfish is named by its species alone ("Walleye Stockfish"): no size, nor Gutted, which nearly all of it is.
--- One from another mod's fish (no icon of ours) keeps the name it came with. Matured once ripe; Rehydrated, soaked.
+-- One from another mod's fish (no icon of ours) keeps the name it came with. Matured once ripe; Soaked, rehydrated.
 local function stockfishName(item, fishName)
     local index = item:getModelIndex()
     if index >= 0 then fishName = getItemNameFromFullType(F.FISH_ICONS[index % #F.FISH_ICONS + 1]) end
@@ -1386,6 +1508,8 @@ function F.rename(item)
         item:setName(name)
         item:setCustomName(true)
     end
+    -- Air dried meat's tooltip has no smoke in it.
+    if item:getModData().airDried and item:getFullType() == "TraditionalPreservationFishMeat.DryCuredMeat" then item:setTooltip("Tooltip_TraditionalPreservationFishMeat_AirDried") end
     if not F.STAGES[item:getFullType()].matures then return end
     local ripeness = F.ripeness(item)
     local tooltip = "Tooltip_TraditionalPreservationFishMeat_ColdDried"
@@ -1395,6 +1519,31 @@ end
 
 -- InheritFood would copy the first fish onto all of them, and a batch can mix sizes, so each
 -- fish hands its own values to one output.
+-- A hung piece that rotted before it was done: the same stage again, as it went up, rotten ("Corned Beef", not
+-- "Bresaola"; a Gutted Walleye, not a Stockfish).
+function F.rottenStage(source)
+    local rotten = instanceItem(source:getFullType())
+    copyFood(source, rotten, 1)
+    rotten:setActualWeight(source:getActualWeight())
+    rotten:setCustomWeight(true)
+    local sourceData, rottenData = source:getModData(), rotten:getModData()
+    for _, key in ipairs({ "fishName", "sliceable", "longCure", "rinsed", "cureSpoiled" }) do rottenData[key] = sourceData[key] end
+    if sourceData.rinsed then F.applyRinse(rotten) end
+    rotten:setModelIndex(source:getModelIndex())
+    F.rename(rotten)
+    rotten:setAge(rotten:getOffAgeMax())
+    return rotten
+end
+
+-- Hot smoked pork is vanilla's Ham (6b), with the cut's own food and Hot Smoked's share of its weight, so Slice Ham
+-- and every ham dish take it. Vanilla names and keeps it.
+function F.carryHam(source, ham)
+    local stage = F.STAGES[F.HOT_MEAT]
+    copyFood(source, ham, stage.nutrition, stage.hunger)
+    ham:setActualWeight(F.foodWeight(source) * stage.weight)
+    ham:setCustomWeight(true)
+end
+
 function F.onCreateCured(craftRecipeData)
     local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
     local created = craftRecipeData:getAllCreatedItems()
@@ -1559,9 +1708,15 @@ end
 
 -- Marks the fish of a stack, so a frame can tell its finished stacks apart, and ages it by what
 -- the season took out of it. A stack hot smoked in the Smokehouse comes out Hot Smoked instead, and one that had
--- smoke for a third of its time there Cold Smoked.
+-- its hours of smoke there (F.smokeHours) Cold Smoked. Meat dried in the shed is Dry-Cured either way, never Charque.
 function F.onCreateDried(craftRecipeData)
     local modData = craftRecipeData:getModData()
+    local hung = modData.stackId and F.stackStations[modData.stackId]
+    if hung then F.stackStations[modData.stackId] = nil end
+    if hung and (modData.spoiled or 0) >= 1 and F.rottenOutputs(craftRecipeData, hung) then
+        F.hotStations[modData.stackId], F.smokeStations[modData.stackId] = nil, nil
+        return
+    end
     local station = F.hotStations[modData.stackId]
     if station then
         F.hotStations[modData.stackId] = nil
@@ -1569,8 +1724,11 @@ function F.onCreateDried(craftRecipeData)
     end
     station = modData.stackId and F.smokeStations[modData.stackId]
     if station then F.smokeStations[modData.stackId] = nil end
-    if station and F.coldDone(modData, getGameTime():getWorldAgeHours())
-        and F.smokedOutputs(craftRecipeData, station, F.COLD_FISH_OUT, F.DRY_CURED) then return end
+    if station then
+        local smoked = F.coldDone(modData)
+        -- Meat from the shed is always Dry-Cured, smoked or air dried (6b); fish only with its share of smoke.
+        if (smoked or modData.smokeMeat) and F.smokedOutputs(craftRecipeData, station, F.COLD_FISH_OUT, F.DRY_CURED, not smoked) then return end
+    end
     F.onCreateCured(craftRecipeData)
     local spoiled = modData.spoiled or 0
     local created = craftRecipeData:getAllCreatedItems()

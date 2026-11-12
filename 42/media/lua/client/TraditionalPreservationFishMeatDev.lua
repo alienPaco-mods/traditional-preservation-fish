@@ -17,11 +17,13 @@ end
 function TPFM.help()
     say("TPFM.weather()             the drying weather now: temperature, season, wetness, rates, spoilage and totals")
     say("TPFM.wind()                start a log of live wind every 10 minutes; again to print it beside the forecast")
-    say("TPFM.age(hours)            give every hanging stack this many hours of perfect drying weather")
+    say("TPFM.age(hours)            give every hanging stack this many hours of perfect drying weather (Corned meat in a Smokehouse spoils with it)")
     say("TPFM.spoil(hours)          add this many hours of spoiling weather, to test rotting stacks")
+    say("TPFM.underSalt(hours)      add this many hours of a 10 C shed (default 168) for Corned meat hanging in a Smokehouse")
     say("TPFM.frost(hours)          add this many hours of hard frost, to test early frost on fresh cold stacks")
     say("TPFM.heat(hours)           add this many hours of hot sun, to test it on fresh open salt stacks")
     say("TPFM.warmCure(hours)       add this many hours of a warm cure at 25 C, to test a warm cure spoiling a running tub")
+    say("TPFM.longCure(hours)       add this many hours of a 15 C season (default 168) to a running Country Cure, which wants 10 C or less")
     say("TPFM.dry()                 clear the wetness, so open and cold frames start drying again at once")
     say("TPFM.mature(days)          age the stockfish you carry by this many days, to test maturing")
     say("TPFM.stockfish(n)          spawn n young stockfish (fresh off the frame), for the pallet")
@@ -45,7 +47,8 @@ function TPFM.help()
     say("TPFM.smokehouse()          each Smokehouse tile within 3 tiles: facing, part, the Fireboxes beside it and why each can't join")
     say("TPFM.smoke()               the joined Firebox's fire record and each stack's hot and smoke hours, Smokehouses within 3 tiles")
     say("TPFM.stoke(hours)          add stoked hours to the running session of those joined Fireboxes (stoke it first)")
-    say("TPFM.bank(hours)           add banked hours (default 6) to those joined Fireboxes: smoke for Cold Smoked")
+    say("TPFM.bank(hours)           add banked hours (default 6) to those joined Fireboxes: smoke, but only on a day of 15 C or less")
+    say("TPFM.addSmoke(hours)       add hours of smoke (default 60) straight to the stacks in those Smokehouses, whatever the weather")
     say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up curing.")
 end
 
@@ -112,7 +115,11 @@ function TPFM.age(hours)
     ledger.charque, ledger.charqueCovered, ledger.charqueSheltered = ledger.charque + hours, ledger.charqueCovered + hours, ledger.charqueSheltered + hours
     ledger.smokeBanked, ledger.smokeStoked = ledger.smokeBanked + hours, ledger.smokeStoked + hours
     ledger.charqueBanked, ledger.charqueStoked = ledger.charqueBanked + hours, ledger.charqueStoked + hours
-    say(string.format("Added %.0f hours of perfect drying weather. Stacks update within a few seconds.", hours))
+    ledger.dryCure, ledger.dryCureBanked, ledger.dryCureStoked = ledger.dryCure + hours, ledger.dryCureBanked + hours, ledger.dryCureStoked + hours
+    -- Perfect dry-curing weather is a shed at 12 C: Corned meat hanging in a Smokehouse spoils as it would there.
+    local under = hours * F.underCureRate(F.DRY_CURE_FULL_HEAT)
+    ledger.underCure, ledger.underCureBanked, ledger.underCureStoked = ledger.underCure + under, ledger.underCureBanked + under, ledger.underCureStoked + under
+    say(string.format("Added %.0f hours of perfect drying weather. Stacks update within a few seconds. Corned meat in a Smokehouse spoiled %.0f%% (a 12 C shed).", hours, under * 100))
 end
 
 function TPFM.spoil(hours)
@@ -120,6 +127,15 @@ function TPFM.spoil(hours)
     local ledger = F.getLedger()
     ledger.rawSpoil, ledger.saltSpoil = ledger.rawSpoil + hours, ledger.saltSpoil + hours
     say(string.format("Added %.0f hours of spoiling weather. A fresh cold stack rots after %d.", hours, F.RAW_SPOIL_HOURS))
+end
+
+-- Hours of a 10 C shed for under-salted (Corned) meat hanging in a Smokehouse: rotten after F.UNDER_CURE_HOURS.
+function TPFM.underSalt(hours)
+    hours = hours or 168
+    local ledger = F.getLedger()
+    local share = hours / F.UNDER_CURE_HOURS
+    ledger.underCure, ledger.underCureBanked, ledger.underCureStoked = ledger.underCure + share, ledger.underCureBanked + share, ledger.underCureStoked + share
+    say(string.format("Added %.0f hours of a 10 C shed for Corned meat in the Smokehouse. It rots after %d.", hours, F.UNDER_CURE_HOURS))
 end
 
 function TPFM.frost(hours)
@@ -158,6 +174,14 @@ function TPFM.warmCure(hours)
 end
 
 -- Ripeness runs on the fish's own food clock, so this ages the fish themselves.
+-- Hours of a 15 C season for a running Country Cure: a leg's 504 hours of it are a rotten batch.
+function TPFM.longCure(hours)
+    hours = hours or 168
+    local ledger = F.getLedger()
+    ledger.longCureSpoil = (ledger.longCureSpoil or 0) + hours / F.LONG_CURE_ROT_HOURS
+    say(string.format("Added %.0f hours of a 15 C season to running Country Cures: %.0f%% spoiled.", hours, hours / F.LONG_CURE_ROT_HOURS * 100))
+end
+
 function TPFM.mature(days)
     days = days or 10
     local fish = getPlayer():getInventory():getAllTypeRecurse("TraditionalPreservationFishMeat.ColdDriedFish")
@@ -229,14 +253,15 @@ end
 function TPFM.cured(count, long)
     local inventory = getPlayer():getInventory()
     for _, cut in ipairs(F.MEAT_CUTS) do
-        for _ = 1, count or 1 do
+        -- The short cure refuses a leg, so there is no Corned Leg of Pork.
+        for _ = 1, (long == true or cut ~= F.LEG_OF_PORK) and (count or 1) or 0 do
             local raw = instanceItem(cut)
             local cured = inventory:AddItem(F.CURED_MEAT)
             cured:getModData().longCure = long == true or nil
             F.carry(raw, cured)
         end
     end
-    say("Gave " .. (count or 1) .. " each of the seven cuts, " .. (long and "Country Cured" or "Corned") .. ". Pork hangs in the Smokehouse only.")
+    say("Gave " .. (count or 1) .. " each of the " .. (long == true and "seven cuts, Country Cured" or "six cuts, Corned (a leg takes the long cure only)") .. ". Pork hangs in the Smokehouse only.")
 end
 
 -- A vanilla fish packed and cured as the tub would, ready for the frame or the Smokehouse ("Walleye (Salt Cured)").
@@ -446,11 +471,14 @@ function TPFM.smoke()
         local items = CraftLogicUILogic.new(getPlayer(), shed.tile, logic):getItemsInProgress()
         for craftData, _ in pairs(items) do
             local modData = craftData:getModData()
-            local now = getGameTime():getWorldAgeHours()
             say(string.format("  stack %s (heaviest piece %.2f): hot %.1f of %s h, smoke %.1f of %.1f h%s, dried %.0f h%s", tostring(modData.stackId), modData.heaviest or 0, modData.hot or 0,
-                modData.hotNeed and string.format("%.0f", modData.hotNeed) or "-", modData.cold or 0, F.coldNeed(modData, now),
-                F.coldDone(modData, now) and " (Cold Smoked)" or "", modData.dried or 0,
+                modData.hotNeed and string.format("%.0f", modData.hotNeed) or "-", modData.cold or 0, F.coldNeed(modData),
+                F.coldDone(modData) and " (Cold Smoked)" or "", modData.dried or 0,
                 F.hotStations[modData.stackId] and ", cook done" or ""))
+            if modData.cureNeed then
+                say(string.format("    meat: dry curing needs %.0f h%s%s", modData.cureNeed, modData.noHot and ", a leg: no hot cook" or "",
+                    modData.underCured and string.format(", under-salted, %.0f%% spoiled", (modData.underSpoiled or 0) * 100) or ""))
+            end
         end
     end
     if #found == 0 then say("No Smokehouse within 3 tiles on this floor.") end
@@ -476,11 +504,32 @@ function TPFM.bank(hours)
         local fire = shed.firebox and Hearth.stateOf(shed.firebox:getModData())
         if fire then
             fire.bankedHours = (fire.bankedHours or 0) + (hours or 6)
-            say(string.format("Banked now %.1f h", fire.bankedHours))
+            say(string.format("Added %.0f banked hours (the fire's record is now %.1f h in all).", hours or 6, fire.bankedHours))
+            local outdoors = F.getLedger().temperature or 0
+            if outdoors > F.COLD_SMOKE_MAX then
+                say(string.format("It is %.0f C outdoors: over %d C banked hours don't count as smoke. TPFM.addSmoke(hours) gives the stacks smoke whatever the weather.",
+                    outdoors, F.COLD_SMOKE_MAX))
+            end
         else
             say("No Firebox joined to this Smokehouse.")
         end
     end
+end
+
+-- Adds hours of smoke (default 60) straight to every stack in those Smokehouses, whatever the weather or the fire.
+function TPFM.addSmoke(hours)
+    hours = hours or 60
+    local stacks = 0
+    for _, shed in ipairs(smokehouses()) do
+        local logic = shed.tile:getComponent(ComponentType.DryingCraftLogic)
+        for craftData, _ in pairs(CraftLogicUILogic.new(getPlayer(), shed.tile, logic):getItemsInProgress()) do
+            local modData = craftData:getModData()
+            modData.cold = (modData.cold or 0) + hours
+            stacks = stacks + 1
+            say(string.format("Stack %s: %.0f of %.0f h of smoke.", tostring(modData.stackId), modData.cold, F.coldNeed(modData)))
+        end
+    end
+    if stacks == 0 then say("No stack hanging in a Smokehouse within 3 tiles.") end
 end
 
 say("Debug commands loaded. Type TPFM.help() in the Lua console.")

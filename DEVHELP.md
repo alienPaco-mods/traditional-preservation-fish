@@ -8,7 +8,7 @@ These console commands load only when the game runs in **debug mode** (launch op
 |---|---|
 | `TPFM.weather()` | The drying weather now: temperature, the 10-day season average, humidity, wetness (open and cold frames), wind, the drying speed open, under a roof and cold, whether unsalted and salted fish are spoiling, and the running totals (with hours of hard frost and of cold fish lying wet). |
 | `TPFM.wind()` | Starts a log of the live wind (0-1) every 10 game minutes; run it again to print the mean, min and max on dry and on rainy or snowy spells, beside the forecast's mean wind for the same days, and stop. For setting the cold-drying wind curve. |
-| `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one, `TPFM.age(120)` a charque one. |
+| `TPFM.age(hours)` | Gives every hanging stack this many hours of perfect drying weather. `TPFM.age(288)` finishes a salt stack, `TPFM.age(768)` a cold one, `TPFM.age(120)` a charque one, `TPFM.age(520)` a Country Cured cut in the Smokehouse (1010 with a leg). Corned meat hanging in a Smokehouse spoils with it as a 12 C shed would, so `TPFM.age(520)` rots it. |
 | `TPFM.spoil(hours)` | Adds spoiling weather, to test rotting. A fresh cold stack rots after 48; a part-dried one takes longer. |
 | `TPFM.frost(hours)` | Adds hours of hard frost. A cold stack under 30% dried loses a tenth of its keeping per 72 hours, at most a quarter in all with wet. |
 | `TPFM.heat(hours)` | Adds hours of hot sun (above 25 C). An open salt stack under half dried loses 5% of its keeping per 24 hours, times how wet it still is, at most a quarter. |
@@ -33,7 +33,9 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.keep(days)` | Ages those crocks by this many days at their place's rate now (default 10). |
 | `TPFM.flueKit()` | Spawns both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay) with a Mason's Trowel and a Shovel. |
 | `TPFM.smokehouse()` | Each Smokehouse chamber tile within 3 tiles on your floor: facing, back or door tile, the entry overlay it shows, and each Firebox beside it with its flue and why it can't join (or `may join`, `joined here`). |
-| `TPFM.smoke()` | Each Smokehouse within 3 tiles: its joined Firebox's fire record (mode, stoked and banked hours, the session now running and its hours) and each stack's hot hours against its need, smoke hours against Cold Smoked's need (a third of its hours so far), dried hours, and whether its cook is done. |
+| `TPFM.smoke()` | Each Smokehouse within 3 tiles: its joined Firebox's fire record (mode, stoked and banked hours, the session now running and its hours) and each stack's hot hours against its need, smoke hours against its need (`F.smokeHours`), dried hours, whether its cook is done, and for meat its dry-curing need, whether it has a leg and how far under-salting has spoiled it. |
+| `TPFM.addSmoke(hours)` | Adds hours of smoke (default 60) straight to every stack in the Smokehouses within 3 tiles, whatever the weather or the fire. `TPFM.bank` only gives smoke on a day of 15 C or less, and says so when it is warmer. |
+| `TPFM.underSalt(hours)` | Adds hours of a 10 C shed (default 168) for Corned meat hanging in a Smokehouse; it rots after 672. |
 | `TPFM.stoke(hours)` | Adds stoked hours (default 1) to the running session of those joined Fireboxes; the stacks pick them up on the World's next look. Stoke the Firebox first: with no session running it says so. |
 | `TPFM.bank(hours)` | Adds banked hours (default 6) to the record of those joined Fireboxes, as if they had smouldered that long: smoke for Cold Smoked (counted only if today is 20 C or less). |
 | `TPFM.fatRows()` | Says whether the sandbox has butchering fat on, and prints the fat row of each vanilla pig, cow and sheep's butchering table (base numbers: about x2.8 on a Butchering Hook, x0.6 on the ground). |

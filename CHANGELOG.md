@@ -1,5 +1,34 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.14
+- **Dry curing in the Smokehouse** (phase 6b): meat hung in the shed never comes out Charque. It dries on its own
+  need by the heaviest piece (`F.dryCureHours`: 3 weeks at full rate for a Beef, 6 for a Leg of Pork) in cool air
+  (`F.dryCureRate`: full from 12 C, a quarter in frost, damp air as salt fish, no wind), with the fire's warmth as
+  before (ledger totals `dryCure`, `dryCureBanked`, `dryCureStoked`). With its smoke it is
+  **Suho Meso, Mutton Ham, Jerked Venison, Smoked Dry-Cured Pork**; with less, air dried: **Bresaola, Dry-Cured
+  Mutton / Venison / Pork** (`modData.airDried`). Charque comes from the frames only. A stack hung before this
+  keeps its share of progress on the new need.
+- **Country Ham**: a Leg of Pork dries to a new item, `CountryHam` (**Smoked Country Ham** or **Country Ham**),
+  keeping 180 / 365 days. A stack with a leg takes no hot cook: its stoked hours are smoke.
+- **Hot smoked pork is vanilla's Ham** (`F.carryHam`), with the cut's own food and weight, so Slice Ham and ham
+  dishes take it. Never a leg.
+- **Under-salted**: Corned meat (the short cure) left to dry in the shed spoils by the shed's temperature
+  (`F.underCureRate`: rotten in 4 weeks at 10 C, five times faster per 10 C more, the fire's lift counted) until a
+  hot cook is done; Country Cured pieces in the same stack don't. Popup line "Under-salted".
+- Popup in the shed: Method "Dry curing", the shed's temperature word, no Hot Smoke line for a stack with a leg.
+- **A rotted stack comes down as what was hung** (`F.rottenStage`, `F.rottenOutputs`, `F.stackStations`): Corned Beef
+  (Rotten), a pressed or gutted fish, not Bresaola, Salt Dried or Stockfish. In a mixed stack only the Corned pieces
+  rot and the stack dries on (`modData.allUnder`). Air dried meat has its own tooltip, with no smoke in it.
+- **Smoke by fixed hours** (`F.smokeHours`, `modData.smokeNeed`), for fish and meat alike: by the heaviest piece, fish
+  24 hours (up to 1.1 weight) to 48 (2.2), meat 60 (a cut) to 120 (a leg). It was a third of the hours hung, which
+  the slow dry cure turned into weeks of fire. Popup: *x of y h of smoke*.
+- **"(Soaked)"** on rehydrated fish too (*Walleye Stockfish (Soaked)*, *Medium Walleye (Soaked, Salt Dried)*), as
+  charque. Stockfish tooltips: "Keeps for about a year", "Matured stockfish".
+- **The long cure wants the cold**: above a season mean of 10 C (`F.LONG_CURE_ABOVE`) a Country Cure batch spoils in
+  step with the warmth, rotten after a leg's 21 days at 15 C (ledger `longCureSpoil`). Without it, the cool-air rule
+  made summer the quickest season for ham. The short cure and fish keep the 20 C rule. `TPFM.longCure(hours)`.
+- **Stockfish keeps 365 / 540 days** (was 730), so a winter's fish reaches the next winter but two don't stack.
+
 ## 0.4.13
 - **Pork in the salt** (phase 6a): Pack Meat in Salt takes **Pork, Pork Chop and the new Leg of Pork**. Salt Cured
   pork hangs in the **Smokehouse only** (`F.porkRefusal`): a frame, Beam or Gantry refuses it, as pork fat goes rancid

@@ -10,7 +10,7 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [table]
 [tr][th]Road[/th][th]Fish[/th][th]Meat[/th][th]Season[/th][th]Keeps[/th][/tr]
 [tr][td]Salt and dry[/td][td]Salt Dried fish[/td][td]Charque (beef, mutton, venison)[/td][td]Any for fish, summer for charque[/td][td]4 to 6 months[/td][/tr]
-[tr][td]Freeze-dry in the wind[/td][td]Stockfish[/td][td]-[/td][td]Winter[/td][td]1 to 2 years[/td][/tr]
+[tr][td]Freeze-dry in the wind[/td][td]Stockfish[/td][td]-[/td][td]Winter[/td][td]A year to a year and a half[/td][/tr]
 [tr][td]Hot smoke[/td][td]Hot Smoked fish[/td][td]Hot Smoked meat[/td][td]Any[/td][td]1 to 2 weeks, ready to eat[/td][/tr]
 [tr][td]Cold smoke[/td][td]Cold Smoked fish[/td][td]Suho Meso, Mutton Ham, Jerked Venison, smoked pork, Smoked Country Ham[/td][td]Cool months[/td][td]4 to 6 months, ready to eat[/td][/tr]
 [tr][td]Under fat[/td][td]-[/td][td]Potted Meat (pork too)[/td][td]Any[/td][td]Weeks to months, by where you keep it[/td][/tr]
@@ -36,7 +36,7 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [*][b]Pack Meat in Salt:[/b] a Beef, Steak, Mutton Chop, Venison, Pork or Pork Chop as the butcher gives it, with 4 salt, or a whole Leg of Pork with 10. No knife needed. Pork and Country Cured meat hang in the Smokehouse only: pork fat goes rancid in sun and wind.
 [*][b]Leg of Pork:[/b] a grown pig gives some of its Pork as whole legs for country ham, one or two on a Butchering Hook. Five Pork make a leg, so the pig's meat stays the same.
 [*][b]Cure Salted Fish / Corn Salted Meat:[/b] the heaviest piece sets the time, 1 to 2 in-game days: Salt Cured fish, Corned meat. Nothing else goes in until the last piece is out.
-[*][b]Country Cure Salted Meat:[/b] the long cure for the Smokehouse's dry-cured meat and country ham: 10 days for cuts, 21 with a leg. A cold-season job. A warm spell above 20 C starts it spoiling by the spine (bone taint) and costs it keeping.
+[*][b]Country Cure Salted Meat:[/b] the long cure for the Smokehouse's dry-cured meat and country ham: 10 days for cuts, 21 with a leg. A cold-season job: safe while the last ten days average 10 C or less, about October to April. Warmer, it spoils by the bone; at 15 C a leg rots in the tub.
 [*][b]Rinse Off Salt (optional):[/b] 0.15 L of clean water a piece, or at a sink. Less salty, keeps a tenth less long.
 [/list]
 
@@ -62,8 +62,9 @@ Gut Fish (a big one also gives a Fish Head), split it if it's over 2.5 weight, a
 [list]
 [*]Inside it's always indoors: no rain, no wind, about two thirds of the open drying speed. No stockfish: gutted fish need moving air. The tile in front of its door must stay clear.
 [*][b]Connect the Firebox[/b] (from TP Core) on a tile beside it: a clay pipe (2 Clay Pipe Segments, 1 Clay, mason's trowel kept) or a stone trench (3 Flat Stones, 2 Clay, shovel kept). Not at the door end, not with the Firebox's door towards the shed, one Firebox a shed, and only with the fire out. Disconnect gives the pipe or stones back.
-[*][b]Hot smoking:[/b] keep the joined Firebox stoked and each salt stack inside counts the hours in a row: 4 to 6 for fish, 6 to 8 for meat, by the heaviest piece. Then it comes out Hot Smoked: cooked, ready to eat, 1 to 2 weeks' keeping. Banking the fire for up to an hour doesn't break the run. Stop sooner and nothing is lost: the stack dries on as Salt Dried fish or Charque.
-[*][b]Cold smoking:[/b] bank the Firebox to a smoulder. Banked hours, and stoked runs that broke off, count as smoke on days of 15 C or less. If smoke covered a third of the time a stack hung, it comes out Cold Smoked fish, or the old smoked meats: Suho Meso from beef, Mutton Ham, Jerked Venison, Smoked Dry-Cured Pork, Smoked Country Ham from a leg. Dry, ready to eat sliced thin, 4 to 6 months' keeping. Smoked meat is no longer charque. A burning fire also warms the shed, so it dries faster even in frost.
+[*][b]Hot smoking:[/b] keep the joined Firebox stoked and each salt stack inside counts the hours in a row: 4 to 6 for fish, 6 to 8 for meat, by the heaviest piece. Then it comes out Hot Smoked: cooked, ready to eat, 1 to 2 weeks' keeping. Banking the fire for up to an hour doesn't break the run. Pork comes out as a Ham you can slice. Stop sooner and fish dries on as Salt Dried; corned meat must get its cook, or it spoils in the shed.
+[*][b]Cold smoking:[/b] bank the Firebox to a smoulder. Banked hours, and stoked runs that broke off, count as smoke on days of 15 C or less. With its hours of smoke (a day or two for fish, 60 hours for cuts, 120 for a leg, by the heaviest piece) a stack comes out Cold Smoked fish, or the old smoked meats: Suho Meso from beef, Mutton Ham, Jerked Venison, Smoked Dry-Cured Pork, Smoked Country Ham from a leg. Dry, ready to eat sliced thin, 4 to 6 months' keeping. A burning fire also warms the shed, so it dries faster even in frost.
+[*][b]Dry curing:[/b] meat hung in the Smokehouse is never charque. Country cured, it dries slowly in cool air: 3 weeks at best for a cut, 6 for a leg, longer in frost. Without smoke it comes out air dried: Bresaola, Dry-Cured Mutton, Venison or Pork, and a Country Ham from a leg, which keeps half a year to a year.
 [*]A smoked ham hangs by the door while finished stacks wait inside.
 [/list]
 
@@ -85,10 +86,10 @@ A whole fish over 0.6 weight gives Fish Guts when gutted or packed. Gut Fish tak
 Days are fresh, then rotten.
 [list]
 [*][b]Salt Dried fish:[/b] about 37% of the fresh fish, 120 and 180 days
-[*][b]Stockfish:[/b] about 18%, 365 and 730 days
+[*][b]Stockfish:[/b] about 18%, 365 and 540 days
 [*][b]Charque:[/b] about 50% of the raw cut, 120 and 180 days
 [*][b]Hot Smoked fish / Hot-Smoked meat:[/b] about 63% / 70%, 7 and 14 days
-[*][b]Cold Smoked fish / smoked dry-cured meat:[/b] about 37% / 50%, 120 and 180 days
+[*][b]Cold Smoked fish / dry-cured meat:[/b] about 37% / 50%, 120 and 180 days; a Country Ham 180 and 365
 [*][b]Crock of Potted Meat:[/b] by where you keep it, 14 to 120 days fresh
 [*][b]Salt Packed / Salt Cured / Corned / Country Cured / Gutted / rehydrated:[/b] days, not weeks: cure, hang or cook them
 [/list]
@@ -97,7 +98,7 @@ Days are fresh, then rotten.
 [list]
 [*][b]Packed, Salt Cured, Corned, Country Cured, gutted fish and halves, fresh fat:[/b] raw, so cook them first or risk getting sick
 [*][b]Stockfish and charque:[/b] can't be eaten until rehydrated
-[*][b]Salt Dried, Hot and Cold Smoked, Suho Meso and the other smoked meats, rehydrated fish, Potted Meat:[/b] ready as they are
+[*][b]Salt Dried, Hot and Cold Smoked, Suho Meso, Bresaola and the other dry-cured meats, Country Ham, soaked fish, Potted Meat:[/b] ready as they are
 [/list]
 
 [h2]A little history[/h2]

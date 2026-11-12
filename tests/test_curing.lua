@@ -175,6 +175,21 @@ local hotCure, hotLedger = warmCure(25, 48)
 check("25 C for two days, 37.5%", near(hotCure, 0.375) and hotLedger.warmCuring)
 check("the tub's popup shows it", near(T.pressStatus({ pressStartHour = 0, pressHours = 48, lastWarmCure = 0 }, 48, hotLedger).spoiled, 0.375))
 check("a press from before counts from now", T.cureSpoiled({}, hotLedger) == 0)
+-- The long cure wants the cold: above a 10 C season it spoils in step, rotten in a leg's 21 days at 15 C.
+local function longCure(season, cureHours)
+    local ledger = T.newLedger(0)
+    ledger.seasonTemperature = season
+    T.advance(ledger, cureHours, { temperature = season, humidity = 0.3, precipitation = 0 })
+    return T.cureSpoiled({ lastWarmCure = 0, lastLongCure = 0 }, ledger), ledger, T.cureSpoiled({ lastWarmCure = 0 }, ledger)
+end
+local coolLong, coolLedger = longCure(10, 504)
+check("a long cure at 10 C loses nothing", coolLong == 0 and not coolLedger.longCuring)
+local mildLeg, mildLedger, mildShort = longCure(12, 504)
+check("a leg at 12 C loses two fifths, cuts a fifth, the short cure nothing", near(mildLeg, 0.4) and near(longCure(12, 240), 0.4 * 240 / 504)
+    and mildShort == 0 and mildLedger.longCuring)
+check("a leg at 15 C rots in the tub, cuts lose about half", near(longCure(15, 504), 1) and near(longCure(15, 240), 240 / 504))
+check("the tub's popup says a long cure is spoiling, a short one not", T.pressStatus({ pressStartHour = 0, pressHours = 504, lastWarmCure = 0, lastLongCure = 0 }, 100, mildLedger).spoiling
+    and not T.pressStatus({ pressStartHour = 0, pressHours = 48, lastWarmCure = 0 }, 48, mildLedger).spoiling)
 local hotPress = newRecipeData(RECIPE_TIME, { newFood("TraditionalPreservationFishMeat.SaltPackedFish", { ActualWeight = 1 }) },
     { newFood("TraditionalPreservationFishMeat.SaltPressedFish", {}) })
 hotPress.modData.lastWarmCure = 0
@@ -592,7 +607,7 @@ for _, stage in ipairs({ "SaltPackedFish", "SaltPressedFish", "SaltDriedFish", "
         check("pressing takes 7 to 12 percent", keptShare >= 0.88 and keptShare <= 0.93 and near(item.values.ActualWeight, 8 * 0.9 * keptShare))
     end
 end
-check("the species survives every stage", item.name == "Medium Walleye (Rehydrated, Salt Dried)")
+check("the species survives every stage", item.name == "Medium Walleye (Soaked, Salt Dried)")
 check("the fish's icon lasts to the end", item.modelIndex == 6)
 
 -- A part-eaten fish stays part-eaten. The engine has already scaled its calories.
@@ -741,7 +756,7 @@ T.onCreateSoaked(newRecipeData(0, { coldFish }, { soakedCold }))
 coldFish = soakedCold
 check("soaking gives back about 60%", near(coldFish.values.ActualWeight, 5.28) and near(coldFish.values.Calories, 714.4))
 check("and the bulk drying took", near(coldFish.values.BaseHunger, -0.564))
-check("and says it was cold dried", coldFish.name == "Walleye Stockfish (Rehydrated)")
+check("and says it was cold dried", coldFish.name == "Walleye Stockfish (Soaked)")
 local spawned = newFood("TraditionalPreservationFishMeat.SaltDriedFish", { ActualWeight = 1 })
 spawned.displayName = "Salt Dried Fish"
 spawned = through(spawned, "SoakedSaltFish")
@@ -1023,9 +1038,9 @@ local function soak(dried)
     return soaked
 end
 local soakedFresh, soakedHalf, soakedRipe = soak(fresh), soak(coldDried(T.MATURE_DAYS / 2)), soak(ripe)
-check("unripe stockfish soaks into a dull fish", soakedFresh.unhappy == T.MATURE_UNHAPPY and soakedFresh.name == "Walleye Stockfish (Rehydrated)")
+check("unripe stockfish soaks into a dull fish", soakedFresh.unhappy == T.MATURE_UNHAPPY and soakedFresh.name == "Walleye Stockfish (Soaked)")
 check("halfway is neither", soakedHalf.unhappy == 0)
-check("ripe stockfish cheers you up", soakedRipe.unhappy == -T.MATURE_UNHAPPY and soakedRipe.name == "Walleye Stockfish (Rehydrated)")
+check("ripe stockfish cheers you up", soakedRipe.unhappy == -T.MATURE_UNHAPPY and soakedRipe.name == "Walleye Stockfish (Soaked)")
 check("the soaked fish keeps how ripe it was", T.ripeness(soakedHalf) == 0.5)
 local ripeFillet = slice(ripe, "ColdDriedFish")
 ripeFillet.age = ripe.age
@@ -1033,7 +1048,7 @@ check("a slice of stockfish keeps its ripeness", T.ripeness(ripeFillet) == 1)
 local oldSoaked = newFood("TraditionalPreservationFishMeat.SoakedColdFish", {})
 oldSoaked:getModData().fishName = "Small Bass"
 T.rename(oldSoaked)
-check("a fish soaked before maturing is Rehydrated stockfish", oldSoaked.name == "Small Bass Stockfish (Rehydrated)")
+check("a fish soaked before maturing is Soaked stockfish", oldSoaked.name == "Small Bass Stockfish (Soaked)")
 local tooltips = io.open("42/media/lua/shared/Translate/EN/Tooltip.json"):read("*a")
 for tenth = 0, 90, 10 do
     check("the tooltip has a text for " .. tenth .. "%", tooltips:find('"Tooltip_TraditionalPreservationFishMeat_ColdDried_' .. tenth .. '"', 1, true) ~= nil)
@@ -1062,7 +1077,7 @@ check("an unrinsed fish is as it was", unrinsed.thirst == 0.3 and unrinsed.offAg
 local rinsedFillet = slice(rinsedDried, "SaltDriedFish")
 check("a slice of rinsed fish is rinsed too", rinsedFillet:getModData().rinsed and rinsedFillet.offAge == 108)
 local soakedRinsed = through(rinsedDried, "SoakedSaltFish")
-check("soaking doesn't rinse a second time", soakedRinsed.offAge == nil and soakedRinsed.name == "Medium Walleye (Rehydrated, Salt Dried)")
+check("soaking doesn't rinse a second time", soakedRinsed.offAge == nil and soakedRinsed.name == "Medium Walleye (Soaked, Salt Dried)")
 
 -- The Rinse recipe
 local beforeRecipe = through(packedBass, "SaltPressedFish")
@@ -1292,6 +1307,56 @@ end)()
     check("nor can stockfish", fishScript:match("item ColdDriedFish%s*{(.-)}"):find("CantEat = true", 1, true) ~= nil)
     check("Salt Dried fish still can", not fishScript:match("item SaltDriedFish%s*{(.-)}"):find("CantEat", 1, true))
     check("the rinse gives back what went in", fishScript:find("TraditionalPreservationFishMeat.SaltCuredMeat = TraditionalPreservationFishMeat.SaltCuredMeat", 1, true) ~= nil)
+end)()
+
+-- 6b: what comes out of the Smokehouse, piece by piece (F.smokedItem)
+;(function()
+    local oldInstance = instanceItem
+    instanceItem = function(fullType) return newFood(fullType, {}) end
+    local meatScript = io.open("42/media/scripts/TraditionalPreservationFishMeat_Meat.txt"):read("*a")
+    local fishScript = io.open("42/media/scripts/TraditionalPreservationFishMeat.txt"):read("*a")
+    local function cut(fullType, values, longCure)
+        local raw = newFood(fullType, values)
+        local cured = through(through(raw, "SaltPackedMeat"), "SaltCuredMeat")
+        cured:getModData().longCure = longCure
+        return cured
+    end
+    local porkValues = { Calories = 300, Proteins = 40, Lipids = 15, BaseHunger = -0.6, HungChange = -0.6, ActualWeight = 0.5 }
+    local pork = cut("Base.Pork", porkValues, false)
+    local ham = T.smokedItem(pork, { stackId = 1 }, T.HOT_FISH, T.HOT_MEAT)
+    check("hot smoked pork is vanilla's Ham with the cut's food", ham.fullType == "Base.Ham" and near(ham.values.Calories, 300)
+        and near(ham.values.ActualWeight, pork.values.ActualWeight * 0.78) and ham.name == nil)
+    local beef = cut("Base.Beef", { Calories = 440, BaseHunger = -0.8, HungChange = -0.8, ActualWeight = 0.5 }, false)
+    check("hot smoked beef is ours", T.smokedItem(beef, {}, T.HOT_FISH, T.HOT_MEAT).name == "Hot-Smoked Beef")
+    local smoked = T.smokedItem(beef, { underSpoiled = 0.5 }, T.COLD_FISH_OUT, T.DRY_CURED, false)
+    check("Corned beef dried in smoke is Suho Meso, half its keeping gone", smoked.name == "Suho Meso" and near(smoked.age, 60))
+    local longBeef = cut("Base.Beef", { Calories = 440, BaseHunger = -0.8, HungChange = -0.8, ActualWeight = 0.5 }, true)
+    local aired = T.smokedItem(longBeef, { underSpoiled = 0.5 }, T.COLD_FISH_OUT, T.DRY_CURED, true)
+    check("Country Cured beef with no smoke is Bresaola, and the stack's under-salting isn't its own", aired.name == "Bresaola"
+        and aired.fullType == T.DRY_CURED and aired.age == 0 and near(aired.values.Calories, 396))
+    check("Bresaola's tooltip has no smoke in it, Suho Meso keeps the item's", aired.tooltip == "Tooltip_TraditionalPreservationFishMeat_AirDried"
+        and smoked.tooltip == nil)
+    local rotten = T.smokedItem(beef, { underSpoiled = 1.2 }, T.COLD_FISH_OUT, T.DRY_CURED, true)
+    check("under-salted meat that rots comes down as the Corned Beef that was hung, rotten", rotten.fullType == T.CURED_MEAT
+        and rotten.name == "Corned Beef" and rotten.age == 180 and near(rotten.values.ActualWeight, beef.values.ActualWeight)
+        and near(rotten.values.Calories, 440))
+    check("a Country Cured piece in the same stack is spared", T.smokedItem(longBeef, { underSpoiled = 1.2 }, T.COLD_FISH_OUT, T.DRY_CURED, true).name == "Bresaola")
+    local pressed = newFood("TraditionalPreservationFishMeat.SaltPressedFish", { Calories = 200, ActualWeight = 1 })
+    pressed:getModData().fishName = "Walleye"
+    local rottenFish = T.rottenStage(pressed)
+    check("a rotted salt stack's fish is still the pressed fish", rottenFish.fullType == pressed.fullType and rottenFish.age == 180
+        and rottenFish:getModData().fishName == "Walleye")
+    local leg = cut(T.LEG_OF_PORK, { Calories = 1500, BaseHunger = -3, HungChange = -3, ActualWeight = 2.5 }, true)
+    local countryHam = T.smokedItem(leg, {}, T.COLD_FISH_OUT, T.DRY_CURED, false)
+    check("a leg dried in smoke is a Smoked Country Ham, an item of its own", countryHam.fullType == T.COUNTRY_HAM
+        and countryHam.name == "Smoked Country Ham" and near(countryHam.values.Calories, 1350))
+    check("air dried, a Country Ham", T.smokedItem(leg, {}, T.COLD_FISH_OUT, T.DRY_CURED, true).name == "Country Ham")
+    check("a leg is never vanilla's Ham", T.smokedItem(leg, {}, T.HOT_FISH, T.HOT_MEAT).fullType == T.HOT_MEAT)
+    local fish = newFood("TraditionalPreservationFishMeat.SaltPressedFish", { Calories = 200, ActualWeight = 1 })
+    check("fish is as before", T.smokedItem(fish, {}, T.COLD_FISH_OUT, T.DRY_CURED, false).fullType == T.COLD_FISH_OUT)
+    check("the Country Ham keeps half a year to a year", meatScript:match("item CountryHam%s*{(.-)}"):find("DaysFresh = 180,%s*DaysTotallyRotten = 365") ~= nil)
+    check("stockfish keeps a year, rotten at a year and a half", fishScript:match("item ColdDriedFish%s*{(.-)}"):find("DaysTotallyRotten = 540", 1, true) ~= nil)
+    instanceItem = oldInstance
 end)()
 
 H.done()

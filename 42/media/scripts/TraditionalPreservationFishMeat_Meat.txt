@@ -624,6 +624,32 @@ module TraditionalPreservationFishMeat
         Tooltip = Tooltip_TraditionalPreservationFishMeat_DryCured,
     }
 
+    /* A Leg of Pork, country cured and dried in the Smokehouse (6b): Smoked Country Ham with a third of its time in
+       smoke, Country Ham without. Dry-Cured meat's shares of the leg; it keeps half a year to a year. The script's
+       values are a 2.5 leg's; its icon and model are the leg's (index 6), as the other meat stages list them. */
+    item CountryHam
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 1.25,
+        Icon = DryCured_Leg,
+        IconsForTexture = DryCured_Beef;DryCured_Steak;DryCured_Mutton;DryCured_Venison;DryCured_Pork;DryCured_PorkChop;DryCured_Leg,
+        DaysFresh = 180,
+        DaysTotallyRotten = 365,
+        HungerChange = -210.0,
+        ThirstChange = 25.0,
+        UnhappyChange = -3,
+        Calories = 1350.0,
+        Carbohydrates = 0.0,
+        Lipids = 54.0,
+        Proteins = 225.0,
+        FoodType = Pork,
+        StaticModel = Ham,
+        WorldStaticModel = Ham,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_CountryHam,
+    }
+
     item DryCuredMeatIngredient
     {
         DisplayCategory = Food,
