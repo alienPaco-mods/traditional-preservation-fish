@@ -1,6 +1,8 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
 ## 0.4.24
+- Debug console (2026-11-12): `TPFM.fish` takes the stages `"dried"`, `"hotSmoked"` and `"coldSmoked"`, `TPFM.meat`
+  `"charque"` and `"hotSmoked"`, each made as its station makes it from a cured piece. Test, DEVHELP, guide.
 - Guide: no emojis (2026-11-12): the decorative bullets and margin-note marks are gone, warning signs read **Warning:**.
 - **Whatever dries in a basement goes by the basement** (2026-11-12, consistency sweep step D): salt fish dries there
   indoors at the basement's own temperature (TP Core's ground mean, a month behind the season), not the day's: about

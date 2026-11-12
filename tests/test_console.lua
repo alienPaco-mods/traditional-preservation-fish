@@ -106,7 +106,9 @@ H.installGetText()
 run("fish", "Walleye", 2, "stockfish")
 check("stockfish gives young stockfish", #stamped == 2 and stamped[1].fullType == "TraditionalPreservationFishMeat.ColdDriedFish"
     and stamped[1]:getModData().matureAge == 3 and stamped[1].name == "Walleye Stockfish")
-check("meat with no name lists the cuts and the stages", run("meat"):find("LegOfPork", 1, true) ~= nil and run("meat"):find("dryCured", 1, true) ~= nil)
+check("meat with no name lists the cuts and the stages", run("meat"):find("LegOfPork", 1, true) ~= nil and run("meat"):find("dryCured", 1, true) ~= nil
+    and run("meat"):find("charque", 1, true) ~= nil and run("meat"):find("hotSmoked", 1, true) ~= nil)
+check("fish lists its stages, the dried and smoked ones too", run("fish"):find("\"dried\", \"hotSmoked\", \"coldSmoked\"", 1, true) ~= nil)
 local before = #player.given
 run("meat", "all", 2)
 check("meat gives each cut", #player.given == before + 2 * #F.MEAT_CUTS and player.given[before + 1] == "Base.Beef")

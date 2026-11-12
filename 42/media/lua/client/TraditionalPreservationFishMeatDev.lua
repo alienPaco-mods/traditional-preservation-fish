@@ -29,8 +29,8 @@ function TPFM.help()
     say("TPFM.dry()                 clear the wetness, so open and cold frames start drying again at once")
     say("TPFM.mature(days)          age the stockfish and dry cured meat you carry by this many days, to test maturing and ageing")
     say("TPFM.food()                the cured fish and meat you carry: hunger, unhappiness, boredom, thirst, age against its days, ageing")
-    say("TPFM.fish(name, n, weight, stage) spawn n fish, e.g. TPFM.fish(\"Walleye\", 2, 4); stage \"cured\" or \"stockfish\" (it may take weight's place); TPFM.fish() lists the names, \"all\" gives each")
-    say("TPFM.meat(name, n, stage)  spawn n of a cut, e.g. TPFM.meat(\"Steak\", 2) or TPFM.meat(\"all\", 1, \"corned\"); stage \"corned\", \"country\" or \"dryCured\"; TPFM.meat() lists the names")
+    say("TPFM.fish(name, n, weight, stage) spawn n fish, e.g. TPFM.fish(\"Walleye\", 2, 4); stage \"cured\", \"dried\", \"hotSmoked\", \"coldSmoked\" or \"stockfish\" (it may take weight's place); TPFM.fish() lists the names, \"all\" gives each")
+    say("TPFM.meat(name, n, stage)  spawn n of a cut, e.g. TPFM.meat(\"Steak\", 2) or TPFM.meat(\"all\", 1, \"corned\"); stage \"corned\", \"country\", \"charque\", \"hotSmoked\" or \"dryCured\"; TPFM.meat() lists the names")
     say("TPFM.give(name, n, option) spawn n of: head, stock, salt, fat, fatPot (option \"burnt\" or \"raw\"), crock (full, four Steaks in Lard). TPFM.give() lists them")
     say("TPFM.kit(kind)             the things a test needs: \"potted\" (Potted Meat) or \"flue\" (both flue kits and tools). TPFM.kit() lists the kinds")
     say("TPFM.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
@@ -265,14 +265,29 @@ local function listNames(label, list, stages)
     say(label .. ": " .. table.concat(names, ", ") .. ", or \"all\". Stages: " .. stages)
 end
 
--- A fish as a stage gives it: whole, "cured" (packed and cured as the tub would: "Walleye (Salt Cured)") or
--- "stockfish" (young, fresh off the frame).
+-- A fish packed and cured as the tub would: "Walleye (Salt Cured)".
+local function curedFish(fullType, weight)
+    local raw, packed, cured = instanceItem(fullType), instanceItem(F.PACKED_FISH), instanceItem("TraditionalPreservationFishMeat.SaltPressedFish")
+    setWeight(raw, weight)
+    F.carry(raw, packed)
+    F.carry(packed, cured)
+    return cured
+end
+
+-- A fish as a stage gives it: whole, "cured", then as the stations give a cured one with nothing spoiled: "dried"
+-- (Salt Dried), "hotSmoked", "coldSmoked"; or "stockfish" (young, fresh off the frame).
 local FISH_STAGES = {
-    cured = function(inventory, fullType, weight)
-        local raw, packed = instanceItem(fullType), instanceItem(F.PACKED_FISH)
-        setWeight(raw, weight)
-        F.carry(raw, packed)
-        F.carry(packed, inventory:AddItem("TraditionalPreservationFishMeat.SaltPressedFish"))
+    cured = function(inventory, fullType, weight) inventory:AddItem(curedFish(fullType, weight)) end,
+    dried = function(inventory, fullType, weight)
+        local dried = instanceItem("TraditionalPreservationFishMeat.SaltDriedFish")
+        F.carry(curedFish(fullType, weight), dried)
+        inventory:AddItem(dried)
+    end,
+    hotSmoked = function(inventory, fullType, weight)
+        inventory:AddItem(F.smokedItem(curedFish(fullType, weight), {}, F.HOT_FISH, F.HOT_MEAT))
+    end,
+    coldSmoked = function(inventory, fullType, weight)
+        inventory:AddItem(F.smokedItem(curedFish(fullType, weight), {}, F.COLD_FISH_OUT, F.DRY_CURED))
     end,
     stockfish = function(inventory, fullType)
         local fish = inventory:AddItem("TraditionalPreservationFishMeat.ColdDriedFish")
@@ -286,7 +301,7 @@ local FISH_STAGES = {
 function TPFM.fish(name, count, weight, stage)
     if type(weight) == "string" then weight, stage = nil, weight end
     local types = name and named(F.FISH_ICONS, name)
-    if not types or stage and not FISH_STAGES[stage] then return listNames("Fish", F.FISH_ICONS, "\"cured\", \"stockfish\"") end
+    if not types or stage and not FISH_STAGES[stage] then return listNames("Fish", F.FISH_ICONS, "\"cured\", \"dried\", \"hotSmoked\", \"coldSmoked\", \"stockfish\"") end
     local inventory = getPlayer():getInventory()
     for _, fullType in ipairs(types) do
         for _ = 1, count or 1 do
@@ -302,7 +317,9 @@ function TPFM.fish(name, count, weight, stage)
 end
 
 -- A cut as a stage gives it: raw, "corned" (the short cure: "Steak (Corned)"), "country" (the long cure: "Steak
--- (Country Cured)") or "dryCured" (as the Smokehouse gives it after the long cure and its smoke, young: "Suho Meso").
+-- (Country Cured)"), "charque" (a Corned cut dried on a frame; no pork, which never hangs in the open), "hotSmoked"
+-- (a Corned cut from a stoked Smokehouse; pork comes out as vanilla's Ham) or "dryCured" (as the Smokehouse gives it
+-- after the long cure and its smoke, young: "Suho Meso").
 local function curedCut(cut, long)
     local cured = instanceItem(F.CURED_MEAT)
     cured:getModData().longCure = long or nil
@@ -314,6 +331,17 @@ local MEAT_SPAWNS = {
     -- The short cure refuses a leg, so there is no Leg of Pork (Corned).
     corned = function(inventory, cut) if cut ~= F.LEG_OF_PORK then inventory:AddItem(curedCut(cut, false)) end end,
     country = function(inventory, cut) inventory:AddItem(curedCut(cut, true)) end,
+    charque = function(inventory, cut)
+        local corned = curedCut(cut, false)
+        if F.isPork(corned) then return end
+        local charque = instanceItem("TraditionalPreservationFishMeat.Charque")
+        F.carry(corned, charque)
+        inventory:AddItem(charque)
+    end,
+    -- A leg never hot smokes.
+    hotSmoked = function(inventory, cut)
+        if cut ~= F.LEG_OF_PORK then inventory:AddItem(F.smokedItem(curedCut(cut, false), {}, F.HOT_FISH, F.HOT_MEAT)) end
+    end,
     dryCured = function(inventory, cut)
         inventory:AddItem(F.smokedItem(curedCut(cut, true), {}, F.COLD_FISH_OUT, F.DRY_CURED, false))
     end,
@@ -322,7 +350,7 @@ local MEAT_SPAWNS = {
 function TPFM.meat(name, count, stage)
     local types = name and named(F.MEAT_CUTS, name)
     if not types or stage and not MEAT_SPAWNS[stage] then
-        return listNames("Meat", F.MEAT_CUTS, "\"corned\", \"country\", \"dryCured\"")
+        return listNames("Meat", F.MEAT_CUTS, "\"corned\", \"country\", \"charque\", \"hotSmoked\", \"dryCured\"")
     end
     local inventory = getPlayer():getInventory()
     for _, cut in ipairs(types) do
