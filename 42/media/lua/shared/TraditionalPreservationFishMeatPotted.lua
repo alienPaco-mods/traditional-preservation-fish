@@ -175,6 +175,19 @@ function F.onPackPotted(craftRecipeData, character)
     if character and addXp then addXp(character, Perks.Cooking, F.POTTED_XP * batch.portions) end
 end
 
+-- A crock with no batch of its own (the debug Item List, loot, another mod) holds what its script gives: one
+-- portion, in a plain Clay Jar. That is written down the first time it is eaten, so it eats and labels as a packed
+-- one; without it the portions left read 0 and the first bite threw the rest away.
+function F.adoptCrock(crock)
+    local data = crock:getModData()
+    if data.tpfmPortion then return end
+    data.tpfmVessel = data.tpfmVessel or "Base.ClayJar"
+    data.tpfmPortion = { hunger = crock:getHungChange(), calories = crock:getCalories(),
+        carbohydrates = crock:getCarbohydrates(), lipids = crock:getLipids(), proteins = crock:getProteins() }
+    local empty = ScriptManager.instance:getItem(data.tpfmVessel)
+    data.tpfmPortionWeight = math.max(crock:getActualWeight() - (empty and empty:getActualWeight() or 0), 0)
+end
+
 -- After any eat: an emptied crock goes back to its container as its jar or pot; one with meat left is relabelled.
 -- Returns the empty vessel, if any.
 function F.afterCrockUse(crock, container)
@@ -288,6 +301,7 @@ end
 -- Eaten through vanilla's eat action (TP Core's Portions, the one wrap of it, which Dairy's jar uses too): the crock's
 -- keeping is brought up to now first; a first portion taken opens it; then it is relabelled or gives its vessel back.
 Portions.onEat(F.CROCK, function(crock)
+    F.adoptCrock(crock)
     local before = F.crockPortions(crock)
     F.keepCrock(crock)
     return before

@@ -1,5 +1,12 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.30
+- **Fix: Eat 1/4 on a Crock of Potted Meat from the debug Item List ate the whole crock** (user, 2026-11-12). A
+  crock not packed by Pack Potted Meat had no portion record, so after any bite it read as empty and the rest went
+  with the jar. Such a crock now holds what its script gives, one portion in a plain Clay Jar, written down at its
+  first bite (`F.adoptCrock`). Packed crocks were never affected (in game: a quarter of four portions left three).
+  Test in `test_potted.lua`. In-game step 107 of `TESTING_GUIDE.md`.
+
 ## 0.4.29
 - **Carpentry only** (2026-11-12, sweep step F): the Salting Tub, Drying Frame, Hanging Beam and Gantry no longer ask
   Fishing 2 (it dated from when the mod was fish only; a charque maker needed it for a tub). The Smokehouse gives 15

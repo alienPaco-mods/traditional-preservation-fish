@@ -154,6 +154,19 @@ check("one portion reads singular", crock.name == "Crock of Potted Meat (1 porti
 ISEatFoodAction.serverStop({ item = crock, share = 1 })
 check("the last bite gives the glazed jar back", not container:contains(crock) and container.added == "Base.ClayJarGlazed")
 
+-- A bare crock (the debug Item List): its script's food is one portion in a plain Clay Jar
+local bare = newFood(CROCK, { hunger = -0.46, calories = 1244, lipids = 123, proteins = 32, weight = 1.0 })
+bare.base = -0.46
+local shelf = { items = { [bare] = true } }
+setmetatable(shelf, { __index = container })
+bare.container = shelf
+ISEatFoodAction.complete({ item = bare, share = 0.25 })
+check("a bare crock eaten by a quarter keeps the rest", shelf:contains(bare) and near(F.crockPortions(bare), 0.75, 1e-4)
+    and bare.name == "Crock of Potted Meat (0.8 portions)")
+check("it weighs its plain jar and what is left", near(bare.weight, 0.3 + 0.75 * 0.7, 1e-4))
+ISEatFoodAction.complete({ item = bare, share = 1 })
+check("eaten out, it gives the plain Clay Jar back", not shelf:contains(bare) and shelf.added == "Base.ClayJar")
+
 -- Keeping by place (4c): a day in a basement is a day of the crock's script age
 local ledger = F.pottedLedger()
 local function keptCrock()
