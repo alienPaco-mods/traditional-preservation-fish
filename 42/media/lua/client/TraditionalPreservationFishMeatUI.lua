@@ -4,8 +4,8 @@
 -- same rules decide the slot's green border, so it never promises what adding then refuses.
 require "Entity/ISUI/Components/Crafting/ISCraftLogicPanel"
 require "Entity/ISUI/Controls/ISItemSlot"
-require "TimedActions/ISInventoryTransferAction"
 local UI = require "TraditionalPreservationCore/UI"
+local Transfer = require "TraditionalPreservationCore/Transfer"
 local Weather = require "TraditionalPreservationCore/Weather"
 local Tiles = require "TraditionalPreservationFishMeat/Tiles"
 local F = TraditionalPreservationFishMeat
@@ -233,14 +233,9 @@ Events.OnRefreshInventoryWindowContainers.Add(function(page, reason)
 end)
 
 -- A crock is looked at as it is moved, while it is still where it was, so its time there counts at that place.
--- Outside the game (tests) there is no transfer action.
-if ISInventoryTransferAction then
-    local vanillaTransferItem = ISInventoryTransferAction.transferItem
-    function ISInventoryTransferAction:transferItem(item)
-        if item and item:getFullType() == F.CROCK then F.keepCrock(item) end
-        return vanillaTransferItem(self, item)
-    end
-end
+Transfer.before(function(_, item)
+    if item:getFullType() == F.CROCK then F.keepCrock(item) end
+end)
 
 -- Rinse at Sink: the Rinse recipe takes carried water, and this takes it from the nearest sink, bathtub, barrel or
 -- well of clean water, walking there. It goes in the fish's own submenu, beside the recipe, for every selected fish.

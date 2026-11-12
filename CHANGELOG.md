@@ -1,5 +1,9 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## Unreleased
+- A crock moved between places is looked at through TP Core's `Transfer.before` (2026-11-12) instead of Fish & Meat's
+  own wrap of `transferItem`. No change in play.
+
 ## 0.4.17
 - **The Salting Tub shows what is in it**: uncovered and waiting, a tub of meat no longer draws fish. Red cuts for
   beef, mutton and venison, pale pink for pork, and one Leg of Pork filling the tub, each lying in the salt
