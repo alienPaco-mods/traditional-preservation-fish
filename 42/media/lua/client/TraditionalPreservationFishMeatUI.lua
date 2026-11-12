@@ -54,6 +54,8 @@ local function refusal(slot, item, queued)
         return "IGUI_TraditionalPreservationFishMeat_MixedStack"
     end
     local hanger = F.hangerFor(spriteIndex(entity))
+    local porkRefused = F.porkRefusal(hanger.closed, item)
+    if porkRefused then return porkRefused end
     if F.hangKind(item:getFullType()) == "cold" then
         local coldRefused = F.coldRefusal(hanger.closed and "Sheltered" or Weather.placeOf(entity, true))
         if coldRefused then return coldRefused end
@@ -76,6 +78,8 @@ end
 UI.slotRules{
     station = station,
     refusal = refusal,
+    -- The short cure refuses a Leg of Pork, on the drop and again at Craft if the recipe changed after loading.
+    recipeRefusal = function(slot, item) return F.recipeRefusal(slot.recipe, item) end,
     -- What hangs there now, so the count of busy stacks is current.
     added = function(entity) TraditionalPreservationFishMeatWorld.refresh(entity) end,
 }

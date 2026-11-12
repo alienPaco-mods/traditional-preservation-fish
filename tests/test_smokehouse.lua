@@ -211,8 +211,9 @@ local function meatItem(index)
     return { getFullType = function() return F.DRY_CURED end, getModelIndex = function() return index end,
         getModData = function() return { fishName = "Steak" } end }
 end
-check("a steak is Dry-Cured Beef (Cold Smoked)", F.stageName(meatItem(1)) == "Dry-Cured Beef (Cold Smoked)")
-check("a mutton chop is Dry-Cured Mutton", F.stageName(meatItem(2)) == "Dry-Cured Mutton (Cold Smoked)")
+check("a smoked steak is Suho Meso", F.stageName(meatItem(1)) == "Suho Meso")
+check("a mutton chop is Mutton Ham, venison Jerked Venison", F.stageName(meatItem(2)) == "Mutton Ham" and F.stageName(meatItem(3)) == "Jerked Venison")
+check("pork is Smoked Dry-Cured Pork, a leg Smoked Country Ham", F.stageName(meatItem(5)) == "Smoked Dry-Cured Pork" and F.stageName(meatItem(6)) == "Smoked Country Ham")
 
 -- The ham by the door (user's idea): the door's tile, by facing, only with finished stacks.
 check("the ham hangs on the door's tile while stacks wait", F.hamSprite(0, 1, true) == Tiles.CHAMBER_HAM and F.hamSprite(1, 1, true) == Tiles.CHAMBER_HAM + 1)

@@ -1,6 +1,7 @@
 -- Checks the debug console (TPFM) loads and its commands run. Run from the mod folder: luajit tests/test_console.lua
 local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
 local check = H.check
+function getItemNameFromFullType(fullType) return (fullType:gsub("^[^.]*%.", "")) end
 H.useModPaths()
 H.installClock(100)
 H.installModData()
@@ -79,7 +80,7 @@ player:getInventory().AddItem = function(_, fullType)
     function fish:getModData() return modData end
     function fish:getFullType() return self.fullType end
     function fish:getAge() return 3 end
-    function fish:getModelIndex() return 0 end
+    function fish:getModelIndex() return -1 end
     function fish:getDisplayName() return self.name or "" end
     function fish:setName(name) self.name = name end
     function fish:setCustomName() end
@@ -97,8 +98,8 @@ check("fatPot gives a cooked pot, or a burnt one", #stamped == pots + 2 and stam
 stamped = {}
 H.installGetText()
 run("stockfish", 2)
-check("stockfish gives unripe Cold Dried fish", #stamped == 2 and stamped[1].fullType == "TraditionalPreservationFishMeat.ColdDriedFish"
-    and stamped[1]:getModData().matureAge == 3 and stamped[1].name == "Walleye (Cold Dried, Unripe)")
+check("stockfish gives young stockfish", #stamped == 2 and stamped[1].fullType == "TraditionalPreservationFishMeat.ColdDriedFish"
+    and stamped[1]:getModData().matureAge == 3 and stamped[1].name == "Walleye Stockfish")
 function getCell() return { getGridSquare = function() return nil end } end
 check("pallet says when there is none near", run("pallet"):find("No Stockfish Pallet", 1, true) ~= nil)
 

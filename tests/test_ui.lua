@@ -38,6 +38,11 @@ TraditionalPreservationFishMeatWorld = {
     track = function() end,
     refresh = function() end,
 }
+local vanillaStarts = 0
+ISWidgetCraftLogicControl = { startCraft = function() vanillaStarts = vanillaStarts + 1 end }
+ComponentType.Resources = "resources"
+ResourceType = { Item = "item" }
+ArrayList = { new = function() return H.list({}) end }
 ISMoveableSpriteProps = {}
 function ISMoveableSpriteProps:canPlaceMoveable() return true end
 dofile("42/media/lua/client/TraditionalPreservationFishMeatUI.lua")
@@ -47,10 +52,12 @@ local check = H.check
 
 local list = H.list
 
-local function fish(fullType, weight)
+local function fish(fullType, weight, modelIndex)
     return {
         getFullType = function() return fullType end,
         getActualWeight = function() return weight end,
+        getModelIndex = function() return modelIndex or 0 end,
+        getModData = function() return {} end,
     }
 end
 
@@ -103,6 +110,37 @@ check("a frame is green for Salt Cured meat", green(station(FRAME), fish(CURED, 
 check("not for meat on a fish stack, nor fish on a meat one", not green(station(FRAME, { fish(PRESSED, 0.5) }), fish(CURED, 0.3))
     and not green(station(FRAME, { fish(CURED, 0.3) }), fish(GUTTED, 0.5)))
 check("meat stacks with meat", green(station(FRAME, { fish(CURED, 0.3) }), fish(CURED, 0.5)))
+
+-- The short cure refuses a Leg of Pork (Core's recipeRefusal): the station's CraftLogic says which recipe, in full.
+local PACKED_MEAT = "TraditionalPreservationFishMeat.SaltPackedMeat"
+local selected = "PressSaltedMeat"
+local function tubWith(stored)
+    local logic = { isRunning = function() return false end,
+        getCurrentRecipe = function() return { getName = function() return "TraditionalPreservationFishMeat." .. selected end } end }
+    local slot = { getStoredItems = function() return list(stored) end }
+    local resources = { getResourcesFromGroup = function() return list({ slot }) end }
+    return {
+        getSprite = function() return { getName = function() return TUB end } end,
+        getComponent = function(_, kind) return kind == ComponentType.Resources and resources or logic end,
+    }
+end
+local craftLogic = { getCraftLogic = function() return { getInputsGroupName = function() return "craft_inputs" end } end }
+local tubSlot = { resource = { getIO = function() return ResourceIO.Input end, getGameEntity = function() return tubWith({}) end,
+    getStoredItems = function() return list({}) end } }
+check("a packed leg's border is red while the tub is set to corn", not green(tubSlot, fish(PACKED_MEAT, 2.5, 6))
+    and green(tubSlot, fish(PACKED_MEAT, 0.5, 4)))
+halos = {}
+ISWidgetCraftLogicControl.startCraft({ entity = tubWith({ fish(PACKED_MEAT, 0.5, 4), fish(PACKED_MEAT, 2.5, 6) }), player = "player", logic = craftLogic })
+check("corning with a leg already in is refused at Craft, with a reason", vanillaStarts == 0 and halos[1] == "IGUI_TraditionalPreservationFishMeat_LegNeedsLongCure")
+selected = "CountryCureMeat"
+check("and green when it is set to country cure", green(tubSlot, fish(PACKED_MEAT, 2.5, 6)))
+ISWidgetCraftLogicControl.startCraft({ entity = tubWith({ fish(PACKED_MEAT, 2.5, 6) }), player = "player", logic = craftLogic })
+check("the long cure starts with it", vanillaStarts == 1)
+halos = {}
+check("Salt Cured pork is refused on a frame", not green(station(FRAME), fish(CURED, 0.5, 4)))
+check("and a leg", not green(station(FRAME), fish(CURED, 2.3, 6)))
+check("but hangs in the Smokehouse", green(station("traditionalpreservationfishmeat_02_449"), fish(CURED, 0.5, 4))
+    and green(station("traditionalpreservationfishmeat_02_449"), fish(CURED, 2.3, 6)))
 check("a half over the limit is refused", not green(station(FRAME), fish(HALF, 3)))
 local MEDIUM, LARGE = "traditionalpreservationfishmeat_02_0", "traditionalpreservationfishmeat_02_3"
 check("a medium beam takes a fish too heavy for a frame", green(station(MEDIUM), fish(PRESSED, 12)))

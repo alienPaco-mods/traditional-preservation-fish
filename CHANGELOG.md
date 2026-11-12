@@ -1,5 +1,33 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.13
+- **Pork in the salt** (phase 6a): Pack Meat in Salt takes **Pork, Pork Chop and the new Leg of Pork**. Salt Cured
+  pork hangs in the **Smokehouse only** (`F.porkRefusal`): a frame, Beam or Gantry refuses it, as pork fat goes rancid
+  in sun and wind; so does **Country Cured** meat, whose long cure is for dry-cured meat, not charque. Icons and ground models for the three in every meat stage (`F.MEAT_CUTS` now seven).
+- **Leg of Pork** (`TraditionalPreservationFishMeatPork.lua`): an adult pig gives some of its Pork as whole legs, 2.5
+  weight. A wrapper on `ButcheringUtil.addAnimalPart` lets vanilla give the Pork, then makes 5 of those pieces into one
+  leg with their food (`F.fillLeg`), at most half the Pork and 3 legs (`F.legsFrom`). No table row and no trim, so a
+  pig's meat stays vanilla's at any size, meat ratio, skill or roadkill (a fixed row was simulated first and lost
+  meat on a typical pig). About 1-2 on the Hook, usually none from the ground. Sandbox **Butchering gives legs of
+  pork** (on). Icon and model: vanilla's Ham pulled to raw pink. A leg takes half fish's salt, 10 for 2.5 (~8%).
+- **Two meat cures.** **Corn Salted Meat** (was Cure Salted Meat), the short one for charque and hot smoking, gives
+  **Corned** meat. A leg gets the red border while Corn is selected, and Craft refuses if one is in the tub (`F.recipeRefusal` through Core's new `recipeRefusal` slot rule: in game, OnTest alone let vanilla start and leave the leg in its slot). **Country Cure Salted Meat** (new, `CountryCureMeat`), the long
+  one for the Smokehouse's dry-cured meat and country ham: **10 days** for cuts, **21** with a leg
+  (`F.LONG_CUT_HOURS`, `F.LONG_LEG_HOURS`), marks `longCure` (6b reads it). The warm-cure rule applies unchanged, so
+  the long cure is a cold-season job.
+- **Names** (display only; keys and indices kept, old items rename on load): the name says what it is now, a bracket
+  only for a changing state. Meat: *Steak (Salt Packed)*, *Corned Steak*, *Country Cured Leg of Pork*, *Beef Charque*,
+  *Beef Charque (Soaked)*, *Hot-Smoked Mutton*; cold smoked *Suho Meso* (beef), *Mutton Ham*, *Jerked Venison*,
+  *Smoked Dry-Cured Pork*, *Smoked Country Ham* (air-dried names ready for 6b: Bresaola, Dry-Cured X, Country Ham).
+  Vanilla's *(Prime Cut)* no longer follows a cut into the salt. Stockfish: *Walleye Stockfish*, *(Matured)*,
+  *(Rehydrated)*, without size or Gutted; other fish names unchanged. Hang Salt Cured Meat to Dry is now *Hang
+  Salted Meat to Dry*.
+- **Wording:** fish and meat never sour. The tub popup reads *Spoiling (Warm cure)*; guide, README and Workshop say
+  the flesh "starts to spoil by the spine (bone taint)"; a rinsed Salt Dried fish loses its "sharp tang".
+- `TPFM.meat` gives the pork cuts and a leg; `TPFM.cured(n, long)`; tests `test_pork`, pork, leg, long-cure and name
+  checks; `test_curing` reads the real EN texts. README's stoked lift corrected to 20 C.
+- **Not released alone:** 6b (the Smokehouse routes: no charque from the shed, Ham, Country Ham) ships with it.
+
 ## 0.4.12
 - **Cold smoke counts on days of 15 C or less** (was 20 C; `F.COLD_SMOKE_MAX`). With the banked smoulder now lifting
   the shed 15 C (0.4.11), a 20 C day read 35 C, past the 30 C where smoke cooks rather than cures (side-agent flag,

@@ -61,6 +61,13 @@ option TraditionalPreservationFishMeat.ButcheringFat {
     translation = TraditionalPreservationFishMeat_ButcheringFat,
 }
 
+option TraditionalPreservationFishMeat.LegsOfPork {
+    type = boolean,
+    default = true,
+    page = TraditionalPreservationFishMeat,
+    translation = TraditionalPreservationFishMeat_LegsOfPork,
+}
+
 option TraditionalPreservationFishMeat.Charque {
     type = boolean,
     default = true,

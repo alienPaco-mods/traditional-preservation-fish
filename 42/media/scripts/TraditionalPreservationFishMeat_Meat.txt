@@ -400,8 +400,51 @@ module TraditionalPreservationFishMeat
         }
     }
 
-    /* Charque, phase 3b: red meat salted in the Salting Tub. Pork waits for Country Ham (phase 6): its fat goes
-       rancid in the sun. The cuts go in as vanilla gives them. As with fish, nutrition, hunger and weight come from
+    /* A whole hind leg (6a), for country ham: TraditionalPreservationFishMeatPork.lua makes it from five of the Pork
+       an adult pig gives, and it carries their food; the values here are five vanilla Pork. Its icon and ground model
+       are vanilla's Ham pulled back to raw pink (tools/build_meat_icons.py). */
+    item LegOfPork
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 2.5,
+        Icon = LegOfPork,
+        BadCold = true,
+        BadInMicrowave = true,
+        DangerousUncooked = true,
+        FoodType = Meat,
+        GoodHot = true,
+        IsCookable = true,
+        MinutesToCook = 150,
+        MinutesToBurn = 210,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -300.0,
+        Calories = 1500.0,
+        Carbohydrates = 0.0,
+        Lipids = 60.0,
+        Proteins = 250.0,
+        StaticModel = LegOfPork,
+        WorldStaticModel = LegOfPork,
+        CookingSound = FryingFood,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_LegOfPork,
+    }
+
+    model LegOfPork
+    {
+        mesh = WorldItems/Ham,
+        texture = LegOfPorkModel,
+        scale = 0.4,
+        attachment Bip01_Prop2
+        {
+            offset = 0.009 0.0492 -0.0274,
+            rotate = -155.9665 37.3825 169.0512,
+            scale = 0.504,
+        }
+    }
+
+    /* Charque, phase 3b: red meat salted in the Salting Tub; pork and the Leg of Pork since 6a, for the Smokehouse
+       only (its fat goes rancid in sun and wind, TraditionalPreservationFishMeat.porkRefusal). The cuts go in as vanilla gives them. As with fish, nutrition, hunger and weight come from
        the cut that went in (TraditionalPreservationFishMeat.onCreateCured), and the name from it too ("Steak (Salt
        Cured)"). IconsForTexture and WorldStaticModelsByIndex are in MEAT_CUTS' order in TraditionalPreservationFishMeat.lua. */
     item SaltPackedMeat
@@ -410,7 +453,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.3,
         Icon = SaltPacked_Beef,
-        IconsForTexture = SaltPacked_Beef;SaltPacked_Steak;SaltPacked_Mutton;SaltPacked_Venison,
+        IconsForTexture = SaltPacked_Beef;SaltPacked_Steak;SaltPacked_Mutton;SaltPacked_Venison;SaltPacked_Pork;SaltPacked_PorkChop;SaltPacked_Leg,
         CantEat = true,
         DangerousUncooked = true,
         DaysFresh = 3,
@@ -423,7 +466,7 @@ module TraditionalPreservationFishMeat
         FoodType = Beef,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;LegOfPork,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_PackedMeat,
     }
 
@@ -434,7 +477,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.27,
         Icon = SaltCured_Beef,
-        IconsForTexture = SaltCured_Beef;SaltCured_Steak;SaltCured_Mutton;SaltCured_Venison,
+        IconsForTexture = SaltCured_Beef;SaltCured_Steak;SaltCured_Mutton;SaltCured_Venison;SaltCured_Pork;SaltCured_PorkChop;SaltCured_Leg,
         DaysFresh = 7,
         DaysTotallyRotten = 14,
         HungerChange = -40.0,
@@ -453,13 +496,13 @@ module TraditionalPreservationFishMeat
         CookingSound = FryingFood,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_CuredMeat,
     }
 
     /* Salt is rubbed into the cut as it is: no knife, nothing to gut. Fish's salt rule (canPack, onCreatePacked):
-       4 for each started half weight, so a Steak or a Beef takes 4 (about 15%, as charque). The recipe asks for
-       the first 2. */
+       4 for each started half weight, so a Steak or a Beef takes 4 (about 15%, as charque). A Leg of Pork takes half
+       that (F.saltFor), as a country ham's dry cure: 10 for a 2.5 leg. The recipe asks for the first 2. */
     craftRecipe PackMeatInSalt
     {
         timedAction = MixingBowl,
@@ -472,7 +515,7 @@ module TraditionalPreservationFishMeat
         Tooltip = Tooltip_TraditionalPreservationFishMeat_PackMeat,
         inputs
         {
-            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop;TraditionalPreservationFishMeat.LegOfPork] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
             item 2 tags[base:salt],
         }
         outputs
@@ -481,16 +524,41 @@ module TraditionalPreservationFishMeat
         }
     }
 
-    /* time is overwritten from PRESS_HOURS in TraditionalPreservationFishMeat.lua; the heaviest cut sets the
-       batch's own hours (meatPressHours). */
+    /* The short cure, for charque and hot smoking: Corned meat. time is overwritten from PRESS_HOURS in
+       TraditionalPreservationFishMeat.lua; the heaviest cut sets the batch's own hours (meatPressHours). A leg is too
+       thick for it (canCorn). */
     craftRecipe PressSaltedMeat
     {
         time = 43200,
         Tags = SaltingTub,
         category = Cooking,
+        Tooltip = Tooltip_craft_pressSaltedMeat,
+        OnTest = TraditionalPreservationFishMeat.canCorn,
         OnStart = TraditionalPreservationFishMeat.onPressStart,
         OnUpdate = TraditionalPreservationFishMeat.onPressUpdate,
         OnCreate = TraditionalPreservationFishMeat.onCreatePressed,
+        inputs
+        {
+            item variable[1:35] [TraditionalPreservationFishMeat.SaltPackedMeat] flags[IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item variable[1:35] TraditionalPreservationFishMeat.SaltCuredMeat,
+        }
+    }
+
+    /* The long cure (6a), for the Smokehouse's dry-cured meat and country ham: Country Cured meat, LONG_CUT_HOURS
+       for cuts, LONG_LEG_HOURS if a leg is in the batch (onPressStart). time is the leg's. Same item as the short
+       cure, marked longCure (onCreateLongCured). */
+    craftRecipe CountryCureMeat
+    {
+        time = 1814400,
+        Tags = SaltingTub,
+        category = Cooking,
+        Tooltip = Tooltip_craft_countryCureMeat,
+        OnStart = TraditionalPreservationFishMeat.onPressStart,
+        OnUpdate = TraditionalPreservationFishMeat.onPressUpdate,
+        OnCreate = TraditionalPreservationFishMeat.onCreateLongCured,
         inputs
         {
             item variable[1:35] [TraditionalPreservationFishMeat.SaltPackedMeat] flags[IsUncookedFoodItem;ItemCount] mode:destroy,
@@ -510,7 +578,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.15,
         Icon = Charque_Beef,
-        IconsForTexture = Charque_Beef;Charque_Steak;Charque_Mutton;Charque_Venison,
+        IconsForTexture = Charque_Beef;Charque_Steak;Charque_Mutton;Charque_Venison;Charque_Pork;Charque_PorkChop;Charque_Leg,
         CantEat = true,
         DaysFresh = 120,
         DaysTotallyRotten = 180,
@@ -523,7 +591,7 @@ module TraditionalPreservationFishMeat
         FoodType = Beef,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_Charque,
     }
 
@@ -537,7 +605,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.15,
         Icon = DryCuredMeat,
-        IconsForTexture = DryCured_Beef;DryCured_Steak;DryCured_Mutton;DryCured_Venison,
+        IconsForTexture = DryCured_Beef;DryCured_Steak;DryCured_Mutton;DryCured_Venison;DryCured_Pork;DryCured_PorkChop;DryCured_Leg,
         DaysFresh = 120,
         DaysTotallyRotten = 180,
         HungerChange = -28.0,
@@ -552,7 +620,7 @@ module TraditionalPreservationFishMeat
         EvolvedRecipeName = Beef,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_DryCured,
     }
 
@@ -574,7 +642,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.2,
         Icon = HotSmokedMeat,
-        IconsForTexture = HotSmoked_Beef;HotSmoked_Steak;HotSmoked_Mutton;HotSmoked_Venison,
+        IconsForTexture = HotSmoked_Beef;HotSmoked_Steak;HotSmoked_Mutton;HotSmoked_Venison;HotSmoked_Pork;HotSmoked_PorkChop;HotSmoked_Leg,
         DaysFresh = 7,
         DaysTotallyRotten = 14,
         HungerChange = -28.0,
@@ -589,7 +657,7 @@ module TraditionalPreservationFishMeat
         EvolvedRecipeName = Beef,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_HotSmoked,
     }
 
@@ -611,7 +679,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.25,
         Icon = SoakedCharque,
-        IconsForTexture = SoakedCharque_Beef;SoakedCharque_Steak;SoakedCharque_Mutton;SoakedCharque_Venison,
+        IconsForTexture = SoakedCharque_Beef;SoakedCharque_Steak;SoakedCharque_Mutton;SoakedCharque_Venison;SoakedCharque_Pork;SoakedCharque_PorkChop;SoakedCharque_Leg,
         DaysFresh = 2,
         DaysTotallyRotten = 4,
         HungerChange = -40.0,
@@ -631,7 +699,7 @@ module TraditionalPreservationFishMeat
         EvolvedRecipeName = Beef,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_SoakedCharque,
     }
 

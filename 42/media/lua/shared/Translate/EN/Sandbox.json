@@ -18,6 +18,8 @@
   "Sandbox_TraditionalPreservationFishMeat_Spoilage_option4": "Harsh",
   "Sandbox_TraditionalPreservationFishMeat_ButcheringFat": "Butchering gives fat",
   "Sandbox_TraditionalPreservationFishMeat_ButcheringFat_tooltip": "Pigs give Pork Fat, cattle Beef Suet and sheep Mutton Fat when butchered, most on a Butchering Hook. Two pieces render in a pot to one Lard or Tallow. Off, Lard is loot only, as in the base game.",
+  "Sandbox_TraditionalPreservationFishMeat_LegsOfPork": "Butchering gives legs of pork",
+  "Sandbox_TraditionalPreservationFishMeat_LegsOfPork_tooltip": "An adult pig gives some of its Pork as whole Legs of Pork for country ham: five pieces make one leg, which keeps their food, so the pig's meat stays the same. One or two on a Butchering Hook, up to three from a big pig, usually none from the ground. Off, all Pork, as in the base game.",
   "Sandbox_TraditionalPreservationFishMeat_Charque": "Charque",
   "Sandbox_TraditionalPreservationFishMeat_Charque_tooltip": "Beef, steak, mutton and venison can be packed in the Salting Tub and sun dried on the drying stations as charque. Off, meat isn't salted.",
   "Sandbox_TraditionalPreservationFishMeat_CharqueDays": "Charque drying time (days)",

@@ -1,6 +1,7 @@
 -- Checks the Stockfish Pallet outside the game. Run from the mod folder: luajit tests/test_pallet.lua
 local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
 local check, near = H.check, H.near
+function getItemNameFromFullType(fullType) return (fullType:gsub("^[^.]*%.", "")) end
 H.useModPaths()
 H.installClock(100)
 H.installModData()

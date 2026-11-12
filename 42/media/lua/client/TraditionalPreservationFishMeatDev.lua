@@ -21,18 +21,18 @@ function TPFM.help()
     say("TPFM.spoil(hours)          add this many hours of spoiling weather, to test rotting stacks")
     say("TPFM.frost(hours)          add this many hours of hard frost, to test early frost on fresh cold stacks")
     say("TPFM.heat(hours)           add this many hours of hot sun, to test it on fresh open salt stacks")
-    say("TPFM.warmCure(hours)       add this many hours of a warm cure at 25 C, to test souring in a running tub")
+    say("TPFM.warmCure(hours)       add this many hours of a warm cure at 25 C, to test a warm cure spoiling a running tub")
     say("TPFM.dry()                 clear the wetness, so open and cold frames start drying again at once")
-    say("TPFM.mature(days)          age the Cold Dried fish you carry by this many days, to test ripening")
-    say("TPFM.stockfish(n)          spawn n unripe Cold Dried fish (fresh off the frame), for the pallet")
+    say("TPFM.mature(days)          age the stockfish you carry by this many days, to test maturing")
+    say("TPFM.stockfish(n)          spawn n young stockfish (fresh off the frame), for the pallet")
     say("TPFM.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
     say("TPFM.fish(name, weight, n) spawn n whole fish, e.g. TPFM.fish(\"Walleye\", 4, 2). TPFM.fish() lists the names")
     say("TPFM.heads(n)              spawn n Fish Heads")
     say("TPFM.stock()               spawn a Pot of Fish Head Stock")
     say("TPFM.salt(n)               spawn n vanilla Salt shakers")
     say("TPFM.fat(n)                spawn n each of Pork Fat, Beef Suet and Mutton Fat")
-    say("TPFM.meat(n)               spawn n each of the cuts that go in the salt: Beef, Steak, Mutton Chop, Venison")
-    say("TPFM.cured(n)              spawn n each of those cuts already Salt Cured, ready for the frame as charque")
+    say("TPFM.meat(n)               spawn n each of the cuts that go in the salt: Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop, Leg of Pork")
+    say("TPFM.cured(n, long)        spawn n each of those cuts already Corned (long = true: Country Cured), ready to hang")
     say("TPFM.curedFish(name, n)    spawn n fish (default Walleye) already Salt Cured, ready for the frame or Smokehouse")
     say("TPFM.rain(hours)           add this many hours of rain and wet the open frames, to test rain on open charque")
     say("TPFM.fatPot(state)         spawn a Pot of Pork Fat: \"cooked\" (the default), \"burnt\" or \"raw\"")
@@ -222,19 +222,21 @@ end
 
 function TPFM.meat(count)
     for _, cut in ipairs(F.MEAT_CUTS) do give(cut, count) end
-    say("Gave " .. (count or 1) .. " each of Beef, Steak, Mutton Chop and Venison.")
+    say("Gave " .. (count or 1) .. " each of Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop and Leg of Pork.")
 end
 
--- Each cut as the tub gives it, named for the cut ("Steak (Salt Cured)").
-function TPFM.cured(count)
+-- Each cut as the short cure gives it ("Corned Steak"); long = true for the long cure ("Country Cured Steak").
+function TPFM.cured(count, long)
     local inventory = getPlayer():getInventory()
     for _, cut in ipairs(F.MEAT_CUTS) do
         for _ = 1, count or 1 do
             local raw = instanceItem(cut)
-            F.carry(raw, inventory:AddItem(F.CURED_MEAT))
+            local cured = inventory:AddItem(F.CURED_MEAT)
+            cured:getModData().longCure = long == true or nil
+            F.carry(raw, cured)
         end
     end
-    say("Gave " .. (count or 1) .. " each of Beef, Steak, Mutton Chop and Venison, Salt Cured.")
+    say("Gave " .. (count or 1) .. " each of the seven cuts, " .. (long and "Country Cured" or "Corned") .. ". Pork hangs in the Smokehouse only.")
 end
 
 -- A vanilla fish packed and cured as the tub would, ready for the frame or the Smokehouse ("Walleye (Salt Cured)").
@@ -349,7 +351,7 @@ function TPFM.stockfish(count)
         fish:getModData().matureAge = fish:getAge()
         F.rename(fish)
     end
-    say(string.format("Gave %d unripe Cold Dried fish. Ripe after %d days on a shelf.", count or 1, F.MATURE_DAYS))
+    say(string.format("Gave %d young stockfish. Matured after %d days on a shelf.", count or 1, F.MATURE_DAYS))
 end
 
 function TPFM.pallet()

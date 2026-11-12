@@ -70,14 +70,37 @@ F.HEAD_WEIGHT = 0.1
 F.HEAD_FOOD = 0.06
 -- Butchering XP for gutting a whole fish while packing it.
 F.PACK_GUTTING_XP = 5
--- Charque (phase 3b): the red meat cuts that go in the salt as vanilla gives them, in the order of the meat
--- stages' IconsForTexture. Pork waits for Country Ham: its fat goes rancid in the sun.
-F.MEAT_CUTS = { "Base.Beef", "Base.Steak", "Base.MuttonChop", "Base.Venison" }
+-- Charque (phase 3b): the meat cuts that go in the salt as vanilla gives them, in the order of the meat stages'
+-- IconsForTexture. Pork, Pork Chop and the Leg of Pork came with 6a, for the Smokehouse only: pork fat goes rancid
+-- in sun and wind (porkRefusal).
+F.MEAT_CUTS = { "Base.Beef", "Base.Steak", "Base.MuttonChop", "Base.Venison", "Base.Pork", "Base.PorkChop",
+    "TraditionalPreservationFishMeat.LegOfPork" }
+-- The pork cuts' and the leg's model indices.
+F.PORK_INDICES = { [4] = true, [5] = true, [6] = true }
+F.LEG_INDEX = 6
+F.LEG_OF_PORK = "TraditionalPreservationFishMeat.LegOfPork"
+-- The meat stages, which take their icon from MEAT_CUTS' index.
+F.MEAT_STAGES = {
+    ["TraditionalPreservationFishMeat.SaltPackedMeat"] = true, ["TraditionalPreservationFishMeat.SaltCuredMeat"] = true,
+    ["TraditionalPreservationFishMeat.Charque"] = true, ["TraditionalPreservationFishMeat.SoakedCharque"] = true,
+    ["TraditionalPreservationFishMeat.HotSmokedMeat"] = true, ["TraditionalPreservationFishMeat.DryCuredMeat"] = true,
+}
+
+function F.isMeatStage(fullType)
+    return F.MEAT_STAGES[fullType] == true
+end
 F.PACKED_FISH = "TraditionalPreservationFishMeat.SaltPackedFish"
 F.PACKED_MEAT = "TraditionalPreservationFishMeat.SaltPackedMeat"
 -- A cut is pressed when the salt has reached its middle: PRESS_HOURS for a MEAT_PRESS_WEIGHT cut (a Beef or a
 -- Venison), less by weight (a Steak about 29 hours), never under PRESS_MIN_HOURS. The heaviest cut sets the batch.
 F.MEAT_PRESS_WEIGHT = 0.5
+-- The long cure (6a), Country Cure Salted Meat: the salt goes all through, for meat that dries for weeks in the
+-- Smokehouse. LONG_CUT_HOURS for cuts, LONG_LEG_HOURS for a batch with a leg in it. A leg takes only this one.
+F.LONG_CUT_HOURS = 240
+F.LONG_LEG_HOURS = 504
+F.LONG_CURE_RECIPE = "CountryCureMeat"
+-- A leg takes half fish's salt, as a country ham's dry cure (about 8%): LEG_SALT_PER_STEP for each started SALT_STEP.
+F.LEG_SALT_PER_STEP = 2
 F.CURED_MEAT = "TraditionalPreservationFishMeat.SaltCuredMeat"
 -- What a frame cold dries.
 F.COLD_FISH = { ["TraditionalPreservationFishMeat.GuttedFish"] = true, ["TraditionalPreservationFishMeat.FishHalf"] = true }
@@ -144,7 +167,7 @@ F.RAW_SPOIL_HOURS = 48
 F.SALT_SPOIL_ABOVE = 22
 F.SALT_SPOIL_HUMIDITY = 0.4
 F.SALT_SPOIL_HOURS = 480
--- A tub in a warm season: the flesh by the spine sours before the salt reaches it. Above WARM_CURE_ABOVE
+-- A tub in a warm season: the flesh by the spine spoils (bone taint) before the salt reaches it. Above WARM_CURE_ABOVE
 -- (the season's mean) the batch picks up spoilage at WARM_CURE_SHARE of RAW_SPOIL_HOURS' rate, and each
 -- 10 degrees more adds as much again. The pressed fish carries it onto the frame.
 F.WARM_CURE_ABOVE = 20
@@ -163,7 +186,7 @@ F.MATURE_DAYS = 60
 F.MATURE_UNHAPPY = 10
 -- Rinsing Salt Cured fish, as on the Volga: the excess salt soaked off before it hangs. Optional. It takes
 -- RINSE_LITRES of water a fish, leaves RINSED_THIRST of the thirst, and the fish keeps RINSED_KEEPING as long
--- (less salt, less protection). A Salt Dried fish from it loses its sour note too (unhappiness 3 to 0).
+-- (less salt, less protection). A Salt Dried fish from it loses its sharp tang too (unhappiness 3 to 0).
 F.RINSE_LITRES = 0.15
 F.RINSED_THIRST = 2 / 3
 F.RINSED_KEEPING = 0.9
@@ -259,8 +282,8 @@ F.STAGES = {
     ["TraditionalPreservationFishMeat.DryCuredMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdSmoked", weight = 0.55, nutrition = 0.9, hunger = 0.7, salty = true, dryCured = true },
 }
 
--- The animal each of MEAT_CUTS comes from, by model index, for the Dry-Cured names.
-F.MEAT_ANIMALS = { "Beef", "Beef", "Mutton", "Venison" }
+-- The animal each of MEAT_CUTS comes from, by model index, for the finished meat's names.
+F.MEAT_ANIMALS = { "Beef", "Beef", "Mutton", "Venison", "Pork", "Pork", "Pork" }
 
 -- The low end of DryingCraftLogic's curve: nothing at freezing, 1 at 20 C. It stops there, so
 -- heat can't finish a batch in under DRY_HOURS.
@@ -542,12 +565,48 @@ function F.onPressStart(craftRecipeData)
     Weather.startClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours())
     craftRecipeData:getModData().lastWarmCure = F.getLedger().warmCure
     local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
-    local heaviest, meat = 0, false
+    local heaviest, meat, leg = 0, false, false
     for i = 0, fish:size() - 1 do
         heaviest = math.max(heaviest, fish:get(i):getActualWeight())
         meat = meat or fish:get(i):getFullType() == F.PACKED_MEAT
+        leg = leg or F.isLeg(fish:get(i))
     end
-    craftRecipeData:getModData().pressHours = meat and F.meatPressHours(heaviest) or F.pressHours(heaviest)
+    local hours = meat and F.meatPressHours(heaviest) or F.pressHours(heaviest)
+    -- The engine gives the recipe's full name, module and all.
+    local recipeName = string.gsub(craftRecipeData:getRecipe():getName(), "^.*%.", "")
+    if recipeName == F.LONG_CURE_RECIPE then hours = F.longCureHours(leg) end
+    craftRecipeData:getModData().pressHours = hours
+end
+
+-- Hours of the long cure: a leg's if the batch has one.
+function F.longCureHours(leg)
+    return leg and F.LONG_LEG_HOURS or F.LONG_CUT_HOURS
+end
+
+-- A Leg of Pork, raw or at any stage.
+function F.isLeg(item)
+    if item:getFullType() == F.LEG_OF_PORK then return true end
+    return F.isMeatStage(item:getFullType()) and item:getModelIndex() == F.LEG_INDEX
+end
+
+-- Pork or a leg at any meat stage, by its model index.
+function F.isPork(item)
+    return F.isMeatStage(item:getFullType()) and F.PORK_INDICES[item:getModelIndex()] == true
+end
+
+-- OnTest of the short cure: a leg is too thick for it, and takes the long cure only.
+function F.canCorn(item)
+    return not F.isLeg(item)
+end
+
+-- The long cure's OnCreate: as the short one's, and each piece is marked Country Cured.
+function F.onCreateLongCured(craftRecipeData)
+    F.onCreatePressed(craftRecipeData)
+    local created = craftRecipeData:getAllCreatedItems()
+    for i = 0, created:size() - 1 do
+        created:get(i):getModData().longCure = true
+        F.rename(created:get(i))
+    end
 end
 
 -- The share of its keeping a batch has lost to a warm cure so far. A press started before this counts from now.
@@ -591,6 +650,23 @@ function F.fishRefusal(isTub, fullType)
     if fullType == F.PACKED_MEAT or fullType == F.CURED_MEAT then
         if not F.CHARQUE_ON then return "IGUI_TraditionalPreservationFishMeat_CharqueOff" end
     end
+    return nil
+end
+
+-- Meat a frame, Beam or Gantry refuses: pork, whose fat goes rancid in sun and wind, and Country Cured meat, whose
+-- long cure is for the Smokehouse's dry-cured meat, not charque. The Smokehouse (closed) takes both.
+function F.porkRefusal(closed, item)
+    if closed then return nil end
+    if F.isPork(item) then return "IGUI_TraditionalPreservationFishMeat_PorkSmokehouse" end
+    if item:getFullType() == F.CURED_MEAT and item:getModData().longCure then
+        return "IGUI_TraditionalPreservationFishMeat_CountryCuredSmokehouse"
+    end
+    return nil
+end
+
+-- Why an item can't go in a tub set to this recipe (Core's recipeRefusal): a Leg of Pork is too thick to corn.
+function F.recipeRefusal(recipeName, item)
+    if recipeName == "PressSaltedMeat" and F.isLeg(item) then return "IGUI_TraditionalPreservationFishMeat_LegNeedsLongCure" end
     return nil
 end
 
@@ -898,7 +974,8 @@ end
 -- The salt packing this fish takes in all, the recipe's own SALT_MIN included.
 function F.saltFor(fish)
     local steps = math.ceil(F.packedWeight(fish) / F.SALT_STEP - 1e-6)
-    return math.max(F.SALT_MIN, F.SALT_PER_STEP * steps)
+    local perStep = fish:getFullType() == F.LEG_OF_PORK and F.LEG_SALT_PER_STEP or F.SALT_PER_STEP
+    return math.max(F.SALT_MIN, perStep * steps)
 end
 
 -- A whole or gutted fish over SALT_WHOLE_MAX, which has to be split before it goes in the salt.
@@ -1230,28 +1307,72 @@ function F.wasGutted(item)
     return index >= count and index < count * 2
 end
 
+-- Names (6a): the name says what it is now, a permanent fact in front ("Corned Beef", "Suho Meso"); a bracket only
+-- holds a state that changes or wants acting on, one at most, before vanilla's freshness.
+-- The finished meat of each animal, by how it dried: smoked (the default) or air dried (modData.airDried, 6b).
+-- The leg has its own, Country Ham.
+local function meatKind(item)
+    local index = item:getModelIndex()
+    if index == F.LEG_INDEX then return "Leg" end
+    return F.MEAT_ANIMALS[index + 1]
+end
+
+-- A meat stage's name, from the cut it was made of (its model index): nil for one spawned without a cut.
+-- Vanilla's grade ("Beef (Prime Cut)") stays behind: the food values carry it.
+local function meatStageName(item)
+    local fullType, modData = item:getFullType(), item:getModData()
+    local cut = F.MEAT_CUTS[item:getModelIndex() + 1]
+    if not cut then return nil end
+    local kind = meatKind(item)
+    local animal = getText("IGUI_TraditionalPreservationFishMeat_Animal" .. F.MEAT_ANIMALS[item:getModelIndex() + 1])
+    if fullType == "TraditionalPreservationFishMeat.SaltPackedMeat" then
+        return getText("IGUI_TraditionalPreservationFishMeat_Named", getItemNameFromFullType(cut), getText("IGUI_TraditionalPreservationFishMeat_Packed"))
+    elseif fullType == F.CURED_MEAT then
+        return getText(modData.longCure and "IGUI_TraditionalPreservationFishMeat_CountryCured" or "IGUI_TraditionalPreservationFishMeat_Corned",
+            getItemNameFromFullType(cut))
+    elseif fullType == "TraditionalPreservationFishMeat.Charque" then
+        return getText("IGUI_TraditionalPreservationFishMeat_CharqueOf", animal)
+    elseif fullType == "TraditionalPreservationFishMeat.SoakedCharque" then
+        return getText("IGUI_TraditionalPreservationFishMeat_Named", getText("IGUI_TraditionalPreservationFishMeat_CharqueOf", animal),
+            getText("IGUI_TraditionalPreservationFishMeat_Soaked"))
+    elseif fullType == "TraditionalPreservationFishMeat.HotSmokedMeat" then
+        return getText("IGUI_TraditionalPreservationFishMeat_HotSmokedOf", animal)
+    end
+    return getText((modData.airDried and "IGUI_TraditionalPreservationFishMeat_AirDried_" or "IGUI_TraditionalPreservationFishMeat_Smoked_") .. kind)
+end
+
+-- Stockfish is named by its species alone ("Walleye Stockfish"): no size, nor Gutted, which nearly all of it is.
+-- One from another mod's fish (no icon of ours) keeps the name it came with. Matured once ripe; Rehydrated, soaked.
+local function stockfishName(item, fishName)
+    local index = item:getModelIndex()
+    if index >= 0 then fishName = getItemNameFromFullType(F.FISH_ICONS[index % #F.FISH_ICONS + 1]) end
+    local name = getText("IGUI_TraditionalPreservationFishMeat_Stockfish", fishName)
+    local stage = F.STAGES[item:getFullType()]
+    if stage.ripened then
+        return getText("IGUI_TraditionalPreservationFishMeat_Named", name, getText("IGUI_TraditionalPreservationFishMeat_Rehydrated"))
+    end
+    if F.ripeness(item) >= 1 then
+        return getText("IGUI_TraditionalPreservationFishMeat_Named", name, getText("IGUI_TraditionalPreservationFishMeat_Ripe"))
+    end
+    return name
+end
+
 -- A fish stage's name: the fish (Gutted if it went through Gut Fish), then its stage in brackets, as in
--- "Gutted Medium Walleye (Cold Dried, Ripe)". Vanilla adds (Fresh) or (Stale) after it. Nil for a stage
--- item that never had a species.
+-- "Gutted Medium Walleye (Salt Dried, Rinsed)"; stockfish and meat have their own. Vanilla adds (Fresh) or
+-- (Stale) after it. Nil for a stage item that never had a species or a cut.
 function F.stageName(item)
     local stage = F.STAGES[item:getFullType()]
+    if not stage then return nil end
+    if F.isMeatStage(item:getFullType()) then return meatStageName(item) end
     local modData = item:getModData()
     local fishName = modData.fishName
-    if not stage or not fishName then return nil end
-    if stage.dryCured then
-        local animal = F.MEAT_ANIMALS[item:getModelIndex() + 1] or F.MEAT_ANIMALS[1]
-        fishName = getText("IGUI_TraditionalPreservationFishMeat_DryCured", getText("IGUI_TraditionalPreservationFishMeat_Animal" .. animal))
-    end
+    if not fishName then return nil end
+    if stage.matures or stage.ripened then return stockfishName(item, fishName) end
     if stage.prep then return stage.name and getText(stage.name, fishName) or fishName end
     if F.wasGutted(item) then fishName = getText("IGUI_TraditionalPreservationFishMeat_Gutted", fishName) end
     local state = getText(stage.name)
     if stage.salty and modData.rinsed then
         state = getText("IGUI_TraditionalPreservationFishMeat_And", state, getText("IGUI_TraditionalPreservationFishMeat_Rinsed"))
-    end
-    local ripeness = (stage.matures or stage.ripened) and F.ripeness(item)
-    if ripeness then
-        state = getText("IGUI_TraditionalPreservationFishMeat_And", state,
-            getText(ripeness >= 1 and "IGUI_TraditionalPreservationFishMeat_Ripe" or "IGUI_TraditionalPreservationFishMeat_Unripe"))
     end
     return getText("IGUI_TraditionalPreservationFishMeat_Named", fishName, state)
 end
@@ -1505,6 +1626,7 @@ function F.applyRecipeTimes()
     F.applySandbox()
     applyRecipeTime("TraditionalPreservationFishMeat.PressSaltedFish", F.PRESS_HOURS)
     applyRecipeTime("TraditionalPreservationFishMeat.PressSaltedMeat", F.PRESS_HOURS)
+    applyRecipeTime("TraditionalPreservationFishMeat.CountryCureMeat", F.LONG_LEG_HOURS)
     applyRecipeTime("TraditionalPreservationFishMeat.HangFishToDry", F.DRY_HOURS)
     applyRecipeTime("TraditionalPreservationFishMeat.HangFishToColdDry", F.COLD_DRY_HOURS)
     applyRecipeTime("TraditionalPreservationFishMeat.HangMeatToDry", F.CHARQUE_HOURS)

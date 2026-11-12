@@ -30,7 +30,11 @@ FATS = {
 }
 # Charque's stages (phases 3b and 3c), one icon per cut in MEAT_CUTS' order: Salt Packed is the cut dusted towards
 # salt, Salt Cured darkened towards cured red-brown.
-CUTS = {"Beef": "Item_BeefLoin", "Steak": "Item_Steak", "Mutton": "Item_Mutton", "Venison": "Item_Venison"}
+# Pork, Pork Chop and the Leg of Pork came with phase 6a; the leg starts from vanilla's Ham.
+CUTS = {"Beef": "Item_BeefLoin", "Steak": "Item_Steak", "Mutton": "Item_Mutton", "Venison": "Item_Venison",
+        "Pork": "Item_PorkLoin", "PorkChop": "Item_Porkchop", "Leg": "Item_Ham"}
+# The raw Leg of Pork (6a): vanilla's Ham icon, and its ground model's texture, pulled back to raw pork pink.
+RAW_LEG = ((226, 150, 140), 0.7)
 SALTED = {"SaltPacked": ((236, 232, 224), 0.35), "SaltCured": ((128, 54, 44), 0.45),
           # Charque (phase 3c) dark and dry, as its last hanging stage; soaked it is paler but never red again.
           "Charque": ((78, 40, 26), 0.85), "SoakedCharque": ((138, 82, 64), 0.6)}
@@ -162,6 +166,8 @@ def main():
         pull(Image.open(path), *COLD_FISH).save(folder / f"Item_{COLD_FISH_STAGES[stage + '_']}{species}.png")
     pull(Image.open(folder / "Item_SaltDriedFish.png"), *HOT_FISH).save(folder / "Item_HotSmokedFish.png")
     pull(Image.open(folder / "Item_SaltDriedFish.png"), *COLD_FISH).save(folder / "Item_ColdSmokedFish.png")
+    pull(icons[CUTS["Leg"]], *RAW_LEG).save(folder / "Item_LegOfPork.png")
+    pull(Image.open(game / "media/textures/WorldItems/Ham.png"), *RAW_LEG).save(folder / "LegOfPorkModel.png")
     for name, source in POTS.items():
         fat_pot(icons[source]).save(folder / f"Item_{name}.png")
     for name, source in MEAT_POTS.items():

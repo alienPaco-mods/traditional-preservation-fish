@@ -24,7 +24,7 @@
   "Tooltip_TraditionalPreservationFishMeat_Dried": "Keeps for months. Very salty: rehydrate it in water before cooking.",
   "Tooltip_TraditionalPreservationFishMeat_Head": "Raw, it will make you sick. Cook it, or add it to a soup or stew. It can't be dried. It also makes chum.",
   "Tooltip_TraditionalPreservationFishMeat_HeadStock": "Fish head stock, ready to take up to 6 stew ingredients and your seasonings. It starts out as tasty as a plain stew. Cook it before eating.",
-  "Tooltip_craft_rinseSaltedFish": "Optional. Soaks the excess salt off Salt Cured fish or meat before hanging, as on the Volga and in the charqueadas. It comes out less salty (less thirst; the fish loses its sour note) but keeps a tenth less long. Near a sink, bathtub, barrel or well, right-click it for Rinse at Sink.",
+  "Tooltip_craft_rinseSaltedFish": "Optional. Soaks the excess salt off Salt Cured fish or meat before hanging, as on the Volga and in the charqueadas. It comes out less salty (less thirst; the fish loses its sharp tang) but keeps a tenth less long. Near a sink, bathtub, barrel or well, right-click it for Rinse at Sink.",
   "Tooltip_TraditionalPreservationFishMeat_RinseAtSink": "Rinses %1 pieces with %2 L of clean water from the sink, bathtub, barrel or well close by. It comes out less salty but keeps a tenth less long.",
   "Tooltip_craft_stockfishPalletDesc": "Where stockfish ripens, stacked as in the old warehouses. Cold Dried fish on it ripens twice as fast in a loft (a room upstairs) and half as fast again in a ground-floor room; covered, outdoors or in a damp basement, no faster than a shelf. Holds 20 weight.",
   "Tooltip_TraditionalPreservationFishMeat_StockfishBale": "Stockfish tied up as it was shipped from the Lofoten. Holds 10 weight of stockfish and nothing else; the fish ripen inside, on a pallet too.",
@@ -36,9 +36,9 @@
   "Tooltip_TraditionalPreservationFishMeat_Tallow": "Rendered beef or mutton fat. Bakes and seasons like Lard.",
   "Tooltip_TraditionalPreservationFishMeat_Cracklings": "The crisp bits left in the pot after rendering fat.",
   "Tooltip_TraditionalPreservationFishMeat_PotOfFat": "Cook it on any stove or fire. Once it is cooked, pour off the melted fat and strain it. Burnt fat is only good for scraping out.",
-  "Tooltip_TraditionalPreservationFishMeat_PackMeat": "Beef, Steak, Mutton Chop or Venison, as it is. Takes 4 salt for each started half weight, about a seventh of its weight, as charque. Carry the salt yourself. Pork is not sun dried: its fat goes rancid.",
-  "Tooltip_TraditionalPreservationFishMeat_PackedMeat": "Salted, not yet cured. Cure it in a Salting Tub, one to two days by the heaviest cut.",
-  "Tooltip_TraditionalPreservationFishMeat_CuredMeat": "Cured, but still damp: it keeps a week or two. Cook it, or rinse off the salt if you like (right-click) and hang it on a drying frame to dry in the sun as Charque.",
+  "Tooltip_TraditionalPreservationFishMeat_PackMeat": "Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop or a Leg of Pork, as it is. Takes 4 salt for each started half weight, about a seventh of its weight, as charque; a Leg of Pork half that, as a country ham. Carry the salt yourself. Pork goes to the Smokehouse only: in sun and wind its fat goes rancid.",
+  "Tooltip_TraditionalPreservationFishMeat_PackedMeat": "Salted, not yet cured. Cure it in a Salting Tub: corned in one to two days by the heaviest cut, for charque or hot smoking, or country cured in 10 days (21 with a leg), for dry-cured meat and country ham.",
+  "Tooltip_TraditionalPreservationFishMeat_CuredMeat": "Cured, but still damp: it keeps a week or two. Cook it, or rinse off the salt if you like (right-click) and hang it to dry: corned beef, mutton or venison in the sun as Charque, or hot smoked in the Smokehouse; pork and anything country cured in the Smokehouse.",
   "Tooltip_craft_hangMeatToDry": "Salt drying, for Salt Cured meat: charque. Best in hot sun and a breeze, about 5 days in summer; slow in spring and autumn, nearly stops in winter. Rain on an open frame takes some of it back. Keeps for months.",
   "Tooltip_TraditionalPreservationFishMeat_Charque": "Keeps for months. Salty and as hard as leather: rehydrate it in water before cooking.",
   "Tooltip_TraditionalPreservationFishMeat_SoakedCharque": "Desalted and soft again. Still a little salty. Cook it soon: it spoils like fresh meat.",
@@ -48,5 +48,8 @@
   "Tooltip_craft_smokehouseChamberDesc": "A plank smokehouse two tiles long under one roof slope, its door on the high end. Hangs up to 6 stacks of salt fish or Salt Cured meat, up to 15 weight each. With no fire it dries like a frame in a room: still air, no rain. No cold drying: gutted fish needs open air. Open air or under an open roof, not in a room.",
   "Tooltip_TraditionalPreservationFishMeat_HotSmoked": "Cooked through in the smokehouse and ready to eat. Still moist: it keeps a week or two.",
   "Tooltip_TraditionalPreservationFishMeat_ColdSmoked": "Dried in the smoke of a banked fire. Keeps for months and is eaten as it is, sliced thin; a little salty.",
-  "Tooltip_TraditionalPreservationFishMeat_DryCured": "Salted, then dried in the smoke of a banked fire. Keeps for months and is eaten as it is, sliced thin; a little salty."
+  "Tooltip_TraditionalPreservationFishMeat_DryCured": "Salted, then dried in the smoke of a banked fire. Keeps for months and is eaten as it is, sliced thin; a little salty.",
+  "Tooltip_TraditionalPreservationFishMeat_LegOfPork": "A whole hind leg, for a country ham. Pack it in salt and country cure it in a Salting Tub for 21 days, best from the first hard frost to spring: in a warm season it spoils by the bone before the salt gets there.",
+  "Tooltip_craft_pressSaltedMeat": "The short cure, one to two days by the heaviest cut: corned meat, for charque on a frame or hot smoking. Too short for a Leg of Pork.",
+  "Tooltip_craft_countryCureMeat": "The long cure: 10 days for cuts, 21 if a Leg of Pork is in the batch. The salt goes all the way through, for meat that dries for weeks in the Smokehouse: dry-cured meat and country ham. A cold-season job: in a warm season it spoils by the bone."
 }
