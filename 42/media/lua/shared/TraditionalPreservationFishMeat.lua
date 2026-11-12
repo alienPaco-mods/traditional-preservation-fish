@@ -55,10 +55,11 @@ F.GUTS_WEIGHT = 0.1
 -- A fillet vanilla cut weighs a twentieth of its fish and holds half its food. Salted, it counts as what it
 -- holds, half the gutted fish: it pays that much salt and comes out of the salt that heavy.
 F.FILLET_FOOD_WEIGHT = (1 - F.GUTS_WEIGHT) * 0.5 / F.FILLET_WEIGHT
--- Packing takes SALT_PER_STEP salt for each started SALT_STEP of the packed fish's weight, and never less
--- than the SALT_MIN the recipe itself asks for.
-F.SALT_STEP = 0.5
-F.SALT_PER_STEP = 4
+-- Packing takes SALT_PER_STEP salt for each SALT_STEP of the packed fish's weight, to the nearest step, and never
+-- less than the SALT_MIN the recipe itself asks for. Quarter steps since 0.4.18: a started half weight made a
+-- Steak pay a Beef's salt and a small panfish a big one's.
+F.SALT_STEP = 0.25
+F.SALT_PER_STEP = 2
 F.SALT_MIN = 2
 -- A fish over this weight is too thick to salt whole, as on the Volga: gut and split it first. Halves always pack.
 F.SALT_WHOLE_MAX = 4.5
@@ -102,8 +103,8 @@ F.MEAT_PRESS_WEIGHT = 0.5
 F.LONG_CUT_HOURS = 240
 F.LONG_LEG_HOURS = 504
 F.LONG_CURE_RECIPE = "CountryCureMeat"
--- A leg takes half fish's salt, as a country ham's dry cure (about 8%): LEG_SALT_PER_STEP for each started SALT_STEP.
-F.LEG_SALT_PER_STEP = 2
+-- A leg takes half fish's salt, as a country ham's dry cure (about 8%): LEG_SALT_PER_STEP for each SALT_STEP.
+F.LEG_SALT_PER_STEP = 1
 F.CURED_MEAT = "TraditionalPreservationFishMeat.SaltCuredMeat"
 -- What a frame cold dries.
 F.COLD_FISH = { ["TraditionalPreservationFishMeat.GuttedFish"] = true, ["TraditionalPreservationFishMeat.FishHalf"] = true }
@@ -1169,7 +1170,7 @@ end
 
 -- The salt packing this fish takes in all, the recipe's own SALT_MIN included.
 function F.saltFor(fish)
-    local steps = math.ceil(F.packedWeight(fish) / F.SALT_STEP - 1e-6)
+    local steps = math.floor(F.packedWeight(fish) / F.SALT_STEP + 0.5 + 1e-6)
     local perStep = fish:getFullType() == F.LEG_OF_PORK and F.LEG_SALT_PER_STEP or F.SALT_PER_STEP
     return math.max(F.SALT_MIN, perStep * steps)
 end

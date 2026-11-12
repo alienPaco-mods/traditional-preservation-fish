@@ -32,7 +32,7 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [h2]Salting (fish and meat)[/h2]
 [list]
 [*][b]Salting Tub:[/b] Carpentry 2, Fishing 2. 4 planks, 6 nails, 2 twine, hammer and saw kept. Holds 50 weight or 35 pieces, fish or meat, never both at once.
-[*][b]Pack Fish in Salt:[/b] a raw fish or fillet and a sharp knife or meat cleaver (kept). 4 salt for each started half weight, about 15%, as on the Volga: a bluegill takes 4, a 4.5 weight walleye 36. A fish over 4.5 weight is too thick to salt whole: gut and split it first.
+[*][b]Pack Fish in Salt:[/b] a raw fish or fillet and a sharp knife or meat cleaver (kept). 2 salt for each quarter weight, about 15%, as on the Volga: a small panfish takes 2, a 4.5 weight walleye 32. A fish over 4.5 weight is too thick to salt whole: gut and split it first.
 [*][b]Pack Meat in Salt:[/b] a Beef, Steak, Mutton Chop, Venison, Pork or Pork Chop as the butcher gives it, with 4 salt, or a whole Leg of Pork with 10. No knife needed. Pork never hangs in the open: its fat goes rancid in sun and wind.
 [*][b]Leg of Pork:[/b] a grown pig gives some of its Pork as whole legs for country ham, one or two on a Butchering Hook. Five Pork make a leg, so the pig's meat stays the same.
 [*][b]Cure Salted Fish / Corn Salted Meat:[/b] the heaviest piece sets the time, 1 to 2 in-game days: Salt Cured fish, Corned meat. Nothing else goes in until the last piece is out.
@@ -107,7 +107,7 @@ Days are fresh, then rotten.
 The salt route is the lower Volga's: around Astrakhan, fish is salted in vats under a weighted lid, soaked, and dried in the shade, small fish whole and big ones split or hung from hooks. Stockfish is unsalted fish hung on open racks through the cold northern Norwegian spring and traded across Europe since the Viking age. In the charqueadas of southern Brazil, beef was salted in piles, washed and dried in the sun as charque. Turkish kavurma, French confit and the Balkan meso u masti are all meat cooked in fat and sealed in clay pots for the winter. The Smokehouse is the Kentucky farm smokehouse and the Bosnian pušnica, fed from a low firebox outside the wall; its winter smoke makes the Balkans' dry-cured suho meso.
 
 [h2]Works well with[/h2]
-[b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt: one batch (5 Evaporated Salt, 25 uses) packs a dozen panfish, or one 4 weight walleye with salt to spare. Traditional Preservation (Fish & Meat) needs no other mods besides Traditional Preservation (Core).
+[b]Traditional Preservation (Salt)[/b] gives you a sustainable source of salt: one batch (5 Evaporated Salt, 25 uses) packs six half-weight panfish, or most of a 4 weight walleye. Traditional Preservation (Fish & Meat) needs no other mods besides Traditional Preservation (Core).
 
 [h2]Sandbox options[/h2]
 Set salt drying time, the slowest it can take, stockfish drying and maturing times, the ageing times of dry-cured meat and Country Ham, the salt cure time and spoilage strictness. Turn butchering fat, charque and Potted Meat's keeping by place on or off, and set charque drying time.

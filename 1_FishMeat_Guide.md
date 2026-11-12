@@ -65,7 +65,7 @@ Fish and meat share one workshop. The same **Salting Tub** cures both, the same 
 | You need | For |
 |---|---|
 | Sharp knife or meat cleaver (kept) | Packing fish, gutting, splitting, slicing (meat needs no knife) |
-| 4 salt per half weight of fish; 4 per cut of meat; 10 per leg of pork | Salting |
+| 2 salt per quarter weight of fish; 4 per half-weight cut of meat, 2 per Steak or chop; 10 per leg of pork | Salting |
 | Carpentry 2, Fishing 2 | Tub and frame |
 | A pot and any fire | Rendering fat, Potted Meat |
 | 1 L water | Rehydrating a dried fish or a piece of charque |
@@ -166,7 +166,7 @@ Numbers are for an average animal and an unskilled butcher. A bigger or meatier 
 | | **Pack Fish in Salt** | **Pack Meat in Salt** |
 |---|---|---|
 | Takes | A raw fish, fillet, Gutted Fish or Fish Half; knife or cleaver (kept) | A Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop or Leg of Pork; no knife |
-| Salt | **4 for each started half weight** of the packed fish (about 15%) | **4** a cut (every cut is half a weight or less); a Leg of Pork **half the rate**, **10** for 2.5 weight (about 8%) |
+| Salt | **2 for each quarter weight** of the packed fish, to the nearest quarter, never under 2 (about 15%) | The same: **4** for a Beef, Venison or Pork, **2** for a Steak or a chop; a Leg of Pork **half the rate**, **10** for 2.5 weight (about 8%) |
 | Gives | **Salt Packed** fish (+ Fish Guts from a whole fish over 0.6) | Salt Packed meat, named for its cut (*Steak (Salt Packed)*) |
 | Not | Rotten, frozen or cooked fish | Rotten, frozen or cooked meat |
 
@@ -177,9 +177,10 @@ Numbers are for an average animal and an unskilled butcher. A bigger or meatier 
 
 | Fish | Packed weight | Salt |
 |---|---|---|
+| Bluegill, 0.3 | 0.3 | 2 |
 | Bluegill, 0.5 | 0.5 | 4 |
-| Walleye, 4.0 | 3.6 | 32 |
-| Walleye, 4.5 (the most salted whole) | 4.05 | 36 |
+| Walleye, 4.0 | 3.6 | 28 |
+| Walleye, 4.5 (the most salted whole) | 4.05 | 32 |
 | Catfish, 10.0: too big, gut and split | each half 4.0 | 32 a half |
 | Vanilla fillet of that catfish, 0.5 | 4.5 | 36 |
 
@@ -1051,7 +1052,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 The Salting Tub runs on the game clock, not the weather, so `TPFM.age` doesn't speed up curing. Use the game's own time controls for that.
 
 **Typical checks**
-- **Salt fish:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(10)` (each 4 weight walleye takes 32 salt), pack and cure, then hang the fish and `TPFM.age(288)`.
+- **Salt fish:** `TPFM.fish("Walleye", 4, 3)` and `TPFM.salt(10)` (each 4 weight walleye takes 28 salt), pack and cure, then hang the fish and `TPFM.age(288)`.
 - **Charque:** `TPFM.cured(2)`, hang the beef, mutton and venison on a frame (it refuses the pork), `TPFM.age(120)`, take them down and rehydrate one.
 - **Potted Meat:** `TPFM.potted()`, Put Meat in Lard or Tallow with the Steak, Add Meat to the Pot three times, cook it two hours, Pack Potted Meat into the Glazed Clay Jar, then eat a quarter.
 - **Hot smoking:** build a Smokehouse, `TPC.fireboxKit()` and `TPFM.flueKit()`, build a Firebox by a long side with its door turned away, Connect the Firebox, hang `TPFM.cured(2)` inside, light the Firebox, then `TPFM.stoke(8)`: Hot-Smoked meat, and a ham by the door.

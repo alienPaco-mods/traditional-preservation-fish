@@ -645,8 +645,8 @@ module TraditionalPreservationFishMeat
         EvolvedRecipeName = Fish,
     }
 
-    /* Salt goes by the packed fish's weight: 2 for each started half weight, so a bluegill takes 2 and a 10 weight
-       catfish half 16. The recipe asks for the first 2; canPack checks the rest is on you (and refuses a whole fish
+    /* Salt goes by the packed fish's weight: 2 for each quarter weight to the nearest (F.saltFor), so a small
+       bluegill takes 2 and a 4 weight walleye 28. The recipe asks for the first 2; canPack checks the rest is on you (and refuses a whole fish
        over SALT_WHOLE_MAX) and onCreatePacked takes it.
        A shaker holds 10, an Evaporated Salt 5, a Bag of Salt 50. The fish is the input with ItemCount,
        which is how onCreateCured finds it. Don't use IsWholeFoodItem: it needs the script's exact

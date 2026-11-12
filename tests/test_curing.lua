@@ -913,12 +913,14 @@ check("nor does a fish too small to gut", #xpGiven == 0)
 -- Salt by the packed fish's weight (C11)
 local cutFillet = newFood("Base.FishFillet", { ActualWeight = 0.5 })
 cutFillet.customWeight = true
-check("a fish too small to gut takes one step, 4", T.saltFor(newFood("Base.Bluegill", { ActualWeight = 0.5 })) == 4)
-check("a whole fish pays for what is left once gutted", T.saltFor(newFood("Base.Walleye", { ActualWeight = 4 })) == 32)
-check("a whole half weight pays no extra step", T.saltFor(newFood("TraditionalPreservationFishMeat.GuttedFish", { ActualWeight = 1 })) == 8)
-check("a gutted fish or a half by its weight", T.saltFor(gutted) == 28)
+check("a half-weight fish too small to gut takes two quarter steps, 4", T.saltFor(newFood("Base.Bluegill", { ActualWeight = 0.5 })) == 4)
+check("a small panfish takes one step, 2, and never less", T.saltFor(newFood("Base.Bluegill", { ActualWeight = 0.3 })) == 2
+    and T.saltFor(newFood("Base.Bluegill", { ActualWeight = 0.05 })) == 2)
+check("a whole fish pays for what is left once gutted", T.saltFor(newFood("Base.Walleye", { ActualWeight = 4 })) == 28)
+check("a whole number of steps pays no extra", T.saltFor(newFood("TraditionalPreservationFishMeat.GuttedFish", { ActualWeight = 1 })) == 8)
+check("a gutted fish or a half by its weight, to the nearest step", T.saltFor(gutted) == 26)
 check("a fillet vanilla cut pays for its food, half the gutted fish", T.saltFor(cutFillet) == 36)
-check("a loot fillet, by its own weight", T.saltFor(newFood("Base.FishFillet", { ActualWeight = 0.2 })) == 4)
+check("a loot fillet, by its own weight", T.saltFor(newFood("Base.FishFillet", { ActualWeight = 0.2 })) == 2)
 check("about 15% of the fish's weight, a use weighing 0.02", near(T.SALT_PER_STEP / T.SALT_STEP * 0.02, 0.16))
 local packedCut = through(cutFillet, "SaltPackedFish")
 check("and comes out of the salt that heavy (C26)", near(packedCut.values.ActualWeight, 4.5))
@@ -945,7 +947,7 @@ local function carry(...)
     carried, removed = { ... }, {}
     for _, item in ipairs(carried) do function item:getContainer() return container end end
 end
-local walleye4 = newFood("Base.Walleye", { ActualWeight = 4 })
+local walleye4 = newFood("Base.Walleye", { ActualWeight = 4.5 })  -- packs at 4.05: 16 quarter steps, 32 salt
 carry(saltItem("Base.Salt", 10), saltItem("TraditionalPreservationSalt.LooseSalt", 5), saltItem("TraditionalPreservationSalt.BagOfSalt", 16))
 check("31 salt carried can't pack a fish that takes 32", not T.canPack(walleye4, salter))
 check("the knife, the salt and a test without a character pass", T.canPack(newFood("Base.HuntingKnife", {}), salter) and T.canPack(carried[1], salter) and T.canPack(walleye4, nil))
@@ -976,7 +978,7 @@ carry(saltItem("Base.Salt", 20))
 local packData = newRecipeData(0, { newFood("Base.Walleye", { ActualWeight = 2 }) }, { newFood("TraditionalPreservationFishMeat.SaltPackedFish", {}) })
 function packData:getCharacter() return packer end
 T.onCreatePacked(packData)
-check("both pack recipes charge in onCreatePacked, finding the packer", carried[1].uses == 6)
+check("both pack recipes charge in onCreatePacked, finding the packer", carried[1].uses == 8)
 instanceof = nil
 
 -- How a stack looks on the frame
@@ -1158,8 +1160,8 @@ check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnT
         and curedSteak.name == "Corned Steak")
     local venison = newFood("Base.Venison", { ActualWeight = 0.5 })
     check("venison is the fourth icon", through(venison, "SaltPackedMeat").modelIndex == 3)
-    check("a Beef takes 4 salt, as a half-weight fish", T.saltFor(newFood("Base.Beef", { ActualWeight = 0.5 })) == 4
-        and T.saltFor(steak) == 4)
+    check("a Beef takes 4 salt, as a half-weight fish, and a Steak 2", T.saltFor(newFood("Base.Beef", { ActualWeight = 0.5 })) == 4
+        and T.saltFor(steak) == 2)
     instanceof = function(_, name) return name == "Food" end
     check("a cut is never too big to salt whole", T.canPack(newFood("Base.Beef", { ActualWeight = 5 }), nil))
     instanceof = nil

@@ -501,7 +501,7 @@ module TraditionalPreservationFishMeat
     }
 
     /* Salt is rubbed into the cut as it is: no knife, nothing to gut. Fish's salt rule (canPack, onCreatePacked):
-       4 for each started half weight, so a Steak or a Beef takes 4 (about 15%, as charque). A Leg of Pork takes half
+       2 for each quarter weight to the nearest, so a Beef takes 4 and a Steak 2 (about 15%, as charque). A Leg of Pork takes half
        that (F.saltFor), as a country ham's dry cure: 10 for a 2.5 leg. The recipe asks for the first 2. */
     craftRecipe PackMeatInSalt
     {

@@ -1,6 +1,12 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
-## Unreleased
+## 0.4.18
+- **Salt by the quarter weight** (2026-11-12, the fish and meat against salt check): packing takes 2 salt for
+  each quarter weight of the packed piece, to the nearest quarter and never under 2, where it took 4 for each
+  started half weight. Still about 15%. A Steak, Mutton Chop or Pork Chop takes 2 (was 4, a Beef's salt), a panfish
+  under about 0.4 weight 2 (was 4), a 4 weight walleye 28 (was 32), a 4.5 weight one 32 (was 36); a Beef, Venison,
+  Pork, a half-weight fish and a Leg of Pork (10) pay what they did (`F.SALT_STEP` 0.25, `F.SALT_PER_STEP` 2,
+  `F.LEG_SALT_PER_STEP` 1, `F.saltFor` rounds).
 - A crock moved between places is looked at through TP Core's `Transfer.before` (2026-11-12) instead of Fish & Meat's
   own wrap of `transferItem`. No change in play.
 - Guide chapter 14, **At the Table** (2026-11-12): what each fish and meat stage is eaten as, its cook and burn
