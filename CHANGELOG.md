@@ -1,6 +1,7 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
 ## 0.4.24
+- Guide: no emojis (2026-11-12): the decorative bullets and margin-note marks are gone, warning signs read **Warning:**.
 - **Whatever dries in a basement goes by the basement** (2026-11-12, consistency sweep step D): salt fish dries there
   indoors at the basement's own temperature (TP Core's ground mean, a month behind the season), not the day's: about
   27 days a batch all year, the slowest the mod allows (a cellar is for keeping salt fish). Charque the same.
