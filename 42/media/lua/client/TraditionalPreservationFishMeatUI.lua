@@ -56,6 +56,8 @@ local function refusal(slot, item, queued)
     local mixedMeat = stored:size() > 0 and F.mixedMeat(stored:get(0), item)
     if mixedMeat then return mixedMeat end
     local hanger = F.hangerFor(spriteIndex(entity))
+    local sausageRefused = F.sausageRefusal(hanger, item)
+    if sausageRefused then return sausageRefused end
     local porkRefused = F.meatRefusal(hanger, hanger.closed and "Enclosed" or Weather.placeOf(entity), item)
     if porkRefused then return porkRefused end
     if F.hangKind(item:getFullType()) == "cold" then
@@ -162,6 +164,26 @@ local function drawStackTooltip(slot, tooltip, kind)
     end)
 end
 
+-- A stack of blood sausage: the smoke against its need, what the fire is doing for it, and how long its links keep
+-- before they come down stale (F.sausageStatus).
+local function drawSausageTooltip(slot, tooltip)
+    local modData = slot.craftRecipeData:getModData()
+    local status = F.sausageStatus(modData, F.getLedger(), getGameTime():getWorldAgeHours())
+    local key = "IGUI_TraditionalPreservationFishMeat_"
+    UI.drawTooltip(tooltip, function(layout)
+        UI.addLine(layout, key .. "Method", getText(key .. "MethodSausage"))
+        UI.addLine(layout, key .. "Progress", UI.percent(status.progress))
+        UI.addLine(layout, key .. "ColdSmoke", getText(key .. "ColdSmokeNeed", string.format("%.1f", status.cold),
+            string.format("%.0f", status.need)))
+        UI.addLine(layout, key .. "Fire", getText(key .. "Sausage" .. status.state),
+            status.state ~= "Smoking" and UI.SLOW_COLOUR or nil)
+        if status.staleDays then
+            UI.addLine(layout, key .. "Spoilage", UI.say(key .. "SausageStaleIn", string.format("%.1f", status.staleDays)),
+                status.staleDays < 1 and UI.WARNING_COLOUR or nil)
+        end
+    end)
+end
+
 -- The tub's recipe time is the longest press, so a lighter batch says its own time left, and what a warm
 -- season is taking from it.
 local function drawPressTooltip(slot, tooltip)
@@ -183,6 +205,7 @@ UI.progressTooltips({
     HangFishToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "salt") end,
     HangFishToColdDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "cold") end,
     HangMeatToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "meat") end,
+    HangBloodSausageToSmoke = drawSausageTooltip,
 })
 
 -- The window's Output slot shows the script's one output whatever the stack will be: its popup lists every end

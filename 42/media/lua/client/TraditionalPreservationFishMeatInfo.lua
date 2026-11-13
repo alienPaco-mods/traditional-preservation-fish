@@ -17,9 +17,10 @@ local KEY = "IGUI_TraditionalPreservationFishMeat_"
 local PLACES = { Open = true, Covered = true, Sheltered = true, Loft = true, Basement = true, Enclosed = true }
 -- A running batch's kind, by its recipe's short name.
 local KINDS = { HangFishToDry = "salt", HangFishToColdDry = "cold", HangMeatToDry = "meat",
-    PressSaltedFish = "fishCure", PressSaltedMeat = "corn", [F.LONG_CURE_RECIPE] = "long" }
+    PressSaltedFish = "fishCure", PressSaltedMeat = "corn", [F.LONG_CURE_RECIPE] = "long",
+    HangBloodSausageToSmoke = "sausage" }
 local KIND_NAMES = { salt = KEY .. "InfoSalt", cold = KEY .. "InfoCold", meat = KEY .. "InfoCharque",
-    fishCure = KEY .. "InfoCure", corn = KEY .. "InfoCorn", long = KEY .. "InfoLongCure" }
+    fishCure = KEY .. "InfoCure", corn = KEY .. "InfoCorn", long = KEY .. "InfoLongCure", sausage = KEY .. "InfoSausage" }
 local GOOD_COLOUR, SLOW_COLOUR = { 0.35, 0.6, 0.3 }, { 0.75, 0.55, 0.2 }
 
 local function weightOf(items)
@@ -28,9 +29,22 @@ local function weightOf(items)
     return weight
 end
 
+-- A stack of blood sausage (F.sausageStatus): smoke only, no drying or spoiling of its own.
+function Info.sausageBatch(modData, ledger, now)
+    local status = F.sausageStatus(modData, ledger, now)
+    local row = { name = KIND_NAMES.sausage, progress = status.progress, notes = {}, slow = status.state ~= "Smoking" }
+    row.value = UI.say(KEY .. "InfoShare", UI.percent(status.progress), getText(KEY .. "Sausage" .. status.state))
+    table.insert(row.notes, UI.say(KEY .. "ColdSmokeNeed", string.format("%.1f", status.cold), string.format("%.0f", status.need)))
+    if status.staleDays then
+        table.insert(row.notes, UI.say(KEY .. "SausageStaleIn", string.format("%.1f", status.staleDays)))
+    end
+    return row
+end
+
 -- One running batch: its name (a key), progress, the text on its bar, whether something holds it back, and the
 -- lines to say about it below. kind is KINDS'.
 function Info.batch(kind, modData, ledger, now)
+    if kind == "sausage" then return Info.sausageBatch(modData, ledger, now) end
     local isPress = kind == "fishCure" or kind == "corn" or kind == "long"
     local isCold, isMeat = kind == "cold", kind == "meat"
     local status = isPress and F.pressStatus(modData, now, ledger)

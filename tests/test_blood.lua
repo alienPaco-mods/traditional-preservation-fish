@@ -19,6 +19,12 @@ ArrayList = { new = function()
     return list
 end }
 
+local recipeTimes = {}
+ScriptManager = { instance = {} }
+function ScriptManager.instance:getCraftRecipe(name)
+    return { Load = function(_, recipeName, text) recipeTimes[recipeName] = text end }
+end
+
 -- Vanilla's tables as the animal definitions build them (the numbers are vanilla's).
 AnimalDefinitions = { animals = {
     cow = { minWeight = 360, maxWeight = 950, minBlood = 1000, maxBlood = 3500 },
@@ -61,6 +67,8 @@ local function casings(parts)
     end
     return n, row
 end
+check("the hang recipe's window time is the 24 h of smoke",
+    recipeTimes["TraditionalPreservationFishMeat.HangBloodSausageToSmoke"] == "{ time = 86400, }")
 local pigN, pigRow = casings(pigParts)
 local cowN, cowRow = casings(cowParts)
 check("a pig's table gets one casing row", pigN == 1 and pigRow.minNb == 1 and pigRow.maxNb == 1)
@@ -202,5 +210,120 @@ check("a sausage slice is a quarter link", near(field("BloodSausageSlice", "Calo
     and near(field("BloodSausageSlice", "Weight") * 4, field("BloodSausage", "Weight")))
 check("calories follow the macros", near(field("BloodSausage", "Proteins") * 4 + field("BloodSausage", "Lipids") * 9
     + field("BloodSausage", "Carbohydrates") * 4, field("BloodSausage", "Calories"), 1))
+
+-- Smoked Blood Sausage: the script, then the stack against the Smokehouse's cold counter.
+check("a smoked link keeps 21 / 40, a boiled link's food, and dries to 0.22",
+    field("SmokedBloodSausage", "DaysFresh") == 21 and field("SmokedBloodSausage", "DaysTotallyRotten") == 40
+    and field("SmokedBloodSausage", "Calories") == field("BloodSausage", "Calories")
+    and field("SmokedBloodSausage", "HungerChange") == field("BloodSausage", "HungerChange")
+    and field("SmokedBloodSausage", "Weight") == 0.22)
+check("a smoked slice is a quarter link and keeps as the link",
+    near(field("SmokedBloodSausageSlice", "Calories") * 4, field("SmokedBloodSausage", "Calories"))
+    and near(field("SmokedBloodSausageSlice", "Weight") * 4, field("SmokedBloodSausage", "Weight"))
+    and field("SmokedBloodSausageSlice", "DaysFresh") == 21 and field("SmokedBloodSausageSlice", "DaysTotallyRotten") == 40)
+local hang = script:match("craftRecipe HangBloodSausageToSmoke\n    {(.-)\n    }\n")
+check("the hang recipe is the Smokehouse's alone and takes only boiled links", hang
+    and hang:find("Tags = Smokehouse,", 1, true) and hang:find("[TraditionalPreservationFishMeat.BloodSausage]", 1, true)
+    and hang:find("IsCookedFoodItem", 1, true))
+
+H.installGetText()
+dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
+dofile("42/media/lua/shared/TraditionalPreservationFishMeatSmokehouse.lua")
+local Hearth = require "TraditionalPreservationCore/Hearth"
+local OnHeat = require "TraditionalPreservationCore/OnHeat"
+
+local OFF_AGES = { ["TraditionalPreservationFishMeat.BloodSausage"] = 7, ["TraditionalPreservationFishMeat.SmokedBloodSausage"] = 21 }
+local function link(fullType, age, share)
+    local o = { fullType = fullType, age = age or 0, md = {}, hunger = -30 * (share or 1), calories = 538 * (share or 1),
+        weight = fullType == "TraditionalPreservationFishMeat.BloodSausage" and 0.25 or 0.22 }
+    function o:getFullType() return self.fullType end
+    function o:getModData() return self.md end
+    function o:getAge() return self.age end
+    function o:setAge(age) self.age = age end
+    function o:getOffAge() return OFF_AGES[self.fullType] end
+    function o:setCooked(cooked) self.cooked = cooked end
+    function o:getBaseHunger() return -30 end
+    function o:getHungChange() return self.hunger end
+    function o:setHungChange(n) self.hunger = n end
+    function o:getCalories() return 538 end
+    function o:setCalories(n) self.calories = n end
+    for _, name in ipairs({ "Proteins", "Lipids", "Carbohydrates" }) do
+        o["get" .. name] = function() return 10 end
+        o["set" .. name] = function(self, n) self[name] = n end
+    end
+    function o:getActualWeight() return self.weight end
+    function o:setActualWeight(n) self.weight = n end
+    function o:setCustomWeight() end
+    return o
+end
+instanceItem = function(fullType) return link(fullType) end
+local function links(...)
+    local list = ArrayList.new()
+    for _, item in ipairs({ ... }) do list:add(item) end
+    return list
+end
+
+local fried = link(F.BLOOD_SAUSAGE)
+fried.md[OnHeat.KEY] = { done = true }
+check("a fried link stays out, a boiled one goes in", not F.canSmokeBloodSausage(fried)
+    and F.canSmokeBloodSausage(link(F.BLOOD_SAUSAGE)))
+check("only the Smokehouse takes blood sausage, and never a fried link",
+    F.sausageRefusal({ closed = true }, link(F.BLOOD_SAUSAGE)) == nil
+    and F.sausageRefusal({}, link(F.BLOOD_SAUSAGE)) == "IGUI_TraditionalPreservationFishMeat_SausageSmokehouse"
+    and F.sausageRefusal({ closed = true }, fried) == "IGUI_TraditionalPreservationFishMeat_SausageFried")
+check("a sausage stack is its own kind", F.hangKind(F.BLOOD_SAUSAGE) == "sausage"
+    and F.hangKind(F.CURED_MEAT) ~= "sausage")
+
+local stack = { leftover = true, cold = 50 }
+F.startSausageSmoke(stack, links(link(F.BLOOD_SAUSAGE, 1), link(F.BLOOD_SAUSAGE, 3)), 100, 1)
+check("a new stack forgets the pooled data, needs 24 h and takes no cook", stack.leftover == nil and stack.cold == 0
+    and F.coldNeed(stack) == 24 and stack.noHot and stack.sausage and stack.stackId == 100)
+check("it goes stale when its freshest link would (6 days left)", near(stack.staleAt, 100 + 6 * 24))
+
+local fire = {}
+Hearth.logFire(fire, 100, nil, nil)
+F.smokeStep(stack, fire)
+Hearth.logFire(fire, 101, Hearth.STOKED, 140)
+Hearth.logFire(fire, 111, Hearth.STOKED, 140)
+F.smokeStep(stack, fire)
+check("stoked hours are smoke at once, never a cook", near(stack.cold, 10) and not F.hotDone(stack))
+F.sausageSmokeStep(stack, 111)
+check("10 of 24 h: not smoked, the bar at 10/24", stack.smokedAt == nil and near(F.sausageProgress(stack, 111), 10 / 24))
+Hearth.logFire(fire, 112, Hearth.BANKED, 200)
+Hearth.logFire(fire, 132, Hearth.BANKED, 200)
+F.smokeStep(stack, fire)
+F.sausageSmokeStep(stack, 132)
+check("banked hours count too, and the smoked hour is placed within the stretch", near(stack.cold, 31)
+    and near(stack.smokedAt, 111 + 21 * 14 / 21))
+check("done, it waits for the World's look at its shed", F.sausageProgress(stack, 132) == F.SHED_WAIT)
+F.smokeStations[stack.stackId] = {}
+check("then it ends", F.sausageProgress(stack, 132) == 1)
+
+local now = 132
+local smoked = F.smokedLink(link(F.BLOOD_SAUSAGE, 1), stack, now, 1)
+local ageThen = 1 + (stack.smokedAt - 100) / 24
+check("smoked in time: Smoked, cooked, its age the same share of 21 days plus the days since",
+    smoked.fullType == F.SMOKED_BLOOD_SAUSAGE and smoked.cooked
+    and near(smoked.age, ageThen / 7 * 21 + (now - stack.smokedAt) / 24))
+local stale = F.smokedLink(link(F.BLOOD_SAUSAGE, 6.5), stack, now, 1)
+check("one that went stale before the smoke was done comes down Boiled, aged by the days it hung",
+    stale.fullType == F.BLOOD_SAUSAGE and stale.cooked and near(stale.age, 6.5 + 32 / 24))
+local half = F.smokedLink(link(F.BLOOD_SAUSAGE, 0, 0.5), stack, now, 1)
+check("a part-eaten link keeps its share", near(half.hunger, -15) and near(half.calories, 269) and near(half.weight, 0.11))
+check("Food Spoilage's speed runs the clock", near(F.smokedLink(link(F.BLOOD_SAUSAGE, 6.5), stack, now, 0.25).age,
+    (6.5 + (stack.smokedAt - 100) / 24 * 0.25) / 7 * 21 + (now - stack.smokedAt) / 24 * 0.25))
+
+local cold = {}
+F.startSausageSmoke(cold, links(link(F.BLOOD_SAUSAGE, 0)), 200, 1)
+F.smokeStations[200] = {}
+check("with no fire the stack ends when its links have gone stale", F.sausageProgress(cold, 200 + 7 * 24 - 1) < 1
+    and F.sausageProgress(cold, 200 + 7 * 24) == 1)
+check("and they come down Boiled", F.smokedLink(link(F.BLOOD_SAUSAGE, 0), cold, 200 + 7 * 24, 1).fullType == F.BLOOD_SAUSAGE)
+local status = F.sausageStatus(cold, { temperature = 5 }, 200 + 24)
+check("the popup: no fire, six days left", status.state == "NoFire" and near(status.staleDays, 6) and status.need == 24)
+cold.burning = Hearth.BANKED
+check("a fire on a warm day doesn't count", F.sausageStatus(cold, { temperature = 20 }, 200).state == "TooWarm"
+    and F.sausageStatus(cold, { temperature = 10 }, 200).state == "Smoking")
+check("once smoked, no stale countdown", F.sausageStatus(stack, { temperature = 5 }, now).staleDays == nil)
 
 H.done()

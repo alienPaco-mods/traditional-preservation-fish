@@ -100,7 +100,7 @@ Every road on one page. *Start* is when to begin it in Kentucky's weather; *Yiel
 | **Country Ham** (a Leg of Pork) | **October to March** | Country Cured, 21 days | The same | 6 weeks to 5 months | 50% weight, 90% food | **180 / 365** | As it is |
 | **Potted Meat** (any cut, pork, poultry and rabbit too) | Any month; whenever you butcher | None | A pot, a fire, a clay jar | 2 hours | The meat and its fat | 17 to 120, by where it's kept | As it is |
 | **Lard, Tallow** | Whenever you butcher | None | A pot, or the Hearth's copper | 1 hour | 2 pieces of fat a block | Don't spoil | For cooking and potting |
-| **Black Pudding, Blood Sausage** | The day you butcher (cured blood: within 3 days) | None | A pan in the oven; casings and a pot of water | 1 hour baking; half an hour boiling | 1 L of blood, filler and fat: 6 slices or 6 links | 5 / 10 (boiled links 7 / 14) | As it is, fried, or in a dish |
+| **Black Pudding, Blood Sausage** | The day you butcher (cured blood: within 3 days) | None | A pan in the oven; casings and a pot of water | 1 hour baking; half an hour boiling (smoked: 24 hours of cool-day smoke more) | 1 L of blood, filler and fat: 6 slices or 6 links | 5 / 10 (boiled links 7 / 14, smoked 21 / 40) | As it is, fried, or in a dish |
 
 **What each road costs**
 
@@ -365,7 +365,7 @@ A plank shed two tiles long under one sloping roof, the door on the high end wit
 |---|---|
 | Build | Carpentry 3: **14 planks, 20 nails**, hammer kept (Build menu, Furniture) |
 | Holds | **6 stacks** of up to **15 weight**, 25 pieces |
-| Takes | **Hang Salt Cured Fish** and **Hang Salted Meat** only; the one place Corned pork may hang |
+| Takes | **Hang Salt Cured Fish**, **Hang Salted Meat** and **Hang Blood Sausage to Smoke** only; the one place Corned pork may hang |
 | Inside | always **In a shed**: no rain, no wind, the day's temperature, wherever it stands |
 | Stands | in the open or under an open roof, not inside a room; the tile in front of its door stays clear |
 
@@ -728,11 +728,17 @@ Every pig-killing ends the same way, in every country that keeps pigs: the blood
 | Blood Sausage, uncooked | 1 / 2 days | 538 | 30 |
 | **Blood Sausage (Boiled)** | **7 / 14 days** | 538 | 30 |
 | Blood Sausage Slice (a quarter link) | 7 / 14 days | 134 | 7.5 |
+| **Smoked Blood Sausage** | **21 / 40 days** | 538 | 30 |
+| Smoked Blood Sausage Slice | 21 / 40 days | 134 | 7.5 |
 | Salted Casings | a year | - | - |
 
 **Boiled, fried, or both.** A boiled link is cooked and ready to eat. Fry it as well, five minutes in a pan, and it becomes **Blood Sausage (Boiled, Fried)**. A raw link fried as it is cooks too, and is **Blood Sausage (Fried)**, but it keeps only its raw day or two: boiling is what makes it last the week. **Slice Blood Sausage** cuts a cooked link into four rounds. Slices of both go into soups, stews, stir fries, sandwiches, burgers, rice and pasta, named *Black Pudding* and *Blood Sausage* there.
 
+**Smoked, for three weeks.** Boiled links go into the **Smokehouse** (chapter 10) with **Hang Blood Sausage to Smoke**, a stack of their own: no fish or meat with them, and never a fried link. They take **24 hours of the Firebox's smoke**, banked or stoked, counted only on days of **15 C or less** outside, as all cold smoke is; a stoked fire smokes them, it never cooks them. Banked all day in a cool month, that is a day. While they hang the links keep their boiled week: smoked in time they come down **Smoked Blood Sausage**, 0.22 a link, the same food, keeping **21 / 40 days**, as fresh a share of that as they were of their week. Any that went stale first come down as they went up, *Blood Sausage (Boiled)*; with no fire at all the stack ends when its links do. A smoked link is ready to eat cold, fries, and slices into four (**Slice Smoked Blood Sausage**). Hover the stack for its smoke so far and the days its links have left.
+
 > *Margin note:* the blood is stirred as it runs, or it sets into a jelly; a pinch of salt or a splash of vinegar per litre keeps it liquid and holds it a few more days. A litre makes about a kilo and a half of pudding, at around 300 calories a hundred grams in the real thing. Here it comes to a little less, from what goes in: blood itself carries little but protein, and most of the calories are the fat.
+
+> *Margin note:* smoked blood sausage is boiled first and smoked after, cold, for a day or a few: Thuringian **Rotwurst** and smoked Polish **kaszanka** among them. The smoke dries the skin and slows the rot; it keeps two or three weeks where a boiled one keeps one.
 
 > *Old names:* English and Irish **black pudding** is set with oatmeal or barley; Scottish **marag dhubh** too. Spanish **morcilla** takes rice. Polish **kaszanka** is buckwheat in a casing; Swedish **blodpudding** a loaf with rye, eaten fried in slices with lingonberries. In Finland it is **mustamakkara**, the black sausage of Tampere. And Polish **czernina** is the soup the blood went into, kept sweet-sour with vinegar.
 
@@ -776,6 +782,7 @@ Every pig-killing ends the same way, in every country that keeps pigs: the blood
 | **Crock of Potted Meat** | the cuts + fat | the cuts + fat | **by place** | Yes |
 | **Black Pudding**, its slices | 1.5 a loaf, 0.25 a slice | blood, filler and fat | 5 / 10 | Slices: yes |
 | **Blood Sausage (Boiled)** | 0.25 a link | the same | **7 / 14** (fried raw 1 / 2) | Yes |
+| **Smoked Blood Sausage** | 0.22 a link | the same | **21 / 40** | Yes |
 
 Each piece keeps its own weight and food through every stage. The name says what it is now, with a bracket only for a state that changes: a fish keeps its size and species (*Small Largemouth Bass (Salt Dried)*), stockfish its species (*Walleye Stockfish (Matured)*), meat its cut in the tub (*Steak (Corned)*) and its animal after (*Beef Charque*, *Beef (Cold Smoked)*). A butcher's grade (*Prime Cut*) stays behind in the salt; the food remembers it. Freshness carries over as a share of each stage's fresh days, so a fish halfway to stale is still halfway when packed.
 
@@ -831,6 +838,8 @@ What each stage is good for once it's in your hands. *Cook* is its time on a sto
 | Pot of Blood Sausages | No | 30 min, at the boil (90) | - | **Take Out Blood Sausages** |
 | **Blood Sausage (Boiled)** | Yes | Fry 5 min more: *Boiled, Fried* | As the slices | **Slice Blood Sausage** (4) |
 | Blood Sausage Slice | Yes | 10 min (30) | As the slices, and salad | - |
+| **Smoked Blood Sausage** | Yes | 20 min (50) | As the slices | **Slice Smoked Blood Sausage** (4); the Smokehouse makes it from boiled links |
+| Smoked Blood Sausage Slice | Yes | 10 min (30) | As the slices, and salad | - |
 | Raw Casings | No | - | - | **Clean and Salt Casings** |
 
 **In a dish, meat is named by its animal** (0.4.35): hot smoked venison makes a *Venison Stew*, dry cured pork a *Pork Soup*, a smoked chicken leg a *Chicken Soup*, each with its own icon, as the game's fresh meat does.
@@ -1144,6 +1153,7 @@ Laid out as the game's planting seasons: the months a process works, its best an
 | **Hot smoking**: Hot Smoked Fish; Beef, Mutton, Venison (Hot Smoked); pork becomes Ham; chicken, turkey and rabbit (Corned, brined a day or two) | All year | Any | None | None | Smokehouse, Firebox stoked; never a leg | Fish 4 to 6 hours in a row, Steaks, chops and poultry cuts 6, a Beef or Venison 7½, a whole chicken 7, a turkey 8 |
 | **Potting and rendering**: Potted Meat, Lard, Tallow | All year | Whenever you butcher | None | None | A pot and a fire (Potted Meat then a clay jar, kept in a cellar) | 2 hours; rendering 1 |
 | **Blood**: Black Pudding, Blood Sausage (blood cured with salt or vinegar) | All year | Whenever you butcher | None | None | A pan in an oven; a pot of water at the boil | Baking 1 hour; boiling half an hour |
+| **Smoked Blood Sausage** (boiled links) | October to April | November to March | October, April | May to September: over 15 C the smoke doesn't count, and the links go stale in their week | Smokehouse, Firebox banked or stoked | 24 hours of smoke: a day banked |
 
 **A powered room** (22 C while the grid is on) dry cures a cut in 3 weeks and a leg in 6, any month.
 
@@ -1192,8 +1202,8 @@ Laid out as the game's planting seasons: the months a process works, its best an
 |---|---|
 | `TPFM.fish(name, n, weight, stage)` | Spawns `n` fish, at that weight if given (food scaled to match), e.g. `TPFM.fish("Walleye", 2, 4)`. A stage gives it further along: `"cured"` (Salt Cured, ready to hang), `"dried"` (Salt Dried), `"hotSmoked"`, `"coldSmoked"` (each as its station gives a cured fish, nothing spoiled) or `"stockfish"` (young, fresh off the frame), and may take the weight's place: `TPFM.fish("Walleye", 3, "cured")`. `TPFM.fish()` lists the names; `"all"` gives one of each |
 | `TPFM.meat(name, n, stage)` | Spawns `n` of a cut, e.g. `TPFM.meat("Steak", 2)`; `"all"` gives each of Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop and Leg of Pork, then Chicken, ChickenWings, ChickenFillet, ChickenWhole, TurkeyLegs, TurkeyWings, TurkeyFillet, TurkeyWhole and Rabbitmeat (poultry and rabbit: `"corned"` and `"hotSmoked"` only; other stages skip them). A stage gives it further along: `"corned"` (*Steak (Corned)*; no leg), `"country"` (Country Cured), `"charque"` (a Corned cut dried on a frame; no pork), `"hotSmoked"` (a Corned cut from a stoked Smokehouse; pork comes out as the game's Ham, no leg) or `"dryCured"` (dry cured, smoked and young, to age and slice). `TPFM.meat()` lists the names |
-| `TPFM.give(name, n, option)` | Spawns `n` of: `"head"` (Fish Head), `"stock"` (Pot of Fish Head Stock), `"boneBroth"`, `"chickenStock"`, `"soups"` (one of each stock's soup and stew), `"salt"` (vanilla shaker), `"fat"` (one each of Pork Fat, Beef Suet and Mutton Fat), `"fatPot"` (a Pot of Pork Fat, cooked; option `"burnt"` or `"raw"`), `"crock"` (a full Crock of Potted Meat: four Steaks in Lard in a Glazed Clay Jar), `"blood"` (a Bucket of 4 L of blood; option `"cured"` or `"spoiled"`), `"casings"`, `"saltedCasings"`, `"blackPudding"`, `"bloodSausage"`. Default food values. `TPFM.give()` lists them |
-| `TPFM.kit("blood")` | Spawns what black pudding and blood sausage take: a Bucket of 4 L of fresh blood, an Empty Jar, a Baking Pan, a Pot, every filler (Oats, Rice, 12 grains each of Barley, Rye and Wheat), Lard, Pork Fat, 4 Salt, Vinegar, Raw Casings, Salted Casings and a Kitchen Knife |
+| `TPFM.give(name, n, option)` | Spawns `n` of: `"head"` (Fish Head), `"stock"` (Pot of Fish Head Stock), `"boneBroth"`, `"chickenStock"`, `"soups"` (one of each stock's soup and stew), `"salt"` (vanilla shaker), `"fat"` (one each of Pork Fat, Beef Suet and Mutton Fat), `"fatPot"` (a Pot of Pork Fat, cooked; option `"burnt"` or `"raw"`), `"crock"` (a full Crock of Potted Meat: four Steaks in Lard in a Glazed Clay Jar), `"blood"` (a Bucket of 4 L of blood; option `"cured"` or `"spoiled"`), `"casings"`, `"saltedCasings"`, `"blackPudding"`, `"bloodSausage"` (boiled, cooked; option `"stale"`: 0.1 days short of its week), `"smokedBloodSausage"`. Default food values. `TPFM.give()` lists them |
+| `TPFM.kit("blood")` | Spawns what black pudding and blood sausage take: a Bucket of 4 L of fresh blood, an Empty Jar, a Baking Pan, a Pot, every filler (Oats, Rice, 12 grains each of Barley, Rye and Wheat), Lard, Pork Fat, 4 Salt, Vinegar, Raw Casings, Salted Casings and a Kitchen Knife; 6 boiled Blood Sausages for the Smokehouse and a Smoked Blood Sausage |
 | `TPFM.kit("poultry")` | Spawns what hot smoked poultry takes: a whole Chicken and Turkey, every chicken and turkey cut, Rabbit Meat, a Steak (to see the mixed-stack refusal), 2 Salt and a Kitchen Knife |
 | `TPFM.kit("potted")` | Spawns what Potted Meat takes: 2 Pots, 2 Lard, Salt, four red meat cuts, a Chicken leg, Turkey Legs, Turkey Wings and Rabbit Meat, and the three clay vessels |
 | `TPFM.kit("stock")` | Spawns what every stock takes: a Fish Head, 2 Animal Bones, a Large Animal Bone, 6 Small Animal Bones, 2 Chicken Feet, a hen's and a turkey's head, 5 Pots to fill with water and 4 Bowls. |
@@ -1226,6 +1236,7 @@ The Salting Tub cures by its place's temperature on the weather's totals (0.4.35
 - **Cold smoking:** in a cool month, the same Smokehouse and Firebox, hang `TPFM.fish("Walleye", 3, "cured")`, bank the Firebox, `TPFM.bank(50)`, then `TPFM.age(288)`: Cold Smoked Fish.
 - **Dry curing:** hang `TPFM.meat("all", 1, "country")` (Country Cured, with a leg) in the Smokehouse. `TPFM.age(1008)` with no fire: Beef, Mutton, Venison and Pork (Dry Cured) and a Country Ham. With `TPFM.addSmoke(130)` first (or `TPFM.bank(130)` on a day of 15 C or less): Beef, Mutton, Venison and Pork (Cold Smoked) and a Smoked Country Ham. Hang `TPFM.meat("all", 1, "corned")` (Corned) and `TPFM.age(520)`: it comes down Corned and rotten, as it would after three weeks in a 12 C shed (`TPFM.underSalt(hours)` adds the spoiling alone). `TPFM.smoke()` lists each stack's hours.
 - **Blood:** `TPFM.kit("blood")`, right-click the bucket, Cure Blood → Salt: *Animal Blood (Cured)*. Mix Black Pudding, bake an hour, Turn Out, Slice: six slices. Clean and Salt Casings, Stuff Blood Sausages, fill the Pot with 1.5 L of water, Put Blood Sausages in Water, boil half an hour, Take Out: six Blood Sausage (Boiled).
+- **Smoked Blood Sausage:** the kit's six boiled links into a joined Smokehouse, the Firebox banked, `TPFM.addSmoke(24)`: six Smoked Blood Sausage. `TPFM.give("bloodSausage", 2, "stale")` hung with no smoke: they come down Boiled within a few hours.
 - **Heads:** `TPFM.fish("Walleye", 1, 4)` and `TPFM.fish("Bluegill", 1, 0.9)`, then Gut Fish on both. Only the walleye gives a head.
 
 ---

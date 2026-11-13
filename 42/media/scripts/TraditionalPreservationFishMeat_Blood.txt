@@ -523,4 +523,130 @@ module TraditionalPreservationFishMeat
             scale = 0.3686,
         }
     }
+
+    /* Smoked Blood Sausage (user, 2026-11-13): boiled links, never fried, hung alone in the Smokehouse for 24 hours
+       of cold smoke (fire hours on cool days), as Thuringian Rotwurst or smoked kaszanka are smoked after the
+       kettle. time is overwritten from SMOKED_SAUSAGE_HOURS in TraditionalPreservationFishMeatBlood.lua; OnUpdate sets
+       the progress from the smoke, OnCreate swaps in the smoked links (or the boiled ones that went stale first). */
+    craftRecipe HangBloodSausageToSmoke
+    {
+        Tooltip = Tooltip_craft_hangBloodSausageToSmoke,
+        time = 86400,
+        Tags = Smokehouse,
+        category = Cooking,
+        OnTest = TraditionalPreservationFishMeat.canSmokeBloodSausage,
+        OnStart = TraditionalPreservationFishMeat.onSausageSmokeStart,
+        OnUpdate = TraditionalPreservationFishMeat.onSausageSmokeUpdate,
+        OnCreate = TraditionalPreservationFishMeat.onCreateSmokedSausage,
+        inputs
+        {
+            item variable[1:25] [TraditionalPreservationFishMeat.BloodSausage] flags[IsCookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item variable[1:25] TraditionalPreservationFishMeat.SmokedBloodSausage,
+        }
+    }
+
+    /* Smoked and a little dried (0.25 to 0.22): the boiled link's food, keeps three weeks. Eat it cold or fry it. */
+    item SmokedBloodSausage
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.22,
+        Icon = SmokedBloodSausage,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Stir fry:15;Sandwich:15;Burger:15;Rice:15;Pasta:15,
+        FoodType = Sausage,
+        IsCookable = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        CookingSound = FryingFood,
+        DaysFresh = 21,
+        DaysTotallyRotten = 40,
+        HungerChange = -30.0,
+        Calories = 538.0,
+        Carbohydrates = 17.0,
+        Lipids = 38.0,
+        Proteins = 32.0,
+        StaticModel = SmokedBloodSausage,
+        WorldStaticModel = SmokedBloodSausage,
+        EvolvedRecipeName = Blood Sausage,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_SmokedBloodSausage,
+    }
+
+    model SmokedBloodSausage
+    {
+        mesh = WorldItems/Sausage,
+        texture = SmokedBloodSausageModel,
+        scale = 0.4,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0274 0.0221 -0.0206,
+            rotate = 178.7112 67.2918 -88.6029,
+            scale = 0.75,
+        }
+    }
+
+    /* A smoked link sliced: 4 rounds of a quarter link each, keeping as the link does. */
+    item SmokedBloodSausageSlice
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.055,
+        Icon = SmokedBloodSausageSlice,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Stir fry:15;Sandwich:15;Burger:15;Rice:15;Pasta:15;Salad:15,
+        FoodType = Sausage,
+        IsCookable = true,
+        MinutesToCook = 10,
+        MinutesToBurn = 30,
+        CookingSound = FryingFood,
+        DaysFresh = 21,
+        DaysTotallyRotten = 40,
+        HungerChange = -7.5,
+        Calories = 134.5,
+        Carbohydrates = 4.25,
+        Lipids = 9.5,
+        Proteins = 8.0,
+        StaticModel = SmokedBloodSausageSlice_Hand,
+        WorldStaticModel = SmokedBloodSausageSlice,
+        EvolvedRecipeName = Blood Sausage,
+    }
+
+    craftRecipe SliceSmokedBloodSausage
+    {
+        timedAction = SliceMeat_Surface,
+        time = 30,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationCore.OnCreateCooked,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.SmokedBloodSausage] flags[InheritFoodAge;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 4 TraditionalPreservationFishMeat.SmokedBloodSausageSlice,
+        }
+    }
+
+    model SmokedBloodSausageSlice
+    {
+        mesh = WorldItems/SalamiSlice,
+        texture = SmokedBloodSausageSliceModel,
+        scale = 0.4,
+    }
+
+    model SmokedBloodSausageSlice_Hand
+    {
+        mesh = WorldItems/SalamiSlice_Hand,
+        texture = SmokedBloodSausageSliceModel,
+        scale = 0.4,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0147 0.045 -0.0093,
+            rotate = 72.3247 -25.2001 -28.9395,
+            scale = 0.3686,
+        }
+    }
 }

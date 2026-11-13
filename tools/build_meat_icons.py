@@ -66,11 +66,16 @@ SET_FAT = (240, 234, 212)
 # are vanilla's meshes with the same textures pulled the same way.
 RAW_BLOOD = ((112, 30, 32), 0.85)
 COOKED_BLOOD = ((46, 20, 22), 0.9)
+# Smoked Blood Sausage (0.4.37): darker and browner than the boiled link, the smoke's dry tan over cooked blood.
+SMOKED_BLOOD = ((40, 26, 16), 0.93)
 BLOOD_ICONS = {"BloodSausage": ("Item_Sausage", RAW_BLOOD, False), "BloodSausage_Cooked": ("Item_Sausage", COOKED_BLOOD, False),
                "BloodSausageSlice": ("Item_SalamiSlices", COOKED_BLOOD, True),
+               "SmokedBloodSausage": ("Item_Sausage", SMOKED_BLOOD, False),
+               "SmokedBloodSausageSlice": ("Item_SalamiSlices", SMOKED_BLOOD, True),
                "BlackPudding": ("Item_Bread", COOKED_BLOOD, True), "BlackPuddingSlice": ("Item_BreadSlices", COOKED_BLOOD, True)}
 BLOOD_MODELS = {"BloodSausageRawModel": ("SausageRaw", False), "BloodSausageModel": ("SausageCooked", False),
                 "BloodSausageSliceModel": ("Salami", True), "BlackPuddingModel": ("Bread", True),
+                "SmokedBloodSausageModel": ("SausageCooked", False), "SmokedBloodSausageSliceModel": ("Salami", True),
                 "BlackPuddingSlicesModel": ("CheeseSandwich_PeanutButterSandwich_BreadSlices", True)}
 FLECK = (214, 202, 176)
 OUTLINE_BELOW = 70  # pixels with no channel above this are the icon's outline and stay as they are
@@ -210,7 +215,7 @@ def main():
         icon = pull(icons[source], colour, amount)
         (flecks(icon) if flecked else icon).save(folder / f"Item_{name}.png")
     for name, (source, flecked) in BLOOD_MODELS.items():
-        colour = RAW_BLOOD if name == "BloodSausageRawModel" else COOKED_BLOOD
+        colour = RAW_BLOOD if name == "BloodSausageRawModel" else SMOKED_BLOOD if name.startswith("Smoked") else COOKED_BLOOD
         texture = pull(Image.open(game / f"media/textures/WorldItems/{source}.png"), *colour)
         (flecks(texture, 0.05) if flecked else texture).save(folder / f"{name}.png")
 

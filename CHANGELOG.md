@@ -1,5 +1,14 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.37
+Smoked Blood Sausage (user, 2026-11-13; ROADMAP). In-game step 123 of `TESTING_GUIDE.md` (INGAME_PASS 122), passed.
+- **Hang Blood Sausage to Smoke** (the Smokehouse only): boiled links, a stack of their own (no fish or meat with them; a link fried after boiling is refused, on the drop and by the recipe). They take **24 hours of the Firebox's smoke** (`F.SMOKED_SAUSAGE_HOURS`), banked or stoked, on the Smokehouse's cold counter: only on days of 15 C or less, and a stoked run is smoke at once, never a cook. Banked all day in a cool month, a day.
+- **The links keep their boiled week while they hang** (a day a day, by the Food Spoilage setting). Smoked in time they come down **Smoked Blood Sausage**: 0.22 a link (0.25 boiled), 538 kcal, hunger 30, **21 / 40 days**, as fresh a share of that as they were of their week. Any that went stale first come down *Blood Sausage (Boiled)*, aged by the days they hung; with no fire the stack ends when its links do. A part-eaten link keeps its share.
+- A smoked link is cooked: eat it cold, fry it, or put it in a dish. **Slice Smoked Blood Sausage**: 4 rounds, 21 / 40.
+- Hover the stack (or the Smokehouse's info block): its smoke against the 24 h, what the fire is doing for it (smoking, too warm, no fire) and the days its links have left.
+- Own icons and models, browner and darker than the boiled link (`tools/build_meat_icons.py`, `SMOKED_BLOOD`).
+- Console: `TPFM.give("bloodSausage", n, "stale")` (boiled links are now given cooked, as the pot makes them; "stale" 0.1 days short of the week), `"smokedBloodSausage"`; `TPFM.kit("blood")` adds 6 boiled links and a smoked one. Tests in `test_blood.lua`.
+
 ## 0.4.36
 Blood (user, 2026-11-13; ROADMAP section 7). Needs this TP Core (fluid states, the treat menu, `Uses`, `OnCreateCooked`, the gather-blood wrap). Salt charging (`F.chargeSalt`, `F.saltCarried`) now goes through Core's `Uses`, same behaviour. In-game step 121 of `TESTING_GUIDE.md` (INGAME_PASS 120).
 - **Blood by weight.** Vanilla bleeds a pig or a sheep of 8 to 25 L, four to six times a real sticking. Each animal now gives 3.5 cl a kg of its weight (about half its blood): a 100 kg pig 3.5 L, a 600 kg cow 20 L; pigs 4-12 L, ewes 2-4, rams 3-7, deer 4-7, cattle 12.5-33, bulls up to 45 (`F.realBlood`, applied to vanilla's animal table as it loads).

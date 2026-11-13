@@ -51,8 +51,8 @@
   "IGUI_TraditionalPreservationFishMeat_TubInUse": "The tub is in use",
   "IGUI_TraditionalPreservationFishMeat_TubNotEmpty": "Take the cured batch out first",
   "IGUI_TraditionalPreservationFishMeat_NeedsPacked": "The tub takes Salt Packed fish or meat",
-  "IGUI_TraditionalPreservationFishMeat_NeedsPressed": "Hangs Salt Cured fish, Corned or Country Cured meat, or gutted fish",
-  "IGUI_TraditionalPreservationFishMeat_MixedStack": "A stack is one kind: salted fish, gutted fish or meat",
+  "IGUI_TraditionalPreservationFishMeat_NeedsPressed": "Hangs Salt Cured fish, Corned or Country Cured meat, gutted fish, or boiled blood sausage in the Smokehouse",
+  "IGUI_TraditionalPreservationFishMeat_MixedStack": "A stack is one kind: salted fish, gutted fish, meat or blood sausage",
   "IGUI_TraditionalPreservationFishMeat_MixedMeat": "Poultry and rabbit hang apart from other meat: they only take a hot cook",
   "IGUI_TraditionalPreservationFishMeat_HotOnlySmokehouse": "Corned poultry and rabbit go in the Smokehouse for a hot cook, nothing else: they are never dried",
   "IGUI_TraditionalPreservationFishMeat_HotOnlyShortCure": "Poultry and rabbit take a light brine only: pick Corn Salted Meat",
@@ -183,5 +183,14 @@
   "IGUI_TraditionalPreservationFishMeat_InfoCorn": "Corning",
   "IGUI_TraditionalPreservationFishMeat_BoiledBone": "Boiled %1",
   "IGUI_TraditionalPreservationFishMeat_BloodSausageFried": "Blood Sausage (Fried)",
-  "IGUI_TraditionalPreservationFishMeat_BloodSausageBoiledFried": "Blood Sausage (Boiled, Fried)"
+  "IGUI_TraditionalPreservationFishMeat_BloodSausageBoiledFried": "Blood Sausage (Boiled, Fried)",
+  "IGUI_TraditionalPreservationFishMeat_Fire": "Fire",
+  "IGUI_TraditionalPreservationFishMeat_MethodSausage": "Cold smoking (blood sausage)",
+  "IGUI_TraditionalPreservationFishMeat_InfoSausage": "Smoked blood sausage",
+  "IGUI_TraditionalPreservationFishMeat_SausageSmoking": "the fire's smoke counts",
+  "IGUI_TraditionalPreservationFishMeat_SausageTooWarm": "too warm for the smoke to count (over 15 C outside)",
+  "IGUI_TraditionalPreservationFishMeat_SausageNoFire": "no fire in a joined Firebox",
+  "IGUI_TraditionalPreservationFishMeat_SausageStaleIn": "goes stale in %1 d unless smoked by then (it comes down Boiled)",
+  "IGUI_TraditionalPreservationFishMeat_SausageFried": "Only a boiled link takes the smoke: this one was fried",
+  "IGUI_TraditionalPreservationFishMeat_SausageSmokehouse": "Blood sausage hangs only in the Smokehouse, to smoke"
 }

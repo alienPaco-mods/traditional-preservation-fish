@@ -475,6 +475,8 @@ local function swapOutputs(craftRecipeData, station, make)
     return true
 end
 
+F.swapOutputs = swapOutputs
+
 function F.smokedOutputs(craftRecipeData, station, fishType, meatType, airDried)
     local modData = craftRecipeData:getModData()
     return swapOutputs(craftRecipeData, station, function(input) return F.smokedItem(input, modData, fishType, meatType, airDried) end)
