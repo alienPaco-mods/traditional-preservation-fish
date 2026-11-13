@@ -651,7 +651,7 @@ Potted Meat is the road for any season and any red meat, pork too, and the one r
 
 **A portion** is the cut's own food plus a quarter of the fat, about 1,000 calories of it. A full crock of four is around **5,000 calories**: few foods carry more. Fewer than four cuts leave the rest of the block behind in the pot, so cook four at a time when you can.
 
-> *Margin note:* chickens, turkeys and rabbits were kept alive and eaten fresh, so a farm rarely salted or dried them. When it had too many, they went under fat: English potted rabbit and chicken, French *rillettes de lapin*, the Gascon confit of duck and goose. The game's Rabbit Meat carries nearly four times a chicken leg's calories, and a portion of it about 2,000 with its fat.
+> *Margin note:* chickens, turkeys and rabbits were kept alive and eaten fresh, so a farm rarely salted or dried them. When it had too many, they went under fat: English potted rabbit and chicken, French *rillettes de lapin*, the Gascon confit of duck and goose. Rabbit needed the fat more than most: it is so lean that trappers living on it alone fell sick within days, full but starving ("rabbit starvation"), which is why rillettes de lapin are made with pork fat. The game's Rabbit Meat carries nearly four times a chicken leg's calories, and a portion of it about 2,000 with its fat.
 
 **Where you keep it.** The crock keeps by the temperature it sits in, and it remembers: one left a month in a basement has aged a basement's month when you next look.
 
