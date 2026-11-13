@@ -1,6 +1,7 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
 ## 0.4.35
+- **Fix** (2026-11-13): `IGUI_TraditionalPreservationFishMeat_DryCured` was in `IG_UI.json` twice (a stale "Dry Cured %1" from 0.4.22); the game refuses the whole file on a duplicate key, so every IGUI text of the mod showed as its key. The stale line removed.
 Realism pass, part one (user, 2026-11-13: numbers skewed to acceptable realism, every method kept viable; ROADMAP).
 - **Under-salted meat above freezing.** Corned red meat hung to dry (the Smokehouse, a room, a basement) used to last about 140 days near 0 C. Above freezing it now rots within **6 weeks** of thawed hours however cool (the middle sours before the salt gets there: `F.UNDER_CURE_MAX_DAYS`), and in 4 at 10 C as before; frozen hours keep the slow curve, so meat hung in a hard frost freeze-dries slowly. The long cure is the way to a long hang.
 - **Poultry and rabbit:** the 14 days a waiting stack lasts now count only hours above freezing (`F.hotOnlyUnderRate`); frozen, a bird keeps, as farms hung them all winter. Both rules are hourly ledger totals by the shed's temperature, the fire's lift included (`hotOnlyUnder`, `...Banked`, `...Stoked`), and scale with the Spoilage sandbox setting.
