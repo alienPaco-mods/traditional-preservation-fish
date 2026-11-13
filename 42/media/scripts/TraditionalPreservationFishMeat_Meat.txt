@@ -453,7 +453,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.3,
         Icon = SaltPacked_Beef,
-        IconsForTexture = SaltPacked_Beef;SaltPacked_Steak;SaltPacked_Mutton;SaltPacked_Venison;SaltPacked_Pork;SaltPacked_PorkChop;SaltPacked_Leg,
+        IconsForTexture = SaltPacked_Beef;SaltPacked_Steak;SaltPacked_Mutton;SaltPacked_Venison;SaltPacked_Pork;SaltPacked_PorkChop;SaltPacked_Leg;SaltPacked_ChickenLeg;SaltPacked_ChickenWing;SaltPacked_ChickenFillet;SaltPacked_ChickenWhole;SaltPacked_TurkeyLeg;SaltPacked_TurkeyWing;SaltPacked_TurkeyFillet;SaltPacked_TurkeyWhole;SaltPacked_Rabbit,
         CantEat = true,
         DangerousUncooked = true,
         DaysFresh = 3,
@@ -466,7 +466,7 @@ module TraditionalPreservationFishMeat
         FoodType = Beef,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;LegOfPork,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;LegOfPork;Chicken;PoultryWing;PoultryFillet;ChickenWhole;Chicken;PoultryWing;PoultryFillet;TurkeyWhole;RabbitMeat,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_PackedMeat,
     }
 
@@ -477,7 +477,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.27,
         Icon = SaltCured_Beef,
-        IconsForTexture = SaltCured_Beef;SaltCured_Steak;SaltCured_Mutton;SaltCured_Venison;SaltCured_Pork;SaltCured_PorkChop;SaltCured_Leg,
+        IconsForTexture = SaltCured_Beef;SaltCured_Steak;SaltCured_Mutton;SaltCured_Venison;SaltCured_Pork;SaltCured_PorkChop;SaltCured_Leg;SaltCured_ChickenLeg;SaltCured_ChickenWing;SaltCured_ChickenFillet;SaltCured_ChickenWhole;SaltCured_TurkeyLeg;SaltCured_TurkeyWing;SaltCured_TurkeyFillet;SaltCured_TurkeyWhole;SaltCured_Rabbit,
         DaysFresh = 7,
         DaysTotallyRotten = 14,
         HungerChange = -40.0,
@@ -496,7 +496,7 @@ module TraditionalPreservationFishMeat
         CookingSound = FryingFood,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham;Chicken;PoultryWing;PoultryFillet;ChickenWhole;Chicken;PoultryWing;PoultryFillet;TurkeyWhole;RabbitMeat,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_CuredMeat,
     }
 
@@ -515,7 +515,7 @@ module TraditionalPreservationFishMeat
         Tooltip = Tooltip_TraditionalPreservationFishMeat_PackMeat,
         inputs
         {
-            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop;TraditionalPreservationFishMeat.LegOfPork] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop;TraditionalPreservationFishMeat.LegOfPork;Base.Chicken;Base.ChickenWings;Base.ChickenFillet;Base.ChickenWhole;Base.TurkeyLegs;Base.TurkeyWings;Base.TurkeyFillet;Base.TurkeyWhole;Base.Rabbitmeat] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
             item 2 tags[base:salt],
         }
         outputs
@@ -556,6 +556,7 @@ module TraditionalPreservationFishMeat
         Tags = SaltingTub,
         category = Cooking,
         Tooltip = Tooltip_craft_countryCureMeat,
+        OnTest = TraditionalPreservationFishMeat.canCountryCure,
         OnStart = TraditionalPreservationFishMeat.onPressStart,
         OnUpdate = TraditionalPreservationFishMeat.onPressUpdate,
         OnCreate = TraditionalPreservationFishMeat.onCreateLongCured,
@@ -578,7 +579,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.15,
         Icon = Charque_Beef,
-        IconsForTexture = Charque_Beef;Charque_Steak;Charque_Mutton;Charque_Venison;Charque_Pork;Charque_PorkChop;Charque_Leg,
+        IconsForTexture = Charque_Beef;Charque_Steak;Charque_Mutton;Charque_Venison;Charque_Pork;Charque_PorkChop;Charque_Leg;Charque_ChickenLeg;Charque_ChickenWing;Charque_ChickenFillet;Charque_ChickenWhole;Charque_TurkeyLeg;Charque_TurkeyWing;Charque_TurkeyFillet;Charque_TurkeyWhole;Charque_Rabbit,
         CantEat = true,
         DaysFresh = 120,
         DaysTotallyRotten = 180,
@@ -591,13 +592,13 @@ module TraditionalPreservationFishMeat
         FoodType = Beef,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham;Chicken;PoultryWing;PoultryFillet;ChickenWhole;Chicken;PoultryWing;PoultryFillet;TurkeyWhole;RabbitMeat,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_Charque,
     }
 
     /* Cold smoked in the Smokehouse (5d): salt cured meat dried in smoky air over a banked Firebox for a third of its
        time or more. No longer charque (sun and wind only) but the start of the Dry Cured line, suho meso's family:
-       named by the animal ("Dry Cured Beef (Cold Smoked)", F.stageName), keeps as charque does and is eaten as it is,
+       named by the animal ("Beef (Cold Smoked)", F.stageName), keeps as charque does and is eaten as it is,
        sliced thin. Phase 6 adds ripening. Food from the cut (carry); the values here are placeholders. */
     item DryCuredMeat
     {
@@ -605,7 +606,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.15,
         Icon = DryCuredMeat,
-        IconsForTexture = DryCured_Beef;DryCured_Steak;DryCured_Mutton;DryCured_Venison;DryCured_Pork;DryCured_PorkChop;DryCured_Leg,
+        IconsForTexture = DryCured_Beef;DryCured_Steak;DryCured_Mutton;DryCured_Venison;DryCured_Pork;DryCured_PorkChop;DryCured_Leg;DryCured_ChickenLeg;DryCured_ChickenWing;DryCured_ChickenFillet;DryCured_ChickenWhole;DryCured_TurkeyLeg;DryCured_TurkeyWing;DryCured_TurkeyFillet;DryCured_TurkeyWhole;DryCured_Rabbit,
         DaysFresh = 120,
         DaysTotallyRotten = 180,
         HungerChange = -28.0,
@@ -620,7 +621,7 @@ module TraditionalPreservationFishMeat
         EvolvedRecipeName = Beef,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham;Chicken;PoultryWing;PoultryFillet;ChickenWhole;Chicken;PoultryWing;PoultryFillet;TurkeyWhole;RabbitMeat,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_DryCured,
     }
 
@@ -634,7 +635,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 1.25,
         Icon = DryCured_Leg,
-        IconsForTexture = DryCured_Beef;DryCured_Steak;DryCured_Mutton;DryCured_Venison;DryCured_Pork;DryCured_PorkChop;DryCured_Leg,
+        IconsForTexture = DryCured_Beef;DryCured_Steak;DryCured_Mutton;DryCured_Venison;DryCured_Pork;DryCured_PorkChop;DryCured_Leg;DryCured_ChickenLeg;DryCured_ChickenWing;DryCured_ChickenFillet;DryCured_ChickenWhole;DryCured_TurkeyLeg;DryCured_TurkeyWing;DryCured_TurkeyFillet;DryCured_TurkeyWhole;DryCured_Rabbit,
         DaysFresh = 180,
         DaysTotallyRotten = 365,
         HungerChange = -210.0,
@@ -647,7 +648,7 @@ module TraditionalPreservationFishMeat
         FoodType = Pork,
         StaticModel = Ham,
         WorldStaticModel = Ham,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham;Chicken;PoultryWing;PoultryFillet;ChickenWhole;Chicken;PoultryWing;PoultryFillet;TurkeyWhole;RabbitMeat,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_CountryHam,
     }
 
@@ -669,7 +670,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.2,
         Icon = HotSmokedMeat,
-        IconsForTexture = HotSmoked_Beef;HotSmoked_Steak;HotSmoked_Mutton;HotSmoked_Venison;HotSmoked_Pork;HotSmoked_PorkChop;HotSmoked_Leg,
+        IconsForTexture = HotSmoked_Beef;HotSmoked_Steak;HotSmoked_Mutton;HotSmoked_Venison;HotSmoked_Pork;HotSmoked_PorkChop;HotSmoked_Leg;HotSmoked_ChickenLeg;HotSmoked_ChickenWing;HotSmoked_ChickenFillet;HotSmoked_ChickenWhole;HotSmoked_TurkeyLeg;HotSmoked_TurkeyWing;HotSmoked_TurkeyFillet;HotSmoked_TurkeyWhole;HotSmoked_Rabbit,
         DaysFresh = 7,
         DaysTotallyRotten = 14,
         HungerChange = -28.0,
@@ -684,7 +685,7 @@ module TraditionalPreservationFishMeat
         EvolvedRecipeName = Beef,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham;Chicken;PoultryWing;PoultryFillet;ChickenWhole;Chicken;PoultryWing;PoultryFillet;TurkeyWhole;RabbitMeat,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_HotSmoked,
     }
 
@@ -779,6 +780,7 @@ module TraditionalPreservationFishMeat
         Tags = AnySurfaceCraft;Cooking,
         category = Cooking,
         xpAward = Cooking:3,
+        OnTest = TraditionalPreservationFishMeat.canSliceHot,
         OnCreate = TraditionalPreservationFishMeat.onCreateMeatSliced,
         inputs
         {
@@ -807,6 +809,48 @@ module TraditionalPreservationFishMeat
         outputs
         {
             item 2 TraditionalPreservationFishMeat.DryCuredMeatSlice,
+        }
+    }
+
+    /* A whole bird hot smoked (0.4.34) is carved as vanilla's Cut Chicken / Cut Turkey cuts a raw one: 2 legs, 2
+       wings, 2 fillets, hot smoked (onCreateBirdCarved). Named after the item it takes. */
+    craftRecipe CarveHotSmokedChicken
+    {
+        timedAction = SliceMeat_Surface,
+        time = 150,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        xpAward = Cooking:20,
+        OnTest = TraditionalPreservationFishMeat.canCarveChicken,
+        OnCreate = TraditionalPreservationFishMeat.onCreateBirdCarved,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.HotSmokedMeat] flags[ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 6 TraditionalPreservationFishMeat.HotSmokedMeat,
+        }
+    }
+
+    craftRecipe CarveHotSmokedTurkey
+    {
+        timedAction = SliceMeat_Surface,
+        time = 150,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        xpAward = Cooking:20,
+        OnTest = TraditionalPreservationFishMeat.canCarveTurkey,
+        OnCreate = TraditionalPreservationFishMeat.onCreateBirdCarved,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.HotSmokedMeat] flags[ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 6 TraditionalPreservationFishMeat.HotSmokedMeat,
         }
     }
 
@@ -861,7 +905,7 @@ module TraditionalPreservationFishMeat
         ItemType = base:food,
         Weight = 0.25,
         Icon = SoakedCharque,
-        IconsForTexture = SoakedCharque_Beef;SoakedCharque_Steak;SoakedCharque_Mutton;SoakedCharque_Venison;SoakedCharque_Pork;SoakedCharque_PorkChop;SoakedCharque_Leg,
+        IconsForTexture = SoakedCharque_Beef;SoakedCharque_Steak;SoakedCharque_Mutton;SoakedCharque_Venison;SoakedCharque_Pork;SoakedCharque_PorkChop;SoakedCharque_Leg;SoakedCharque_ChickenLeg;SoakedCharque_ChickenWing;SoakedCharque_ChickenFillet;SoakedCharque_ChickenWhole;SoakedCharque_TurkeyLeg;SoakedCharque_TurkeyWing;SoakedCharque_TurkeyFillet;SoakedCharque_TurkeyWhole;SoakedCharque_Rabbit,
         DaysFresh = 2,
         DaysTotallyRotten = 4,
         HungerChange = -40.0,
@@ -881,7 +925,7 @@ module TraditionalPreservationFishMeat
         EvolvedRecipeName = Beef,
         StaticModel = Steak,
         WorldStaticModel = Steak,
-        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham,
+        WorldStaticModelsByIndex = Beef;Steak;MuttonChop;Venison;Pork;PorkChop;Ham;Chicken;PoultryWing;PoultryFillet;ChickenWhole;Chicken;PoultryWing;PoultryFillet;TurkeyWhole;RabbitMeat,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_SoakedCharque,
     }
 

@@ -78,11 +78,33 @@ F.PACK_GUTTING_XP = 5
 -- Charque (phase 3b): the meat cuts that go in the salt as vanilla gives them, in the order of the meat stages'
 -- IconsForTexture. Pork, Pork Chop and the Leg of Pork came with 6a, for the Smokehouse only: pork fat goes rancid
 -- in sun and wind (meatRefusal).
+-- Chicken, turkey and rabbit came with 0.4.34: hot smoke only (F.HOT_ONLY_INDICES).
 F.MEAT_CUTS = { "Base.Beef", "Base.Steak", "Base.MuttonChop", "Base.Venison", "Base.Pork", "Base.PorkChop",
-    "TraditionalPreservationFishMeat.LegOfPork" }
+    "TraditionalPreservationFishMeat.LegOfPork",
+    "Base.Chicken", "Base.ChickenWings", "Base.ChickenFillet", "Base.ChickenWhole",
+    "Base.TurkeyLegs", "Base.TurkeyWings", "Base.TurkeyFillet", "Base.TurkeyWhole", "Base.Rabbitmeat" }
 -- The pork cuts' and the leg's model indices.
 F.PORK_INDICES = { [4] = true, [5] = true, [6] = true }
 F.LEG_INDEX = 6
+-- Poultry and rabbit (0.4.34, user 2026-11-13): brined lightly and hot smoked, nothing else. Lean bird fat goes rancid
+-- and raw poultry carries salmonella, rabbit tularemia, which only cooking kills: no charque, dry cure or cold smoke.
+-- Their Corned keeps HOT_ONLY_DAYS (a light brine, not a salting), and in the Smokehouse they never dry: a stack waits
+-- for its hot run and spoils as under-salted meat does, HOT_ONLY_UNDER_RATE times as fast (Corned's keeping, 14 / 6).
+F.HOT_ONLY_INDICES = { [7] = true, [8] = true, [9] = true, [10] = true, [11] = true, [12] = true, [13] = true,
+    [14] = true, [15] = true }
+F.HOT_ONLY_DAYS = { 3, 6 }
+F.HOT_ONLY_UNDER_RATE = 14 / 6
+-- Above freezing a waiting stack is rotten within HOT_ONLY_MAX_DAYS of thawed hours (brined poultry keeps about two
+-- weeks in a cold larder); frozen hours keep the slow curve, as a bird hung in a hard frost kept all winter.
+F.HOT_ONLY_MAX_DAYS = 14
+-- A whole bird is hollow: the salt and the heat go through no more than a thick cut's depth. It counts as this weight
+-- for the cure and the cook (a chicken 38 hours in the tub and 7 stoked, a turkey 48 and 8).
+F.TIMING_WEIGHTS = { [10] = 0.4, [14] = 0.5 }
+-- A whole bird hot smoked is carved as vanilla's Cut Chicken / Cut Turkey cuts a raw one: 2 legs, 2 wings, 2
+-- fillets, by index; their food is shared by the vanilla cuts' script hunger, their weight from it x0.9 (vanilla's
+-- RecipeCodeOnCreate.cutChicken).
+F.WHOLE_BIRDS = { [10] = { 7, 8, 9 }, [14] = { 11, 12, 13 } }
+F.CARVE_BIRD_SHARE = 0.9
 F.LEG_OF_PORK = "TraditionalPreservationFishMeat.LegOfPork"
 -- The meat stages, which take their icon from MEAT_CUTS' index.
 F.MEAT_STAGES = {
@@ -197,6 +219,11 @@ F.WARM_CURE_SHARE = 0.25
 F.LONG_CURE_ABOVE = 10
 F.LONG_CURE_ROT_AT = 15
 F.LONG_CURE_ROT_HOURS = 504
+-- The tub in the cold (realism pass, user 2026-11-13): salt moves slowly near freezing, and the old rule added a day
+-- of cure for each day the meat froze. The cure goes by the tub's place temperature, { C, speed } joined by straight
+-- lines: full from 2 C, half at -5, a quarter from -10 (a brine doesn't freeze solid). Batches from before 0.4.34
+-- keep the clock.
+F.TUB_CURE_POINTS = { { -10, 0.25 }, { -5, 0.5 }, { 2, 1 } }
 -- Salt fish hangs in the shade. In open sun above HEAT_ABOVE (the temperature now), until it is
 -- SALT_FRESH_UNTIL dried, the skin hardens over wet flesh and the fat rusts: HEAT_DAMAGE_HOURS of that on
 -- a fresh stack add HEAT_DAMAGE to its spoilage, scaled by how wet it still is, within DAMAGE_CAP.
@@ -300,6 +327,10 @@ F.UNDER_CURE_HOURS = 672
 F.UNDER_CURE_AT = 10
 F.UNDER_CURE_TENFOLD = 5
 F.UNDER_CURE_MAX = 30
+-- Realism pass (user, 2026-11-13): above freezing, under-salted red meat is rotten within UNDER_CURE_MAX_DAYS of thawed
+-- hours, however cool (bone taint: the middle sours before the salt gets there); frozen hours keep the slow curve. A
+-- rinsed piece lost surface salt too: it spoils 1 / RINSED_KEEPING as fast.
+F.UNDER_CURE_MAX_DAYS = 42
 
 -- From DryingCraftLogic, so the frame's wetness readout tells the truth.
 local RAIN_WETTING = 0.001  -- per game second, at full intensity
@@ -337,7 +368,7 @@ F.STAGES = {
     ["TraditionalPreservationFishMeat.HotSmokedMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_HotSmoked", weight = 0.78, nutrition = 1, hunger = 1, salty = true },
     ["TraditionalPreservationFishMeat.SoakedCharque"] = { name = "IGUI_TraditionalPreservationFishMeat_SoakedCharque", weight = 1.6, nutrition = 1, hunger = 1 / 0.7, salty = true },
     -- Cold smoked (the Smokehouse, 5d): dried in smoky air, as dry as Salt Dried fish or charque. Meat smoked so is no
-    -- longer charque but the start of the Dry Cured line, named by the animal ("Dry Cured Beef (Cold Smoked)").
+    -- longer charque but the start of the Dry Cured line, named by the animal ("Beef (Cold Smoked)").
     ["TraditionalPreservationFishMeat.ColdSmokedFish"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdSmoked", weight = 0.45, nutrition = 0.9, hunger = 0.7, salty = true },
     ["TraditionalPreservationFishMeat.DryCuredMeat"] = { name = "IGUI_TraditionalPreservationFishMeat_ColdSmoked", weight = 0.55, nutrition = 0.9, hunger = 0.7, salty = true, dryCured = true, ages = true },
     -- A Leg of Pork dried in the Smokehouse (6b): Dry Cured meat's shares, an item of its own for its longer keeping.
@@ -349,7 +380,8 @@ F.STAGES = {
 }
 
 -- The animal each of MEAT_CUTS comes from, by model index, for the finished meat's names.
-F.MEAT_ANIMALS = { "Beef", "Beef", "Mutton", "Venison", "Pork", "Pork", "Pork" }
+F.MEAT_ANIMALS = { "Beef", "Beef", "Mutton", "Venison", "Pork", "Pork", "Pork",
+    "Chicken", "Chicken", "Chicken", "Chicken", "Turkey", "Turkey", "Turkey", "Turkey", "Rabbit" }
 
 -- The low end of DryingCraftLogic's curve: nothing at freezing, 1 at 20 C. It stops there, so
 -- heat can't finish a batch in under DRY_HOURS.
@@ -391,6 +423,11 @@ function F.charqueWarmRate(celsius)
     return math.max(0, math.min(celsius / F.CHARQUE_FULL_HEAT, 1))
 end
 
+-- How fast a tub cures at this temperature, 0.25 to 1 (TUB_CURE_POINTS).
+function F.tubCureRate(celsius)
+    return Weather.curve(F.TUB_CURE_POINTS, celsius)
+end
+
 -- Dry curing's rate by temperature: DRY_CURE_FROST_RATE at its lowest, full from DRY_CURE_FULL_HEAT.
 function F.dryCureRate(celsius)
     return math.max(F.DRY_CURE_FROST_RATE, math.min(celsius / F.DRY_CURE_FULL_HEAT, 1))
@@ -404,10 +441,18 @@ function F.dryCureHours(heaviest)
     return math.min(hours, high[2])
 end
 
--- The share of itself under-salted meat loses an hour at this temperature in the shed.
-function F.underCureRate(celsius)
+-- The share of itself under-salted meat loses an hour at this temperature in the shed: the curve, and above freezing
+-- never slower than rotting in maxDays (UNDER_CURE_MAX_DAYS for red meat). scale speeds the curve (poultry's).
+function F.underCureRate(celsius, scale, maxDays)
     local warmth = (math.min(celsius, F.UNDER_CURE_MAX) - F.UNDER_CURE_AT) / 10
-    return F.UNDER_CURE_TENFOLD ^ warmth / F.UNDER_CURE_HOURS
+    local rate = F.UNDER_CURE_TENFOLD ^ warmth / F.UNDER_CURE_HOURS * (scale or 1)
+    if celsius > 0 then rate = math.max(rate, 1 / ((maxDays or F.UNDER_CURE_MAX_DAYS) * 24)) end
+    return rate
+end
+
+-- Poultry's and rabbit's (hot-smoke only) under-salted spoiling: faster, and within HOT_ONLY_MAX_DAYS above freezing.
+function F.hotOnlyUnderRate(celsius)
+    return F.underCureRate(celsius, F.HOT_ONLY_UNDER_RATE, F.HOT_ONLY_MAX_DAYS)
 end
 
 -- What the wind does to charque: CHARQUE_CALM_RATE in still air, rising to CHARQUE_WINDY_RATE at WIND_GOOD.
@@ -420,7 +465,7 @@ function F.liftedRates(weather, lift)
     local celsius = weather.temperature + lift
     return math.max(F.temperatureRate(celsius) * air, F.MIN_DRY_RATE),
         F.charqueWarmRate(celsius) * air * F.charqueWindRate(weather.wind),
-        F.dryCureRate(celsius) * air, F.underCureRate(celsius)
+        F.dryCureRate(celsius) * air, F.underCureRate(celsius), F.hotOnlyUnderRate(celsius)
 end
 
 function F.charqueWindRate(wind)
@@ -454,6 +499,13 @@ function F.newLedger(now)
 end
 
 -- A tub's warm cure and long cure at this temperature, into the totals named: whether each is spoiling now.
+-- A tub's cure at a place: its total ("tubCure" .. place, "" for under a roof by the season) and its rate now.
+local function addTubCure(ledger, place, celsius, hours)
+    local rate = F.tubCureRate(celsius)
+    ledger["tubCure" .. place .. "Rate"] = rate
+    ledger["tubCure" .. place] = (ledger["tubCure" .. place] or 0) + rate * hours
+end
+
 local function addCureSpoil(ledger, celsius, hours, warmKey, longKey)
     local warmth = celsius - F.WARM_CURE_ABOVE
     if warmth > 0 then ledger[warmKey] = (ledger[warmKey] or 0) + (1 + warmth / 10) * hours end
@@ -530,9 +582,9 @@ function F.advance(ledger, now, weather)
     if raining then ledger.charqueRain = ledger.charqueRain + hours end
     ledger.clock = ledger.clock + hours
     if weather.temperature <= F.COLD_SMOKE_MAX then ledger.smokeCool = ledger.smokeCool + hours end
-    local underBanked, underStoked
-    ledger.bankedRate, ledger.charqueBankedRate, ledger.dryCureBankedRate, underBanked = F.liftedRates(weather, F.BANKED_LIFT)
-    ledger.stokedRate, ledger.charqueStokedRate, ledger.dryCureStokedRate, underStoked = F.liftedRates(weather, F.STOKED_LIFT)
+    local underBanked, underStoked, hotOnlyBanked, hotOnlyStoked
+    ledger.bankedRate, ledger.charqueBankedRate, ledger.dryCureBankedRate, underBanked, hotOnlyBanked = F.liftedRates(weather, F.BANKED_LIFT)
+    ledger.stokedRate, ledger.charqueStokedRate, ledger.dryCureStokedRate, underStoked, hotOnlyStoked = F.liftedRates(weather, F.STOKED_LIFT)
     ledger.dryCureRate = F.dryCureRate(weather.temperature) * F.airRate(weather.humidity)
     ledger.dryCure = ledger.dryCure + ledger.dryCureRate * hours
     ledger.dryCureBanked = ledger.dryCureBanked + ledger.dryCureBankedRate * hours
@@ -540,6 +592,10 @@ function F.advance(ledger, now, weather)
     ledger.underCure = ledger.underCure + F.underCureRate(weather.temperature) * hours
     ledger.underCureBanked = ledger.underCureBanked + underBanked * hours
     ledger.underCureStoked = ledger.underCureStoked + underStoked * hours
+    -- Poultry and rabbit hang in the Smokehouse only: the shed's air, the fire out, banked and stoked.
+    ledger.hotOnlyUnder = (ledger.hotOnlyUnder or 0) + F.hotOnlyUnderRate(weather.temperature) * hours
+    ledger.hotOnlyUnderBanked = (ledger.hotOnlyUnderBanked or 0) + hotOnlyBanked * hours
+    ledger.hotOnlyUnderStoked = (ledger.hotOnlyUnderStoked or 0) + hotOnlyStoked * hours
     ledger.smokeBanked = ledger.smokeBanked + ledger.bankedRate * hours
     ledger.smokeStoked = ledger.smokeStoked + ledger.stokedRate * hours
     ledger.charqueBanked = ledger.charqueBanked + ledger.charqueBankedRate * hours
@@ -567,6 +623,8 @@ function F.advance(ledger, now, weather)
         ledger.rawSpoilOpen = (ledger.rawSpoilOpen or 0) + (1 + dayWarmth / 10) * hours
     end
     ledger.warmCuring, ledger.longCuring = addCureSpoil(ledger, ledger.seasonTemperature, hours, "warmCure", "longCureSpoil")
+    addTubCure(ledger, "", ledger.seasonTemperature, hours)
+    addTubCure(ledger, "Open", weather.temperature, hours)
     -- A tub in the open air (step I) goes by the day's temperature, as the open air does in Core.
     ledger.openWarmCuring, ledger.openLongCuring = addCureSpoil(ledger, weather.temperature, hours, "warmCureOpen", "longCureOpen")
 
@@ -583,6 +641,7 @@ function F.advance(ledger, now, weather)
     ledger.dryCureBasement = ledger.dryCureBasement + ledger.dryCureBasementRate * hours
     ledger.underCureBasement = ledger.underCureBasement + F.underCureRate(basement) * hours
     ledger.basementWarmCuring, ledger.basementLongCuring = addCureSpoil(ledger, basement, hours, "warmCureBasement", "longCureBasement")
+    addTubCure(ledger, "Basement", basement, hours)
     -- A loft (sweep step H) the same by its own, TP Core's figure as every mod reads it: a room's season mean with
     -- the roof's summer warmth on top, 22 C while the grid is on. Dry curing has a room's air, not a cellar's.
     local loft = Weather.placeTemperature(ledger, "Loft")
@@ -594,6 +653,7 @@ function F.advance(ledger, now, weather)
     ledger.dryCureLoft = (ledger.dryCureLoft or 0) + ledger.dryCureLoftRate * hours
     ledger.underCureLoft = (ledger.underCureLoft or 0) + F.underCureRate(loft) * hours
     ledger.loftWarmCuring, ledger.loftLongCuring = addCureSpoil(ledger, loft, hours, "warmCureLoft", "longCureLoft")
+    addTubCure(ledger, "Loft", loft, hours)
     -- A room (step I) the same by Core's room temperature: the season's mean, 22 C while the grid is on.
     local room = Weather.placeTemperature(ledger, "Sheltered")
     ledger.roomShelteredRate = math.max(F.temperatureRate(room) * air * F.SHELTERED_RATE, minRate)
@@ -604,6 +664,7 @@ function F.advance(ledger, now, weather)
     ledger.dryCureRoom = (ledger.dryCureRoom or 0) + ledger.dryCureRoomRate * hours
     ledger.underCureRoom = (ledger.underCureRoom or 0) + F.underCureRate(room) * hours
     ledger.roomWarmCuring, ledger.roomLongCuring = addCureSpoil(ledger, room, hours, "warmCureRoom", "longCureRoom")
+    addTubCure(ledger, "Room", room, hours)
     -- Under a roof (step I) by Core's covered temperature, the season's mean, with the outdoor air and wind.
     local roof = Weather.placeTemperature(ledger, "Covered")
     ledger.coveredRate = math.max(F.temperatureRate(roof) * air, minRate)
@@ -708,6 +769,24 @@ end
 
 -- How a hanging charque stack is doing right now, for its popup, as stackStatus.
 function F.charqueStatus(modData, ledger)
+    -- Poultry and rabbit (0.4.34) never dry: the bar is the cook, which runs only while the Firebox is stoked.
+    if modData.hotOnly then
+        local burning = modData.burning
+        local stoked = burning == Hearth.STOKED
+        return {
+            progress = F.cookShare(modData) or 0,
+            rate = stoked and 1 or 0,
+            reason = not stoked and "NeedsStoking" or nil,
+            hoursLeft = stoked and math.max((modData.hotNeed or 0) - (modData.hot or 0), 0) or nil,
+            spoiled = math.min((modData.spoiled or 0) + (modData.underSpoiled or 0), 1),
+            spoiling = false,
+            scorching = false,
+            dryCuring = false,
+            hotOnly = true,
+            underSalted = true,
+            shedTemperature = (ledger.temperature or 0) + (stoked and F.STOKED_LIFT or burning and F.BANKED_LIFT or 0),
+        }
+    end
     local rate, reason
     local curing = F.dryCuring(modData)
     local lift = 0
@@ -826,10 +905,13 @@ function F.onPressStart(craftRecipeData)
     craftRecipeData:getModData().lastLongCure, craftRecipeData:getModData().lastLongCureBasement = nil, nil
     craftRecipeData:getModData().lastLongCureLoft, craftRecipeData:getModData().lastLongCureRoom = nil, nil
     craftRecipeData:getModData().lastLongCureOpen = nil
+    -- The cure's own progress by the tub's place (TUB_CURE_POINTS): hours at full speed, and each place's total now.
+    craftRecipeData:getModData().tubDone = 0
+    F.markTub(craftRecipeData:getModData(), ledger)
     local fish = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
     local heaviest, meat, leg = 0, false, false
     for i = 0, fish:size() - 1 do
-        heaviest = math.max(heaviest, fish:get(i):getActualWeight())
+        heaviest = math.max(heaviest, F.timingWeight(fish:get(i)))
         meat = meat or fish:get(i):getFullType() == F.PACKED_MEAT
         leg = leg or F.isLeg(fish:get(i))
     end
@@ -863,9 +945,34 @@ function F.isPork(item)
     return F.isMeatStage(item:getFullType()) and F.PORK_INDICES[item:getModelIndex()] == true
 end
 
+-- A cut's MEAT_CUTS index, raw (by its type) or at a meat stage (by its model index), or nil.
+function F.cutIndex(item)
+    local fullType = item:getFullType()
+    if F.isMeatStage(fullType) then return item:getModelIndex() end
+    for index, cut in ipairs(F.MEAT_CUTS) do
+        if cut == fullType then return index - 1 end
+    end
+    return nil
+end
+
+-- Poultry or rabbit, raw or at any meat stage: hot smoke only.
+function F.isHotOnly(item)
+    return F.HOT_ONLY_INDICES[F.cutIndex(item) or -1] == true
+end
+
+-- The weight a piece counts as for the cure's and the cook's hours: its own, or a whole bird's TIMING_WEIGHTS.
+function F.timingWeight(item)
+    return F.TIMING_WEIGHTS[F.cutIndex(item) or -1] or item:getActualWeight()
+end
+
 -- OnTest of the short cure: a leg is too thick for it, and takes the long cure only.
 function F.canCorn(item)
     return not F.isLeg(item)
+end
+
+-- OnTest of the long cure: poultry and rabbit take the short one only.
+function F.canCountryCure(item)
+    return not F.isHotOnly(item)
 end
 
 -- The long cure's OnCreate: as the short one's, and each piece is marked Country Cured.
@@ -920,10 +1027,28 @@ function F.tubSpoiling(modData, ledger)
 end
 
 -- How far a batch in the tub is, for its popup.
+-- Each place's tub total now, so the next look adds only what came since.
+local TUB_PLACES = { "", "Open", "Basement", "Loft", "Room" }
+function F.markTub(modData, ledger)
+    for _, place in ipairs(TUB_PLACES) do modData["lastTubCure" .. place] = ledger["tubCure" .. place] or 0 end
+end
+
+
+-- A batch's cure so far, in hours at full speed, and its rate now: by the tub's place since the last look, or by
+-- the clock for a batch from before 0.4.34.
+function F.pressDone(modData, now, ledger)
+    if modData.tubDone == nil then return math.max(now - (modData.pressStartHour or now), 0), 1 end
+    -- The place's total ("" under a roof, by the season).
+    local place = tubPlace(modData) or ""
+    local total = ledger["tubCure" .. place] or 0
+    return modData.tubDone + total - (modData["lastTubCure" .. place] or total), ledger["tubCure" .. place .. "Rate"] or 1
+end
+
 function F.pressStatus(modData, now, ledger)
     local hours = modData.pressHours or OLD_PRESS_HOURS
-    local done = math.max(now - (modData.pressStartHour or now), 0)
-    return { progress = math.min(done / hours, 1), hoursLeft = math.max(hours - done, 0),
+    local done, rate = F.pressDone(modData, now, ledger)
+    local left = math.max(hours - done, 0)
+    return { progress = math.min(done / hours, 1), hoursLeft = rate > 0 and left / rate or nil, rate = rate,
         spoiled = F.cureSpoiled(modData, ledger),
         spoiling = F.tubSpoiling(modData, ledger) }
 end
@@ -932,9 +1057,17 @@ end
 -- so this replaces their count with the game clock. The recipe's time is the longest press (the long cure's: a
 -- leg's 21 days), so a lighter batch's bar runs faster to end on its own hours.
 function F.onPressUpdate(craftRecipeData)
-    local hours = craftRecipeData:getModData().pressHours or OLD_PRESS_HOURS
+    local modData = craftRecipeData:getModData()
+    local hours = modData.pressHours or OLD_PRESS_HOURS
     local recipeHours = craftRecipeData:getRecipe():getTime() / SECONDS_PER_HOUR
-    Weather.showClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours(), recipeHours / hours)
+    if modData.tubDone == nil then
+        Weather.showClock(craftRecipeData, "pressStartHour", getGameTime():getWorldAgeHours(), recipeHours / hours)
+        return
+    end
+    local ledger = F.getLedger()
+    modData.tubDone = F.pressDone(modData, getGameTime():getWorldAgeHours(), ledger)
+    F.markTub(modData, ledger)
+    craftRecipeData:setElapsedTime(math.min(modData.tubDone / hours, 1) * recipeHours * SECONDS_PER_HOUR)
 end
 
 -- A tub salts fish or meat, one batch at a time: what is waiting in it already sets the kind.
@@ -970,12 +1103,21 @@ function F.meatRefusal(hanger, place, item)
         return nil
     end
     if F.isPork(item) then return "IGUI_TraditionalPreservationFishMeat_PorkSmokehouse" end
+    if F.isHotOnly(item) then return "IGUI_TraditionalPreservationFishMeat_HotOnlySmokehouse" end
+    return nil
+end
+
+-- One stack of meat is red meat or hot-smoke-only meat (poultry, rabbit), never both: they finish differently.
+function F.mixedMeat(stored, item)
+    if stored:getFullType() ~= F.CURED_MEAT or item:getFullType() ~= F.CURED_MEAT then return nil end
+    if F.isHotOnly(stored) ~= F.isHotOnly(item) then return "IGUI_TraditionalPreservationFishMeat_MixedMeat" end
     return nil
 end
 
 -- Why an item can't go in a tub set to this recipe (Core's recipeRefusal): a Leg of Pork is too thick to corn.
 function F.recipeRefusal(recipeName, item)
     if recipeName == "PressSaltedMeat" and F.isLeg(item) then return "IGUI_TraditionalPreservationFishMeat_LegNeedsLongCure" end
+    if recipeName == F.LONG_CURE_RECIPE and F.isHotOnly(item) then return "IGUI_TraditionalPreservationFishMeat_HotOnlyShortCure" end
     return nil
 end
 
@@ -1140,6 +1282,7 @@ local function startStack(craftRecipeData)
     modData.lastClock, modData.lastSmokeCool, modData.lastDraughtCovered, modData.lastDraughtSheltered = nil, nil, nil, nil
     modData.lastDraughtBanked, modData.lastDraughtStoked = nil, nil
     modData.cureNeed, modData.noHot, modData.underCured, modData.underSpoiled, modData.allUnder = nil, nil, nil, nil, nil
+    modData.hotOnly, modData.lastHotOnlyUnder = nil, ledger.hotOnlyUnder
     modData.smokeNeed = nil
     modData.lastUnderBase, modData.lastUnderBanked, modData.lastUnderStoked = nil, nil, nil
 end
@@ -1166,7 +1309,15 @@ end
 -- Whether a hanging stack is lost as a whole. Under-salting ends a stack only when every piece in it is Corned:
 -- Country Cured pieces dry on, and the stack keeps its drying look.
 function F.stackRotten(modData)
-    return (modData.spoiled or 0) + (modData.allUnder and modData.underSpoiled or 0) >= 1
+    return (modData.spoiled or 0) + (modData.allUnder and (modData.underSpoiled or 0) * (modData.underScale or 1) or 0) >= 1
+end
+
+-- What under-salting has taken from one hung piece: none from a Country Cured one; a rinsed Corned piece lost surface
+-- salt too, and spoils 1 / RINSED_KEEPING as fast (realism pass, user 2026-11-13).
+function F.underLoss(piece, modData)
+    local data = piece:getModData()
+    if data.longCure then return 0 end
+    return (modData.underSpoiled or 0) * (data.rinsed and 1 / F.RINSED_KEEPING or 1)
 end
 
 local function showProgress(craftRecipeData, modData, hours)
@@ -1338,6 +1489,12 @@ local function dryCureStep(modData, ledger)
     elseif place == "Open" then
         dried = 0
     end
+    -- Poultry and rabbit never dry: they wait for a cook, spoiling faster than red meat.
+    if modData.hotOnly then
+        local total = ledger.hotOnlyUnder or 0
+        dried, under = 0, total - (modData.lastHotOnlyUnder or total)
+        modData.lastHotOnlyUnder = total
+    end
     modData.dried = modData.dried + dried
     if modData.underCured then modData.underSpoiled = (modData.underSpoiled or 0) + under end
     modData.lastDryCure, modData.lastUnderCure = ledger.dryCure, ledger.underCure
@@ -1353,6 +1510,8 @@ function F.charqueStep(modData, ledger)
     local rain = ledger.charqueRain - (modData.lastCharqueRain or ledger.charqueRain)
     if F.dryCuring(modData) then
         dryCureStep(modData, ledger)
+    elseif modData.hotOnly then
+        -- Poultry and rabbit hang only in the Smokehouse and never dry; before the World's first look, nothing.
     elseif modData.basement then
         local total = ledger.charqueBasement or 0
         modData.dried = modData.dried + total - (modData.lastCharqueBasement or total)
@@ -1432,7 +1591,9 @@ end
 -- The salt packing this fish takes in all, the recipe's own SALT_MIN included.
 function F.saltFor(fish)
     local steps = math.floor(F.packedWeight(fish) / F.SALT_STEP + 0.5 + 1e-6)
-    local perStep = fish:getFullType() == F.LEG_OF_PORK and F.LEG_SALT_PER_STEP or F.SALT_PER_STEP
+    -- Poultry and rabbit take a leg's half too: a light brine's salt, not charque's.
+    local light = fish:getFullType() == F.LEG_OF_PORK or F.isHotOnly(fish)
+    local perStep = light and F.LEG_SALT_PER_STEP or F.SALT_PER_STEP
     return math.max(F.SALT_MIN, perStep * steps)
 end
 
@@ -1806,8 +1967,8 @@ function F.wasGutted(item)
     return index >= count and index < count * 2
 end
 
--- Names (6a): the name says what it is now, a permanent fact in front ("Beef (Corned)", "Suho Meso"); a bracket only
--- holds a state that changes or wants acting on, one at most, before vanilla's freshness.
+-- Names (6a): the name says what it is now, a permanent fact in front ("Beef (Corned)", "Beef Charque"); a bracket
+-- holds a state that changes or wants acting on, one at most, before vanilla's freshness ("Beef (Dry Cured, Aged)").
 -- The finished meat of each animal, by how it dried: smoked (the default) or air dried (modData.airDried, 6b).
 -- The leg has its own, Country Ham.
 local function meatKind(index)
@@ -1836,20 +1997,26 @@ local function meatStageName(item)
         return getText("IGUI_TraditionalPreservationFishMeat_Named", getText("IGUI_TraditionalPreservationFishMeat_CharqueOf", animal),
             getText("IGUI_TraditionalPreservationFishMeat_Soaked"))
     elseif fullType == "TraditionalPreservationFishMeat.HotSmokedMeat" then
+        -- Poultry and rabbit keep the cut, whose food differs (a turkey fillet is no wing): "Turkey Wing (Hot Smoked)".
+        if F.HOT_ONLY_INDICES[index] then return getText("IGUI_TraditionalPreservationFishMeat_HotSmokedOf", getItemNameFromFullType(cut)) end
         return getText("IGUI_TraditionalPreservationFishMeat_HotSmokedOf", animal)
     elseif stage.hot then
         return getText("IGUI_TraditionalPreservationFishMeat_HotSmokedOf", getText("IGUI_TraditionalPreservationFishMeat_SliceOf", animal))
     end
-    local name = getText((modData.airDried and "IGUI_TraditionalPreservationFishMeat_AirDried_" or "IGUI_TraditionalPreservationFishMeat_Smoked_") .. meatKind(index))
     local aged = F.agedness(item) >= 1
-    if stage.slice then
-        name = getText("IGUI_TraditionalPreservationFishMeat_SliceOf", name)
-        aged = modData.aged == true
-    end
-    if aged then
+    if stage.slice then aged = modData.aged == true end
+    -- A ham keeps its own name ("Smoked Country Ham Slice (Aged)"); the rest go by the animal and the way they dried,
+    -- as every other stage does: "Mutton (Dry Cured)", "Beef Slice (Cold Smoked, Aged)".
+    if index == F.LEG_INDEX then
+        local name = getText((modData.airDried and "IGUI_TraditionalPreservationFishMeat_AirDried_" or "IGUI_TraditionalPreservationFishMeat_Smoked_") .. "Leg")
+        if stage.slice then name = getText("IGUI_TraditionalPreservationFishMeat_SliceOf", name) end
+        if not aged then return name end
         return getText("IGUI_TraditionalPreservationFishMeat_Named", name, getText("IGUI_TraditionalPreservationFishMeat_Aged"))
     end
-    return name
+    local way = getText(modData.airDried and "IGUI_TraditionalPreservationFishMeat_DryCured" or "IGUI_TraditionalPreservationFishMeat_ColdSmoked")
+    if aged then way = getText("IGUI_TraditionalPreservationFishMeat_AndAged", way) end
+    if stage.slice then animal = getText("IGUI_TraditionalPreservationFishMeat_SliceOf", animal) end
+    return getText("IGUI_TraditionalPreservationFishMeat_Named", animal, way)
 end
 
 -- What one piece of meat comes down as: "charque", "hot", "smoked" or "airDried", named for its cut as the finished
@@ -1865,8 +2032,15 @@ local function meatOutcomeName(input, way)
     end
     local animal = getText("IGUI_TraditionalPreservationFishMeat_Animal" .. F.MEAT_ANIMALS[index + 1])
     if way == "charque" then return getText("IGUI_TraditionalPreservationFishMeat_CharqueOf", animal) end
+    if way == "hot" and F.HOT_ONLY_INDICES[index] then
+        return getText("IGUI_TraditionalPreservationFishMeat_HotSmokedOf", getItemNameFromFullType(cut))
+    end
     if way == "hot" then return getText("IGUI_TraditionalPreservationFishMeat_HotSmokedOf", animal) end
-    return getText((way == "airDried" and "IGUI_TraditionalPreservationFishMeat_AirDried_" or "IGUI_TraditionalPreservationFishMeat_Smoked_") .. meatKind(index))
+    if index == F.LEG_INDEX then
+        return getText((way == "airDried" and "IGUI_TraditionalPreservationFishMeat_AirDried_" or "IGUI_TraditionalPreservationFishMeat_Smoked_") .. "Leg")
+    end
+    return getText("IGUI_TraditionalPreservationFishMeat_Named", animal,
+        getText(way == "airDried" and "IGUI_TraditionalPreservationFishMeat_DryCured" or "IGUI_TraditionalPreservationFishMeat_ColdSmoked"))
 end
 
 -- What a hanging stack would come down as if it were done now, by F.onCreateDried's rules: a stoked run counting in
@@ -1877,7 +2051,8 @@ function F.stackOutcome(modData, items, kind)
     if (modData.spoiled or 0) >= 1 then return getText("IGUI_TraditionalPreservationFishMeat_OutcomeRotten") end
     local way
     if modData.inShed then
-        way = (F.cookShare(modData) or F.hotStations[modData.stackId]) and "hot" or F.coldDone(modData) and "smoked" or "airDried"
+        way = (modData.hotOnly or F.cookShare(modData) or F.hotStations[modData.stackId]) and "hot"
+            or F.coldDone(modData) and "smoked" or "airDried"
     elseif kind == "meat" then
         way = F.dryCuring(modData) and "airDried" or "charque"
     end
@@ -1890,7 +2065,7 @@ function F.stackOutcome(modData, items, kind)
     for i = 0, items and items:size() - 1 or -1 do
         local input = items:get(i)
         local name
-        if not input:getModData().longCure and (modData.spoiled or 0) + (modData.underSpoiled or 0) >= 1 then
+        if (modData.spoiled or 0) + F.underLoss(input, modData) >= 1 then
             name = getText("IGUI_TraditionalPreservationFishMeat_OutcomeRotten")
         else
             name = meatOutcomeName(input, way)
@@ -1968,7 +2143,7 @@ end
 -- InheritFood would copy the first fish onto all of them, and a batch can mix sizes, so each
 -- fish hands its own values to one output.
 -- A hung piece that rotted before it was done: the same stage again, as it went up, rotten ("Beef (Corned)", not
--- "Bresaola"; a Gutted Walleye, not a Stockfish).
+-- "Beef (Dry Cured)"; a Gutted Walleye, not a Stockfish).
 -- stack is the stack's modData, if it came off a station: the piece keeps its stack, so the station still counts it
 -- and draws it with the rest.
 function F.rottenStage(source, stack)
@@ -2020,9 +2195,17 @@ end
 -- that share onto the frame.
 function F.onCreatePressed(craftRecipeData)
     F.onCreateCured(craftRecipeData)
+    local created = craftRecipeData:getAllCreatedItems()
+    -- Corned poultry and rabbit keep a light brine's days (Food saves its offAge, ENGINE_NOTES).
+    for i = 0, created:size() - 1 do
+        local piece = created:get(i)
+        if piece:getFullType() == F.CURED_MEAT and F.isHotOnly(piece) then
+            piece:setOffAge(F.HOT_ONLY_DAYS[1])
+            piece:setOffAgeMax(F.HOT_ONLY_DAYS[2])
+        end
+    end
     local spoiled = F.cureSpoiled(craftRecipeData:getModData(), F.getLedger())
     if spoiled <= 0 then return end
-    local created = craftRecipeData:getAllCreatedItems()
     for i = 0, created:size() - 1 do
         local fish = created:get(i)
         fish:getModData().cureSpoiled = spoiled
@@ -2321,6 +2504,7 @@ local SPOILAGE_SCALES = { math.huge, 2, 1, 0.5 }
 local RAW_SPOIL_HOURS, SALT_SPOIL_HOURS = F.RAW_SPOIL_HOURS, F.SALT_SPOIL_HOURS
 local FREEZE_DAMAGE_HOURS, WET_DAMAGE_HOURS, HEAT_DAMAGE_HOURS = F.FREEZE_DAMAGE_HOURS, F.WET_DAMAGE_HOURS, F.HEAT_DAMAGE_HOURS
 local UNDER_CURE_HOURS, LONG_CURE_ROT_HOURS = F.UNDER_CURE_HOURS, F.LONG_CURE_ROT_HOURS
+local UNDER_CURE_MAX_DAYS, HOT_ONLY_MAX_DAYS = F.UNDER_CURE_MAX_DAYS, F.HOT_ONLY_MAX_DAYS
 -- Small fish press for the same share of the biggest fish's time, whatever the sandbox sets it to.
 local PRESS_MIN_SHARE = F.PRESS_MIN_HOURS / F.PRESS_HOURS
 
@@ -2351,6 +2535,9 @@ function F.applySandbox()
     -- Under-salted Corned meat and the long cure's cold rule (0.4.14) go by the setting too: off, they never spoil.
     F.UNDER_CURE_HOURS = UNDER_CURE_HOURS * scale
     F.LONG_CURE_ROT_HOURS = LONG_CURE_ROT_HOURS * scale
+    -- The thawed-hours limits (realism pass) with them.
+    F.UNDER_CURE_MAX_DAYS = UNDER_CURE_MAX_DAYS * scale
+    F.HOT_ONLY_MAX_DAYS = HOT_ONLY_MAX_DAYS * scale
 end
 
 local function applyRecipeTime(name, hours)

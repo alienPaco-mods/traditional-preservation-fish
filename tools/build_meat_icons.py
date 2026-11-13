@@ -32,7 +32,11 @@ FATS = {
 # salt, Salt Cured darkened towards cured red-brown.
 # Pork, Pork Chop and the Leg of Pork came with phase 6a; the leg starts from vanilla's Ham.
 CUTS = {"Beef": "Item_BeefLoin", "Steak": "Item_Steak", "Mutton": "Item_Mutton", "Venison": "Item_Venison",
-        "Pork": "Item_PorkLoin", "PorkChop": "Item_Porkchop", "Leg": "Item_Ham"}
+        "Pork": "Item_PorkLoin", "PorkChop": "Item_Porkchop", "Leg": "Item_Ham",
+        # Poultry and rabbit (0.4.34): hot smoke only, but every stage lists every cut.
+        "ChickenLeg": "Item_Chicken", "ChickenWing": "Item_ChickenWing", "ChickenFillet": "Item_ChickenFilet",
+        "ChickenWhole": "Item_ChickenWhole", "TurkeyLeg": "Item_TurkeyLeg", "TurkeyWing": "Item_TurkeyWing",
+        "TurkeyFillet": "Item_TurkeyFilet", "TurkeyWhole": "Item_TurkeyWhole", "Rabbit": "Item_Rabbitmeat"}
 # The raw Leg of Pork (6a): vanilla's Ham icon, and its ground model's texture, pulled back to raw pork pink.
 RAW_LEG = ((226, 150, 140), 0.7)
 SALTED = {"SaltPacked": ((236, 232, 224), 0.35), "SaltCured": ((128, 54, 44), 0.45),

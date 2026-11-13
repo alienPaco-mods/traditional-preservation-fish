@@ -53,6 +53,8 @@ local function refusal(slot, item, queued)
     if stored:size() > 0 and F.hangKind(stored:get(0):getFullType()) ~= F.hangKind(item:getFullType()) then
         return "IGUI_TraditionalPreservationFishMeat_MixedStack"
     end
+    local mixedMeat = stored:size() > 0 and F.mixedMeat(stored:get(0), item)
+    if mixedMeat then return mixedMeat end
     local hanger = F.hangerFor(spriteIndex(entity))
     local porkRefused = F.meatRefusal(hanger, hanger.closed and "Enclosed" or Weather.placeOf(entity), item)
     if porkRefused then return porkRefused end
@@ -101,7 +103,8 @@ local function drawStackTooltip(slot, tooltip, kind)
     local status = isMeat and F.charqueStatus(slot.craftRecipeData:getModData(), ledger)
         or F.stackStatus(isCold, slot.craftRecipeData:getModData(), ledger)
     UI.drawTooltip(tooltip, function(layout)
-        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Method", getText(status.dryCuring and "IGUI_TraditionalPreservationFishMeat_MethodDryCure" or METHODS[kind]))
+        UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_Method", getText(status.hotOnly and "IGUI_TraditionalPreservationFishMeat_MethodHotOnly"
+            or status.dryCuring and "IGUI_TraditionalPreservationFishMeat_MethodDryCure" or METHODS[kind]))
         -- The recipe's output says Charque or Salt Dried whatever the stack is; this says what it is turning into.
         UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_ComesOutAs", F.stackOutcome(slot.craftRecipeData:getModData(),
             slot.craftRecipeData:getAllInputItemsWithFlag("ItemCount"), kind))
@@ -116,7 +119,7 @@ local function drawStackTooltip(slot, tooltip, kind)
         local own = place == "Basement" or place == "Loft" or place == "Sheltered" or place == "Covered"
         local celsius = own and F.ownTemperature(ledger, place) or ledger.temperature or 0
         local word = F.temperatureWord(isCold, celsius, place == "Open")
-        if status.dryCuring then
+        if status.dryCuring or status.hotOnly then
             word = F.dryCureTemperatureWord(status.shedTemperature)
         elseif isMeat then
             word = F.charqueTemperatureWord(celsius)
@@ -139,7 +142,9 @@ local function drawStackTooltip(slot, tooltip, kind)
         end
         -- Smoke so far against the stack's need (F.smokeHours, by its heaviest piece), or why banked
         -- hours don't count today.
-        if modData.smokeFrom and (ledger.temperature or 0) > F.COLD_SMOKE_MAX then
+        if modData.hotOnly then
+            -- Poultry and rabbit take no cold smoke.
+        elseif modData.smokeFrom and (ledger.temperature or 0) > F.COLD_SMOKE_MAX then
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_ColdSmoke", getText("IGUI_TraditionalPreservationFishMeat_ColdSmokeTooWarm"), UI.SLOW_COLOUR)
         elseif modData.smokeFrom or (modData.cold or 0) > 0 then
             UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_ColdSmoke", getText("IGUI_TraditionalPreservationFishMeat_ColdSmokeNeed",
@@ -151,7 +156,7 @@ local function drawStackTooltip(slot, tooltip, kind)
         end
         -- Corned meat left to dry in the shed: what the shed's warmth is taking from it.
         if status.underSalted then
-            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_UnderSalted", UI.say("IGUI_TraditionalPreservationFishMeat_UnderSaltedShed",
+            UI.addLine(layout, "IGUI_TraditionalPreservationFishMeat_UnderSalted", UI.say(status.hotOnly and "IGUI_TraditionalPreservationFishMeat_UnderSaltedHotOnly" or "IGUI_TraditionalPreservationFishMeat_UnderSaltedShed",
                 string.format("%.0f", status.shedTemperature)), UI.WARNING_COLOUR)
         end
     end)

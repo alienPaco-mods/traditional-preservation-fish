@@ -9,7 +9,7 @@
   "Sandbox_TraditionalPreservationFishMeat_MatureDays": "Stockfish maturing time (days)",
   "Sandbox_TraditionalPreservationFishMeat_MatureDays_tooltip": "Days for stockfish to ripen in storage, on its own food clock. A Stockfish Pallet in a loft halves it. Real stockfish matures for 60 to 90.",
   "Sandbox_TraditionalPreservationFishMeat_AgeCutDays": "Dry cured meat ageing time (days)",
-  "Sandbox_TraditionalPreservationFishMeat_AgeCutDays_tooltip": "Days for a dry cured cut (Suho Meso, Bresaola and the rest) to age after it has dried, on its own food clock. Left hanging where it dried, three quarters of that. Aged, it lifts the mood more.",
+  "Sandbox_TraditionalPreservationFishMeat_AgeCutDays_tooltip": "Days for a dry cured cut (Beef (Dry Cured), Mutton (Cold Smoked) and the rest) to age after it has dried, on its own food clock. Left hanging where it dried, three quarters of that. Aged, it lifts the mood more.",
   "Sandbox_TraditionalPreservationFishMeat_AgeHamDays": "Country Ham ageing time (days)",
   "Sandbox_TraditionalPreservationFishMeat_AgeHamDays_tooltip": "Days for a Country Ham to age after it has dried, on its own food clock. Left hanging where it dried, three quarters of that. Real country hams age for six months to a year.",
   "Sandbox_TraditionalPreservationFishMeat_PressDays": "Salt cure time (days)",

@@ -210,7 +210,8 @@ end
 -- FluidAgeing record (kind potted) on the mod's potted ledger }, so one left in a basement for a month catches up
 -- when it is next seen: its age is base plus the record's hours. A powered freezer stops it. Vanilla ages it between
 -- looks at its own rate; each look puts that right.
-F.POTTED_KEEPING = { { 4, 0.5 }, { 15, 1 }, { 25, 60 / 14 } }
+-- Frozen (realism pass, user 2026-11-13) it keeps as in a freezer: from 0.5 at 4 C down to nothing at -2 C.
+F.POTTED_KEEPING = { { -2, 0 }, { 4, 0.5 }, { 15, 1 }, { 25, 60 / 14 } }
 -- The first portion taken lets air under the fat: a third of the keeping left goes, once.
 F.POTTED_OPENED_LOSS = 1 / 3
 F.POTTED_LEDGER_KEY = "TraditionalPreservationFishMeatPotted"

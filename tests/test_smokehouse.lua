@@ -235,12 +235,12 @@ local function meatItem(index)
     return { getFullType = function() return F.DRY_CURED end, getModelIndex = function() return index end,
         getAge = function() return 0 end, getModData = function() return { fishName = "Steak" } end }
 end
-check("a smoked steak is Suho Meso", F.stageName(meatItem(1)) == "Suho Meso")
-check("a mutton chop is Mutton Ham, venison Jerked Venison", F.stageName(meatItem(2)) == "Mutton Ham" and F.stageName(meatItem(3)) == "Jerked Venison")
-check("pork is Smoked Dry Cured Pork, a leg Smoked Country Ham", F.stageName(meatItem(5)) == "Smoked Dry Cured Pork" and F.stageName(meatItem(6)) == "Smoked Country Ham")
+check("a smoked steak is Beef (Cold Smoked)", F.stageName(meatItem(1)) == "Beef (Cold Smoked)")
+check("a mutton chop is Mutton (Cold Smoked), venison Venison (Cold Smoked)", F.stageName(meatItem(2)) == "Mutton (Cold Smoked)" and F.stageName(meatItem(3)) == "Venison (Cold Smoked)")
+check("pork is Pork (Cold Smoked), a leg Smoked Country Ham", F.stageName(meatItem(5)) == "Pork (Cold Smoked)" and F.stageName(meatItem(6)) == "Smoked Country Ham")
 
-check("air dried, beef is Bresaola and a leg plain Country Ham", F.stageName({ getFullType = function() return F.DRY_CURED end,
-    getModelIndex = function() return 0 end, getAge = function() return 0 end, getModData = function() return { airDried = true } end }) == "Bresaola"
+check("air dried, beef is Beef (Dry Cured) and a leg plain Country Ham", F.stageName({ getFullType = function() return F.DRY_CURED end,
+    getModelIndex = function() return 0 end, getAge = function() return 0 end, getModData = function() return { airDried = true } end }) == "Beef (Dry Cured)"
     and F.stageName({ getFullType = function() return F.COUNTRY_HAM end, getModelIndex = function() return F.LEG_INDEX end,
         getAge = function() return 0 end, getModData = function() return { airDried = true } end }) == "Country Ham")
 
@@ -255,16 +255,16 @@ local function list(...)
     return { size = function() return #items end, get = function(_, i) return items[i + 1] end }
 end
 check("Corned beef on a frame in the open is Beef Charque", F.stackOutcome({ dried = 0 }, list(hung(0)), "meat") == "Beef Charque")
-check("Country Cured beef under a roof is Bresaola, a leg Country Ham",
-    F.stackOutcome({ dried = 0, longStack = true, cureNeed = 504 }, list(hung(0, true), hung(F.LEG_INDEX, true)), "meat") == "Bresaola, Country Ham")
-check("Corned mutton in a room dry cures", F.stackOutcome({ dried = 0, sheltered = true, cureNeed = 504 }, list(hung(2)), "meat") == "Dry Cured Mutton")
+check("Country Cured beef under a roof is Beef (Dry Cured), a leg Country Ham",
+    F.stackOutcome({ dried = 0, longStack = true, cureNeed = 504 }, list(hung(0, true), hung(F.LEG_INDEX, true)), "meat") == "Beef (Dry Cured), Country Ham")
+check("Corned mutton in a room dry cures", F.stackOutcome({ dried = 0, sheltered = true, cureNeed = 504 }, list(hung(2)), "meat") == "Mutton (Dry Cured)")
 check("in the Smokehouse with a stoked run counting: Hot Smoked, pork vanilla's Ham",
     F.stackOutcome({ dried = 0, inShed = true, cureNeed = 504, hotNeed = 6, hot = 2 }, list(hung(3), hung(4)), "meat") == "Venison (Hot Smoked), Ham")
-check("with its hours of smoke: Suho Meso", F.stackOutcome({ dried = 0, inShed = true, cureNeed = 504, smokeNeed = 60, cold = 60 }, list(hung(1, true)), "meat") == "Suho Meso")
-check("short of them: Bresaola", F.stackOutcome({ dried = 0, inShed = true, cureNeed = 504, smokeNeed = 60, cold = 20 }, list(hung(1, true)), "meat") == "Bresaola")
+check("with its hours of smoke: Beef (Cold Smoked)", F.stackOutcome({ dried = 0, inShed = true, cureNeed = 504, smokeNeed = 60, cold = 60 }, list(hung(1, true)), "meat") == "Beef (Cold Smoked)")
+check("short of them: Beef (Dry Cured)", F.stackOutcome({ dried = 0, inShed = true, cureNeed = 504, smokeNeed = 60, cold = 20 }, list(hung(1, true)), "meat") == "Beef (Dry Cured)")
 check("each name once", F.stackOutcome({ dried = 0 }, list(hung(0), hung(1), hung(0)), "meat") == "Beef Charque")
 check("a Corned piece lost to under-salting is Rotten, the Country Cured dries on",
-    F.stackOutcome({ dried = 0, inShed = true, cureNeed = 504, underSpoiled = 1 }, list(hung(0), hung(0, true)), "meat") == "Rotten, Bresaola")
+    F.stackOutcome({ dried = 0, inShed = true, cureNeed = 504, underSpoiled = 1 }, list(hung(0), hung(0, true)), "meat") == "Rotten, Beef (Dry Cured)")
 check("a lost stack is Rotten", F.stackOutcome({ dried = 0, spoiled = 1 }, list(hung(0)), "meat") == "Rotten")
 check("fish: Salt Dried, Hot or Cold Smoked in the shed, Stockfish cold dried",
     F.stackOutcome({ dried = 0 }, nil, "salt") == "SaltDriedFish" and F.stackOutcome({ inShed = true, hotNeed = 4, hot = 1 }, nil, "salt") == "HotSmokedFish"
@@ -511,6 +511,99 @@ check("a muggy July loft (over 22 C) spoils salt fish, a cellar and a 21 C porch
     and near(loftSalt.spoiled, 48 / F.SALT_SPOIL_HOURS) and cellarSalt.spoiled == 0 and porchSalt.spoiled == 0
     and F.stackStatus(false, loftSalt, july).spoiling and not F.stackStatus(false, cellarSalt, july).spoiling)
 check("dry curing in the same loft is spared", loftHam.spoiled == 0 and not F.charqueStatus(loftHam, july).spoiling)
+
+-- Poultry and rabbit (0.4.34): hot smoke only. A whole bird counts as its timing weight; a stack never dries, its run
+-- starts again when broken, and it spoils as under-salted meat HOT_ONLY_UNDER_RATE times as fast.
+local function cut(index, weight)
+    local modData = {}
+    return { getActualWeight = function() return weight or 0.27 end, getFullType = function() return F.CURED_MEAT end,
+        getModelIndex = function() return index end, getModData = function() return modData end }
+end
+check("poultry and rabbit are hot-smoke only, red meat isn't", F.isHotOnly(cut(7)) and F.isHotOnly(cut(14)) and F.isHotOnly(cut(15))
+    and not F.isHotOnly(cut(0)) and not F.isHotOnly(cut(F.LEG_INDEX)))
+check("raw by its type too", F.isHotOnly({ getFullType = function() return "Base.TurkeyFillet" end })
+    and not F.isHotOnly({ getFullType = function() return "Base.Steak" end }))
+check("a whole chicken times as 0.4, a turkey 0.5, a cut by its weight", F.timingWeight(cut(10, 1.1)) == 0.4
+    and F.timingWeight(cut(14, 1.2)) == 0.5 and F.timingWeight(cut(8, 0.27)) == 0.27)
+check("a whole chicken cures 38 h and cooks 7, a turkey 48 and 8", near(F.meatPressHours(0.4), 38.4) and near(F.hotHours(true, 0.4), 7)
+    and near(F.meatPressHours(0.5), 48) and near(F.hotHours(true, 0.5), 8))
+local bird = {}
+F.startSmoke(bird, list(cut(10, 1.1), cut(7)), true)
+check("a bird's stack is hot-only, under-salted, timed by the whole bird", bird.hotOnly and bird.underCured and bird.allUnder
+    and near(bird.hotNeed, 7) and not bird.noHot)
+local redStack = {}
+F.startSmoke(redStack, list(cut(0, 0.45)), true)
+check("a red meat stack isn't", not redStack.hotOnly)
+check("poultry hangs only in the Smokehouse", F.meatRefusal({ closed = true }, "Enclosed", cut(7)) == nil
+    and F.meatRefusal({}, "Covered", cut(7)) == "IGUI_TraditionalPreservationFishMeat_HotOnlySmokehouse"
+    and F.meatRefusal({}, "Basement", cut(15)) == "IGUI_TraditionalPreservationFishMeat_HotOnlySmokehouse")
+check("and apart from red meat", F.mixedMeat(cut(7), cut(0)) == "IGUI_TraditionalPreservationFishMeat_MixedMeat"
+    and F.mixedMeat(cut(0), cut(15)) == "IGUI_TraditionalPreservationFishMeat_MixedMeat"
+    and F.mixedMeat(cut(7), cut(14)) == nil and F.mixedMeat(cut(0), cut(1)) == nil)
+check("the long cure refuses it", not F.canCountryCure(cut(9)) and F.canCountryCure(cut(0))
+    and F.recipeRefusal(F.LONG_CURE_RECIPE, cut(9)) == "IGUI_TraditionalPreservationFishMeat_HotOnlyShortCure"
+    and F.recipeRefusal("PressSaltedMeat", cut(9)) == nil)
+
+local birdShed = F.newLedger(0)
+bird.dried, bird.spoiled, bird.stackId, bird.inShed = 0, 0, 1, true
+bird.lastDryCure, bird.lastUnderCure, bird.lastSaltSpoil = 0, 0, 0
+bird.lastHotOnlyUnder = 0
+local birdFire = {}
+Hearth.logFire(birdFire, 800, nil, nil)
+F.smokeStep(bird, birdFire, birdShed)
+F.advance(birdShed, 24, { temperature = 0, humidity = 0.3, precipitation = 0, wind = 0 })
+F.charqueStep(bird, birdShed)
+F.smokeStep(bird, birdFire, birdShed)
+check("a bird's stack never dries", bird.dried == 0)
+check("and spoils faster than red meat, slowly while frozen (0 C is not thawed)", near(bird.underSpoiled, 24 * F.hotOnlyUnderRate(0))
+    and near(F.hotOnlyUnderRate(0), F.underCureRate(0) * F.HOT_ONLY_UNDER_RATE))
+check("above freezing poultry rots within 14 days, red meat within 6 weeks, however cool", near(F.hotOnlyUnderRate(1), 1 / (14 * 24))
+    and near(F.underCureRate(1), 1 / (42 * 24)) and F.underCureRate(-5) < 1 / (42 * 24) * 0.2)
+check("warm air goes by the curve", near(F.hotOnlyUnderRate(20), F.underCureRate(20) * F.HOT_ONLY_UNDER_RATE))
+local warmBird = { hotOnly = true, underCured = true, dried = 0, inShed = true, cureNeed = 504, lastDryCure = 0, lastUnderCure = 0, lastHotOnlyUnder = 0 }
+local warmShed = F.newLedger(0)
+F.charqueStep(warmBird, warmShed)
+F.advance(warmShed, 24, { temperature = 20, humidity = 0.3, precipitation = 0, wind = 0 })
+F.charqueStep(warmBird, warmShed)
+check("at 20 C the shed's rate is faster than the floor: rotten in about 2.4 days", near(warmBird.underSpoiled, 24 * F.underCureRate(20) * F.HOT_ONLY_UNDER_RATE)
+    and near(1 / (F.underCureRate(20) * F.HOT_ONLY_UNDER_RATE) / 24, 2.4))
+Hearth.logFire(birdFire, 801, Hearth.STOKED, 900)
+Hearth.logFire(birdFire, 805, Hearth.BANKED, 900)
+F.advance(birdShed, 4, { temperature = 0, humidity = 0.3, precipitation = 0, wind = 0 })
+F.smokeStep(bird, birdFire, birdShed)
+check("stoked, it still doesn't dry", bird.dried == 0 and near(bird.hot, 4) and not F.hotDone(bird))
+Hearth.logFire(birdFire, 807, Hearth.BANKED, 900)
+Hearth.logFire(birdFire, 808, Hearth.STOKED, 900)
+Hearth.logFire(birdFire, 815, Hearth.STOKED, 900)
+F.smokeStep(bird, birdFire, birdShed)
+check("a broken run starts again, and seven stoked hours in a row cook it", near(bird.hot, 7) and F.hotDone(bird))
+check("its outcome is always the cook, named by the cut", F.stackOutcome({ inShed = true, hotOnly = true, hotNeed = 7, hot = 0 },
+    list(cut(10), cut(15)), "meat") == "ChickenWhole (Hot Smoked), Rabbitmeat (Hot Smoked)")
+check("or Rotten", F.stackOutcome({ inShed = true, hotOnly = true, allUnder = true, underSpoiled = 1 }, list(cut(7)), "meat") == "Rotten")
+local waiting = F.charqueStatus({ hotOnly = true, hotNeed = 7, hot = 0, underSpoiled = 0.2 }, { temperature = 5 })
+local cooking = F.charqueStatus({ hotOnly = true, hotNeed = 7, hot = 3.5, burning = Hearth.STOKED }, { temperature = 5 })
+check("its popup waits for a stoked fire, then counts the cook", waiting.hotOnly and waiting.reason == "NeedsStoking"
+    and waiting.progress == 0 and near(waiting.spoiled, 0.2) and waiting.underSalted and not waiting.dryCuring
+    and near(cooking.progress, 0.5) and near(cooking.hoursLeft, 3.5) and cooking.reason == nil and cooking.shedTemperature == 25)
+check("Hot Smoked poultry keeps the cut's name", F.stageName({ getFullType = function() return F.HOT_MEAT end,
+    getModelIndex = function() return 12 end, getAge = function() return 0 end, getModData = function() return {} end }) == "TurkeyWings (Hot Smoked)")
+
+-- A rinsed Corned piece spoils 1 / RINSED_KEEPING as fast; the stack goes with its slowest piece.
+local function rinsedCut(index, rinsed, longCure)
+    local data = { rinsed = rinsed, longCure = longCure }
+    return { getActualWeight = function() return 0.27 end, getFullType = function() return F.CURED_MEAT end,
+        getModelIndex = function() return index end, getModData = function() return data end }
+end
+local rinsedStack = {}
+F.startSmoke(rinsedStack, list(rinsedCut(0, true), rinsedCut(1, false)), true)
+check("a stack of rinsed and plain Corned goes with the plain one", rinsedStack.underScale == 1)
+local allRinsed = {}
+F.startSmoke(allRinsed, list(rinsedCut(0, true), rinsedCut(1, true)), true)
+check("all rinsed: the stack spoils 1/0.9 as fast", near(allRinsed.underScale, 1 / F.RINSED_KEEPING))
+allRinsed.underSpoiled = 0.92
+check("so it is lost at 0.9 of the plain stack's spoiling", F.stackRotten(allRinsed) and not F.stackRotten({ allUnder = true, underSpoiled = 0.92 }))
+check("each piece by its own rinse, none from a Country Cured one", near(F.underLoss(rinsedCut(0, true), { underSpoiled = 0.45 }), 0.5)
+    and F.underLoss(rinsedCut(0, false), { underSpoiled = 0.45 }) == 0.45 and F.underLoss(rinsedCut(0, true, true), { underSpoiled = 0.45 }) == 0)
 
 -- A leg's stoked hours are smoke at once.
 local legFire = {}

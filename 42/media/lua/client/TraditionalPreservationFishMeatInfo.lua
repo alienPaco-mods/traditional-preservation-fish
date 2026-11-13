@@ -35,7 +35,8 @@ function Info.batch(kind, modData, ledger, now)
     local isCold, isMeat = kind == "cold", kind == "meat"
     local status = isPress and F.pressStatus(modData, now, ledger)
         or isMeat and F.charqueStatus(modData, ledger) or F.stackStatus(isCold, modData, ledger)
-    local row = { name = status.dryCuring and KEY .. "InfoDryCure" or KIND_NAMES[kind], progress = status.progress, notes = {} }
+    local row = { name = status.hotOnly and KEY .. "InfoHotOnly" or status.dryCuring and KEY .. "InfoDryCure" or KIND_NAMES[kind],
+        progress = status.progress, notes = {} }
     local share = UI.percent(status.progress)
     if status.reason then
         row.value, row.slow = UI.say(KEY .. "InfoShare", share, getText(KEY .. "Stopped" .. status.reason)), true
@@ -58,7 +59,7 @@ function Info.batch(kind, modData, ledger, now)
         row.slow = true
     end
     if status.underSalted then
-        table.insert(row.notes, UI.say(KEY .. "UnderSaltedShed", string.format("%.0f", status.shedTemperature)))
+        table.insert(row.notes, UI.say(KEY .. (status.hotOnly and "UnderSaltedHotOnly" or "UnderSaltedShed"), string.format("%.0f", status.shedTemperature)))
         row.slow = true
     end
     if isPress then return row end
@@ -66,7 +67,7 @@ function Info.batch(kind, modData, ledger, now)
     if F.cookShare(modData) then
         table.insert(row.notes, UI.say(KEY .. "InfoCooking", string.format("%.1f", modData.hot), string.format("%.0f", modData.hotNeed)))
     end
-    if modData.smokeFrom or (modData.cold or 0) > 0 then
+    if not modData.hotOnly and (modData.smokeFrom or (modData.cold or 0) > 0) then
         table.insert(row.notes, UI.say(KEY .. "ColdSmokeNeed", string.format("%.1f", modData.cold or 0), string.format("%.0f", F.coldNeed(modData))))
     end
     return row

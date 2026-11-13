@@ -218,6 +218,7 @@ end
 -- Firebox's fire on two counters: hot, the hours of the stoked session now running (TP Core's Hearth.logFire), and
 -- cold, banked hours and the hours of stoked sessions that broke off. Hot reaching the stack's need finishes it at
 -- once as Hot Smoked; short of that it dries on as the Smokehouse always does, and keeps cold for Cold Smoked (5d).
+-- Poultry and rabbit (hotOnly, 0.4.34) never dry: a broken run starts again, and the stack spoils until a cook ends it.
 -- The need goes by the heaviest piece, as the press does: a cook is one unbroken run (real hot smoked fish must reach
 -- 63 C inside and hold it).
 F.HOT_FISH_HOURS = { { 1.1, 4 }, { 2.2, 6 } }
@@ -254,15 +255,20 @@ end
 function F.startSmoke(modData, items, isMeat)
     local heaviest = 0
     modData.noHot, modData.underCured, modData.allUnder, modData.longStack = nil, nil, isMeat or nil, nil
+    modData.hotOnly, modData.underScale = nil, nil
     for i = 0, items:size() - 1 do
         local item = items:get(i)
-        heaviest = math.max(heaviest, item:getActualWeight())
+        heaviest = math.max(heaviest, F.timingWeight(item))
         if isMeat then
             if F.isLeg(item) then modData.noHot = true end
+            if F.isHotOnly(item) then modData.hotOnly = true end
             if item:getModData().longCure then
                 modData.allUnder, modData.longStack = nil, true
             else
                 modData.underCured = true
+                -- The stack as a whole goes when its slowest Corned piece does: rinsed only if every one was.
+                local scale = item:getModData().rinsed and 1 / F.RINSED_KEEPING or 1
+                modData.underScale = math.min(modData.underScale or scale, scale)
             end
         end
     end
@@ -287,7 +293,9 @@ end
 -- How much more under-salted meat spoiled an hour by a banked and by a stoked fire than with the fire out, since the
 -- stack's last look (hours of the ledger's clock), as sinceLast's gains.
 local function underGains(modData, ledger, hours)
-    local base, banked, stoked = ledger.underCure or 0, ledger.underCureBanked or 0, ledger.underCureStoked or 0
+    -- Poultry and rabbit go by their own totals (faster, F.hotOnlyUnderRate).
+    local prefix = modData.hotOnly and "hotOnlyUnder" or "underCure"
+    local base, banked, stoked = ledger[prefix] or 0, ledger[prefix .. "Banked"] or 0, ledger[prefix .. "Stoked"] or 0
     local bankedGain, stokedGain = 0, 0
     if hours > 0 then
         local plain = base - (modData.lastUnderBase or base)
@@ -375,7 +383,9 @@ function F.smokeStep(modData, fire, ledger)
     end
     banked = math.max(banked, 0)
     modData.cold = modData.cold + banked * coolShare
-    if modData.dried then modData.dried = modData.dried + math.max(stoked, 0) * stokedGain + banked * bankedGain end
+    if modData.dried and not modData.hotOnly then
+        modData.dried = modData.dried + math.max(stoked, 0) * stokedGain + banked * bankedGain
+    end
     if modData.underCured then
         modData.underSpoiled = (modData.underSpoiled or 0) + math.max(stoked, 0) * underStoked + banked * underBanked
     end
@@ -414,7 +424,7 @@ F.hotStations = {}
 -- Swaps a finished stack's outputs, already in the chamber's slots (the engine makes them before OnCreate), for
 -- smoked ones made from its inputs: fishType for fish, meatType for meat (Hot Smoked, or Cold Smoked and Dry Cured).
 -- Of the meat, hot smoked pork is vanilla's Ham and a dried leg a Country Ham; airDried marks Dry Cured meat that
--- had too little smoke (Bresaola, plain Country Ham). Corned pieces take the stack's under-salted spoilage.
+-- had too little smoke (Beef (Dry Cured), plain Country Ham). Corned pieces take the stack's under-salted spoilage.
 local function smokedMeatType(input, meatType)
     if meatType == F.HOT_MEAT then return F.isPork(input) and not F.isLeg(input) and F.VANILLA_HAM or meatType end
     return F.isLeg(input) and F.COUNTRY_HAM or meatType
@@ -425,7 +435,7 @@ end
 function F.smokedItem(input, modData, fishType, meatType, airDried)
     local isMeat = input:getFullType() == F.CURED_MEAT
     local lost = modData.spoiled or 0
-    if isMeat and not input:getModData().longCure then lost = lost + (modData.underSpoiled or 0) end
+    if isMeat then lost = lost + F.underLoss(input, modData) end
     if lost >= 1 then return F.rottenStage(input, modData) end
     local hot = instanceItem(isMeat and smokedMeatType(input, meatType) or fishType)
     if hot:getFullType() == F.VANILLA_HAM then

@@ -1,0 +1,289 @@
+/* Written by tools/build_standins.py: don't edit by hand. Dish stand-ins by stage and animal. */
+module TraditionalPreservationFishMeat
+{
+    imports
+    {
+        Base,
+    }
+
+    item HotSmokedMeatIngredient_Beef
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HotSmoked_Beef,
+        FoodType = Beef,
+        EvolvedRecipeName = Beef,
+    }
+
+    item HotSmokedMeatIngredient_Mutton
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HotSmoked_Mutton,
+        FoodType = Meat,
+        EvolvedRecipeName = Mutton,
+    }
+
+    item HotSmokedMeatIngredient_Venison
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HotSmoked_Venison,
+        FoodType = Venison,
+        EvolvedRecipeName = Venison,
+    }
+
+    item HotSmokedMeatIngredient_Chicken
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HotSmoked_ChickenLeg,
+        FoodType = Poultry,
+        EvolvedRecipeName = Chicken,
+    }
+
+    item HotSmokedMeatIngredient_Turkey
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HotSmoked_TurkeyLeg,
+        FoodType = Poultry,
+        EvolvedRecipeName = Turkey,
+    }
+
+    item HotSmokedMeatIngredient_Rabbit
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HotSmoked_Rabbit,
+        FoodType = Game,
+        EvolvedRecipeName = Rabbit,
+    }
+
+    item DryCuredMeatIngredient_Beef
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = DryCured_Beef,
+        FoodType = Beef,
+        EvolvedRecipeName = Beef,
+    }
+
+    item DryCuredMeatIngredient_Mutton
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = DryCured_Mutton,
+        FoodType = Meat,
+        EvolvedRecipeName = Mutton,
+    }
+
+    item DryCuredMeatIngredient_Venison
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = DryCured_Venison,
+        FoodType = Venison,
+        EvolvedRecipeName = Venison,
+    }
+
+    item DryCuredMeatIngredient_Pork
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = DryCured_Pork,
+        FoodType = Meat,
+        EvolvedRecipeName = Pork,
+    }
+
+    item SoakedCharqueIngredient_Beef
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = SoakedCharque_Beef,
+        FoodType = Beef,
+        EvolvedRecipeName = Beef,
+    }
+
+    item SoakedCharqueIngredient_Mutton
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = SoakedCharque_Mutton,
+        FoodType = Meat,
+        EvolvedRecipeName = Mutton,
+    }
+
+    item SoakedCharqueIngredient_Venison
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = SoakedCharque_Venison,
+        FoodType = Venison,
+        EvolvedRecipeName = Venison,
+    }
+
+    item HotSmokedMeatSliceIngredient_Beef
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HamSlices,
+        FoodType = Beef,
+        EvolvedRecipeName = Beef,
+    }
+
+    item HotSmokedMeatSliceIngredient_Mutton
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HamSlices,
+        FoodType = Meat,
+        EvolvedRecipeName = Mutton,
+    }
+
+    item HotSmokedMeatSliceIngredient_Venison
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HamSlices,
+        FoodType = Venison,
+        EvolvedRecipeName = Venison,
+    }
+
+    item DryCuredMeatSliceIngredient_Beef
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HamSlices,
+        FoodType = Beef,
+        EvolvedRecipeName = Beef,
+    }
+
+    item DryCuredMeatSliceIngredient_Mutton
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HamSlices,
+        FoodType = Meat,
+        EvolvedRecipeName = Mutton,
+    }
+
+    item DryCuredMeatSliceIngredient_Venison
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HamSlices,
+        FoodType = Venison,
+        EvolvedRecipeName = Venison,
+    }
+
+    item DryCuredMeatSliceIngredient_Pork
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HamSlices,
+        FoodType = Meat,
+        EvolvedRecipeName = Pork,
+    }
+
+    item ColdSmokedMeatIngredient_Beef
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = DryCured_Beef,
+        FoodType = Beef,
+        EvolvedRecipeName = Beef,
+    }
+
+    item ColdSmokedMeatIngredient_Mutton
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = DryCured_Mutton,
+        FoodType = Meat,
+        EvolvedRecipeName = Mutton,
+    }
+
+    item ColdSmokedMeatIngredient_Venison
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = DryCured_Venison,
+        FoodType = Venison,
+        EvolvedRecipeName = Venison,
+    }
+
+    item ColdSmokedMeatIngredient_Pork
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = DryCured_Pork,
+        FoodType = Meat,
+        EvolvedRecipeName = Pork,
+    }
+
+    item ColdSmokedMeatSliceIngredient_Beef
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HamSlices,
+        FoodType = Beef,
+        EvolvedRecipeName = Beef,
+    }
+
+    item ColdSmokedMeatSliceIngredient_Mutton
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HamSlices,
+        FoodType = Meat,
+        EvolvedRecipeName = Mutton,
+    }
+
+    item ColdSmokedMeatSliceIngredient_Venison
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HamSlices,
+        FoodType = Venison,
+        EvolvedRecipeName = Venison,
+    }
+
+    item ColdSmokedMeatSliceIngredient_Pork
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = HamSlices,
+        FoodType = Meat,
+        EvolvedRecipeName = Pork,
+    }
+
+}

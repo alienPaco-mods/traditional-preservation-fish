@@ -1,5 +1,25 @@
 {
   "TraditionalPreservationFishMeat.HotSmokedMeatSlice": "Smoked Meat",
   "TraditionalPreservationFishMeat.DryCuredMeatSlice": "Dry Cured Meat",
-  "TraditionalPreservationFishMeat.CountryHamSlice": "Country Ham"
+  "TraditionalPreservationFishMeat.CountryHamSlice": "Country Ham",
+  "TraditionalPreservationFishMeat.HotSmokedMeatIngredient_Beef": "Beef",
+  "TraditionalPreservationFishMeat.HotSmokedMeatIngredient_Mutton": "Mutton",
+  "TraditionalPreservationFishMeat.HotSmokedMeatIngredient_Venison": "Venison",
+  "TraditionalPreservationFishMeat.HotSmokedMeatIngredient_Chicken": "Chicken",
+  "TraditionalPreservationFishMeat.HotSmokedMeatIngredient_Turkey": "Turkey",
+  "TraditionalPreservationFishMeat.HotSmokedMeatIngredient_Rabbit": "Rabbit",
+  "TraditionalPreservationFishMeat.DryCuredMeatIngredient_Beef": "Beef",
+  "TraditionalPreservationFishMeat.DryCuredMeatIngredient_Mutton": "Mutton",
+  "TraditionalPreservationFishMeat.DryCuredMeatIngredient_Venison": "Venison",
+  "TraditionalPreservationFishMeat.DryCuredMeatIngredient_Pork": "Pork",
+  "TraditionalPreservationFishMeat.SoakedCharqueIngredient_Beef": "Beef",
+  "TraditionalPreservationFishMeat.SoakedCharqueIngredient_Mutton": "Mutton",
+  "TraditionalPreservationFishMeat.SoakedCharqueIngredient_Venison": "Venison",
+  "TraditionalPreservationFishMeat.HotSmokedMeatSliceIngredient_Beef": "Beef",
+  "TraditionalPreservationFishMeat.HotSmokedMeatSliceIngredient_Mutton": "Mutton",
+  "TraditionalPreservationFishMeat.HotSmokedMeatSliceIngredient_Venison": "Venison",
+  "TraditionalPreservationFishMeat.DryCuredMeatSliceIngredient_Beef": "Beef",
+  "TraditionalPreservationFishMeat.DryCuredMeatSliceIngredient_Mutton": "Mutton",
+  "TraditionalPreservationFishMeat.DryCuredMeatSliceIngredient_Venison": "Venison",
+  "TraditionalPreservationFishMeat.DryCuredMeatSliceIngredient_Pork": "Pork"
 }

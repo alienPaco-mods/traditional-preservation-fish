@@ -3,7 +3,8 @@
 -- Country Ham is carved: CARVE_SLICES slices of CARVE_HUNGER in all come off and the ham stays, lighter, on its own
 -- long clock, until the last carving takes what is left: fifteen slices from a leg in three carvings. A
 -- slice takes its share of the piece's food and mood, keeps half the piece's days (its script) and starts as far
--- through them as the piece was. Hot smoked pork is vanilla's Ham, which vanilla slices.
+-- through them as the piece was. Hot smoked pork is vanilla's Ham, which vanilla slices. Hot smoked poultry and
+-- rabbit aren't sliced; a whole bird is carved into vanilla's six cuts.
 TraditionalPreservationFishMeat = TraditionalPreservationFishMeat or {}
 local F = TraditionalPreservationFishMeat
 local Recipes = require "TraditionalPreservationCore/Recipes"
@@ -89,7 +90,54 @@ function F.canCarveLast(item)
     return item:getFullType() ~= HAM or not F.carvesOn(item)
 end
 
+-- Hot smoked poultry and rabbit (0.4.34) aren't sliced: the cuts are eaten as they are, and a whole bird is carved
+-- (Carve Chicken / Turkey (Hot Smoked)). OnTest sees the knife too.
+function F.canSliceHot(item)
+    return item:getFullType() ~= "TraditionalPreservationFishMeat.HotSmokedMeat" or not F.isHotOnly(item)
+end
+
+-- Whether this is a whole hot smoked bird of the MEAT_CUTS index wanted.
+local function wholeBird(item, index)
+    return item:getFullType() ~= "TraditionalPreservationFishMeat.HotSmokedMeat" or item:getModelIndex() == index
+end
+
+function F.canCarveChicken(item)
+    return wholeBird(item, 10)
+end
+
+function F.canCarveTurkey(item)
+    return wholeBird(item, 14)
+end
+
 local created = Recipes.created
+
+-- Carve Chicken / Turkey (Hot Smoked): the script's six pieces become 2 legs, 2 wings and 2 fillets (WHOLE_BIRDS),
+-- sharing the bird's food by the vanilla cuts' hunger and weighing CARVE_BIRD_SHARE of it in all, as vanilla's Cut
+-- Chicken does; each keeps the bird's mood, salt, age and rinse.
+function F.onCreateBirdCarved(craftRecipeData)
+    local bird = craftRecipeData:getAllInputItemsWithFlag("ItemCount"):get(0)
+    local cuts = F.WHOLE_BIRDS[bird:getModelIndex()]
+    local pieces = created(craftRecipeData)
+    if not cuts then return end
+    local hungers, total = {}, 0
+    for n, index in ipairs(cuts) do
+        hungers[n] = math.abs(instanceItem(F.MEAT_CUTS[index + 1]):getHungChange())
+        total = total + 2 * hungers[n]
+    end
+    for i, piece in ipairs(pieces) do
+        local n = math.floor((i - 1) / 2) + 1
+        local share = hungers[n] / total
+        F.copyFood(bird, piece, share)
+        for _, field in ipairs(EXTRAS) do piece["set" .. field](piece, extra(bird, field) * share) end
+        piece:setActualWeight(bird:getActualWeight() * share * F.CARVE_BIRD_SHARE)
+        piece:setCustomWeight(true)
+        piece:setAge(bird:getAge())
+        piece:setModelIndex(cuts[n])
+        local modData, birdData = piece:getModData(), bird:getModData()
+        modData.rinsed, modData.stackId, modData.style = birdData.rinsed, birdData.stackId, birdData.style
+        F.rename(piece)
+    end
+end
 
 -- Slice Hot Smoked Meat and Slice Dry Cured Meat: the whole cut, in as many slices as it holds. The recipe makes
 -- MIN_SLICES; the rest go straight to the character.

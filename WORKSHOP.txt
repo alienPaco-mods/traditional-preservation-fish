@@ -11,8 +11,8 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [tr][th]Road[/th][th]Fish[/th][th]Meat[/th][th]Season[/th][th]Keeps[/th][/tr]
 [tr][td]Salt and dry[/td][td]Salt Dried fish[/td][td]Charque (beef, mutton, venison)[/td][td]Any for fish, summer for charque[/td][td]4 to 6 months[/td][/tr]
 [tr][td]Freeze-dry in the wind[/td][td]Stockfish[/td][td]-[/td][td]Winter[/td][td]A year to a year and a half[/td][/tr]
-[tr][td]Hot smoke[/td][td]Hot Smoked fish[/td][td]Hot Smoked meat[/td][td]Any[/td][td]1 to 2 weeks, ready to eat[/td][/tr]
-[tr][td]Cold smoke[/td][td]Cold Smoked fish[/td][td]Suho Meso, Mutton Ham, Jerked Venison, smoked pork, Smoked Country Ham[/td][td]Cool months[/td][td]4 to 6 months, ready to eat[/td][/tr]
+[tr][td]Hot smoke[/td][td]Hot Smoked fish[/td][td]Hot Smoked meat, chicken, turkey and rabbit[/td][td]Any[/td][td]1 to 2 weeks, ready to eat[/td][/tr]
+[tr][td]Cold smoke[/td][td]Cold Smoked fish[/td][td]Beef, Mutton, Venison and Pork (Cold Smoked), Smoked Country Ham[/td][td]Cool months[/td][td]4 to 6 months, ready to eat[/td][/tr]
 [tr][td]Under fat[/td][td]-[/td][td]Potted Meat (pork too)[/td][td]Any[/td][td]Weeks to months, by where you keep it[/td][/tr]
 [/table]
 
@@ -63,8 +63,9 @@ Gut Fish (a big one also gives a Fish Head), split it if it's over 2.5 weight, a
 [*]Inside it's always [b]In a shed[/b]: no rain, no wind, the day's temperature (the power grid doesn't warm it), about two thirds of the open drying speed. No stockfish: gutted fish need moving air. The tile in front of its door must stay clear.
 [*][b]Connect the Firebox[/b] (from TP Core) on a tile beside it: a clay pipe (2 Clay Pipe Segments, 1 Clay, mason's trowel kept) or a stone trench (3 Flat Stones, 2 Clay, shovel kept). Not at the door end, not with the Firebox's door towards the shed, one Firebox a shed, and only with the fire out. Disconnect gives the pipe or stones back.
 [*][b]Hot smoking:[/b] keep the joined Firebox stoked and each salt stack inside counts the hours in a row: 4 to 6 for fish, 6 to 8 for meat, by the heaviest piece. Then it comes out Hot Smoked: cooked, ready to eat, 1 to 2 weeks' keeping. Banking the fire for up to an hour doesn't break the run. Pork comes out as a Ham you can slice. Stop sooner and fish dries on as Salt Dried; corned meat must get its cook, or it spoils in the shed.
-[*][b]Cold smoking:[/b] bank the Firebox to a smoulder. Banked hours, and stoked runs that broke off, count as smoke on days of 15 C or less. With its hours of smoke (a day or two for fish, 60 hours for cuts, 120 for a leg, by the heaviest piece) a stack comes out Cold Smoked fish, or the old smoked meats: Suho Meso from beef, Mutton Ham, Jerked Venison, Smoked Dry Cured Pork, Smoked Country Ham from a leg. Dry, ready to eat sliced thin, 4 to 6 months' keeping. A burning fire also warms the shed, so it dries faster even in frost.
-[*][b]Dry curing:[/b] meat hung in the Smokehouse is never charque. Country cured, it dries slowly in cool air: 3 weeks at best for a cut, 6 for a leg, longer in frost. Without smoke it comes out air dried: Bresaola, Dry Cured Mutton, Venison or Pork, and a Country Ham from a leg, which keeps half a year to a year. No Smokehouse yet? Country cured meat dries the same way on any drying station under a roof, on a Frame or Beam indoors, and in a basement by the cellar's own temperature: about a month for a cut from June to October, two to three months in midwinter, twice that for a leg.
+[*][b]Hot smoked poultry and rabbit:[/b] chicken and turkey cuts, whole birds and rabbit take a light brine (Corn Salted Meat; a whole chicken 38 hours, a turkey 48) and then a hot cook in the Smokehouse, nothing else: no charque, dry curing or cold smoke, as on the real farm. A stack only waits for its stoked hours (a cut about 6, a whole bird 7 to 8) and spoils until it gets them. Carve Chicken (Hot Smoked) and Carve Turkey (Hot Smoked) cut a smoked bird into legs, wings and fillets.
+[*][b]Cold smoking:[/b] bank the Firebox to a smoulder. Banked hours, and stoked runs that broke off, count as smoke on days of 15 C or less. With its hours of smoke (a day or two for fish, 60 hours for cuts, 120 for a leg, by the heaviest piece) a stack comes out Cold Smoked fish, or smoked dry cured meat named by its animal: Beef, Mutton, Venison or Pork (Cold Smoked), and Smoked Country Ham from a leg. Dry, ready to eat sliced thin, 4 to 6 months' keeping. A burning fire also warms the shed, so it dries faster even in frost.
+[*][b]Dry curing:[/b] meat hung in the Smokehouse is never charque. Country cured, it dries slowly in cool air: 3 weeks at best for a cut, 6 for a leg, longer in frost. Without smoke it comes out air dried: Beef, Mutton, Venison or Pork (Dry Cured), and a Country Ham from a leg, which keeps half a year to a year. No Smokehouse yet? Country cured meat dries the same way on any drying station under a roof, on a Frame or Beam indoors, and in a basement by the cellar's own temperature: about a month for a cut from June to October, two to three months in midwinter, twice that for a leg.
 [*][b]Ageing:[/b] dry cured meat ages after it has dried: 30 days for a cut, 90 for a Country Ham, or three quarters of that if you leave it hanging where it dried (once taken down it can't go back up). Aged meat lifts the mood more, and an aged Country Ham takes the boredom off too.
 [*][b]Slices:[/b] slice a dry cured or hot smoked cut (2 to 6 slices by its size), or carve a Country Ham 5 slices at a time, 15 from a leg, and keep the rest on the bone. Slices go wherever Ham Slices go (sandwiches, pizza, salads, the pot) and keep half as long as the whole piece.
 [*]A smoked ham hangs by the door while finished stacks wait inside.
@@ -100,7 +101,7 @@ Days are fresh, then rotten.
 [list]
 [*][b]Packed, Salt Cured, Corned, Country Cured, gutted fish and halves, fresh fat:[/b] raw, so cook them first or risk getting sick
 [*][b]Stockfish and charque:[/b] can't be eaten until rehydrated
-[*][b]Salt Dried, Hot and Cold Smoked, Suho Meso, Bresaola and the other dry cured meats, Country Ham, soaked fish, Potted Meat:[/b] ready as they are
+[*][b]Salt Dried, Hot and Cold Smoked, the dry cured meats, Country Ham, soaked fish, Potted Meat:[/b] ready as they are
 [/list]
 
 [h2]A little history[/h2]

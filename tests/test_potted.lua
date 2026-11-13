@@ -209,7 +209,8 @@ end
 for _, item in ipairs({ cellar, cold, fridge, freezer, warm }) do F.keepCrock(item, 240, nil, ledger) end
 check("ten days in a basement age it by the basement's own warmth", near(cellar.age, 10 * F.pottedRate("Basement", ledger), 1e-6)
     and cellar.age < warm.age)
-check("ten days outdoors at 0 C age it five", near(cold.age, 5, 1e-6))
+check("ten days outdoors at 0 C age it a sixth of that, frozen hard nothing", near(cold.age, 10 / 6, 1e-6)
+    and F.pottedRate("Open", { temperature = -2 }) == 0 and F.pottedRate("Open", { temperature = -10 }) == 0)
 check("ten days in a fridge age it five, by the clock", near(fridge.age, 5, 1e-6))
 check("a freezer stops it", near(freezer.age, 0))
 -- The ledger's season mean slips a little towards the 0 C days each hour, so a room reads a hair under 25 C.
@@ -218,10 +219,12 @@ ledger.seasonTemperature, ledger.groundTemperature = 25, 23.125
 check("so a summer basement (15 C) keeps it about 55 days, the cold 120, a warm room 14",
     near(F.pottedRate("Basement", ledger), 1.08, 0.01) and near(F.pottedRate("Fridge", ledger), 0.5)
     and near(60 / F.pottedRate("Sheltered", ledger), 14, 1e-6))
-ledger.seasonTemperature = 15
-check("a room in a 15 C season keeps it as a basement does, not as Weather's 25 C room", near(F.pottedRate("Sheltered", ledger), 1))
+ledger.seasonTemperature = 14
+check("a room in a 14 C season (15 C inside) keeps it as a basement does, not as Weather's 25 C room", near(F.pottedRate("Sheltered", ledger), 1))
 ledger.seasonTemperature = 2
-check("and in a winter season as a fridge", near(F.pottedRate("Sheltered", ledger), 0.5))
+check("and in a 2 C winter season (4 C inside) as a fridge", near(F.pottedRate("Sheltered", ledger), 0.5))
+ledger.seasonTemperature = -4
+check("in a frozen room it keeps as in a freezer", F.pottedRate("Sheltered", ledger) == 0)
 check("an unseen crock keeps counting where it was last seen", cellar.modData.tpfmKeep.record.place == "Basement")
 
 -- The first portion taken costs a third of the keeping left, once

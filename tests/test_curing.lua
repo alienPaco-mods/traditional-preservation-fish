@@ -73,7 +73,8 @@ local function newFood(fullType, values)
     function food:setModelIndex(value) self.modelIndex = value end
     function food:hasTag(tag)
         if tag == ItemTag.SALT then return self.salt == true end
-        local meat = { ["Base.Beef"] = true, ["Base.Steak"] = true, ["Base.MuttonChop"] = true, ["Base.Venison"] = true }
+        local meat = { ["Base.Beef"] = true, ["Base.Steak"] = true, ["Base.MuttonChop"] = true, ["Base.Venison"] = true,
+            ["Base.ChickenWhole"] = true, ["Base.TurkeyLegs"] = true, ["Base.Rabbitmeat"] = true }
         return tag == ItemTag.UNCUT_FISH and self.fullType:sub(1, 5) == "Base." and self.fullType ~= "Base.FishFillet" and not meat[self.fullType]
     end
     function food:setWeight(value) self.weight = value end
@@ -140,24 +141,48 @@ local function pressed(weights)
     for i, weight in ipairs(weights) do fish[i] = newFood("TraditionalPreservationFishMeat.SaltPackedFish", { ActualWeight = weight }) end
     return newRecipeData(RECIPE_TIME, fish)
 end
+-- The tub cures by its place's temperature (0.4.34): the game's ledger, warm here, so hour for hour.
+-- The game's ledger now (a test that clears ModData gets a fresh one).
+local function tubWeather(celsius)
+    local ledger = T.getLedger()
+    ledger.seasonTemperature = celsius
+    T.advance(ledger, hours, { temperature = celsius, humidity = 0.4, precipitation = 0 })
+    return ledger
+end
+tubWeather(15)
 local press = pressed({ 0.4, 3, 0.6 })
 T.onPressStart(press)
-check("the heaviest fish sets the batch's hours", press.modData.pressHours == 48)
+check("the heaviest fish sets the batch's hours", press.modData.pressHours == 48 and press.modData.tubDone == 0)
 hours = hours + T.PRESS_HOURS / 2
+tubWeather(15)
 T.onPressUpdate(press)
 check("half the hours is half the press", near(press.elapsed, RECIPE_TIME / 2))
 hours = hours + 100
+tubWeather(15)
 T.onPressUpdate(press)
 check("time away finishes the press, and no further", press.elapsed == RECIPE_TIME)
 
 local small = pressed({ 0.4, 0.8 })
 T.onPressStart(small)
 hours = hours + 12
+tubWeather(15)
 T.onPressUpdate(small)
 check("a batch of small fish is half done in 12 hours", near(small.elapsed, RECIPE_TIME / 2))
 hours = hours + 12
+tubWeather(15)
 T.onPressUpdate(small)
 check("and done in a day", near(small.elapsed, RECIPE_TIME))
+
+check("the cure's speed: full from 2 C, half at -5, a quarter from -10", T.tubCureRate(2) == 1 and T.tubCureRate(20) == 1
+    and near(T.tubCureRate(-5), 0.5) and near(T.tubCureRate(-10), 0.25) and near(T.tubCureRate(-30), 0.25))
+local frozen = pressed({ 0.4, 0.8 })
+T.onPressStart(frozen)
+hours = hours + 24
+local tubLedger = tubWeather(-5)
+T.onPressUpdate(frozen)
+check("a day at -5 C is half a day's cure", near(frozen.elapsed, RECIPE_TIME / 2))
+local frozenStatus = T.pressStatus(frozen.modData, hours, tubLedger)
+check("its popup counts the rest at that speed", near(frozenStatus.hoursLeft, 24) and near(frozenStatus.rate, 0.5))
 local status = T.pressStatus({ pressStartHour = 100, pressHours = 24 }, 106, T.newLedger(0))
 check("the popup says a small batch's own time left", near(status.hoursLeft, 18) and near(status.progress, 0.25))
 check("a press from before has 12 hours", near(T.pressStatus({ pressStartHour = 100 }, 106, T.newLedger(0)).hoursLeft, 6))
@@ -958,6 +983,46 @@ for _, fullType in ipairs(standinTypes) do
     check(stage .. " goes into dishes", body:find("EvolvedRecipe =", 1, true) ~= nil)
 end
 
+-- Stand-ins by stage and animal (0.4.35): the dish takes the animal's food type and name, not the script's Beef.
+do
+local standinScript = io.open("42/media/scripts/TraditionalPreservationFishMeat_Standins.txt"):read("*a")
+local itemNames = io.open("42/media/lua/shared/Translate/EN/ItemName.json"):read("*a")
+local recipeNames = io.open("42/media/lua/shared/Translate/EN/EvolvedRecipeName.json"):read("*a")
+check("hot smoked venison, chicken and rabbit get their own", T.standinFor("TraditionalPreservationFishMeat.HotSmokedMeat", 3)
+    == "TraditionalPreservationFishMeat.HotSmokedMeatIngredient_Venison" and T.standinFor("TraditionalPreservationFishMeat.HotSmokedMeat", 10)
+    == "TraditionalPreservationFishMeat.HotSmokedMeatIngredient_Chicken" and T.standinFor("TraditionalPreservationFishMeat.HotSmokedMeat", 15)
+    == "TraditionalPreservationFishMeat.HotSmokedMeatIngredient_Rabbit")
+check("cold smoked and dry cured beef apart, a smoked slice too", T.standinFor("TraditionalPreservationFishMeat.DryCuredMeat", 0)
+    == "TraditionalPreservationFishMeat.ColdSmokedMeatIngredient_Beef" and T.standinFor("TraditionalPreservationFishMeat.DryCuredMeat", 0, true)
+    == "TraditionalPreservationFishMeat.DryCuredMeatIngredient_Beef" and T.standinFor("TraditionalPreservationFishMeat.DryCuredMeatSlice", 2)
+    == "TraditionalPreservationFishMeat.ColdSmokedMeatSliceIngredient_Mutton")
+check("dry cured pork, a mutton slice", T.standinFor("TraditionalPreservationFishMeat.DryCuredMeat", 5, true) == "TraditionalPreservationFishMeat.DryCuredMeatIngredient_Pork"
+    and T.standinFor("TraditionalPreservationFishMeat.HotSmokedMeatSlice", 2) == "TraditionalPreservationFishMeat.HotSmokedMeatSliceIngredient_Mutton")
+check("no cut or another item: none", T.standinFor("TraditionalPreservationFishMeat.HotSmokedMeat", nil) == nil
+    and T.standinFor("TraditionalPreservationFishMeat.SaltDriedFish", 0) == nil and T.standinFor("Base.Beef", 0) == nil)
+for stage, animals in pairs({ HotSmokedMeat = { "Beef", "Mutton", "Venison", "Chicken", "Turkey", "Rabbit" },
+        DryCuredMeat = { "Beef", "Mutton", "Venison", "Pork" }, SoakedCharque = { "Beef", "Mutton", "Venison" },
+        HotSmokedMeatSlice = { "Beef", "Mutton", "Venison" }, DryCuredMeatSlice = { "Beef", "Mutton", "Venison", "Pork" } }) do
+    for _, animal in ipairs(animals) do
+        local name = stage .. "Ingredient_" .. animal
+        local body = standinScript:match("item " .. name .. "\n    {(.-)\n    }")
+        check(name .. " is written, named and has no dish of its own", body ~= nil and not body:find("EvolvedRecipe =", 1, true)
+            and itemNames:find('"TraditionalPreservationFishMeat.' .. name .. '"', 1, true) ~= nil
+            and recipeNames:find('"TraditionalPreservationFishMeat.' .. name .. '": "' .. animal .. '"', 1, true) ~= nil)
+    end
+end
+check("venison is Venison food, mutton Meat, chicken Poultry, rabbit Game", standinScript:find("Ingredient_Venison\n    {[^}]-FoodType = Venison") ~= nil
+    and standinScript:find("Ingredient_Mutton\n    {[^}]-FoodType = Meat") ~= nil and standinScript:find("Ingredient_Chicken\n    {[^}]-FoodType = Poultry") ~= nil
+    and standinScript:find("Ingredient_Rabbit\n    {[^}]-FoodType = Game") ~= nil)
+local dishList = { "Base.Carrots", "TraditionalPreservationFishMeat.HotSmokedMeat", "TraditionalPreservationFishMeat.HotSmokedMeat" }
+local dishExtras = { size = function() return #dishList end, get = function(_, i) return dishList[i + 1] end, set = function(_, i, v) dishList[i + 1] = v end }
+local dish = { getExtraItems = function() return dishExtras end }
+check("the newest entry of the piece becomes its animal's", T.useAnimalStandin(dish, "TraditionalPreservationFishMeat.HotSmokedMeat",
+    "TraditionalPreservationFishMeat.HotSmokedMeatIngredient_Venison") and dishList[3] == "TraditionalPreservationFishMeat.HotSmokedMeatIngredient_Venison"
+    and dishList[2] == "TraditionalPreservationFishMeat.HotSmokedMeat")
+check("nothing to swap without a stand-in", not T.useAnimalStandin(dish, "TraditionalPreservationFishMeat.HotSmokedMeat", nil))
+end
+
 -- Fish Head Stock names
 H.texts.ContextMenu_EvolvedRecipe_FishHeadSoup = "Fish Head Soup"
 H.texts.ContextMenu_EvolvedRecipe_and = "and"
@@ -1342,6 +1407,20 @@ check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnT
     check("a leg takes half fish's salt, 10 for 2.5", T.saltFor(leg) == 10 and T.saltFor(newFood("Base.Pork", { ActualWeight = 0.5 })) == 4)
     check("the short cure refuses a leg, not a cut", not T.canCorn(packedLeg) and not T.canCorn(leg) and T.canCorn(pork))
     check("pork is pork, beef is not", T.isPork(pork) and T.isPork(packedLeg) and not T.isPork(packedSteak))
+    -- Poultry and rabbit (0.4.34): their own icons, a brine's salt, Corned for 3 / 6 days
+    local wholeChicken = newFood("Base.ChickenWhole", { ActualWeight = 1.2 })
+    local packedChicken = through(wholeChicken, "SaltPackedMeat")
+    local packedRabbit = through(newFood("Base.Rabbitmeat", { ActualWeight = 0.3 }), "SaltPackedMeat")
+    check("a whole chicken and rabbit take their own icons and names", packedChicken.modelIndex == 10 and packedRabbit.modelIndex == 15
+        and packedChicken.name == "ChickenWhole (Salt Packed)")
+    check("poultry takes a brine's salt, half red meat's", T.saltFor(wholeChicken) == 5 and T.saltFor(newFood("Base.TurkeyLegs", { ActualWeight = 0.3 })) == 2)
+    check("hot-smoke only, never pork", T.isHotOnly(packedChicken) and T.isHotOnly(packedRabbit) and not T.isPork(packedChicken)
+        and not T.isHotOnly(packedSteak))
+    local brine = newRecipeData(RECIPE_TIME, { packedChicken, packedSteak }, { newFood(T.CURED_MEAT, {}), newFood(T.CURED_MEAT, {}) }, "PressSaltedMeat")
+    T.onCreatePressed(brine)
+    local cornedChicken, cornedSteak = brine:getAllCreatedItems():get(0), brine:getAllCreatedItems():get(1)
+    check("Corned poultry keeps 3 / 6 days, the steak its script's", cornedChicken.offAge == 3 and cornedChicken.offAgeMax == 6
+        and cornedSteak.offAge == nil and cornedChicken.name == "ChickenWhole (Corned)")
     local frame, beam, gantry, shed = T.HANGERS[6], T.HANGERS[408], T.HANGERS[410], { closed = true }
     check("pork that isn't Country Cured hangs in the Smokehouse only", T.meatRefusal(frame, "Open", pork) == "IGUI_TraditionalPreservationFishMeat_PorkSmokehouse"
         and T.meatRefusal(frame, "Covered", pork) == "IGUI_TraditionalPreservationFishMeat_PorkSmokehouse"
@@ -1353,6 +1432,7 @@ check("and goes through canRinseInput and onCreateRinsed", rinseRecipe:find("OnT
     check("the long cure: 10 days for cuts, 21 with a leg", longCuts.modData.pressHours == 240 and longLeg.modData.pressHours == 504)
     -- The recipe's time is the leg's 21 days, not the short press's 2: each batch's bar ends on its own hours.
     hours = hours + 240
+    tubWeather(15)
     T.onPressUpdate(longCuts)
     T.onPressUpdate(longLeg)
     check("cuts are cured after their 10 days, a leg 10 days into its 21", near(longCuts.elapsed, T.LONG_LEG_HOURS * 3600)
@@ -1537,19 +1617,19 @@ end)()
     local beef = cut("Base.Beef", { Calories = 440, BaseHunger = -0.8, HungChange = -0.8, ActualWeight = 0.5 }, false)
     check("hot smoked beef is ours", T.smokedItem(beef, {}, T.HOT_FISH, T.HOT_MEAT).name == "Beef (Hot Smoked)")
     local smoked = T.smokedItem(beef, { underSpoiled = 0.5 }, T.COLD_FISH_OUT, T.DRY_CURED, false)
-    check("Corned beef dried in smoke is Suho Meso, half its keeping gone", smoked.name == "Suho Meso" and near(smoked.age, 60))
+    check("Corned beef dried in smoke is Beef (Cold Smoked), half its keeping gone", smoked.name == "Beef (Cold Smoked)" and near(smoked.age, 60))
     local longBeef = cut("Base.Beef", { Calories = 440, BaseHunger = -0.8, HungChange = -0.8, ActualWeight = 0.5 }, true)
     local aired = T.smokedItem(longBeef, { underSpoiled = 0.5 }, T.COLD_FISH_OUT, T.DRY_CURED, true)
-    check("Country Cured beef with no smoke is Bresaola, and the stack's under-salting isn't its own", aired.name == "Bresaola"
+    check("Country Cured beef with no smoke is Beef (Dry Cured), and the stack's under-salting isn't its own", aired.name == "Beef (Dry Cured)"
         and aired.fullType == T.DRY_CURED and aired.age == 0 and near(aired.values.Calories, 396))
-    check("Bresaola's tooltip has no smoke in it, Suho Meso's has; both start ageing", aired.tooltip == "Tooltip_TraditionalPreservationFishMeat_AirDried_0"
+    check("Beef (Dry Cured)'s tooltip has no smoke in it, Beef (Cold Smoked)'s has; both start ageing", aired.tooltip == "Tooltip_TraditionalPreservationFishMeat_AirDried_0"
         and smoked.tooltip == "Tooltip_TraditionalPreservationFishMeat_DryCured_0")
     check("ageing counts from the age it came down with", smoked:getModData().agedFrom == smoked.age and aired:getModData().agedFrom == 0)
     local rotten = T.smokedItem(beef, { underSpoiled = 1.2 }, T.COLD_FISH_OUT, T.DRY_CURED, true)
     check("under-salted meat that rots comes down as the Beef (Corned) that was hung, rotten", rotten.fullType == T.CURED_MEAT
         and rotten.name == "Beef (Corned)" and rotten.age == 180 and near(rotten.values.ActualWeight, beef.values.ActualWeight)
         and near(rotten.values.Calories, 440))
-    check("a Country Cured piece in the same stack is spared", T.smokedItem(longBeef, { underSpoiled = 1.2 }, T.COLD_FISH_OUT, T.DRY_CURED, true).name == "Bresaola")
+    check("a Country Cured piece in the same stack is spared", T.smokedItem(longBeef, { underSpoiled = 1.2 }, T.COLD_FISH_OUT, T.DRY_CURED, true).name == "Beef (Dry Cured)")
     local pressed = newFood("TraditionalPreservationFishMeat.SaltPressedFish", { Calories = 200, ActualWeight = 1 })
     pressed:getModData().fishName = "Walleye"
     local rottenFish = T.rottenStage(pressed)

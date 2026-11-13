@@ -30,14 +30,62 @@ function F.useStandins(dish)
     end
 end
 
+-- Meat stages are one item for every animal, so vanilla would name every dish with them after the script's "Beef".
+-- Once a piece goes in, its entry becomes the stand-in of its stage and animal (tools/build_standins.py), which has
+-- vanilla's food type and name for that animal, and the dish is named again: "Venison Stew" (realism pass, user
+-- 2026-11-13). The animal is the piece's MEAT_CUTS index (a slice's is its modData.cut). Pairs the game can't make,
+-- and a piece with no cut, keep the stage's own stand-in. Dry cured meat that had its smoke (not airDried) takes a
+-- Cold Smoked stand-in, so the dish lists it as its name says: "Beef (Cold Smoked)".
+F.ANIMAL_STAGES = { HotSmokedMeat = true, DryCuredMeat = true, SoakedCharque = true, HotSmokedMeatSlice = true,
+    DryCuredMeatSlice = true }
+local COLD_SMOKED = { DryCuredMeat = "ColdSmokedMeat", DryCuredMeatSlice = "ColdSmokedMeatSlice" }
+
+-- The stand-in for this piece's stage and animal, or nil. airDried: a dry cured piece's modData.airDried.
+function F.standinFor(fullType, index, airDried)
+    local animal = index and F.MEAT_ANIMALS[index + 1]
+    local stage = fullType and fullType:match("^TraditionalPreservationFishMeat%.(.+)$")
+    if not animal or not stage or not F.ANIMAL_STAGES[stage] then return nil end
+    if not airDried and COLD_SMOKED[stage] then stage = COLD_SMOKED[stage] end
+    local standin = "TraditionalPreservationFishMeat." .. stage .. "Ingredient_" .. animal
+    if getScriptManager and not getScriptManager():FindItem(standin) then return nil end
+    return standin
+end
+
+-- The piece's cut: its model index or, for a slice, the piece it was cut from.
+local function cutOf(item)
+    if not item then return nil end
+    local stage = F.STAGES and F.STAGES[item:getFullType()]
+    if stage and stage.slice then return item:getModData().cut end
+    local index = item:getModelIndex()
+    return index >= 0 and index or nil
+end
+
+-- Swaps the newest entry of fullType in the dish's list for standin; true if one was found.
+function F.useAnimalStandin(dish, fullType, standin)
+    local extras = dish and dish:getExtraItems()
+    if not extras or not standin then return false end
+    for i = extras:size() - 1, 0, -1 do
+        if extras:get(i) == fullType then
+            extras:set(i, standin)
+            return true
+        end
+    end
+    return false
+end
+
 -- Once vanilla has added an ingredient, its list entry is swapped for the stand-in (see the top).
 local vanillaComplete = ISAddItemInRecipe.complete
 
 function ISAddItemInRecipe:complete()
     local stock = self.baseItem
+    local used = self.usedItem
+    local usedType = used and used:getFullType()
+    local animalStandin = F.standinFor(usedType, cutOf(used), used and used:getModData().airDried)
     local result = vanillaComplete(self)
     F.carryStock(stock, self.baseItem, self.recipe)
+    local renamed = F.useAnimalStandin(self.baseItem, usedType, animalStandin)
     F.useStandins(self.baseItem)
+    if renamed and not self.baseItem:isCustomName() then ISAddItemInRecipe.checkName(self.baseItem, self.recipe) end
     return result
 end
 

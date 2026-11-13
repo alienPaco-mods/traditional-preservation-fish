@@ -49,14 +49,14 @@ end
 local beef = food(F.DRY_CURED, { ModelIndex = 0, Age = 10, BaseHunger = -0.28, HungChange = -0.28, UnhappyChange = -3 }, { agedFrom = 10 })
 check("a cut takes 30 days, a ham 90, a slice doesn't age", F.ageDays(beef) == 30 and F.ageDays(food(F.COUNTRY_HAM)) == 90
     and F.ageDays(food("TraditionalPreservationFishMeat.DryCuredMeatSlice")) == nil and F.ageDays(food(F.HOT_MEAT)) == nil)
-check("young off the hook", F.agedness(beef) == 0 and F.stageName(beef) == "Suho Meso")
+check("young off the hook", F.agedness(beef) == 0 and F.stageName(beef) == "Beef (Cold Smoked)")
 beef:setAge(25)
 F.rename(beef)
 check("half aged after 15 days: the tooltip says so, the mood is the young one's", near(F.agedness(beef), 0.5)
     and beef.values.Tooltip == "Tooltip_TraditionalPreservationFishMeat_DryCured_50" and beef.values.UnhappyChange == -3 and not beef.modData.aged)
 beef:setAge(40)
 F.rename(beef)
-check("Aged after 30", beef.values.Name == "Suho Meso (Aged)" and beef.modData.aged == true and beef.values.UnhappyChange == F.AGED_CUT_UNHAPPY
+check("Aged after 30", beef.values.Name == "Beef (Cold Smoked, Aged)" and beef.modData.aged == true and beef.values.UnhappyChange == F.AGED_CUT_UNHAPPY
     and beef.values.Tooltip == "Tooltip_TraditionalPreservationFishMeat_DryCured_Aged")
 beef:setAge(0)
 check("and it stays Aged", F.agedness(beef) == 1)
@@ -110,7 +110,7 @@ check("the recipe's two and two more to the character", #given == 2 and slice.fu
 check("four slices share the cut's food and weight", near(slice.values.Calories, 99) and near(slice.values.HungChange, -0.135)
     and near(slices[1].values.HungChange, -0.135) and near(slice.values.ActualWeight, 0.0625) and near(slice.values.ThirstChange, 0.06))
 check("a slice is whole, not part eaten", slice.values.BaseHunger == slice.values.HungChange)
-check("named by the piece, aged with it", slice.values.Name == "Bresaola Slice (Aged)" and slice.modData.aged == true and slice.modData.cut == 0)
+check("named by the piece, aged with it", slice.values.Name == "Beef Slice (Dry Cured, Aged)" and slice.modData.aged == true and slice.modData.cut == 0)
 check("the aged mood is shared out", near(slice.values.UnhappyChange, F.AGED_CUT_UNHAPPY * (0.54 / 0.56) / 4))
 check("half through its days, as the cut was", near(slice.values.Age, 30))
 check("stale keeps its share too", near(F.sliceAge(150, 120, 180, 60, 90), 75) and near(F.sliceAge(400, 120, 180, 60, 90), 90))
@@ -120,6 +120,26 @@ data, slices = recipe(hot, "TraditionalPreservationFishMeat.HotSmokedMeatSlice",
 F.onCreateMeatSliced(data, character)
 check("hot smoked venison: six slices of about 13", #given == 4 and slices[2].values.Name == "Venison Slice (Hot Smoked)"
     and near(slices[2].values.Age, 1.5) and near(given[4].values.HungChange, -0.8 / 6))
+
+-- Hot smoked poultry (0.4.34): no slicing; a whole bird carves into vanilla's six cuts, food by their hunger
+local VANILLA_HUNGER = { ["Base.Chicken"] = -0.33, ["Base.ChickenWings"] = -0.19, ["Base.ChickenFillet"] = -0.3 }
+local oldInstance = instanceItem
+function instanceItem(fullType) return food(fullType, { HungChange = VANILLA_HUNGER[fullType] }) end
+local smokedBird = food(F.HOT_MEAT, { ModelIndex = 10, Age = 2, Calories = 1640, HungChange = -1.64, BaseHunger = -1.64,
+    ActualWeight = 0.8, ThirstChange = 0.15, UnhappyChange = -5 }, { rinsed = true })
+check("hot smoked poultry isn't sliced, red meat and anything else is", not F.canSliceHot(smokedBird)
+    and F.canSliceHot(food(F.HOT_MEAT, { ModelIndex = 3 })) and F.canSliceHot(knife or food("Base.KitchenKnife")))
+check("the chicken recipe takes a whole chicken only", F.canCarveChicken(smokedBird) and not F.canCarveTurkey(smokedBird)
+    and not F.canCarveChicken(food(F.HOT_MEAT, { ModelIndex = 7 })) and F.canCarveChicken(food("Base.KitchenKnife")))
+local birdData, cuts = recipe(smokedBird, F.HOT_MEAT, 6)
+F.onCreateBirdCarved(birdData)
+check("2 legs, 2 wings, 2 fillets", cuts[1].values.ModelIndex == 7 and cuts[2].values.ModelIndex == 7 and cuts[3].values.ModelIndex == 8
+    and cuts[6].values.ModelIndex == 9)
+check("sharing the bird by vanilla's hunger", near(cuts[1].values.HungChange, -1.64 * 0.33 / 1.64) and near(cuts[3].values.Calories, 1640 * 0.19 / 1.64)
+    and near(cuts[1].values.ActualWeight + cuts[3].values.ActualWeight + cuts[5].values.ActualWeight, 0.8 * 0.9 / 2))
+check("each keeps the bird's age and rinse, named by its cut", cuts[5].values.Age == 2 and cuts[5].modData.rinsed
+    and cuts[1].values.Name == "Chicken (Hot Smoked)" and cuts[5].values.Name == "ChickenFillet (Hot Smoked)")
+instanceItem = oldInstance
 
 -- Carving a ham: 15 slices of hunger 14 from a leg, in three carvings
 local ham = food(F.COUNTRY_HAM, { ModelIndex = 6, Age = 45, Calories = 1350, Proteins = 225, Lipids = 54, BaseHunger = -2.1, HungChange = -2.1,

@@ -30,9 +30,9 @@ function TPFM.help()
     say("TPFM.mature(days)          age the stockfish and dry cured meat you carry by this many days, to test maturing and ageing")
     say("TPFM.food()                the cured fish and meat you carry: hunger, unhappiness, boredom, thirst, age against its days, ageing")
     say("TPFM.fish(name, n, weight, stage) spawn n fish, e.g. TPFM.fish(\"Walleye\", 2, 4); stage \"cured\", \"dried\", \"hotSmoked\", \"coldSmoked\" or \"stockfish\" (it may take weight's place); TPFM.fish() lists the names, \"all\" gives each")
-    say("TPFM.meat(name, n, stage)  spawn n of a cut, e.g. TPFM.meat(\"Steak\", 2) or TPFM.meat(\"all\", 1, \"corned\"); stage \"corned\", \"country\", \"charque\", \"hotSmoked\" or \"dryCured\" (red meat only; chicken, turkey and rabbit come raw); TPFM.meat() lists the names")
+    say("TPFM.meat(name, n, stage)  spawn n of a cut, e.g. TPFM.meat(\"Steak\", 2) or TPFM.meat(\"all\", 1, \"corned\"); stage \"corned\", \"country\", \"charque\", \"hotSmoked\" or \"dryCured\" (chicken, turkey and rabbit: corned and hotSmoked only); TPFM.meat() lists the names")
     say("TPFM.give(name, n, option) spawn n of: head, stock, salt, fat, fatPot (option \"burnt\" or \"raw\"), crock (full, four Steaks in Lard). TPFM.give() lists them")
-    say("TPFM.kit(kind)             the things a test needs: \"potted\" (Potted Meat) or \"flue\" (both flue kits and tools). TPFM.kit() lists the kinds")
+    say("TPFM.kit(kind)             the things a test needs: \"potted\" (Potted Meat), \"stock\", \"poultry\" (hot smoked poultry) or \"flue\" (both flue kits and tools). TPFM.kit() lists the kinds")
     say("TPFM.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
     say("TPFM.rain(hours)           add this many hours of rain and wet the open frames, to test rain on open charque")
     say("TPFM.fatRows()             the fat each vanilla animal's butchering table gives now")
@@ -341,21 +341,30 @@ end
 -- A cut as a stage gives it: raw, "corned" (the short cure: "Steak (Corned)"), "country" (the long cure: "Steak
 -- (Country Cured)"), "charque" (a Corned cut dried on a frame; no pork, which never hangs in the open), "hotSmoked"
 -- (a Corned cut from a stoked Smokehouse; pork comes out as vanilla's Ham) or "dryCured" (as the Smokehouse gives it
--- after the long cure and its smoke, young: "Suho Meso").
+-- after the long cure and its smoke, young: "Beef (Cold Smoked)"). Poultry and rabbit take "corned" and
+-- "hotSmoked" only, as in the game.
 local function curedCut(cut, long)
     local cured = instanceItem(F.CURED_MEAT)
     cured:getModData().longCure = long or nil
     F.carry(instanceItem(cut), cured)
+    if F.isHotOnly(cured) then
+        cured:setOffAge(F.HOT_ONLY_DAYS[1])
+        cured:setOffAgeMax(F.HOT_ONLY_DAYS[2])
+    end
     return cured
+end
+
+local function hotOnlyCut(cut)
+    return F.isHotOnly({ getFullType = function() return cut end })
 end
 
 local MEAT_SPAWNS = {
     -- The short cure refuses a leg, so there is no Leg of Pork (Corned).
     corned = function(inventory, cut) if cut ~= F.LEG_OF_PORK then inventory:AddItem(curedCut(cut, false)) end end,
-    country = function(inventory, cut) inventory:AddItem(curedCut(cut, true)) end,
+    country = function(inventory, cut) if not hotOnlyCut(cut) then inventory:AddItem(curedCut(cut, true)) end end,
     charque = function(inventory, cut)
         local corned = curedCut(cut, false)
-        if F.isPork(corned) then return end
+        if F.isPork(corned) or F.isHotOnly(corned) then return end
         local charque = instanceItem("TraditionalPreservationFishMeat.Charque")
         F.carry(corned, charque)
         inventory:AddItem(charque)
@@ -365,32 +374,20 @@ local MEAT_SPAWNS = {
         if cut ~= F.LEG_OF_PORK then inventory:AddItem(F.smokedItem(curedCut(cut, false), {}, F.HOT_FISH, F.HOT_MEAT)) end
     end,
     dryCured = function(inventory, cut)
+        if hotOnlyCut(cut) then return end
         inventory:AddItem(F.smokedItem(curedCut(cut, true), {}, F.COLD_FISH_OUT, F.DRY_CURED, false))
     end,
 }
 
--- The red meat cuts, then the poultry and rabbit that only go into Potted Meat (no stages: they never cure).
-local function meatNames()
-    local names, pottedOnly = {}, {}
-    for _, cut in ipairs(F.MEAT_CUTS) do table.insert(names, cut) end
-    for _, cut in ipairs(F.POTTED_GAME or {}) do
-        table.insert(names, cut)
-        pottedOnly[cut] = true
-    end
-    return names, pottedOnly
-end
-
 function TPFM.meat(name, count, stage)
-    local MEAT_NAMES, POTTED_ONLY = meatNames()
-    local types = name and named(MEAT_NAMES, name)
+    local types = name and named(F.MEAT_CUTS, name)
     if not types or stage and not MEAT_SPAWNS[stage] then
-        return listNames("Meat", MEAT_NAMES, "\"corned\", \"country\", \"charque\", \"hotSmoked\", \"dryCured\" (red meat only)")
+        return listNames("Meat", F.MEAT_CUTS, "\"corned\", \"country\", \"charque\", \"hotSmoked\", \"dryCured\" (poultry and rabbit: corned and hotSmoked only)")
     end
     local inventory = getPlayer():getInventory()
     for _, cut in ipairs(types) do
         for _ = 1, count or 1 do
-            if not stage then inventory:AddItem(cut)
-            elseif not POTTED_ONLY[cut] then MEAT_SPAWNS[stage](inventory, cut) end
+            if not stage then inventory:AddItem(cut) else MEAT_SPAWNS[stage](inventory, cut) end
         end
     end
     say(string.format("Gave %d %s%s.", count or 1, name == "all" and "of each cut" or name, stage and (", " .. stage) or ""))
@@ -439,6 +436,10 @@ local KITS = {
         "Base.AnimalBone", "Base.AnimalBone", "Base.LargeAnimalBone", "Base.SmallAnimalBone", "Base.SmallAnimalBone",
         "Base.SmallAnimalBone", "Base.SmallAnimalBone", "Base.SmallAnimalBone", "Base.SmallAnimalBone", "Base.ChickenFoot",
         "Base.ChickenFoot", "Base.Chicken_Hen_Brown_Head", "Base.Turkey_Hen_Head", "Base.Pot", "Base.Pot", "Base.Pot", "Base.Pot", "Base.Pot", "Base.Bowl", "Base.Bowl", "Base.Bowl", "Base.Bowl" },
+    poultry = { about = "a whole Chicken and Turkey, a Chicken leg, Wing and Fillet, Turkey Legs, Wings and Fillet, Rabbit Meat, a Steak, 2 Salt and a Kitchen Knife, for hot smoked poultry (TPFM.meat(\"ChickenWhole\", 1, \"hotSmoked\") to carve at once)",
+        "Base.ChickenWhole", "Base.TurkeyWhole", "Base.Chicken", "Base.ChickenWings", "Base.ChickenFillet", "Base.TurkeyLegs",
+        "Base.TurkeyWings", "Base.TurkeyFillet", "Base.Rabbitmeat", "Base.Steak", "Base.Salt", "Base.Salt",
+        "Base.KitchenKnife" },
     flue = { about = "both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel",
         "Base.ClayPipeSegment", "Base.ClayPipeSegment", "Base.FlatStone", "Base.FlatStone", "Base.FlatStone", "Base.Clay",
         "Base.Clay", "Base.Clay", "Base.MasonsTrowel", "Base.Shovel" },
