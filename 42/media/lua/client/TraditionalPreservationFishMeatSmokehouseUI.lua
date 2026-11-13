@@ -3,5 +3,5 @@
 local HearthUI = require "TraditionalPreservationCore/HearthUI"
 
 HearthUI.addFireboxNotes(function(info, notes)
-    if info.copper and info.copper.flue then table.insert(notes, getText("IGUI_TraditionalPreservationFishMeat_FlueSmokes")) end
+    if info.state and info.state.flue then table.insert(notes, getText("IGUI_TraditionalPreservationFishMeat_FlueSmokes")) end
 end)

@@ -1,5 +1,8 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.42
+TP Core's Hearth kettle is the Forged Cauldron: texts say Cauldron (Put Fat in the Cauldron, the fat's notes, the fat tooltips). A Stone Hearth joined to the Smokehouse can have the Cauldron fitted too (TP Core's two slots); the shed's smoke note shows on a fitted one (reads `info.state`). Needs this TP Core. In-game step 128 of `TESTING_GUIDE.md` (INGAME_PASS 127), passed.
+
 ## 0.4.41
 Its pots on the hob are TP Core's stove food (`Hearth.cooksOn`): fat, potted meat, stocks, soups, stews and poached sausage, in a pot or a forged pot, so the Stone Hearth sets its pot in the hole for them; the pudding pans stay oven food. Firebox reads Stone Hearth in its texts. Needs this TP Core (the Stone Hearth hub, step ii).
 

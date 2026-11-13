@@ -44,6 +44,7 @@ local function fat(fullType, rotten)
         isRotten = function() return rotten or false end,
         getFluidContainer = function() return nil end,
         isFavorite = function() return false end,
+        hasTag = function() return false end,
         getAge = function() return 1 end,
         getOffAgeMax = function() return 4 end,
     }
