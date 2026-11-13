@@ -100,4 +100,57 @@ module Base
             diluteRatio = 0.2,
         }
     }
+
+    /* Blood (TraditionalPreservationFishMeatBlood.lua): vanilla's Animal Blood under TP Core's FluidAgeing. Salt or
+       vinegar stirred in renames it (Cured, either one) and keeps it longer; every one of them ends as
+       Spoiled Blood. Like vanilla's, they have no food value of their own: the blood counts in Black Pudding and
+       Blood Sausage. Never rename them once the mod is out: saves hold the names. */
+
+    fluid CuredBlood
+    {
+        ColorReference = Red,
+        DisplayName = Fluid_Name_CuredBlood,
+        Categories
+        {
+            Beverage,
+        }
+        BlendWhiteList
+        {
+            whitelist = true,
+            categories
+            {
+                Beverage,
+            }
+        }
+    }
+
+    fluid SpoiledBlood
+    {
+        ColorReference = Maroon,
+        DisplayName = Fluid_Name_SpoiledBlood,
+        Categories
+        {
+            Beverage,
+            Hazardous,
+        }
+        Properties
+        {
+            ThirstChange = -20.0,
+            UnhappyChange = 30.0,
+        }
+        Poison
+        {
+            maxEffect = Mild,
+            minAmount = 0.1,
+            diluteRatio = 0.2,
+        }
+        BlendWhiteList
+        {
+            whitelist = true,
+            categories
+            {
+                Beverage,
+            }
+        }
+    }
 }

@@ -15,6 +15,8 @@ require = function(name)
 end
 dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
 dofile("42/media/lua/shared/TraditionalPreservationFishMeatPotted.lua")
+for _, name in ipairs({ "Cow", "Pig", "Sheep", "Deer", "AnimalParts" }) do package.loaded["Definitions/animal/" .. name .. "Definitions"] = true end
+dofile("42/media/lua/shared/TraditionalPreservationFishMeatBlood.lua")
 
 local halos, vanillaVerdict, vanillaUps, addCalls = {}, true, 0, 0
 ResourceIO = { Input = "input", Output = "output" }

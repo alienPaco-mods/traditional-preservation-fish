@@ -1,0 +1,526 @@
+module TraditionalPreservationFishMeat
+{
+    imports
+    {
+        Base,
+    }
+
+    /* Blood (TraditionalPreservationFishMeatBlood.lua; user, 2026-11-13). Blood from vanilla's bleeding goes off
+       through TP Core's FluidAgeing; salt or vinegar keeps it longer. One mix makes either shape: 1 L of blood
+       (fresh or cured, never spoiled), a filler: a quarter of a bag of oats or rice (12 uses; rice as for
+       morcilla) or, renewable, 12 grains of barley, rye or wheat (0.24 kg). The filler line keeps the one it takes,
+       and TP Core's Charge takes the real amount (F.FILLER); the craft window shows it. half a block of
+       Lard or Tallow or a piece of raw fat, and a use of salt. Its food is the sum of what goes in: about 3,200 kcal
+       in 1.5 kg (real black pudding runs 250-380 kcal a 100 g). Oats, fat and salt are taken by uses (hunger
+       points), so 12 of a 50-hunger bag of oats is a quarter. The casings and pans keep vanilla's icons; the pudding
+       and the sausages have their own (tools/build_meat_icons.py), the cooked link nearly black (Item_BloodSausage_Cooked,
+       which the game takes for a cooked one). */
+
+    /* The finished foods are made cooked (TP Core's OnCreateCooked), so they read Cooked and can be warmed or fried again. */
+
+    /* Casings: a Raw Casings row in the butchering tables of pigs, cattle, sheep and deer. Raw, they go off in a
+       day; rinsed and packed in salt they keep a year, as butchers' salted casings do. */
+    item RawCasings
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.2,
+        Icon = Fish_Guts,
+        CantEat = true,
+        DaysFresh = 1,
+        DaysTotallyRotten = 2,
+        HungerChange = -1.0,
+        FoodType = NoExplicit,
+        WorldStaticModel = FishGuts,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_RawCasings,
+    }
+
+    item SaltedCasings
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = Fish_Guts,
+        CantEat = true,
+        DaysFresh = 365,
+        DaysTotallyRotten = 730,
+        HungerChange = -1.0,
+        FoodType = NoExplicit,
+        WorldStaticModel = FishGuts,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_SaltedCasings,
+    }
+
+    craftRecipe CleanAndSaltCasings
+    {
+        timedAction = Making,
+        time = 80,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Cooking:3,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.RawCasings] flags[IsUncookedFoodItem] mode:destroy,
+            item 1 [*],
+            -fluid 0.5 [Water],
+            item 1 tags[base:salt],
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.SaltedCasings,
+        }
+    }
+
+    /* Black Pudding: the mix in a Baking Pan or Roasting Pan, baked an hour in an oven or on any stove or fire (silent,
+       as vanilla's bread dough), turned out and sliced. */
+    item PanOfBlackPudding
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 2.5,
+        Icon = BakingPan,
+        CantEat = true,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 60,
+        MinutesToBurn = 120,
+        DaysFresh = 1,
+        DaysTotallyRotten = 2,
+        HungerChange = -1.0,
+        FoodType = NoExplicit,
+        WorldStaticModel = BakingPan,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PanOfBlackPudding,
+    }
+
+    item RoastingPanOfBlackPudding
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 2.5,
+        Icon = Roastingpan,
+        CantEat = true,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 60,
+        MinutesToBurn = 120,
+        DaysFresh = 1,
+        DaysTotallyRotten = 2,
+        HungerChange = -1.0,
+        FoodType = NoExplicit,
+        WorldStaticModel = RoastingPan,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PanOfBlackPudding,
+    }
+
+    craftRecipe MixBlackPudding
+    {
+        timedAction = MixingBowl,
+        time = 80,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Cooking:5,
+        OnTest = TraditionalPreservationFishMeat.canTakeFiller,
+        OnCreate = TraditionalPreservationFishMeat.onCreateTakeFiller,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Filler,
+        inputs
+        {
+            item 1 [Base.BakingPan;Base.RoastingPan] mode:destroy flags[InheritCondition] mappers[panType],
+            item 1 [*],
+            -fluid 1.0 [AnimalBlood;CuredBlood],
+            item 1 [Base.OatsRaw;Base.Rice;Base.BarleySeed;Base.RyeSeed;Base.WheatSeed] mode:keep,
+            item 12 [TraditionalPreservationFishMeat.PorkFat;TraditionalPreservationFishMeat.BeefSuet;TraditionalPreservationFishMeat.MuttonFat;Base.Lard;TraditionalPreservationFishMeat.Tallow],
+            item 1 tags[base:salt],
+        }
+        outputs
+        {
+            item 1 mapper:panType,
+        }
+        itemMapper panType
+        {
+            TraditionalPreservationFishMeat.PanOfBlackPudding = Base.BakingPan,
+            TraditionalPreservationFishMeat.RoastingPanOfBlackPudding = Base.RoastingPan,
+        }
+    }
+
+    craftRecipe TurnOutBlackPudding
+    {
+        timedAction = Making,
+        time = 40,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationCore.OnCreateCooked,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.PanOfBlackPudding;TraditionalPreservationFishMeat.RoastingPanOfBlackPudding] mappers[panType] flags[InheritCondition;InheritFoodAge;IsCookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 TraditionalPreservationFishMeat.BlackPudding,
+            item 1 mapper:panType,
+        }
+        itemMapper panType
+        {
+            Base.BakingPan = TraditionalPreservationFishMeat.PanOfBlackPudding,
+            Base.RoastingPan = TraditionalPreservationFishMeat.RoastingPanOfBlackPudding,
+        }
+    }
+
+    /* The loaf is sliced to be eaten: 6 slices of a quarter kilo. */
+    item BlackPudding
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 1.5,
+        Icon = BlackPudding,
+        CantEat = true,
+        IsCookable = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        CookingSound = FryingFood,
+        DaysFresh = 5,
+        DaysTotallyRotten = 10,
+        HungerChange = -180.0,
+        Calories = 3228.0,
+        Carbohydrates = 102.0,
+        Lipids = 228.0,
+        Proteins = 192.0,
+        FoodType = Meat,
+        WorldStaticModel = BlackPudding,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_BlackPudding,
+        StaticModel = BlackPudding,
+    }
+
+    item BlackPuddingSlice
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.25,
+        Icon = BlackPuddingSlice,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Stir fry:15;Sandwich:15;Burger:15;Rice:15;Pasta:15,
+        FoodType = Meat,
+        GoodHot = true,
+        IsCookable = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        CookingSound = FryingFood,
+        DaysFresh = 5,
+        DaysTotallyRotten = 10,
+        HungerChange = -30.0,
+        Calories = 538.0,
+        Carbohydrates = 17.0,
+        Lipids = 38.0,
+        Proteins = 32.0,
+        EvolvedRecipeName = Black Pudding,
+        StaticModel = BlackPuddingSlices,
+        WorldStaticModel = BlackPuddingSlices,
+    }
+
+    craftRecipe SliceBlackPudding
+    {
+        timedAction = SliceMeat_Surface,
+        time = 50,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationCore.OnCreateCooked,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.BlackPudding] flags[InheritFoodAge;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 6 TraditionalPreservationFishMeat.BlackPuddingSlice,
+        }
+    }
+
+    /* Blood Sausage: the mix stuffed into a Salted Casings, six links, poached half an hour in a pot of water: then
+       they keep a week. A raw link is an uncooked food (the game says Uncooked) with the link's food; fried or roasted
+       as it is, it cooks in place but keeps only its raw days. */
+    item RawBloodSausage
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.25,
+        Icon = BloodSausage,
+        DangerousUncooked = true,
+        IsCookable = true,
+        MinutesToCook = 30,
+        MinutesToBurn = 60,
+        CookingSound = FryingFood,
+        BadInMicrowave = true,
+        DaysFresh = 1,
+        DaysTotallyRotten = 2,
+        HungerChange = -30.0,
+        Calories = 538.0,
+        Carbohydrates = 17.0,
+        Lipids = 38.0,
+        Proteins = 32.0,
+        FoodType = Sausage,
+        StaticModel = BloodSausageRaw,
+        WorldStaticModel = BloodSausageRaw,
+        OnCooked = TraditionalPreservationFishMeat.onCookedBloodSausage,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_RawBloodSausage,
+    }
+
+    craftRecipe StuffBloodSausages
+    {
+        timedAction = MixingBowl,
+        time = 120,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Cooking:5,
+        OnTest = TraditionalPreservationFishMeat.canTakeFiller,
+        OnCreate = TraditionalPreservationFishMeat.onCreateTakeFiller,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_Filler,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.SaltedCasings] mode:destroy,
+            item 1 [*],
+            -fluid 1.0 [AnimalBlood;CuredBlood],
+            item 1 [Base.OatsRaw;Base.Rice;Base.BarleySeed;Base.RyeSeed;Base.WheatSeed] mode:keep,
+            item 12 [TraditionalPreservationFishMeat.PorkFat;TraditionalPreservationFishMeat.BeefSuet;TraditionalPreservationFishMeat.MuttonFat;Base.Lard;TraditionalPreservationFishMeat.Tallow],
+            item 1 tags[base:salt],
+        }
+        outputs
+        {
+            item 6 TraditionalPreservationFishMeat.RawBloodSausage,
+        }
+    }
+
+    item PotOfBloodSausage
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.5,
+        Icon = PotFull,
+        CantEat = true,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 30,
+        MinutesToBurn = 90,
+        DaysFresh = 1,
+        DaysTotallyRotten = 2,
+        HungerChange = -1.0,
+        FoodType = NoExplicit,
+        CookingSound = TPBoiling,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PotOfBloodSausage,
+    }
+
+    item PotForgedBloodSausage
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.5,
+        Icon = Pot_Forged_Soup,
+        CantEat = true,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 30,
+        MinutesToBurn = 90,
+        DaysFresh = 1,
+        DaysTotallyRotten = 2,
+        HungerChange = -1.0,
+        FoodType = NoExplicit,
+        CookingSound = TPBoiling,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PotOfBloodSausage,
+    }
+
+    craftRecipe PutBloodSausagesInWater
+    {
+        timedAction = MixingBowl,
+        time = 40,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        inputs
+        {
+            item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition] mappers[potType],
+            -fluid 1.5 categories[Water] mode:mixture,
+            item 6 [TraditionalPreservationFishMeat.RawBloodSausage] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            TraditionalPreservationFishMeat.PotOfBloodSausage = Base.Pot,
+            TraditionalPreservationFishMeat.PotForgedBloodSausage = Base.PotForged,
+        }
+    }
+
+    craftRecipe TakeOutBloodSausages
+    {
+        timedAction = Making,
+        time = 40,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationCore.OnCreateCooked,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.PotOfBloodSausage;TraditionalPreservationFishMeat.PotForgedBloodSausage] mappers[potType] flags[InheritCondition;InheritFoodAge;IsCookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 6 TraditionalPreservationFishMeat.BloodSausage,
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            Base.Pot = TraditionalPreservationFishMeat.PotOfBloodSausage,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedBloodSausage,
+        }
+    }
+
+    item BloodSausage
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.25,
+        Icon = BloodSausage,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Stir fry:15;Sandwich:15;Burger:15;Rice:15;Pasta:15,
+        FoodType = Sausage,
+        GoodHot = true,
+        IsCookable = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        CookingSound = FryingFood,
+        DaysFresh = 7,
+        DaysTotallyRotten = 14,
+        HungerChange = -30.0,
+        Calories = 538.0,
+        Carbohydrates = 17.0,
+        Lipids = 38.0,
+        Proteins = 32.0,
+        StaticModel = BloodSausage,
+        WorldStaticModel = BloodSausage,
+        EvolvedRecipeName = Blood Sausage,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_BloodSausage,
+    }
+
+    /* Ground and hand models: vanilla's meshes, our darkened textures (tools/build_meat_icons.py). */
+    model BloodSausageRaw
+    {
+        mesh = WorldItems/Sausage,
+        texture = BloodSausageRawModel,
+        scale = 0.4,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0274 0.0221 -0.0206,
+            rotate = 178.7112 67.2918 -88.6029,
+            scale = 0.75,
+        }
+    }
+
+    model BloodSausage
+    {
+        mesh = WorldItems/Sausage,
+        texture = BloodSausageModel,
+        scale = 0.4,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0274 0.0221 -0.0206,
+            rotate = 178.7112 67.2918 -88.6029,
+            scale = 0.75,
+        }
+    }
+
+    model BlackPudding
+    {
+        mesh = WorldItems/Bread,
+        texture = BlackPuddingModel,
+        scale = 0.3,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0407 -0.0066 -0.0249,
+            rotate = 155.6451 58.3098 -151.3713,
+            scale = 0.75,
+        }
+    }
+
+    model BlackPuddingSlices
+    {
+        mesh = WorldItems/BreadSlices,
+        texture = BlackPuddingSlicesModel,
+        scale = 0.3,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0348 0.0252 -0.0166,
+            rotate = -90.6753 -6.8314 -174.011,
+            scale = 0.75,
+        }
+    }
+
+    /* A cooked link (boiled or fried) sliced: 4 rounds of a quarter link each, cooked. */
+    item BloodSausageSlice
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.0625,
+        Icon = BloodSausageSlice,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Stir fry:15;Sandwich:15;Burger:15;Rice:15;Pasta:15;Salad:15,
+        FoodType = Sausage,
+        GoodHot = true,
+        IsCookable = true,
+        MinutesToCook = 10,
+        MinutesToBurn = 30,
+        CookingSound = FryingFood,
+        DaysFresh = 7,
+        DaysTotallyRotten = 14,
+        HungerChange = -7.5,
+        Calories = 134.5,
+        Carbohydrates = 4.25,
+        Lipids = 9.5,
+        Proteins = 8.0,
+        StaticModel = BloodSausageSlice_Hand,
+        WorldStaticModel = BloodSausageSlice,
+        EvolvedRecipeName = Blood Sausage,
+    }
+
+    craftRecipe SliceBloodSausage
+    {
+        timedAction = SliceMeat_Surface,
+        time = 30,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationCore.OnCreateCooked,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.BloodSausage;TraditionalPreservationFishMeat.RawBloodSausage] flags[InheritFoodAge;IsCookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 4 TraditionalPreservationFishMeat.BloodSausageSlice,
+        }
+    }
+
+    model BloodSausageSlice
+    {
+        mesh = WorldItems/SalamiSlice,
+        texture = BloodSausageSliceModel,
+        scale = 0.4,
+    }
+
+    model BloodSausageSlice_Hand
+    {
+        mesh = WorldItems/SalamiSlice_Hand,
+        texture = BloodSausageSliceModel,
+        scale = 0.4,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0147 0.045 -0.0093,
+            rotate = 72.3247 -25.2001 -28.9395,
+            scale = 0.3686,
+        }
+    }
+}

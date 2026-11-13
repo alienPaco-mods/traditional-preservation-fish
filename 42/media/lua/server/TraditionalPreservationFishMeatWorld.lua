@@ -254,6 +254,8 @@ Weather.record(function(now, climate)
         wind = climate:getWindIntensity(),
     })
     F.recordPotted(now, climate:getTemperature())
+    F.recordBlood(now, climate:getTemperature())
 end)
+
 
 tracker.start()

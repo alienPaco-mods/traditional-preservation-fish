@@ -25,5 +25,8 @@
   "ContextMenu_EvolvedRecipe_ChickenSoup": "Chicken Soup",
   "ContextMenu_EvolvedRecipe_ChickenSoupForged": "Chicken Soup",
   "ContextMenu_EvolvedRecipe_ChickenStew": "Chicken Stew",
-  "ContextMenu_EvolvedRecipe_ChickenStewForged": "Chicken Stew"
+  "ContextMenu_EvolvedRecipe_ChickenStewForged": "Chicken Stew",
+  "ContextMenu_TraditionalPreservationFishMeat_CureBlood": "Cure Blood",
+  "ContextMenu_TraditionalPreservationFishMeat_CureSalt": "Salt (%1)",
+  "ContextMenu_TraditionalPreservationFishMeat_CureVinegar": "Vinegar (%1)"
 }

@@ -12,6 +12,7 @@ Preserves fish and meat the old way, with no power: salt, wood, fat, smoke and t
 | Cold smoke | Cold Smoked fish | Beef / Mutton / Venison / Pork (Cold Smoked), Smoked Country Ham | Days of 15 C or less | 120 / 180 days, ready to eat (a ham 180 / 365) |
 | Dry cure in cool air | - | Beef / Mutton / Venison / Pork (Dry Cured), Country Ham | Cool months, no fire needed | The same |
 | Under fat | - | Potted Meat (any red meat, pork too) | Any | By place: 14 to 120 days fresh |
+| Blood | - | Black Pudding, Blood Sausage | The day you butcher | About a week |
 
 ## History
 
@@ -105,6 +106,18 @@ A plank shed two tiles long under one roof slope, the door on the high end. Insi
 4. **Pack Potted Meat** into an empty Clay Jar, Glazed Clay Jar or Clay Pot: the pot back and a **Crock of Potted Meat**, one portion a cut (its food plus a quarter block of fat, about 1,000 calories), eaten like any food (its name stays plain; it weighs less as it empties), the vessel back with the last bite. Cooking XP 3 a cut.
 
 The crock **keeps by place**: about 120 / 180 days in a powered fridge or at 4 C, longer as it gets colder and stopped once frozen (−2 C and below, 0.4.35: `F.POTTED_KEEPING`), about 110 / 165 in a winter basement and 64 / 96 in a summer one (5 to 13 C, a month behind the season), in a room by the season's mean temperature (a July pantry about 17 / 25 at the season's 23 C peak, 14 / 21 at 25 C and over; 18 / 27 at 22 C while the grid is on), stopped in a powered freezer. The first portion taken costs a third of the days it had left, once. A part-used Lard gives only what is left of it.
+
+### Blood: Black Pudding and Blood Sausage
+
+Vanilla bleeds a carcass into any container; here that blood is food and goes off.
+- **Amount:** 3.5 cl a kg of the animal's weight (about half its blood): a 100 kg pig 3.5 L, a 600 kg cow 20 L (vanilla gave a pig or a sheep 8 to 25 L). `F.realBlood` sets vanilla's `minBlood` / `maxBlood` as the file loads, before the game reads the table.
+- **Going off:** TP Core's `FluidAgeing`, kind `blood`, its own ledger `TraditionalPreservationFishMeatBlood`. Fresh *Animal Blood (Fresh)* (vanilla's name overridden) keeps 1 day at 20 C, 3 in a fridge, stopped frozen; then *Animal Blood (Spoiled)* (`SpoiledBlood`, mildly poisonous).
+- **Cure Blood** (Core's treat menu: *Bucket > Cure Blood > Salt (n) / Vinegar (n)*): a use per 2 L; either makes it *Animal Blood (Cured)* (`CuredBlood`), 3 days at 20 C, 7 in a fridge (its own cold curve, ledger kind `bloodCured`). Cured into cured stays cured; fresh blood poured or bled in makes it fresh.
+- **Casings:** a Raw Casings row in the butchering tables of pigs, cattle, sheep, deer and their young (`F.CASING_ROWS`, base 1, 1-2 for cattle, 0.5 young); raw 1 / 2 days. **Clean and Salt Casings** (0.5 L water, 1 salt): Salted Casings, a year.
+- **The mix:** 1 L of fresh or cured blood, a filler (12 uses of Oats or Rice, or 12 grains of Barley, Rye or Wheat, on one line charged by Core's `Charge`: `F.FILLER`), 12 uses of Lard, Tallow or raw fat, 1 salt. Anything in reach counts.
+- **Black Pudding:** **Mix Black Pudding** in a Baking or Roasting Pan, bake 60 minutes (silent), **Turn Out Black Pudding** (pan back), **Slice Black Pudding**: 6 slices of 0.25, 538 kcal, hunger 30, 5 / 10 days.
+- **Blood Sausage:** **Stuff Blood Sausages** (a Salted Casings and the mix): 6 uncooked links. **Put Blood Sausages in Water** (a pot with 1.5 L), 30 minutes at the boil (TP Core's `TPBoiling` sound), **Take Out Blood Sausages**: 6 *Blood Sausage (Boiled)*, 7 / 14 days. Fried raw: *Blood Sausage (Fried)* (OnCooked), keeps its raw 1 / 2; boiled then fried 5 minutes: *(Boiled, Fried)* (Core's `OnHeat`). **Slice Blood Sausage**: 4 rounds.
+- The finished foods come out cooked (Core's `OnCreateCooked`). Own icons and models (`tools/build_meat_icons.py`).
 
 ### Names, icons and stages
 
@@ -212,6 +225,7 @@ Under Traditional Preservation (Fish & Meat): **Salt drying time** (12 days), **
 | Potted Meat | `shared/TraditionalPreservationFishMeatPotted.lua` | The batch in the pot's modData `tpfmPotted`; `F.fillCrock`; eaten as Dairy's yogurt jar (`ISEatFoodAction` wrapped, `F.afterCrockUse`); keeping by place on its own ledger `TraditionalPreservationFishMeatPotted` (`F.POTTED_KEEPING`, `F.pottedTemperature`: a room reads the season mean, not Core's station rule), `F.openCrock` |
 | Ageing, slices, carving (6c) | the main file (`F.ageDays`, `F.agedness`, `F.applyAged`, `F.ageHanging`), `shared/TraditionalPreservationFishMeatSlices.lua` | See "Ageing and slices"; tests in `tests/test_aged.lua` |
 | Smokehouse, flue, hot and cold smoking | `shared/TraditionalPreservationFishMeatSmokehouse.lua`, `client/...SmokehouseUI.lua`, action `TPFMFlue` | Chamber tiles (`F.chamberTile`, `F.chamberOther`), `F.connectRefusal`, `F.joinedFirebox`; hot smoking: `F.hotHours`, `F.startSmoke`, `F.smokeStep`, `F.hotDone`, `F.hotStations`, `F.hamSprite`; cold smoking: `F.smokeHours`, `F.coldNeed`, `F.coldDone`, `F.smokeStations`; dry curing: `F.dryCureRate`, `F.dryCureHours`, `F.underCureRate`, `F.dryCuring`; all: `F.smokedItem`, `F.smokedOutputs`, `F.rottenOutputs` |
+| Blood | `shared/TraditionalPreservationFishMeatBlood.lua`, `..._Blood.txt` | `F.realBlood`, `F.BLOOD_SPEC` (states, treatments), `F.bloodLedger` / `F.recordBlood`, `F.FILLER`, `F.CASING_ROWS` / `F.applyCasingRows`, `F.onCookedBloodSausage`, the `OnHeat` watch; tests in `tests/test_blood.lua` |
 | Pallet and bale | `server/...Pallet.lua`, actions `TPFMTieBale` / `TPFMUntieBale` | `F.PALLET_*`, `F.BALE_*` |
 | Dish stand-ins, stock names | `shared/TraditionalPreservationFishMeatEvolved.lua` | `F.INGREDIENT_STANDINS` |
 
@@ -239,7 +253,7 @@ Times, capacity, stage values, weather rates and spoilage limits are at the top 
 ### Tools and tests
 
 - `tools/build_tileset.py` repaints the stations, hanging fish and meat, the Smokehouse and its overlays, the fish icons, the mod list icon and model textures, writes `..._models.txt` and the generated `42/media/lua/shared/TraditionalPreservationFishMeat/Tiles.lua` (don't edit it by hand). It also rewrites the frame, beam and mod icons slightly differently from the committed ones: restore those with git. Needs Pillow and the game files.
-- `tools/build_meat_icons.py` paints the fat, salted meat, charque, Potted Meat, Hot Smoked, Cold Smoked and Dry Cured icons (meat from vanilla's cuts, the Leg of Pork from vanilla's Ham, fish from this mod's Salt Dried icons), and the raw Leg of Pork's icon and ground-model texture (vanilla's Ham pulled to raw pink). Apart from `build_tileset.py`, so the fish art doesn't rebuild with it.
+- `tools/build_meat_icons.py` paints the fat, salted meat, charque, Potted Meat, Hot Smoked, Cold Smoked, Dry Cured and blood (pudding, slices, sausage raw and cooked) icons and the blood foods' model textures (meat from vanilla's cuts, the Leg of Pork from vanilla's Ham, fish from this mod's Salt Dried icons), and the raw Leg of Pork's icon and ground-model texture (vanilla's Ham pulled to raw pink). Apart from `build_tileset.py`, so the fish art doesn't rebuild with it.
 - `tools/build_model.py` writes the Stockfish Bale's ground model, texture and icon (needs Pillow, numpy and the game files).
 - `tools/season_report.lua` and `tools/charque_report.lua` run the rules on `tools/climate_year.csv` (about a year and a half of the game's forecasts); `tools/climate_wind.csv` is a year of forecast wind, which `WIND_GOOD` was scaled from. Run them after changing any rate. `tools/storage_model.lua` is the keeping model checked against its golden output.
 - `tp test FishMeat` (from `~/MODS/TraditionalPreservationCore`) runs every test in `tests/`: `test_curing` (curing rules, stages, scripts, icons), `test_ui` (slots and popups), `test_info` (Station Info), `test_world` (sprites, places, the weather record, the ham), `test_tiles` (entity scripts against `Tiles.lua`), `test_pallet`, `test_fat`, `test_fat_ui`, `test_pork` (legs from butchering), `test_potted`, `test_smokehouse` (flue rules, hot and cold smoking counters, the draught, smoked meat names), `test_console` (debug commands), then the golden checks.

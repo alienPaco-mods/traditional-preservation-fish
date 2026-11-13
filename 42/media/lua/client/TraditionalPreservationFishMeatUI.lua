@@ -286,34 +286,8 @@ local function onRinse(playerObj, fish, source)
     for _, item in ipairs(fish) do ISTimedActionQueue.add(TPFMRinse:new(playerObj, item, source)) end
 end
 
-local OPTION_FIELDS = { "target", "onSelect", "param1", "param2", "param3", "param4", "param5", "param6", "param7",
-    "param8", "param9", "param10", "iconTexture", "color", "toolTip", "notAvailable" }
-
--- The submenu named after the fish that holds its recipes (Gut Fish, Pack Fish in Salt ...). Vanilla makes one only
--- for two recipes or more; a lone recipe option is turned into it where it stands, and with no recipe it is added.
-local function fishSubMenu(context, fish)
-    local name = fish:getDisplayName()
-    local lone
-    for _, option in ipairs(context.options) do
-        if option.name == name and option.subOption then return context:getSubMenu(option.subOption) end
-        if not lone and option.onSelect and option.onSelect == ISInventoryPaneContextMenu.OnNewCraft then lone = option end
-    end
-    local subMenu = context:getNew(context)
-    local parent = lone
-    if lone then
-        local recipe = subMenu:addOption(lone.name)
-        for _, field in ipairs(OPTION_FIELDS) do
-            recipe[field] = lone[field]
-            lone[field] = nil
-        end
-        lone.name = name
-    else
-        parent = context:addOption(name)
-    end
-    parent.iconTexture = fish:getTexture()
-    context:addSubMenu(parent, subMenu)
-    return subMenu
-end
+-- The submenu named after the fish that holds its recipes (TP Core's UI.itemSubMenu).
+local fishSubMenu = UI.itemSubMenu
 
 local function onFillRinseMenu(playerNum, context, items)
     local fish = selectedFish(items, F.canRinse)

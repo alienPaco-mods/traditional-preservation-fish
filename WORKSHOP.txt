@@ -14,6 +14,7 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [tr][td]Hot smoke[/td][td]Hot Smoked fish[/td][td]Hot Smoked meat, chicken, turkey and rabbit[/td][td]Any[/td][td]1 to 2 weeks, ready to eat[/td][/tr]
 [tr][td]Cold smoke[/td][td]Cold Smoked fish[/td][td]Beef, Mutton, Venison and Pork (Cold Smoked), Smoked Country Ham[/td][td]Cool months[/td][td]4 to 6 months, ready to eat[/td][/tr]
 [tr][td]Under fat[/td][td]-[/td][td]Potted Meat (pork too)[/td][td]Any[/td][td]Weeks to months, by where you keep it[/td][/tr]
+[tr][td]Blood[/td][td]-[/td][td]Black Pudding, Blood Sausage[/td][td]The day you butcher[/td][td]About a week[/td][/tr]
 [/table]
 
 [h2]Features[/h2]
@@ -27,6 +28,7 @@ Preserve your catch and your kill the old way, with salt, wood, fat, smoke and t
 [*]Potted Meat: red meat, chicken, turkey or rabbit cooked in Lard or Tallow and packed into a clay jar, keeping by where you store it
 [*]A Smokehouse with a stone Firebox joined to it: keep the fire stoked and salt fish or meat comes out Hot Smoked, or bank it to a smoulder in the cool months for Cold Smoked fish and Dry Cured meat, with a ham hung by the door to tell you
 [*]Gutting gives Fish Guts for chum and a Fish Head for a proper stock
+[*]Blood that goes off, cured with salt or vinegar, made into Black Pudding and Blood Sausage; real blood amounts by the animal's weight, and casings from butchering
 [/list]
 
 [h2]Salting (fish and meat)[/h2]
@@ -85,6 +87,14 @@ Put Pork Fat (or Suet) in a Pot, cook it an hour on any fire, Pour Off the melte
 [h2]Fish Guts, heads and stock[/h2]
 A whole fish over 0.6 weight gives Fish Guts when gutted or packed. Gut Fish takes the head off a fish over 1.0 weight: a Fish Head for soups, stews or chum. [b]Fish Head Stock:[/b] a pot holding 1.5 L of water and a Fish Head make a stock; its first ingredient turns it into Fish Head Soup or Fish Head Stew, with the head taking no ingredient slot: up to 6 ingredients plus seasonings. [b]Bone Broth[/b] (2 Animal Bones, a Large one or 6 Small; the bones come back boiled, still good for tools) and [b]Chicken Stock[/b] (2 Chicken Feet or chicken and turkey heads) work the same way: Bone Broth Soup or Stew, Chicken Soup or Stew. Every stock's soup and stew is tastier than a plain one and takes the boredom off. A fish big enough to fillet can still be sliced at any salted, dried or rehydrated stage.
 
+[h2]Black Pudding and Blood Sausage[/h2]
+[list]
+[*]Bleed a carcass into a bucket: about 3.5 L for every 100 kg of animal. Fresh blood keeps a day, three in a fridge.
+[*][b]Cure Blood[/b] (right-click the bucket) with salt or vinegar: 3 days, a week in a fridge.
+[*][b]Mix Black Pudding[/b] in a baking or roasting pan: 1 L of blood, oats, rice, or 12 grains of barley, rye or wheat, half a block of fat, a pinch of salt. Bake an hour, turn it out, slice it.
+[*]Butchering gives [b]Raw Casings[/b]; clean and salt them, [b]Stuff Blood Sausages[/b], and boil them half an hour in a pot of water: a week's keeping. Fry them too, or slice them.
+[/list]
+
 [h2]Weights and keeping times[/h2]
 Days are fresh, then rotten.
 [list]
@@ -94,6 +104,7 @@ Days are fresh, then rotten.
 [*][b]Hot Smoked fish / Hot Smoked meat:[/b] about 63% / 70%, 7 and 14 days
 [*][b]Cold Smoked fish / dry cured meat:[/b] about 37% / 50%, 120 and 180 days; a Country Ham 180 and 365
 [*][b]Crock of Potted Meat:[/b] by where you keep it, 14 to 120 days fresh
+[*][b]Black Pudding / boiled Blood Sausage:[/b] 5 and 10 / 7 and 14 days
 [*][b]Salt Packed / Salt Cured / Corned / Country Cured / Gutted / rehydrated:[/b] days, not weeks: cure, hang or cook them
 [/list]
 

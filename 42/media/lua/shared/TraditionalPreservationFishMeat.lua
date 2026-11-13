@@ -8,6 +8,7 @@ local Tiles = require "TraditionalPreservationFishMeat/Tiles"
 local Doors = require "TraditionalPreservationCore/Doors"
 local Hearth = require "TraditionalPreservationCore/Hearth"
 local Station = require "TraditionalPreservationCore/Station"
+local Uses = require "TraditionalPreservationCore/Uses"
 
 F.MOD_DATA_KEY = "TraditionalPreservationFishMeat"
 
@@ -1604,21 +1605,9 @@ function F.tooBigToSaltWhole(fish)
     return (whole or gutted) and fish:getActualWeight() > F.SALT_WHOLE_MAX
 end
 
--- The salt the character carries, bags included, with uses left.
-local function saltCarried(character)
-    local found = character:getInventory():getAllTagRecurse(ItemTag.SALT, ArrayList.new())
-    local salt = {}
-    for i = 0, found:size() - 1 do
-        local item = found:get(i)
-        if item:getCurrentUses() > 0 then table.insert(salt, item) end
-    end
-    return salt
-end
-
+-- The salt in reach, as a craft has it (TP Core's Uses).
 function F.saltCarried(character)
-    local uses = 0
-    for _, item in ipairs(saltCarried(character)) do uses = uses + item:getCurrentUses() end
-    return uses
+    return Uses.count(character, ItemTag.SALT)
 end
 
 function F.isMeatCut(fullType)
@@ -1629,7 +1618,7 @@ function F.isMeatCut(fullType)
 end
 
 -- OnTest sees every input, so the knife and the salt pass here too. The recipe finds its first SALT_MIN
--- anywhere in reach; the rest must be on you.
+-- anywhere in reach, and so does the rest (TP Core's Uses).
 function F.canPack(item, character)
     if item:hasTag(ItemTag.SALT) or not instanceof(item, "Food") then return true end
     if F.tooBigToSaltWhole(item) then return false end
@@ -1638,27 +1627,12 @@ function F.canPack(item, character)
     return F.saltCarried(character) >= F.saltFor(item)
 end
 
--- Uses up the salt this fish takes past the recipe's own, part-used salt first. The Salt mod gives an empty
--- shaker or paper bag for what this empties, as it does for what the recipe empties.
+-- Uses up the salt this fish takes past the recipe's own, part-used salt first (TP Core's Uses, which gives back
+-- the Salt mod's empty shaker or paper bag for what this empties, as the Salt mod does for what the recipe empties).
 function F.chargeSalt(fish, character)
     local owed = F.saltFor(fish) - F.SALT_MIN
     if owed <= 0 or not character then return end
-    local salt = saltCarried(character)
-    table.sort(salt, function(a, b) return a:getCurrentUses() < b:getCurrentUses() end)
-    local emptied = ArrayList.new()
-    for _, item in ipairs(salt) do
-        if owed <= 0 then break end
-        local uses = item:getCurrentUses()
-        local taken = math.min(uses, owed)
-        owed = owed - taken
-        item:setCurrentUses(uses - taken)
-        if taken == uses then
-            item:getContainer():DoRemoveItem(item)
-            emptied:add(item)
-        end
-    end
-    local Salt = TraditionalPreservationSalt
-    if Salt and Salt.returnEmpties and emptied:size() > 0 then Salt.returnEmpties(character, emptied) end
+    Uses.take(character, ItemTag.SALT, owed)
 end
 
 -- Hands a share of a fish's food to another item; hungerShare defaults to share.

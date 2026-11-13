@@ -91,5 +91,16 @@
   "TraditionalPreservationFishMeat.ColdSmokedMeatSliceIngredient_Beef": "Beef Slice (Cold Smoked)",
   "TraditionalPreservationFishMeat.ColdSmokedMeatSliceIngredient_Mutton": "Mutton Slice (Cold Smoked)",
   "TraditionalPreservationFishMeat.ColdSmokedMeatSliceIngredient_Venison": "Venison Slice (Cold Smoked)",
-  "TraditionalPreservationFishMeat.ColdSmokedMeatSliceIngredient_Pork": "Pork Slice (Cold Smoked)"
+  "TraditionalPreservationFishMeat.ColdSmokedMeatSliceIngredient_Pork": "Pork Slice (Cold Smoked)",
+  "TraditionalPreservationFishMeat.RawCasings": "Raw Casings",
+  "TraditionalPreservationFishMeat.SaltedCasings": "Salted Casings",
+  "TraditionalPreservationFishMeat.PanOfBlackPudding": "Pan of Black Pudding",
+  "TraditionalPreservationFishMeat.RoastingPanOfBlackPudding": "Roasting Pan of Black Pudding",
+  "TraditionalPreservationFishMeat.BlackPudding": "Black Pudding",
+  "TraditionalPreservationFishMeat.BlackPuddingSlice": "Black Pudding Slice",
+  "TraditionalPreservationFishMeat.RawBloodSausage": "Blood Sausage",
+  "TraditionalPreservationFishMeat.PotOfBloodSausage": "Pot of Blood Sausages",
+  "TraditionalPreservationFishMeat.PotForgedBloodSausage": "Pot of Blood Sausages",
+  "TraditionalPreservationFishMeat.BloodSausage": "Blood Sausage (Boiled)",
+  "TraditionalPreservationFishMeat.BloodSausageSlice": "Blood Sausage Slice"
 }

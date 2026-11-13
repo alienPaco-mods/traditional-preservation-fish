@@ -4,6 +4,7 @@ if not isDebugEnabled() then return end
 
 local F = TraditionalPreservationFishMeat
 local Weather = require "TraditionalPreservationCore/Weather"
+local FluidAgeing = require "TraditionalPreservationCore/FluidAgeing"
 TPFM = {}
 
 local function say(text) print("[TPFM] " .. text) end
@@ -31,8 +32,10 @@ function TPFM.help()
     say("TPFM.food()                the cured fish and meat you carry: hunger, unhappiness, boredom, thirst, age against its days, ageing")
     say("TPFM.fish(name, n, weight, stage) spawn n fish, e.g. TPFM.fish(\"Walleye\", 2, 4); stage \"cured\", \"dried\", \"hotSmoked\", \"coldSmoked\" or \"stockfish\" (it may take weight's place); TPFM.fish() lists the names, \"all\" gives each")
     say("TPFM.meat(name, n, stage)  spawn n of a cut, e.g. TPFM.meat(\"Steak\", 2) or TPFM.meat(\"all\", 1, \"corned\"); stage \"corned\", \"country\", \"charque\", \"hotSmoked\" or \"dryCured\" (chicken, turkey and rabbit: corned and hotSmoked only); TPFM.meat() lists the names")
-    say("TPFM.give(name, n, option) spawn n of: head, stock, salt, fat, fatPot (option \"burnt\" or \"raw\"), crock (full, four Steaks in Lard). TPFM.give() lists them")
-    say("TPFM.kit(kind)             the things a test needs: \"potted\" (Potted Meat), \"stock\", \"poultry\" (hot smoked poultry) or \"flue\" (both flue kits and tools). TPFM.kit() lists the kinds")
+    say("TPFM.give(name, n, option) spawn n of: head, stock, salt, fat, fatPot (option \"burnt\" or \"raw\"), crock (full, four Steaks in Lard), blood (a Bucket of 4 L; option \"cured\" or \"spoiled\"), casings, saltedCasings, blackPudding, bloodSausage. TPFM.give() lists them")
+    say("TPFM.kit(kind)             the things a test needs: \"potted\" (Potted Meat), \"stock\", \"poultry\" (hot smoked poultry), \"blood\" (black pudding and blood sausage) or \"flue\" (both flue kits and tools). TPFM.kit() lists the kinds")
+    say("TPFM.animals()             live animals and carcasses within 6 tiles: weight, and the blood each gives (3.5 cl a kg)")
+    say("TPFM.blood(hours)          the blood you carry: state, age, hours left at 20 C, place; with hours, ages it that much first")
     say("TPFM.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
     say("TPFM.rain(hours)           add this many hours of rain and wet the open frames, to test rain on open charque")
     say("TPFM.fatRows()             the fat each vanilla animal's butchering table gives now")
@@ -417,7 +420,25 @@ local GIVES = {
         for _, crock in ipairs(give(F.CROCK, count)) do F.fillCrock(crock, batch, "Base.ClayJarGlazed") end
     end,
 }
-local GIVE_NAMES = "head, stock, boneBroth, chickenStock, soups (one of each stock's soup and stew), salt, fat (one of each raw fat), fatPot (option \"burnt\" or \"raw\"), crock"
+GIVES.blood = function(count, state)
+    local states = { cured = { "Cured" } }
+    local now = getGameTime():getWorldAgeHours()
+    for _, bucket in ipairs(give("Base.Bucket", count)) do
+        bucket:getFluidContainer():addFluid(FluidType.AnimalBlood, 4)
+        FluidAgeing.look(bucket, now)
+        for _, treatment in ipairs(states[state] or {}) do FluidAgeing.treat(bucket, now, treatment) end
+        local record = bucket:getModData()[FluidAgeing.KEY]
+        if state == "spoiled" and record then
+            record.age = F.BLOOD_SPOIL_HOURS
+            FluidAgeing.apply(bucket:getFluidContainer(), record, F.BLOOD_SPEC)
+        end
+    end
+end
+GIVES.casings = function(count) give("TraditionalPreservationFishMeat.RawCasings", count) end
+GIVES.saltedCasings = function(count) give("TraditionalPreservationFishMeat.SaltedCasings", count) end
+GIVES.blackPudding = function(count) give("TraditionalPreservationFishMeat.BlackPudding", count) end
+GIVES.bloodSausage = function(count) give("TraditionalPreservationFishMeat.BloodSausage", count) end
+local GIVE_NAMES = "head, stock, boneBroth, chickenStock, soups (one of each stock's soup and stew), salt, fat (one of each raw fat), fatPot (option \"burnt\" or \"raw\"), crock, blood (a Bucket of 4 L; option \"cured\" or \"spoiled\"), casings, saltedCasings, blackPudding, bloodSausage"
 
 function TPFM.give(name, count, option)
     if not GIVES[name] then return say("Things: " .. GIVE_NAMES) end
@@ -440,6 +461,12 @@ local KITS = {
         "Base.ChickenWhole", "Base.TurkeyWhole", "Base.Chicken", "Base.ChickenWings", "Base.ChickenFillet", "Base.TurkeyLegs",
         "Base.TurkeyWings", "Base.TurkeyFillet", "Base.Rabbitmeat", "Base.Steak", "Base.Salt", "Base.Salt",
         "Base.KitchenKnife" },
+    blood = { about = "a Bucket of 4 L of fresh blood, an Empty Jar, a Baking Pan, a Pot, every filler (Oats, Rice, 12 grains each of Barley, Rye and Wheat), Lard, Pork Fat, 4 Salt, Vinegar, Raw Casings, Salted Casings and a Kitchen Knife, for black pudding and blood sausage (fill the Pot with 1.5 L of water)",
+        counts = { ["Base.BarleySeed"] = 12, ["Base.RyeSeed"] = 12, ["Base.WheatSeed"] = 12 },
+        "Base.EmptyJar", "Base.BakingPan", "Base.Pot", "Base.OatsRaw", "Base.Rice", "Base.Lard",
+        "TraditionalPreservationFishMeat.PorkFat", "Base.Salt", "Base.Salt", "Base.Salt", "Base.Salt", "Base.Vinegar2",
+        "TraditionalPreservationFishMeat.RawCasings", "TraditionalPreservationFishMeat.SaltedCasings", "Base.KitchenKnife",
+        give = "blood" },
     flue = { about = "both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel",
         "Base.ClayPipeSegment", "Base.ClayPipeSegment", "Base.FlatStone", "Base.FlatStone", "Base.FlatStone", "Base.Clay",
         "Base.Clay", "Base.Clay", "Base.MasonsTrowel", "Base.Shovel" },
@@ -452,7 +479,66 @@ function TPFM.kit(kind)
         return
     end
     for _, fullType in ipairs(kit) do give(fullType) end
+    for fullType, count in pairs(kit.counts or {}) do give(fullType, count) end
+    if kit.give then GIVES[kit.give](1) end
     say("Gave " .. kit.about .. ".")
+end
+
+-- Animals within ANIMAL_REACH tiles: a live one's weight and the blood it would give (the game's own sum), and a
+-- carcass's blood left. The game's Animal Info window shows no weight.
+local ANIMAL_REACH = 6
+function TPFM.animals()
+    local square, cell, found = getPlayer():getSquare(), getCell(), 0
+    for dx = -ANIMAL_REACH, ANIMAL_REACH do
+        for dy = -ANIMAL_REACH, ANIMAL_REACH do
+            local there = cell:getGridSquare(square:getX() + dx, square:getY() + dy, square:getZ())
+            local animals = there and there:getAnimals()
+            for i = 0, animals and animals:size() - 1 or -1 do
+                local animal = animals:get(i)
+                local weight = animal:getData():getWeight()
+                say(string.format("%s (%s): %.0f kg, blood %.2f L (%.1f cl a kg)", animal:getFullName(), animal:getAnimalType(),
+                    weight, animal:getBloodQuantity(), weight > 0 and animal:getBloodQuantity() * 100 / weight or 0))
+                found = found + 1
+            end
+            local bodies = there and there:getDeadBodys()
+            for i = 0, bodies and bodies:size() - 1 or -1 do
+                local data = bodies:get(i):getModData()
+                if data.AnimalType then
+                    say(string.format("Carcass of a %s: %.2f L of blood left", tostring(data.AnimalType), tonumber(data.BloodQty) or 0))
+                    found = found + 1
+                end
+            end
+        end
+    end
+    if found == 0 then say("No animal or carcass within " .. ANIMAL_REACH .. " tiles.") end
+end
+
+-- The blood the player carries (bags included): its fluid, treatments, age against its spoiling, and place. With
+-- hours, each record is first aged that many hours at the reference (20 C).
+function TPFM.blood(hours)
+    local now = getGameTime():getWorldAgeHours()
+    local items = getPlayer():getInventory():getAllEvalRecurse(function(item)
+        local usable, spoiled = F.bloodIn(item)
+        return usable + spoiled > 0
+    end)
+    if items:size() == 0 then return say("You carry no blood.") end
+    for i = 0, items:size() - 1 do
+        local item = items:get(i)
+        local record, spec = FluidAgeing.look(item, now)
+        if record and hours then
+            record.age = record.age + hours
+            FluidAgeing.apply(item:getFluidContainer(), record, spec)
+        end
+        if not record then
+            say(item:getDisplayName() .. ": no record (blood ageing off?)")
+        else
+            local state = FluidAgeing.state(record, spec)
+            local left = FluidAgeing.hoursLeft(record, spec)
+            say(string.format("%s: %.2f L, %s, %s, age %.1f h, %s, in %s", item:getDisplayName(),
+                item:getFluidContainer():getAmount(), item:getFluidContainer():getUiName(), state and state.name or "untreated",
+                record.age, left and string.format("spoils in %.1f h at 20 C", left) or "spoiled", tostring(record.place)))
+        end
+    end
 end
 
 -- Crocks carried, and in containers within CROCK_REACH tiles on the player's floor.

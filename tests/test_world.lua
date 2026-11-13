@@ -99,6 +99,8 @@ end
 dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
 dofile("42/media/lua/shared/TraditionalPreservationFishMeatPotted.lua")
 dofile("42/media/lua/shared/TraditionalPreservationFishMeatSmokehouse.lua")
+for _, name in ipairs({ "Cow", "Pig", "Sheep", "Deer", "AnimalParts" }) do package.loaded["Definitions/animal/" .. name .. "Definitions"] = true end
+dofile("42/media/lua/shared/TraditionalPreservationFishMeatBlood.lua")
 dofile("42/media/lua/server/TraditionalPreservationFishMeatWorld.lua")
 local T, W = TraditionalPreservationFishMeat, TraditionalPreservationFishMeatWorld
 local PRESSED, GUTTED = "TraditionalPreservationFishMeat.SaltPressedFish", "TraditionalPreservationFishMeat.GuttedFish"

@@ -61,6 +61,18 @@ MEAT_POTS = {"PotOfMeatInFat": "Item_PotFull", "PotForgedMeatInFat": "Item_Pot_F
 MEAT_IN_FAT = (150, 92, 60)
 CROCKS = {"PottedMeat_Clay": "Item_ClayJar_Fired", "PottedMeat_Glazed": "Item_ClayJar_Glazed_Fired"}
 SET_FAT = (240, 234, 212)
+# Blood (0.4.36): vanilla's sausage, loaf and bread slices pulled to the near-black of cooked blood, with oat and fat
+# flecks on the pudding; a raw link a dark red, cooked (the game's _Cooked icon) nearly black. Their ground models
+# are vanilla's meshes with the same textures pulled the same way.
+RAW_BLOOD = ((112, 30, 32), 0.85)
+COOKED_BLOOD = ((46, 20, 22), 0.9)
+BLOOD_ICONS = {"BloodSausage": ("Item_Sausage", RAW_BLOOD, False), "BloodSausage_Cooked": ("Item_Sausage", COOKED_BLOOD, False),
+               "BloodSausageSlice": ("Item_SalamiSlices", COOKED_BLOOD, True),
+               "BlackPudding": ("Item_Bread", COOKED_BLOOD, True), "BlackPuddingSlice": ("Item_BreadSlices", COOKED_BLOOD, True)}
+BLOOD_MODELS = {"BloodSausageRawModel": ("SausageRaw", False), "BloodSausageModel": ("SausageCooked", False),
+                "BloodSausageSliceModel": ("Salami", True), "BlackPuddingModel": ("Bread", True),
+                "BlackPuddingSlicesModel": ("CheeseSandwich_PeanutButterSandwich_BreadSlices", True)}
+FLECK = (214, 202, 176)
 OUTLINE_BELOW = 70  # pixels with no channel above this are the icon's outline and stay as they are
 # Vanilla's icons are spread over these packs.
 ICON_PACKS = ["UI2.pack", "UI.pack"]
@@ -129,6 +141,22 @@ def crock(image):
     return icon
 
 
+def flecks(image, share=0.07):
+    """Pale oat and fat flecks over an icon's inside, the same each build."""
+    image = image.convert("RGBA").copy()
+    pixels = image.load()
+    dots = random.Random(7)
+    for x in range(image.width):
+        for y in range(image.height):
+            r, g, b, a = pixels[x, y]
+            inside = all(0 <= x + dx < image.width and 0 <= y + dy < image.height and pixels[x + dx, y + dy][3] > 128
+                         for dx, dy in ((-2, 0), (2, 0), (0, -2), (0, 2)))
+            if inside and dots.random() < share:
+                shade = 0.8 + dots.random() * 0.2
+                pixels[x, y] = tuple(int(c * shade) for c in FLECK) + (a,)
+    return image
+
+
 def read_icons(game, wanted):
     """Each wanted icon from the first pack that has it. Stops the build if one is in none."""
     icons = {}
@@ -147,7 +175,7 @@ def main():
     game = Path(sys.argv[1]) if len(sys.argv) > 1 else GAME
     folder = Path(__file__).resolve().parent.parent / "42" / "media" / "textures"
     wanted = ({source for source, _, _, _ in FATS.values()} | set(POTS.values()) | set(CUTS.values())
-              | set(CROCKS.values()))
+              | set(CROCKS.values()) | {source for source, _, _ in BLOOD_ICONS.values()})
     icons = read_icons(game, wanted)
     for name, (source, colour, amount, mirrored) in FATS.items():
         icon = ImageOps.mirror(icons[source]) if mirrored else icons[source]
@@ -178,6 +206,13 @@ def main():
         meat_pot(icons[source]).save(folder / f"Item_{name}.png")
     for name, source in CROCKS.items():
         crock(icons[source]).save(folder / f"Item_{name}.png")
+    for name, (source, (colour, amount), flecked) in BLOOD_ICONS.items():
+        icon = pull(icons[source], colour, amount)
+        (flecks(icon) if flecked else icon).save(folder / f"Item_{name}.png")
+    for name, (source, flecked) in BLOOD_MODELS.items():
+        colour = RAW_BLOOD if name == "BloodSausageRawModel" else COOKED_BLOOD
+        texture = pull(Image.open(game / f"media/textures/WorldItems/{source}.png"), *colour)
+        (flecks(texture, 0.05) if flecked else texture).save(folder / f"{name}.png")
 
 
 if __name__ == "__main__":

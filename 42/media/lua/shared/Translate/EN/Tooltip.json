@@ -91,5 +91,14 @@
   "Tooltip_craft_pressSaltedMeat": "The short cure, one to two days by the heaviest cut: Corned meat, for charque on a drying station or hot smoking. Too short for a Leg of Pork. Poultry and rabbit take this one only, a light brine: a whole chicken 38 hours, a turkey 48; Corned, they keep 3 days.",
   "Tooltip_craft_countryCureMeat": "The long cure, not for poultry or rabbit: 10 days for cuts, 21 if a Leg of Pork is in the batch. The salt goes all the way through, for meat that dries for weeks in the shade or the Smokehouse: dry cured meat and country ham. A cold-season job: in a warm season it spoils by the bone.",
   "Tooltip_TraditionalPreservationFishMeat_BoneBroth": "Bone broth: little food in it, but plenty of taste. Its first ingredient makes it a soup or a stew, with up to 6 ingredients and your seasonings. It starts out tastier than a plain soup or stew and takes the boredom off. Cook it before eating.",
-  "Tooltip_TraditionalPreservationFishMeat_ChickenStock": "Chicken stock from feet and heads. Its first ingredient makes it a soup or a stew, with up to 6 ingredients and your seasonings. It starts out tastier than a plain soup or stew and takes the boredom off. Cook it before eating."
+  "Tooltip_TraditionalPreservationFishMeat_ChickenStock": "Chicken stock from feet and heads. Its first ingredient makes it a soup or a stew, with up to 6 ingredients and your seasonings. It starts out tastier than a plain soup or stew and takes the boredom off. Cook it before eating.",
+  "Tooltip_TraditionalPreservationFishMeat_TreatBlood": "Stirred into the container's blood, salt or vinegar: a use for each 2 L. Fresh blood keeps 1 day at 20 C, 3 in a fridge; Cured blood 3 days, 7 in a fridge. A freezer stops it.",
+  "Tooltip_TraditionalPreservationFishMeat_RawCasings": "Pig, cattle, sheep or deer intestines from butchering. They go off in a day: clean them and pack them in salt.",
+  "Tooltip_TraditionalPreservationFishMeat_SaltedCasings": "Cleaned casings packed in salt: they keep a year. One fills a batch of six blood sausages.",
+  "Tooltip_TraditionalPreservationFishMeat_PanOfBlackPudding": "Blood, oats, fat and salt: bake it within a day, an hour in an oven or on any stove or fire, then turn it out. The loaf keeps the mix's age.",
+  "Tooltip_TraditionalPreservationFishMeat_BlackPudding": "Baked blood, oats and fat. Slice it to eat or cook with it.",
+  "Tooltip_TraditionalPreservationFishMeat_RawBloodSausage": "Stuffed, not yet cooked: poach six in a pot of water and they keep a week. Fried as it is, it keeps only a day or two.",
+  "Tooltip_TraditionalPreservationFishMeat_PotOfBloodSausage": "Six blood sausages in water: half an hour at the boil, then take them out.",
+  "Tooltip_TraditionalPreservationFishMeat_BloodSausage": "Poached blood sausage: eat it as it is, fry it, slice it, or put it in a dish. Keeps a week.",
+  "Tooltip_TraditionalPreservationFishMeat_Filler": "Filler: a quarter of a bag of Oats or Rice (12 uses), or 12 grains of Barley, Rye or Wheat."
 }

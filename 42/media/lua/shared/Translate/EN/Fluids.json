@@ -3,5 +3,8 @@
   "Fluid_Name_RawSuet": "Suet (Raw)",
   "Fluid_Name_MeltedLard": "Lard (Melted)",
   "Fluid_Name_MeltedTallow": "Tallow (Melted)",
-  "Fluid_Name_RancidFat": "Fat (Rancid)"
+  "Fluid_Name_RancidFat": "Fat (Rancid)",
+  "Fluid_Name_CuredBlood": "Animal Blood (Cured)",
+  "Fluid_Name_SpoiledBlood": "Animal Blood (Spoiled)",
+  "Fluid_Name_AnimalBlood": "Animal Blood (Fresh)"
 }
