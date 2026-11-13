@@ -393,8 +393,12 @@ module TraditionalPreservationFishMeat
         Tooltip = Tooltip_TraditionalPreservationFishMeat_Head,
     }
 
-    /* Fish head stock that is already a stew: the evolved recipes below add up to 6 stew ingredients and
-       any seasonings, as vanilla stew does. onCreateHeadStock gives it the head's food and lists the head. */
+    /* Fish head stock: a pot of water and a head. Its first ingredient makes it Fish Head Soup or Fish Head Stew
+       (below). onCreateHeadStock gives it the head's food, not its hunger, and lists the head.
+       Design decision (user, 2026-11-13): every stock, and the soups and stews made from them, starts at
+       UnhappyChange -10 and BoredomChange -10, at hunger -5 with small calories. A stock is worth its taste.
+       Vanilla's soups and stews start at 0 (addItem zeroes a new pot's mood), so -10 is a modest lead.
+       Balance passes leave these alone. */
     item PotOfFishHeadStock
     {
         DisplayCategory = Food,
@@ -415,7 +419,8 @@ module TraditionalPreservationFishMeat
         DaysTotallyRotten = 5,
         HungerChange = -5.0,
         ThirstChange = -30.0,
-        UnhappyChange = -20,
+        UnhappyChange = -10,
+        BoredomChange = -10,
         Calories = 60.0,
         Carbohydrates = 0.0,
         Lipids = 4.0,
@@ -432,7 +437,7 @@ module TraditionalPreservationFishMeat
         DisplayCategory = Food,
         ItemType = base:food,
         Weight = 3.0,
-        Icon = Pot_Forged_Stew,
+        Icon = Pot_Forged_Soup,
         BadCold = true,
         BadInMicrowave = true,
         CookingSound = BoilingFood,
@@ -447,13 +452,14 @@ module TraditionalPreservationFishMeat
         DaysTotallyRotten = 5,
         HungerChange = -5.0,
         ThirstChange = -30.0,
-        UnhappyChange = -20,
+        UnhappyChange = -10,
+        BoredomChange = -10,
         Calories = 60.0,
         Carbohydrates = 0.0,
         Lipids = 4.0,
         Proteins = 8.0,
-        StaticModel = CookingPotForged_StewGround,
-        WorldStaticModel = CookingPotForged_StewGround,
+        StaticModel = CookingPotForged_SoupGround,
+        WorldStaticModel = CookingPotForged_SoupGround,
         Tags = base:hasmetal,
         SoundMap = DumpContents EmptyPot,
         Tooltip = Tooltip_TraditionalPreservationFishMeat_HeadStock,
@@ -486,39 +492,194 @@ module TraditionalPreservationFishMeat
         }
     }
 
-    evolvedrecipe FishHeadStock
+    /* The stock becomes a soup or a stew with its first ingredient: two evolved recipes on each stock pot, each with
+       its own result pot (vanilla's Soup and Stew templates, so soup takes greens and roe, stew red meat). Vanilla's
+       addItem makes the result pot fresh, with the stock's food but no mood and no listed parts, so
+       F.carryStock (TraditionalPreservationFishMeatEvolved.lua) puts the stock's unhappiness, boredom and parts back.
+       MaxItems is vanilla's 6 plus the one listed item: the head here, a bones or chicken icon for the others. */
+    item PotOfFishHeadSoup
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = PotFull,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.Pot,
+        MinutesToCook = 50,
+        MinutesToBurn = 100,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 60.0,
+        Carbohydrates = 0.0,
+        Lipids = 4.0,
+        Proteins = 8.0,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    item PotForgedFishHeadSoup
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = Pot_Forged_Soup,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.PotForged,
+        MinutesToCook = 50,
+        MinutesToBurn = 100,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 60.0,
+        Carbohydrates = 0.0,
+        Lipids = 4.0,
+        Proteins = 8.0,
+        StaticModel = CookingPotForged_SoupGround,
+        WorldStaticModel = CookingPotForged_SoupGround,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    item PotOfFishHeadStew
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = PotFull,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.Pot,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 60.0,
+        Carbohydrates = 0.0,
+        Lipids = 4.0,
+        Proteins = 8.0,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    item PotForgedFishHeadStew
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = Pot_Forged_Stew,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.PotForged,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 60.0,
+        Carbohydrates = 0.0,
+        Lipids = 4.0,
+        Proteins = 8.0,
+        StaticModel = CookingPotForged_StewGround,
+        WorldStaticModel = CookingPotForged_StewGround,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    evolvedrecipe FishHeadSoup
     {
         BaseItem = TraditionalPreservationFishMeat.PotOfFishHeadStock,
         MaxItems = 7,
-        ResultItem = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+        ResultItem = TraditionalPreservationFishMeat.PotOfFishHeadSoup,
         Cookable = true,
-        Name = Prepare Fish Head Stock,
-        Template = Stew,
+        Name = Prepare Fish Head Soup,
+        Template = Soup,
     }
 
-    evolvedrecipe FishHeadStockForged
+    evolvedrecipe FishHeadSoupForged
     {
         BaseItem = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
         MaxItems = 7,
-        ResultItem = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+        ResultItem = TraditionalPreservationFishMeat.PotForgedFishHeadSoup,
         Cookable = true,
-        Name = Prepare Fish Head Stock,
+        Name = Prepare Fish Head Soup,
+        Template = Soup,
+    }
+
+    evolvedrecipe FishHeadStew
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotOfFishHeadStew,
+        Cookable = true,
+        Name = Prepare Fish Head Stew,
         Template = Stew,
     }
 
-    /* Vanilla's Divide Food into Bowls only knows vanilla's pots, so the stock has its own, the same in every other way. */
+    evolvedrecipe FishHeadStewForged
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotForgedFishHeadStew,
+        Cookable = true,
+        Name = Prepare Fish Head Stew,
+        Template = Stew,
+    }
+
+    /* Vanilla's Divide Food into Bowls only knows vanilla's pots, so the stocks and their soups and stews have their
+       own, the same in every other way. The ids name Fish Head Stock, the first of them; every stock pot uses them.
+       A stock or a soup fills Soup Bowls, a stew Stew Bowls; onCreateStockBowls names them after the dish. */
     craftRecipe MakeFishHeadStock4Bowls
     {
         timedAction = MixingBowl,
         time = 80,
-        OnCreate = RecipeCodeOnCreate.inheritFoodNameBowl,
+        OnCreate = TraditionalPreservationFishMeat.onCreateStockBowls,
         Tooltip = Tooltip_Recipe_CookedPortion,
         Tags = AnySurfaceCraft;Cooking,
         category = Cooking,
         inputs
         {
             item 4 [Base.Bowl;Base.ClayBowl] mode:destroy flags[ItemCount],
-            item 1 [TraditionalPreservationFishMeat.PotOfFishHeadStock;TraditionalPreservationFishMeat.PotForgedFishHeadStock] mappers[bowlType;potType] flags[InheritCondition;InheritCooked;InheritFood;ItemCount],
+            item 1 [TraditionalPreservationFishMeat.PotOfFishHeadStock;TraditionalPreservationFishMeat.PotForgedFishHeadStock;TraditionalPreservationFishMeat.PotOfFishHeadSoup;TraditionalPreservationFishMeat.PotForgedFishHeadSoup;TraditionalPreservationFishMeat.PotOfFishHeadStew;TraditionalPreservationFishMeat.PotForgedFishHeadStew;TraditionalPreservationFishMeat.PotOfBoneBroth;TraditionalPreservationFishMeat.PotForgedBoneBroth;TraditionalPreservationFishMeat.PotOfBoneBrothSoup;TraditionalPreservationFishMeat.PotForgedBoneBrothSoup;TraditionalPreservationFishMeat.PotOfBoneBrothStew;TraditionalPreservationFishMeat.PotForgedBoneBrothStew;TraditionalPreservationFishMeat.PotOfChickenStock;TraditionalPreservationFishMeat.PotForgedChickenStock;TraditionalPreservationFishMeat.PotOfChickenSoup;TraditionalPreservationFishMeat.PotForgedChickenSoup;TraditionalPreservationFishMeat.PotOfChickenStew;TraditionalPreservationFishMeat.PotForgedChickenStew] mappers[bowlType;potType] flags[InheritCondition;InheritCooked;InheritFood;ItemCount],
         }
         outputs
         {
@@ -527,15 +688,63 @@ module TraditionalPreservationFishMeat
         }
         itemMapper bowlType
         {
-            Base.StewBowl = TraditionalPreservationFishMeat.PotOfFishHeadStock,
-            Base.StewBowl = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
-            Base.StewBowlClay = TraditionalPreservationFishMeat.PotOfFishHeadStock,
-            Base.StewBowlClay = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfFishHeadSoup,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedFishHeadSoup,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfBoneBroth,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedBoneBroth,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfBoneBrothSoup,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedBoneBrothSoup,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfChickenStock,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedChickenStock,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfChickenSoup,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedChickenSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfFishHeadSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedFishHeadSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfBoneBroth,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedBoneBroth,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfBoneBrothSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedBoneBrothSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfChickenStock,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedChickenStock,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfChickenSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedChickenSoup,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotOfFishHeadStew,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotForgedFishHeadStew,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotOfBoneBrothStew,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotForgedBoneBrothStew,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotOfChickenStew,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotForgedChickenStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotOfFishHeadStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotForgedFishHeadStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotOfBoneBrothStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotForgedBoneBrothStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotOfChickenStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotForgedChickenStew,
         }
         itemMapper potType
         {
             Base.Pot = TraditionalPreservationFishMeat.PotOfFishHeadStock,
             Base.PotForged = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfFishHeadSoup,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedFishHeadSoup,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfFishHeadStew,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedFishHeadStew,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfBoneBroth,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedBoneBroth,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfBoneBrothSoup,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedBoneBrothSoup,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfBoneBrothStew,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedBoneBrothStew,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfChickenStock,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedChickenStock,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfChickenSoup,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedChickenSoup,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfChickenStew,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedChickenStew,
         }
     }
 
@@ -543,14 +752,14 @@ module TraditionalPreservationFishMeat
     {
         timedAction = MixingBowl,
         time = 80,
-        OnCreate = RecipeCodeOnCreate.inheritFoodNameBowl,
+        OnCreate = TraditionalPreservationFishMeat.onCreateStockBowls,
         Tooltip = Tooltip_Recipe_CookedPortion,
         Tags = AnySurfaceCraft;Cooking,
         category = Cooking,
         inputs
         {
             item 2 [Base.Bowl;Base.ClayBowl] mode:destroy flags[ItemCount],
-            item 1 [TraditionalPreservationFishMeat.PotOfFishHeadStock;TraditionalPreservationFishMeat.PotForgedFishHeadStock] mappers[bowlType;potType] flags[InheritCondition;InheritCooked;InheritFood;ItemCount],
+            item 1 [TraditionalPreservationFishMeat.PotOfFishHeadStock;TraditionalPreservationFishMeat.PotForgedFishHeadStock;TraditionalPreservationFishMeat.PotOfFishHeadSoup;TraditionalPreservationFishMeat.PotForgedFishHeadSoup;TraditionalPreservationFishMeat.PotOfFishHeadStew;TraditionalPreservationFishMeat.PotForgedFishHeadStew;TraditionalPreservationFishMeat.PotOfBoneBroth;TraditionalPreservationFishMeat.PotForgedBoneBroth;TraditionalPreservationFishMeat.PotOfBoneBrothSoup;TraditionalPreservationFishMeat.PotForgedBoneBrothSoup;TraditionalPreservationFishMeat.PotOfBoneBrothStew;TraditionalPreservationFishMeat.PotForgedBoneBrothStew;TraditionalPreservationFishMeat.PotOfChickenStock;TraditionalPreservationFishMeat.PotForgedChickenStock;TraditionalPreservationFishMeat.PotOfChickenSoup;TraditionalPreservationFishMeat.PotForgedChickenSoup;TraditionalPreservationFishMeat.PotOfChickenStew;TraditionalPreservationFishMeat.PotForgedChickenStew] mappers[bowlType;potType] flags[InheritCondition;InheritCooked;InheritFood;ItemCount],
         }
         outputs
         {
@@ -559,15 +768,63 @@ module TraditionalPreservationFishMeat
         }
         itemMapper bowlType
         {
-            Base.StewBowl = TraditionalPreservationFishMeat.PotOfFishHeadStock,
-            Base.StewBowl = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
-            Base.StewBowlClay = TraditionalPreservationFishMeat.PotOfFishHeadStock,
-            Base.StewBowlClay = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfFishHeadSoup,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedFishHeadSoup,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfBoneBroth,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedBoneBroth,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfBoneBrothSoup,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedBoneBrothSoup,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfChickenStock,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedChickenStock,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotOfChickenSoup,
+            Base.SoupBowl = TraditionalPreservationFishMeat.PotForgedChickenSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfFishHeadStock,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfFishHeadSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedFishHeadSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfBoneBroth,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedBoneBroth,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfBoneBrothSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedBoneBrothSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfChickenStock,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedChickenStock,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotOfChickenSoup,
+            Base.SoupBowlClay = TraditionalPreservationFishMeat.PotForgedChickenSoup,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotOfFishHeadStew,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotForgedFishHeadStew,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotOfBoneBrothStew,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotForgedBoneBrothStew,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotOfChickenStew,
+            Base.StewBowl = TraditionalPreservationFishMeat.PotForgedChickenStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotOfFishHeadStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotForgedFishHeadStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotOfBoneBrothStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotForgedBoneBrothStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotOfChickenStew,
+            Base.StewBowlClay = TraditionalPreservationFishMeat.PotForgedChickenStew,
         }
         itemMapper potType
         {
             Base.Pot = TraditionalPreservationFishMeat.PotOfFishHeadStock,
             Base.PotForged = TraditionalPreservationFishMeat.PotForgedFishHeadStock,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfFishHeadSoup,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedFishHeadSoup,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfFishHeadStew,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedFishHeadStew,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfBoneBroth,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedBoneBroth,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfBoneBrothSoup,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedBoneBrothSoup,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfBoneBrothStew,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedBoneBrothStew,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfChickenStock,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedChickenStock,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfChickenSoup,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedChickenSoup,
+            Base.Pot = TraditionalPreservationFishMeat.PotOfChickenStew,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedChickenStew,
         }
     }
 

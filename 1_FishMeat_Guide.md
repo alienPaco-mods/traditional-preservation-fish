@@ -126,11 +126,26 @@ Every road on one page. *Start* is when to begin it in Kentucky's weather; *Yiel
 - **Fish Guts** weigh 10% of the fish and go in chum. Smaller fish, fillets and salmon give none.
 - **A Fish Head** weighs 10% of the fish and takes 6% of its food with it. It spoils like fresh fish (3 / 6 days), makes you sick raw, is a little grim even cooked, and can't be dried. It goes in a soup, a stew, chum, or best of all a stock.
 
-**Fish Head Stock.** **Make Fish Head Stock** (Craft menu of the head or the pot, anywhere): a Cooking Pot or Forged Pot with **1.5 L of water** + a Fish Head. It's a stew from the start and the head takes no slot, so you still get **6 stew ingredients** plus seasonings. It starts with a plain stew's mood boost (-20 unhappiness) and is named for what you add: *Fish Head Stock with Fish and Carrots*, or plain *Fish Head Stock* past 3 kinds. Cook it, then **Divide Food into 4 Bowls** or **2 Bowls** at a table or counter. Keeps 3 / 5 days.
+**Fish Head Stock.** **Make Fish Head Stock** (Craft menu of the head or the pot, anywhere): a Cooking Pot or Forged Pot with **1.5 L of water** + a Fish Head. Right-click the pot: **Fish Head Soup** or **Fish Head Stew**. The first ingredient decides which it becomes, and the head takes no slot, so you still get **6 ingredients** plus seasonings. Soup takes greens, roe and ramen as the game's soup does; stew takes red meat as the game's stew does. It starts tastier than a plain soup or stew (-10 unhappiness, -10 boredom) and is named for what you add: *Fish Head Soup with Fish and Carrots*, or plain *Fish Head Soup* past 3 kinds. Cook it (soup 50 minutes, stew 70), then **Divide Food into 4 Bowls** or **2 Bowls** at a table or counter: Soup Bowls for a soup, Stew Bowls for a stew. Keeps 3 / 5 days.
+
+> *Margin note:* on the Volga the head goes into **ukha**, the fisherman's soup: heads and tails boiled first for the broth, then the good pieces cooked in it. Every stock in this mod works the same way.
 
 ### Meat
 
 Meat goes to the salt or the pot as the butcher cuts it: **no knife work needed**. The cuts are the base game's: Beef and Venison (0.5 weight), Steak and Mutton Chop (0.3), Pork (0.5) and Pork Chop (0.3).
+
+**Bone Broth.** **Make Bone Broth** (Craft menu, Cooking, anywhere): a Pot or Forged Pot with **1.5 L of water** + **2 Animal Bones**, or **1 Large Animal Bone**, or **6 Small Animal Bones**. Bones come from the skeleton once the carcass is butchered. The bones **come back**, as *Boiled Animal Bone*: still good for a club, a needle or a hook, but they give no second stock (smashed, their pieces are boiled too). **Chicken Stock.** **Make Chicken Stock**: the same pot + **2 parts**, Chicken Feet and chicken or turkey heads in any mix (a chicken gives 2 feet and a head; turkeys give no feet). Both work as Fish Head Stock does: the first ingredient makes **Bone Broth Soup** or **Bone Broth Stew**, **Chicken Soup** or **Chicken Stew**, with **6 ingredients** free, -10 unhappiness and -10 boredom, keeps 3 / 5 days, Divide into 2 or 4 Bowls.
+
+| Stock | Takes | Food in the pot | Becomes |
+|---|---|---|---|
+| Fish Head Stock | 1 Fish Head | the head's calories (about 50 from a 2.0 fish) | Fish Head Soup or Stew |
+| Bone Broth | 2 Animal Bones, or 6 Small | about 80 kcal, mostly protein | Bone Broth Soup or Stew |
+| Bone Broth (marrow) | 1 Large Animal Bone | about 150 kcal | the same |
+| Chicken Stock | 2 parts: Chicken Feet, chicken or turkey heads | about 35 kcal a foot, 15 a head | Chicken Soup or Stew |
+
+Every one of them reads hunger -5, -10 unhappiness and -10 boredom, and so do its soup and stew before the ingredients count.
+
+> *Margin note:* a stock is not a meal. A litre of skimmed bone broth is 50 to 150 kcal, nearly all of it gelatin from the collagen; only a split marrow bone adds real fat. What it gives is body and taste, which is why every farm kitchen kept a pot going. Boiling also cleans a bone: carvers simmer bones before they work them.
 
 **The Leg of Pork.** A grown pig also gives some of its Pork as whole hind legs, **2.5 weight** each, for country ham. They aren't extra meat: five of the Pork the pig gave become one leg, with their food, so the pig is worth what it always was.
 
@@ -712,13 +727,17 @@ What each stage is good for once it's in your hands. *Cook* is its time on a sto
 | **Stockfish** | No: hard as wood | Can't | - | **Soak Fish** (1 L); Slice Fish |
 | Stockfish (Soaked) | Yes, better hot | 20 min (50) | As soaked fish | Slice Fish |
 | Fish Head | Cooked, a little grim | 20 min (50) | Soup, stew, chum | **Make Fish Head Stock** (1.5 L) |
-| Fish Head Stock | Cooked | 70 min (140) | It's a stew already: add to it | Divide into 2 or 4 bowls |
+| Fish Head Stock | Cooked | 70 min (140) | Its first ingredient makes Fish Head Soup or Stew | Divide into 2 or 4 bowls |
+| A stock's soup / stew | Cooked | soup 50 min (100), stew 70 (140) | Up to 6 ingredients | Divide into 2 or 4 Soup or Stew Bowls |
 
 **Meat**
 
 | Stage | Eat as it is? | Cook | Into | Recipe |
 |---|---|---|---|---|
 | Leg of Pork | Cooked | 2½ hours (burns at 3½) | - | Pack Meat in Salt (10 salt) |
+| Animal Bones | No | - | - | **Make Bone Broth** (1.5 L): 2, 1 Large or 6 Small; they come back boiled |
+| Chicken Feet, chicken or turkey heads | Feet as the game has them; heads no | - | - | **Make Chicken Stock** (1.5 L), 2 parts |
+| Bone Broth, Chicken Stock | Cooked | 70 min (140) | Its first ingredient makes the soup or stew | Divide into 2 or 4 bowls |
 | Pork Fat, Suet, Mutton Fat | Cooked, but it's for rendering | 20 min (50) | - | Put in a Pot, or the Hearth's copper |
 | Pot of fat | No | 60 min (150) | - | Pour Off, then Strain |
 | Lard, Tallow | As the game's Lard | - | Tallow: soup, stew, stir fry, pasta, sandwich, taco, burrito, toast; bakes wherever Lard does | Put Meat in Lard or Tallow |
@@ -987,6 +1006,7 @@ Drying takes the water out and leaves the food in. Here's what one unit of inven
 | No Eat option on stockfish or charque | They're too hard to eat as they are. Rehydrate them first |
 | No Fish Head from gutting | The fish was 1.0 weight or less, or it was packed in salt (salted fish keep their heads) |
 | Make Fish Head Stock missing | The pot needs the full 1.5 L of water |
+| Make Bone Broth missing | The full 1.5 L of water, and bones that aren't *Boiled*: each bone gives its stock once |
 | Can't divide the stock into bowls | Like vanilla stew, it needs a table or counter nearby, and enough bowls |
 | Smokehouse or Firebox won't build there | Something stands in front of its door (or of a Hearth's or Firebox's door next to it), or a wall is on that edge. Turn it, or clear the tile |
 | Connect the Firebox is greyed out | It stands at the shed's door end, its own door faces the shed, the shed already has a Firebox, or the fire is lit or banked. Hover it for the reason |
@@ -1090,8 +1110,9 @@ Laid out as the game's planting seasons: the months a process works, its best an
 |---|---|
 | `TPFM.fish(name, n, weight, stage)` | Spawns `n` fish, at that weight if given (food scaled to match), e.g. `TPFM.fish("Walleye", 2, 4)`. A stage gives it further along: `"cured"` (Salt Cured, ready to hang), `"dried"` (Salt Dried), `"hotSmoked"`, `"coldSmoked"` (each as its station gives a cured fish, nothing spoiled) or `"stockfish"` (young, fresh off the frame), and may take the weight's place: `TPFM.fish("Walleye", 3, "cured")`. `TPFM.fish()` lists the names; `"all"` gives one of each |
 | `TPFM.meat(name, n, stage)` | Spawns `n` of a cut, e.g. `TPFM.meat("Steak", 2)`; `"all"` gives each of Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop and Leg of Pork. A stage gives it further along: `"corned"` (*Steak (Corned)*; no leg), `"country"` (Country Cured), `"charque"` (a Corned cut dried on a frame; no pork), `"hotSmoked"` (a Corned cut from a stoked Smokehouse; pork comes out as the game's Ham, no leg) or `"dryCured"` (dry cured, smoked and young, to age and slice). `TPFM.meat()` lists the names |
-| `TPFM.give(name, n, option)` | Spawns `n` of: `"head"` (Fish Head), `"stock"` (Pot of Fish Head Stock), `"salt"` (vanilla shaker), `"fat"` (one each of Pork Fat, Beef Suet and Mutton Fat), `"fatPot"` (a Pot of Pork Fat, cooked; option `"burnt"` or `"raw"`), `"crock"` (a full Crock of Potted Meat: four Steaks in Lard in a Glazed Clay Jar). Default food values. `TPFM.give()` lists them |
+| `TPFM.give(name, n, option)` | Spawns `n` of: `"head"` (Fish Head), `"stock"` (Pot of Fish Head Stock), `"boneBroth"`, `"chickenStock"`, `"soups"` (one of each stock's soup and stew), `"salt"` (vanilla shaker), `"fat"` (one each of Pork Fat, Beef Suet and Mutton Fat), `"fatPot"` (a Pot of Pork Fat, cooked; option `"burnt"` or `"raw"`), `"crock"` (a full Crock of Potted Meat: four Steaks in Lard in a Glazed Clay Jar). Default food values. `TPFM.give()` lists them |
 | `TPFM.kit("potted")` | Spawns what Potted Meat takes: a Pot, Lard, Salt, four cuts and the three clay vessels |
+| `TPFM.kit("stock")` | Spawns what every stock takes: a Fish Head, 2 Animal Bones, a Large Animal Bone, 6 Small Animal Bones, 2 Chicken Feet, a hen's and a turkey's head, 5 Pots to fill with water and 4 Bowls. |
 | `TPFM.kit("flue")` | Spawns both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel. With Core's `TPC.kit("firebox")` you can build and join a Firebox |
 
 **Looking things over**

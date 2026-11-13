@@ -34,28 +34,68 @@ end
 local vanillaComplete = ISAddItemInRecipe.complete
 
 function ISAddItemInRecipe:complete()
+    local stock = self.baseItem
     local result = vanillaComplete(self)
+    F.carryStock(stock, self.baseItem, self.recipe)
     F.useStandins(self.baseItem)
     return result
 end
 
--- Fish Head Stock is named "Fish Head Stock with Fish and Carrots" rather than vanilla's "Fish Fish
--- Head Stock". The rules are vanilla's: each food type is named by its first ingredient, or by the type
--- once two different ones share it; more than MAX_NAMED kinds of food give just "Fish Head Stock", and
--- seasonings are named only while the total stays within it. The head the stock started with isn't named.
+-- A stock's soup or stew is named "Fish Head Soup with Fish and Carrots" rather than vanilla's "Fish Fish
+-- Head Soup". The rules are vanilla's: each food type is named by its first ingredient, or by the type once
+-- two different ones share it; more than MAX_NAMED kinds of food give just the dish, and seasonings are named
+-- only while the total stays within it. What the stock started with isn't named: the first Fish Head, and
+-- every part in F.STOCK_PARTS. F.STOCK_POTS gives each stock's plain name, F.STOCK_DISHES each dish's.
 F.STOCK_POTS = {
-    ["TraditionalPreservationFishMeat.PotOfFishHeadStock"] = true,
-    ["TraditionalPreservationFishMeat.PotForgedFishHeadStock"] = true,
+    ["TraditionalPreservationFishMeat.PotOfFishHeadStock"] = "FishHeadStock",
+    ["TraditionalPreservationFishMeat.PotForgedFishHeadStock"] = "FishHeadStock",
+    ["TraditionalPreservationFishMeat.PotOfBoneBroth"] = "BoneBroth",
+    ["TraditionalPreservationFishMeat.PotForgedBoneBroth"] = "BoneBroth",
+    ["TraditionalPreservationFishMeat.PotOfChickenStock"] = "ChickenStock",
+    ["TraditionalPreservationFishMeat.PotForgedChickenStock"] = "ChickenStock",
 }
+F.STOCK_DISHES = {}
+for _, kind in ipairs({ "FishHead", "BoneBroth", "Chicken" }) do
+    for _, dish in ipairs({ "Soup", "Stew" }) do
+        for _, pot in ipairs({ "PotOf", "PotForged" }) do
+            F.STOCK_DISHES["TraditionalPreservationFishMeat." .. pot .. kind .. dish] = kind .. dish
+        end
+    end
+end
+
+-- Vanilla's addItem makes a stock's first soup or stew a fresh pot: the stock's food comes with it, but its
+-- unhappiness and boredom are zeroed and its listed parts dropped. They go back on here, the parts first so
+-- the naming skips them, and the dish is named again with them in place.
+function F.carryStock(stock, dish, recipe)
+    if not (stock and dish) or stock == dish or not F.STOCK_POTS[stock:getFullType()] then return end
+    dish:setUnhappyChange(dish:getUnhappyChangeUnmodified() + stock:getUnhappyChangeUnmodified())
+    dish:setBoredomChange(dish:getBoredomChangeUnmodified() + stock:getBoredomChangeUnmodified())
+    local parts = stock:getExtraItems()
+    if parts and parts:size() > 0 then
+        local added = {}
+        local extras = dish:getExtraItems()
+        if extras then
+            for i = 0, extras:size() - 1 do table.insert(added, extras:get(i)) end
+            extras:clear()
+        end
+        for i = 0, parts:size() - 1 do dish:addExtraItem(parts:get(i)) end
+        for _, fullType in ipairs(added) do dish:addExtraItem(fullType) end
+    end
+    if not dish:isCustomName() then ISAddItemInRecipe.checkName(dish, recipe) end
+end
+
 local MAX_NAMED = 3
 local HEAD = "TraditionalPreservationFishMeat.FishHead"
 
 local function namedKinds(list, skipHead, withMinor)
     local names, byType, order, plain = {}, {}, {}, nil
+    local skipParts = skipHead
     for i = 0, list:size() - 1 do
         local food = list:get(i)
         if skipHead and food == HEAD then
             skipHead = false
+        elseif skipParts and F.STOCK_PARTS and F.STOCK_PARTS[food] then
+            -- a starting part of a Chicken Stock
         elseif isItemFood(food) and (withMinor or not hasItemTag(food, ItemTag.MINOR_INGREDIENT)) then
             local foodType = getItemFoodType(food)
             if not foodType or foodType == "NoExplicit" then
@@ -107,15 +147,40 @@ function F.stockName(stock, recipe)
     return getText("IGUI_TraditionalPreservationFishMeat_StockWith", dish, joined(names))
 end
 
--- A stock pot is named by stockName instead of vanilla's rule; other dishes pass through.
+-- A stock's soup or stew is named by stockName instead of vanilla's rule; other dishes pass through.
 -- Wraps ISAddItemInRecipe.checkName: compare with vanilla after a game update.
 local vanillaCheckName = ISAddItemInRecipe.checkName
 
 ISAddItemInRecipe.checkName = function(baseItem, recipe)
-    if not (baseItem and F.STOCK_POTS[baseItem:getFullType()]) or baseItem:isCustomName() then
+    if not (baseItem and (F.STOCK_POTS[baseItem:getFullType()] or F.STOCK_DISHES[baseItem:getFullType()])) or baseItem:isCustomName() then
         return vanillaCheckName(baseItem, recipe)
     end
     local name = F.stockName(baseItem, recipe)
     if name then baseItem:setName(name) end
     if not isServer() then ISInventoryPage.dirtyUI() end
+end
+
+-- Vanilla's inheritFoodNameBowl names a bowl after the pot, so a stock with nothing added gave "Bowl of Pot of
+-- Bone Broth". The bowls are named after the dish instead: "Bowl of Bone Broth", "Bowl of Bone Broth Soup with
+-- Carrots".
+function F.onCreateStockBowls(craftRecipeData)
+    local pot
+    local inputs = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
+    for i = 0, inputs:size() - 1 do
+        local fullType = inputs:get(i):getFullType()
+        if F.STOCK_POTS[fullType] or F.STOCK_DISHES[fullType] then pot = inputs:get(i) end
+    end
+    if not pot then return end
+    local dish = pot:getDisplayName()
+    if dish == getItemNameFromFullType(pot:getFullType()) then
+        dish = getText("ContextMenu_EvolvedRecipe_" .. (F.STOCK_POTS[pot:getFullType()] or F.STOCK_DISHES[pot:getFullType()]))
+    end
+    local created = craftRecipeData:getAllCreatedItems()
+    for i = 0, created:size() - 1 do
+        local bowl = created:get(i)
+        if bowl:getFullType() ~= "Base.Pot" and bowl:getFullType() ~= "Base.PotForged" then
+            bowl:setName(getText("Tooltip_food_Bowl", dish))
+            bowl:setCustomName(true)
+        end
+    end
 end

@@ -79,5 +79,13 @@
   "TraditionalPreservationFishMeat.PackPottedMeat": "Pack Potted Meat",
   "Smokehouse_Chamber": "Smokehouse",
   "TraditionalPreservationFishMeat.Smokehouse_Chamber": "Smokehouse",
-  "Smokehouse": "Smokehouse"
+  "Smokehouse": "Smokehouse",
+  "MakeBoneBroth": "Make Bone Broth",
+  "TraditionalPreservationFishMeat.MakeBoneBroth": "Make Bone Broth",
+  "MakeMarrowBoneBroth": "Make Bone Broth",
+  "TraditionalPreservationFishMeat.MakeMarrowBoneBroth": "Make Bone Broth",
+  "MakeSmallBoneBroth": "Make Bone Broth",
+  "TraditionalPreservationFishMeat.MakeSmallBoneBroth": "Make Bone Broth",
+  "MakeChickenStock": "Make Chicken Stock",
+  "TraditionalPreservationFishMeat.MakeChickenStock": "Make Chicken Stock"
 }

@@ -387,6 +387,13 @@ end
 local GIVES = {
     head = function(count) give("TraditionalPreservationFishMeat.FishHead", count) end,
     stock = function(count) give("TraditionalPreservationFishMeat.PotOfFishHeadStock", count) end,
+    boneBroth = function(count) give("TraditionalPreservationFishMeat.PotOfBoneBroth", count) end,
+    chickenStock = function(count) give("TraditionalPreservationFishMeat.PotOfChickenStock", count) end,
+    soups = function(count)
+        for _, kind in ipairs({ "FishHead", "BoneBroth", "Chicken" }) do
+            for _, dish in ipairs({ "Soup", "Stew" }) do give("TraditionalPreservationFishMeat.PotOf" .. kind .. dish, count) end
+        end
+    end,
     salt = function(count) give("Base.Salt", count) end,
     fat = function(count) for _, row in ipairs(F.FAT_ROWS) do give(row.item, count) end end,
     fatPot = function(count, state)
@@ -400,7 +407,7 @@ local GIVES = {
         for _, crock in ipairs(give(F.CROCK, count)) do F.fillCrock(crock, batch, "Base.ClayJarGlazed") end
     end,
 }
-local GIVE_NAMES = "head, stock, salt, fat (one of each raw fat), fatPot (option \"burnt\" or \"raw\"), crock"
+local GIVE_NAMES = "head, stock, boneBroth, chickenStock, soups (one of each stock's soup and stew), salt, fat (one of each raw fat), fatPot (option \"burnt\" or \"raw\"), crock"
 
 function TPFM.give(name, count, option)
     if not GIVES[name] then return say("Things: " .. GIVE_NAMES) end
@@ -413,6 +420,11 @@ local KITS = {
     potted = { about = "a Pot, Lard, Salt, a Steak, Beef, Pork Chop and Pork, and a Clay Jar, Glazed Clay Jar and Clay Pot, for Potted Meat",
         "Base.Pot", "Base.Lard", "Base.Salt", "Base.Steak", "Base.Beef", "Base.PorkChop", "Base.Pork", "Base.ClayJar",
         "Base.ClayJarGlazed", "Base.ClayPot" },
+    stock = { about = "what every stock takes: a Fish Head, 2 Animal Bones, a Large Animal Bone, 6 Small Animal Bones, 2 Chicken Feet, a hen's and a turkey's head, 5 Pots (fill them with 1.5 L of water) and 4 Bowls",
+        "TraditionalPreservationFishMeat.FishHead",
+        "Base.AnimalBone", "Base.AnimalBone", "Base.LargeAnimalBone", "Base.SmallAnimalBone", "Base.SmallAnimalBone",
+        "Base.SmallAnimalBone", "Base.SmallAnimalBone", "Base.SmallAnimalBone", "Base.SmallAnimalBone", "Base.ChickenFoot",
+        "Base.ChickenFoot", "Base.Chicken_Hen_Brown_Head", "Base.Turkey_Hen_Head", "Base.Pot", "Base.Pot", "Base.Pot", "Base.Pot", "Base.Pot", "Base.Bowl", "Base.Bowl", "Base.Bowl", "Base.Bowl" },
     flue = { about = "both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel",
         "Base.ClayPipeSegment", "Base.ClayPipeSegment", "Base.FlatStone", "Base.FlatStone", "Base.FlatStone", "Base.Clay",
         "Base.Clay", "Base.Clay", "Base.MasonsTrowel", "Base.Shovel" },

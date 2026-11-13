@@ -82,7 +82,7 @@ Put Pork Fat (or Suet) in a Pot, cook it an hour on any fire, Pour Off the melte
 [/list]
 
 [h2]Fish Guts, heads and stock[/h2]
-A whole fish over 0.6 weight gives Fish Guts when gutted or packed. Gut Fish takes the head off a fish over 1.0 weight: a Fish Head for soups, stews or chum. [b]Fish Head Stock:[/b] a pot holding 1.5 L of water and a Fish Head make a stock that is already a stew, with the head taking no ingredient slot: add up to 6 stew ingredients plus seasonings. A fish big enough to fillet can still be sliced at any salted, dried or rehydrated stage.
+A whole fish over 0.6 weight gives Fish Guts when gutted or packed. Gut Fish takes the head off a fish over 1.0 weight: a Fish Head for soups, stews or chum. [b]Fish Head Stock:[/b] a pot holding 1.5 L of water and a Fish Head make a stock; its first ingredient turns it into Fish Head Soup or Fish Head Stew, with the head taking no ingredient slot: up to 6 ingredients plus seasonings. [b]Bone Broth[/b] (2 Animal Bones, a Large one or 6 Small; the bones come back boiled, still good for tools) and [b]Chicken Stock[/b] (2 Chicken Feet or chicken and turkey heads) work the same way: Bone Broth Soup or Stew, Chicken Soup or Stew. Every stock's soup and stew is tastier than a plain one and takes the boredom off. A fish big enough to fillet can still be sliced at any salted, dried or rehydrated stage.
 
 [h2]Weights and keeping times[/h2]
 Days are fresh, then rotten.

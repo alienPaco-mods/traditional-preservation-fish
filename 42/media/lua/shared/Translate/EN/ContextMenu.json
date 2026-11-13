@@ -1,6 +1,5 @@
 {
   "ContextMenu_EvolvedRecipe_FishHeadStock": "Fish Head Stock",
-  "ContextMenu_EvolvedRecipe_FishHeadStockForged": "Fish Head Stock",
   "ContextMenu_TraditionalPreservationFishMeat_RinseAtSink": "Rinse at Sink",
   "ContextMenu_TraditionalPreservationFishMeat_PalletSpeed": "Stockfish Pallet: ripens stockfish x%1 (%2)",
   "ContextMenu_TraditionalPreservationFishMeat_PalletNoSpeed": "Stockfish Pallet: no faster than a shelf here",
@@ -12,5 +11,19 @@
   "ContextMenu_TraditionalPreservationFishMeat_ConnectFirebox": "Connect the Firebox",
   "ContextMenu_TraditionalPreservationFishMeat_ConnectPipe": "With a Clay Pipe",
   "ContextMenu_TraditionalPreservationFishMeat_ConnectStones": "With a Stone Trench",
-  "ContextMenu_TraditionalPreservationFishMeat_DisconnectFirebox": "Disconnect the Firebox"
+  "ContextMenu_TraditionalPreservationFishMeat_DisconnectFirebox": "Disconnect the Firebox",
+  "ContextMenu_EvolvedRecipe_BoneBroth": "Bone Broth",
+  "ContextMenu_EvolvedRecipe_ChickenStock": "Chicken Stock",
+  "ContextMenu_EvolvedRecipe_FishHeadSoup": "Fish Head Soup",
+  "ContextMenu_EvolvedRecipe_FishHeadSoupForged": "Fish Head Soup",
+  "ContextMenu_EvolvedRecipe_FishHeadStew": "Fish Head Stew",
+  "ContextMenu_EvolvedRecipe_FishHeadStewForged": "Fish Head Stew",
+  "ContextMenu_EvolvedRecipe_BoneBrothSoup": "Bone Broth Soup",
+  "ContextMenu_EvolvedRecipe_BoneBrothSoupForged": "Bone Broth Soup",
+  "ContextMenu_EvolvedRecipe_BoneBrothStew": "Bone Broth Stew",
+  "ContextMenu_EvolvedRecipe_BoneBrothStewForged": "Bone Broth Stew",
+  "ContextMenu_EvolvedRecipe_ChickenSoup": "Chicken Soup",
+  "ContextMenu_EvolvedRecipe_ChickenSoupForged": "Chicken Soup",
+  "ContextMenu_EvolvedRecipe_ChickenStew": "Chicken Stew",
+  "ContextMenu_EvolvedRecipe_ChickenStewForged": "Chicken Stew"
 }

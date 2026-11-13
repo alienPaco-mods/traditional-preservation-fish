@@ -29,7 +29,7 @@ Events = { OnInitGlobalModData = { Add = function(handler) onInit = handler end 
 local loaded = {}
 ScriptManager = { instance = {} }
 function ScriptManager.instance:getCraftRecipe(name)
-    return { Load = function(_, recipeName, text) loaded[recipeName] = text end }
+    return { Load = function(_, recipeName, text) loaded[recipeName] = text end, getName = function() return (name:gsub("^Base%.", "")) end }
 end
 dofile("42/media/lua/shared/TraditionalPreservationFishMeat.lua")
 dofile("42/media/lua/shared/TraditionalPreservationFishMeatSmokehouse.lua")
@@ -756,14 +756,48 @@ local headBody = script:match("item FishHead\n    {(.-)\n    }")
 check("a head spoils like fresh fish", headBody:find("DaysFresh = 3,", 1, true) and headBody:find("DaysTotallyRotten = 6,", 1, true))
 check("and is a little unpleasant to eat", headBody:find("UnhappyChange = 5,", 1, true) ~= nil and not headBody:find("RemoveUnhappinessWhenCooked", 1, true))
 check("no drying recipe takes a head", not script:find("FishHead", (script:find("craftRecipe PressSaltedFish", 1, true)), true))
-for _, name in ipairs({ "FishHeadStock", "FishHeadStockForged" }) do
-    local evolved = script:match("evolvedrecipe " .. name .. "\n    {(.-)\n    }")
-    check(name .. " takes the head and 6 stew ingredients", evolved and evolved:find("MaxItems = 7,", 1, true) and evolved:find("Template = Stew,", 1, true))
-    local pot = evolved:match("BaseItem = ([%w%.]+),")
-    check(name .. " is already a stew", evolved:find("ResultItem = " .. pot .. ",", 1, true) ~= nil)
-    local body = script:match("item " .. pot:gsub("^.-%.", "") .. "\n    {(.-)\n    }")
-    check(name .. " starts as tasty as vanilla stew's -20", tonumber(body:match("UnhappyChange = (%-?%d+)")) == -20)
+-- Design decision (user, 2026-11-13): every stock, and the soups and stews made from them, starts at -10
+-- unhappiness and -10 boredom, at hunger -5 (vanilla's soups and stews start at 0). A balance pass that changes them has to change this test, on the
+-- user's word.
+do
+local both = script .. io.open("42/media/scripts/TraditionalPreservationFishMeat_Meat.txt"):read("*a")
+local STOCKS = { FishHead = { "PotOfFishHeadStock", "PotForgedFishHeadStock", 7 }, BoneBroth = { "PotOfBoneBroth", "PotForgedBoneBroth", 7 },
+    Chicken = { "PotOfChickenStock", "PotForgedChickenStock", 7 } }
+local bowlRecipes = {}
+for _, n in ipairs({ "4", "2" }) do bowlRecipes[n] = script:match("craftRecipe MakeFishHeadStock" .. n .. "Bowls\n    {(.-)\n    }\n") end
+local function checkPot(pot, minutes, bowl)
+    local body = both:match("item " .. pot .. "\n    {(.-)\n    }")
+    check(pot .. " starts at -10 unhappiness, -10 boredom, hunger -5 (design decision)", body
+        and tonumber(body:match("UnhappyChange = (%-?%d+)")) == -10 and tonumber(body:match("BoredomChange = (%-?%d+)")) == -10
+        and body:find("HungerChange = -5.0,", 1, true))
+    check(pot .. " keeps 3 / 5 days and cooks " .. minutes .. " minutes", body:find("DaysFresh = 3,", 1, true) and body:find("MinutesToCook = " .. minutes .. ",", 1, true))
+    for n, recipe in pairs(bowlRecipes) do
+        check(pot .. " divides into " .. n .. " " .. bowl .. "s", recipe:find("Base." .. bowl .. "Clay = TraditionalPreservationFishMeat." .. pot .. ",", 1, true) ~= nil)
+    end
 end
+for kind, stock in pairs(STOCKS) do
+    for index = 1, 2 do
+        checkPot(stock[index], 70, "SoupBowl")
+        for _, dish in ipairs({ "Soup", "Stew" }) do
+            local forged = index == 2 and "Forged" or ""
+            local result = (index == 2 and "PotForged" or "PotOf") .. kind .. dish
+            checkPot(result, dish == "Soup" and 50 or 70, dish .. "Bowl")
+            local evolved = both:match("evolvedrecipe " .. kind .. dish .. forged .. "\n    {(.-)\n    }")
+            check(kind .. dish .. forged .. " turns the stock into " .. result, evolved
+                and evolved:find("BaseItem = TraditionalPreservationFishMeat." .. stock[index] .. ",", 1, true)
+                and evolved:find("ResultItem = TraditionalPreservationFishMeat." .. result .. ",", 1, true)
+                and evolved:find("Template = " .. dish .. ",", 1, true) and evolved:find("MaxItems = " .. stock[3] .. ",", 1, true))
+        end
+    end
+end
+for recipeName, bones in pairs({ MakeBoneBroth = "item 2 [Base.AnimalBone] mode:keep", MakeMarrowBoneBroth = "item 1 [Base.LargeAnimalBone] mode:keep",
+        MakeSmallBoneBroth = "item 6 [Base.SmallAnimalBone] mode:keep" }) do
+    local recipe = both:match("craftRecipe " .. recipeName .. "\n    {(.-)\n    }\n")
+    check(recipeName .. " keeps its bones and refuses boiled ones", recipe and recipe:find(bones, 1, true)
+        and recipe:find("OnTest = TraditionalPreservationFishMeat.canBoil,", 1, true) and recipe:find("-fluid 1.5 categories[Water]", 1, true))
+end
+end
+
 for _, name in ipairs({ "SaltPackedFish", "SaltPressedFish", "GuttedFish", "FishHalf", "FishHead" }) do
     local body = script:match("item " .. name .. "\n    {(.-)\n    }")
     check(name .. " is dangerous uncooked", body:find("DangerousUncooked = true", 1, true) ~= nil)
@@ -845,8 +879,59 @@ function stock:addExtraItem(fullType) self.extras = self.extras or {}; table.ins
 local pot = newFood("Base.Pot", {})
 T.onCreateHeadStock(newRecipeData(0, { pot, stockHead }, { stock }))
 check("the stock carries the head's food", near(stock.values.Calories, 24) and near(stock.values.Proteins, 4.8))
-check("on top of the broth's hunger", near(stock.values.BaseHunger, -0.08) and near(stock.values.HungChange, -0.08))
+check("but not its hunger: every stock reads -5", near(stock.values.BaseHunger, -0.05) and near(stock.values.HungChange, -0.05))
 check("and lists the head as an ingredient", stock.extras and #stock.extras == 1 and stock.extras[1] == "TraditionalPreservationFishMeat.FishHead")
+
+do
+-- Bone Broth: two Animal Bones, one Large or six Small, about 80 kcal; the bones come back boiled
+local function newBone(fullType) local bone = newFood(fullType, {}); function bone:getHungChange() return 0 end; return bone end
+local boneBroth = newFood("TraditionalPreservationFishMeat.PotOfBoneBroth", { Calories = 80, BaseHunger = -0.05, HungChange = -0.05 })
+function boneBroth:addExtraItem(fullType) self.extras = self.extras or {}; table.insert(self.extras, fullType) end
+local bones = { newBone("Base.AnimalBone"), newBone("Base.AnimalBone") }
+check("a fresh bone can make stock", T.canBoil(bones[1]) and T.canBoil(newFood("Base.Pot", {})))
+T.onCreateBoneBroth(newRecipeData(0, bones, { boneBroth }))
+check("two bones give about 80 kcal, mostly protein", near(boneBroth.values.Calories, 80) and near(boneBroth.values.Proteins, 10) and near(boneBroth.values.Lipids, 3))
+check("and no more hunger than the broth's", near(boneBroth.values.HungChange, -0.05))
+check("it lists one bone icon, as Fish Head Stock lists its head", boneBroth.extras and #boneBroth.extras == 1 and boneBroth.extras[1] == "TraditionalPreservationFishMeat.BoneBrothIngredient")
+check("the bones come back boiled", bones[1]:getModData().boiled and bones[2].name == "Boiled AnimalBone" and bones[2].customName)
+check("a boiled bone makes no more stock", not T.canBoil(bones[1]))
+local marrow = newFood("TraditionalPreservationFishMeat.PotOfBoneBroth", { BaseHunger = -0.05, HungChange = -0.05 })
+function marrow:addExtraItem() end
+T.onCreateBoneBroth(newRecipeData(0, { newBone("Base.LargeAnimalBone") }, { marrow }))
+check("a Large bone's marrow gives more", near(marrow.values.Calories, 150) and near(marrow.values.Lipids, 12))
+local small = newFood("TraditionalPreservationFishMeat.PotOfBoneBroth", { BaseHunger = -0.05, HungChange = -0.05 })
+function small:addExtraItem() end
+local smalls = {}
+for i = 1, 6 do smalls[i] = newBone("Base.SmallAnimalBone") end
+T.onCreateBoneBroth(newRecipeData(0, smalls, { small }))
+check("six Small bones give what two Animal Bones do", near(small.values.Calories, 80) and near(small.values.Proteins, 10) and near(small.values.Lipids, 3))
+
+-- Smashing a boiled bone gives boiled pieces
+T.hookSmashBone()
+check("Smash Bone gets the OnCreate under its own name, so it keeps its translation", loaded["SmashBone"] == "{ OnCreate = TraditionalPreservationFishMeat.onCreateSmashedBone, }")
+local function smashData(input, pieces)
+    local data = newRecipeData(0, {}, pieces)
+    function data:getAllInputItems() return list({ newFood("Base.Hammer", {}), input }) end
+    return data
+end
+local pieces = { newBone("Base.SmallAnimalBone"), newBone("Base.SmallAnimalBone") }
+T.onCreateSmashedBone(smashData(bones[1], pieces))
+check("a boiled bone smashes into boiled pieces", pieces[1]:getModData().boiled and pieces[2]:getModData().boiled and not T.canBoil(pieces[1]))
+local freshPieces = { newBone("Base.SmallAnimalBone"), newBone("Base.SmallAnimalBone") }
+T.onCreateSmashedBone(smashData(newBone("Base.AnimalBone"), freshPieces))
+check("a fresh bone smashes into fresh pieces", T.canBoil(freshPieces[1]) and not freshPieces[1]:getModData().boiled)
+
+-- Chicken Stock: a foot gives its gelatin, a head a little, no hunger, and all are listed
+local poultry = newFood("TraditionalPreservationFishMeat.PotOfChickenStock", { Calories = 140, BaseHunger = -0.05, HungChange = -0.05 })
+function poultry:addExtraItem(fullType) self.extras = self.extras or {}; table.insert(self.extras, fullType) end
+local foot = newFood("Base.ChickenFoot", { Calories = 70, Proteins = 16, Lipids = 14, Carbohydrates = 17, BaseHunger = -0.12, HungChange = -0.12 })
+local hen = newFood("Base.Chicken_Hen_Brown_Head", {})
+T.onCreateChickenStock(newRecipeData(0, { foot, hen }, { poultry }))
+check("a foot and a head give 50 kcal", near(poultry.values.Calories, 50) and near(poultry.values.Proteins, 9) and near(poultry.values.Lipids, 1.8) and near(poultry.values.Carbohydrates, 0))
+check("and no hunger: every stock reads -5", near(poultry.values.HungChange, -0.05) and near(poultry.values.BaseHunger, -0.05))
+check("it lists one chicken icon, not its parts", poultry.extras and #poultry.extras == 1 and poultry.extras[1] == "TraditionalPreservationFishMeat.ChickenStockIngredient")
+
+end
 
 -- Ingredient stand-ins
 ISAddItemInRecipe = { complete = function() return true end }
@@ -874,7 +959,7 @@ for _, fullType in ipairs(standinTypes) do
 end
 
 -- Fish Head Stock names
-H.texts.ContextMenu_EvolvedRecipe_FishHeadStock = "Fish Head Stock"
+H.texts.ContextMenu_EvolvedRecipe_FishHeadSoup = "Fish Head Soup"
 H.texts.ContextMenu_EvolvedRecipe_and = "and"
 H.texts.ContextMenu_EvolvedRecipe_comma = ","
 local FOODS = {
@@ -892,20 +977,90 @@ function getItemFoodType(t) return FOODS[t][1] end
 function getItemDisplayName(t) return FOODS[t][2] end
 function getItemEvolvedRecipeName(t) return FOODS[t][3] end
 local function javaList(t) return { size = function() return #t end, get = function(_, i) return t[i + 1] end } end
-local recipe = { getUntranslatedName = function() return "FishHeadStock" end }
+local recipe = { getUntranslatedName = function() return "FishHeadSoup" end }
 local function stockNamed(extras, spices)
     return T.stockName({ getExtraItems = function() return javaList(extras) end, getSpices = function() return spices and javaList(spices) end }, recipe)
 end
 check("the head alone leaves the name be", stockNamed({ "TraditionalPreservationFishMeat.FishHead" }) == nil)
-check("a fish is named after the stock", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "TraditionalPreservationFishMeat.GuttedFishIngredient" }) == "Fish Head Stock with Fish")
-check("two kinds join with and", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "TraditionalPreservationFishMeat.GuttedFishIngredient", "Base.Carrots" }) == "Fish Head Stock with Fish and Carrots")
-check("two vegetables become Vegetables", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Potato" }) == "Fish Head Stock with Vegetables")
-check("three kinds use a comma", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice" }) == "Fish Head Stock with Carrots, Rabbit Meat and Rice")
-check("more than three is just the stock", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice", "Base.Mushroom" }) == "Fish Head Stock")
-check("a seasoning is named while there's room", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots" }, { "Base.Pepper" }) == "Fish Head Stock with Carrots and Pepper")
-check("minor seasonings such as salt aren't", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots" }, { "Base.Salt" }) == "Fish Head Stock with Carrots")
-check("seasonings drop out past three", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice" }, { "Base.Pepper" }) == "Fish Head Stock with Carrots, Rabbit Meat and Rice")
-check("a second head added as an ingredient is named", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "TraditionalPreservationFishMeat.FishHead" }) == "Fish Head Stock with Fish")
+check("a fish is named after the soup", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "TraditionalPreservationFishMeat.GuttedFishIngredient" }) == "Fish Head Soup with Fish")
+check("two kinds join with and", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "TraditionalPreservationFishMeat.GuttedFishIngredient", "Base.Carrots" }) == "Fish Head Soup with Fish and Carrots")
+check("two vegetables become Vegetables", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Potato" }) == "Fish Head Soup with Vegetables")
+check("three kinds use a comma", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice" }) == "Fish Head Soup with Carrots, Rabbit Meat and Rice")
+check("more than three is just the soup", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice", "Base.Mushroom" }) == "Fish Head Soup")
+check("a seasoning is named while there's room", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots" }, { "Base.Pepper" }) == "Fish Head Soup with Carrots and Pepper")
+check("minor seasonings such as salt aren't", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots" }, { "Base.Salt" }) == "Fish Head Soup with Carrots")
+check("seasonings drop out past three", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "Base.Carrots", "Base.Rabbitmeat", "Base.Rice" }, { "Base.Pepper" }) == "Fish Head Soup with Carrots, Rabbit Meat and Rice")
+do
+H.texts.ContextMenu_EvolvedRecipe_ChickenStew = "Chicken Stew"
+FOODS["Base.ChickenFoot"] = { "NoExplicit", "Chicken Foot" }
+FOODS["Base.Turkey_Hen_Head"] = { "NoExplicit", "Turkey Head" }
+local poultryRecipe = { getUntranslatedName = function() return "ChickenStew" end }
+local function poultryNamed(extras)
+    return T.stockName({ getExtraItems = function() return javaList(extras) end, getSpices = function() return nil end }, poultryRecipe)
+end
+FOODS["TraditionalPreservationFishMeat.ChickenStockIngredient"] = { "NoExplicit", "Chicken Stock" }
+check("a Chicken Stew's stock icon leaves the name be", poultryNamed({ "TraditionalPreservationFishMeat.ChickenStockIngredient" }) == nil)
+check("and isn't named with what went in", poultryNamed({ "TraditionalPreservationFishMeat.ChickenStockIngredient", "Base.Carrots" }) == "Chicken Stew with Carrots")
+check("nor are an older pot's feet and heads", poultryNamed({ "Base.ChickenFoot", "Base.Turkey_Hen_Head", "Base.Carrots" }) == "Chicken Stew with Carrots")
+
+-- Stock bowls are named after the stock, not the pot
+H.texts.Tooltip_food_Bowl = "Bowl of %1"
+H.texts.ContextMenu_EvolvedRecipe_BoneBroth = "Bone Broth"
+local function bowlsFrom(potName)
+    local pot = newFood("TraditionalPreservationFishMeat.PotOfBoneBroth", {})
+    function pot:getDisplayName() return potName end
+    local bowls = { newFood("Base.StewBowl", {}), newFood("Base.StewBowl", {}), newFood("Base.Pot", {}) }
+    T.onCreateStockBowls(newRecipeData(0, { newFood("Base.Bowl", {}), pot }, bowls))
+    return bowls
+end
+local savedName = getItemNameFromFullType
+function getItemNameFromFullType(fullType)
+    if fullType == "TraditionalPreservationFishMeat.PotOfBoneBroth" then return "Pot of Bone Broth" end
+    return savedName(fullType)
+end
+local plain = bowlsFrom("Pot of Bone Broth")
+check("a plain stock's bowls are Bowl of Bone Broth", plain[1].name == "Bowl of Bone Broth" and plain[2].name == "Bowl of Bone Broth" and plain[1].customName)
+check("the pot keeps its name", plain[3].name == nil)
+check("a named stock's bowls keep its name", bowlsFrom("Bone Broth with Carrots")[1].name == "Bowl of Bone Broth with Carrots")
+getItemNameFromFullType = savedName
+end
+check("a second head added as an ingredient is named", stockNamed({ "TraditionalPreservationFishMeat.FishHead", "TraditionalPreservationFishMeat.FishHead" }) == "Fish Head Soup with Fish")
+
+-- The stock's first soup or stew: vanilla makes a fresh pot, with no mood and no listed parts; they come back
+do
+local function moodItem(fullType, unhappy, boredom, extras)
+    local item = { fullType = fullType, unhappy = unhappy, boredom = boredom, list = extras }
+    function item:getFullType() return self.fullType end
+    function item:getUnhappyChangeUnmodified() return self.unhappy end
+    function item:getBoredomChangeUnmodified() return self.boredom end
+    function item:setUnhappyChange(x) self.unhappy = x end
+    function item:setBoredomChange(x) self.boredom = x end
+    function item:isCustomName() return false end
+    function item:setName(x) self.name = x end
+    function item:getSpices() return nil end
+    function item:getExtraItems()
+        local list = self.list
+        return { size = function() return #list end, get = function(_, i) return list[i + 1] end,
+            clear = function() for i = #list, 1, -1 do list[i] = nil end end }
+    end
+    function item:addExtraItem(x) table.insert(self.list, x) end
+    return item
+end
+function isServer() return true end
+local stockPot = moodItem("TraditionalPreservationFishMeat.PotOfFishHeadStock", -10, -10, { "TraditionalPreservationFishMeat.FishHead" })
+local soup = moodItem("TraditionalPreservationFishMeat.PotOfFishHeadSoup", -2, 0, { "Base.Carrots" })
+T.carryStock(stockPot, soup, recipe)
+check("the soup gets the stock's -10 unhappiness and -10 boredom, on top of what went in", soup.unhappy == -12 and soup.boredom == -10)
+check("and its head, listed first", #soup.list == 2 and soup.list[1] == "TraditionalPreservationFishMeat.FishHead" and soup.list[2] == "Base.Carrots")
+check("and is named with the head skipped", soup.name == "Fish Head Soup with Carrots")
+local again = moodItem("TraditionalPreservationFishMeat.PotOfFishHeadSoup", -12, -10, { "Base.Carrots" })
+T.carryStock(again, again, recipe)
+check("a soup taking more keeps its mood as it is", again.unhappy == -12 and again.boredom == -10 and #again.list == 1)
+local plain = moodItem("Base.WaterPot", 0, 0, {})
+local vanillaSoup = moodItem("Base.PotOfSoupRecipe", 0, 0, { "Base.Carrots" })
+T.carryStock(plain, vanillaSoup, recipe)
+check("a vanilla soup is left alone", vanillaSoup.unhappy == 0 and vanillaSoup.name == nil)
+end
 
 -- Butchering XP for packing
 Perks = { Butchering = "Butchering" }

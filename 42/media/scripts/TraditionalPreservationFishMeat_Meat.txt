@@ -1121,4 +1121,598 @@ module TraditionalPreservationFishMeat
             Base.PotForged = TraditionalPreservationFishMeat.PotForgedMeatInFat,
         }
     }
+
+    /* Meat stocks, built as Fish Head Stock is (TraditionalPreservationFishMeat.txt): a pot of water and the parts make
+       a stock, 3 / 5 days, which its first ingredient turns into a soup or a stew, shared out by the same Divide into
+       Bowls recipes. Design decision (user, 2026-11-13): every stock, soup and stew of them starts at UnhappyChange -10
+       and BoredomChange -10, at hunger -5 with small calories (F.STOCK_BONES, F.STOCK_FOOT, F.STOCK_HEAD). Balance
+       passes leave these alone.
+       Bone Broth: the bones are kept and come back boiled (onCreateBoneBroth); canBoil refuses a boiled one, and a
+       boiled bone smashed gives boiled pieces (onCreateSmashedBone). Two Animal Bones, one Large or six Small make a pot. */
+    item PotOfBoneBroth
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = PotFull,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.Pot,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 80.0,
+        Carbohydrates = 0.0,
+        Lipids = 3.0,
+        Proteins = 10.0,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_BoneBroth,
+    }
+
+    item PotForgedBoneBroth
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = Pot_Forged_Soup,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.PotForged,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 80.0,
+        Carbohydrates = 0.0,
+        Lipids = 3.0,
+        Proteins = 10.0,
+        StaticModel = CookingPotForged_SoupGround,
+        WorldStaticModel = CookingPotForged_SoupGround,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_BoneBroth,
+    }
+
+    /* Chicken Stock: two parts, Chicken Feet and chicken or turkey heads in any mix (onCreateChickenStock: a foot or a
+       head gives a little food, no hunger). Turkeys give no feet in vanilla. */
+    item PotOfChickenStock
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = PotFull,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.Pot,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 70.0,
+        Carbohydrates = 0.0,
+        Lipids = 1.6,
+        Proteins = 14.0,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_ChickenStock,
+    }
+
+    item PotForgedChickenStock
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = Pot_Forged_Soup,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.PotForged,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 70.0,
+        Carbohydrates = 0.0,
+        Lipids = 1.6,
+        Proteins = 14.0,
+        StaticModel = CookingPotForged_SoupGround,
+        WorldStaticModel = CookingPotForged_SoupGround,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_ChickenStock,
+    }
+
+    /* What a Bone Broth's and a Chicken Stock's soups and stews list first, as Fish Head Stock lists its head: one icon
+       for the stock, never named, taking no slot (MaxItems is vanilla's 6 plus it). No EvolvedRecipe, so they only
+       ever appear in that list. */
+    item BoneBrothIngredient
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = Bones,
+    }
+
+    item ChickenStockIngredient
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.1,
+        Icon = ChickenFoot,
+    }
+    craftRecipe MakeBoneBroth
+    {
+        timedAction = MixingBowl,
+        time = 50,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnTest = TraditionalPreservationFishMeat.canBoil,
+        OnCreate = TraditionalPreservationFishMeat.onCreateBoneBroth,
+        inputs
+        {
+            item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition] mappers[potType],
+            -fluid 1.5 categories[Water] mode:mixture,
+            item 2 [Base.AnimalBone] mode:keep flags[ItemCount],
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            TraditionalPreservationFishMeat.PotOfBoneBroth = Base.Pot,
+            TraditionalPreservationFishMeat.PotForgedBoneBroth = Base.PotForged,
+        }
+    }
+
+    craftRecipe MakeMarrowBoneBroth
+    {
+        timedAction = MixingBowl,
+        time = 50,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnTest = TraditionalPreservationFishMeat.canBoil,
+        OnCreate = TraditionalPreservationFishMeat.onCreateBoneBroth,
+        inputs
+        {
+            item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition] mappers[potType],
+            -fluid 1.5 categories[Water] mode:mixture,
+            item 1 [Base.LargeAnimalBone] mode:keep flags[ItemCount],
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            TraditionalPreservationFishMeat.PotOfBoneBroth = Base.Pot,
+            TraditionalPreservationFishMeat.PotForgedBoneBroth = Base.PotForged,
+        }
+    }
+
+    craftRecipe MakeSmallBoneBroth
+    {
+        timedAction = MixingBowl,
+        time = 50,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnTest = TraditionalPreservationFishMeat.canBoil,
+        OnCreate = TraditionalPreservationFishMeat.onCreateBoneBroth,
+        inputs
+        {
+            item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition] mappers[potType],
+            -fluid 1.5 categories[Water] mode:mixture,
+            item 6 [Base.SmallAnimalBone] mode:keep flags[ItemCount],
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            TraditionalPreservationFishMeat.PotOfBoneBroth = Base.Pot,
+            TraditionalPreservationFishMeat.PotForgedBoneBroth = Base.PotForged,
+        }
+    }
+
+    craftRecipe MakeChickenStock
+    {
+        timedAction = MixingBowl,
+        time = 50,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationFishMeat.onCreateChickenStock,
+        inputs
+        {
+            item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition] mappers[potType],
+            -fluid 1.5 categories[Water] mode:mixture,
+            item 2 [Base.ChickenFoot;Base.Chicken_Chick_Head;Base.Chicken_Hen_Brown_Head;Base.Chicken_Hen_White_Head;Base.Chicken_Rooster_Head_Brown;Base.Chicken_Rooster_Head_White;Base.Turkey_Hen_Head;Base.Turkey_Gobbler_Head;Base.Turkey_Poult_Head] flags[InheritFoodAge;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            TraditionalPreservationFishMeat.PotOfChickenStock = Base.Pot,
+            TraditionalPreservationFishMeat.PotForgedChickenStock = Base.PotForged,
+        }
+    }
+
+    item PotOfBoneBrothSoup
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = PotFull,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.Pot,
+        MinutesToCook = 50,
+        MinutesToBurn = 100,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 80.0,
+        Carbohydrates = 0.0,
+        Lipids = 3.0,
+        Proteins = 10.0,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    item PotForgedBoneBrothSoup
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = Pot_Forged_Soup,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.PotForged,
+        MinutesToCook = 50,
+        MinutesToBurn = 100,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 80.0,
+        Carbohydrates = 0.0,
+        Lipids = 3.0,
+        Proteins = 10.0,
+        StaticModel = CookingPotForged_SoupGround,
+        WorldStaticModel = CookingPotForged_SoupGround,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    item PotOfBoneBrothStew
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = PotFull,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.Pot,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 80.0,
+        Carbohydrates = 0.0,
+        Lipids = 3.0,
+        Proteins = 10.0,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    item PotForgedBoneBrothStew
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = Pot_Forged_Stew,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.PotForged,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 80.0,
+        Carbohydrates = 0.0,
+        Lipids = 3.0,
+        Proteins = 10.0,
+        StaticModel = CookingPotForged_StewGround,
+        WorldStaticModel = CookingPotForged_StewGround,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    evolvedrecipe BoneBrothSoup
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotOfBoneBroth,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotOfBoneBrothSoup,
+        Cookable = true,
+        Name = Prepare Bone Broth Soup,
+        Template = Soup,
+    }
+
+    evolvedrecipe BoneBrothSoupForged
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotForgedBoneBroth,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotForgedBoneBrothSoup,
+        Cookable = true,
+        Name = Prepare Bone Broth Soup,
+        Template = Soup,
+    }
+
+    evolvedrecipe BoneBrothStew
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotOfBoneBroth,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotOfBoneBrothStew,
+        Cookable = true,
+        Name = Prepare Bone Broth Stew,
+        Template = Stew,
+    }
+
+    evolvedrecipe BoneBrothStewForged
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotForgedBoneBroth,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotForgedBoneBrothStew,
+        Cookable = true,
+        Name = Prepare Bone Broth Stew,
+        Template = Stew,
+    }
+
+    item PotOfChickenSoup
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = PotFull,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.Pot,
+        MinutesToCook = 50,
+        MinutesToBurn = 100,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 70.0,
+        Carbohydrates = 0.0,
+        Lipids = 1.6,
+        Proteins = 14.0,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    item PotForgedChickenSoup
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = Pot_Forged_Soup,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.PotForged,
+        MinutesToCook = 50,
+        MinutesToBurn = 100,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 70.0,
+        Carbohydrates = 0.0,
+        Lipids = 1.6,
+        Proteins = 14.0,
+        StaticModel = CookingPotForged_SoupGround,
+        WorldStaticModel = CookingPotForged_SoupGround,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    item PotOfChickenStew
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = PotFull,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.Pot,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 70.0,
+        Carbohydrates = 0.0,
+        Lipids = 1.6,
+        Proteins = 14.0,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    item PotForgedChickenStew
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.0,
+        Icon = Pot_Forged_Stew,
+        BadCold = true,
+        BadInMicrowave = true,
+        CookingSound = BoilingFood,
+        EatType = Pot,
+        PourType = Pot,
+        IsCookable = true,
+        DangerousUncooked = true,
+        ReplaceOnUse = Base.PotForged,
+        MinutesToCook = 70,
+        MinutesToBurn = 140,
+        DaysFresh = 3,
+        DaysTotallyRotten = 5,
+        HungerChange = -5.0,
+        ThirstChange = -30.0,
+        UnhappyChange = -10,
+        BoredomChange = -10,
+        Calories = 70.0,
+        Carbohydrates = 0.0,
+        Lipids = 1.6,
+        Proteins = 14.0,
+        StaticModel = CookingPotForged_StewGround,
+        WorldStaticModel = CookingPotForged_StewGround,
+        Tags = base:hasmetal,
+        SoundMap = DumpContents EmptyPot,
+    }
+
+    evolvedrecipe ChickenSoup
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotOfChickenStock,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotOfChickenSoup,
+        Cookable = true,
+        Name = Prepare Chicken Soup,
+        Template = Soup,
+    }
+
+    evolvedrecipe ChickenSoupForged
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotForgedChickenStock,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotForgedChickenSoup,
+        Cookable = true,
+        Name = Prepare Chicken Soup,
+        Template = Soup,
+    }
+
+    evolvedrecipe ChickenStew
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotOfChickenStock,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotOfChickenStew,
+        Cookable = true,
+        Name = Prepare Chicken Stew,
+        Template = Stew,
+    }
+
+    evolvedrecipe ChickenStewForged
+    {
+        BaseItem = TraditionalPreservationFishMeat.PotForgedChickenStock,
+        MaxItems = 7,
+        ResultItem = TraditionalPreservationFishMeat.PotForgedChickenStew,
+        Cookable = true,
+        Name = Prepare Chicken Stew,
+        Template = Stew,
+    }
 }

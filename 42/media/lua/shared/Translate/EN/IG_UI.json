@@ -177,5 +177,6 @@
   "IGUI_TraditionalPreservationFishMeat_InfoFinishedTub": "Cured and waiting to be taken: %1",
   "IGUI_TraditionalPreservationFishMeat_InfoWeather": "Times left assume the weather holds as it is now.",
   "IGUI_TraditionalPreservationFishMeat_InfoEmpty": "Nothing in it.",
-  "IGUI_TraditionalPreservationFishMeat_InfoCorn": "Corning"
+  "IGUI_TraditionalPreservationFishMeat_InfoCorn": "Corning",
+  "IGUI_TraditionalPreservationFishMeat_BoiledBone": "Boiled %1"
 }
