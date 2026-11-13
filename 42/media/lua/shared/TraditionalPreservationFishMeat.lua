@@ -13,6 +13,13 @@ local Uses = require "TraditionalPreservationCore/Uses"
 
 F.MOD_DATA_KEY = "TraditionalPreservationFishMeat"
 
+-- Pots on the hob (Core's Stone Hearth sets its pot in the hole for them): fat rendering, potting, stocks, soups and
+-- stews, poached sausage. The pudding pans are oven food.
+for _, pot in ipairs({ "PorkFat", "Suet", "MeatInFat", "BoneBroth", "ChickenStock", "BoneBrothSoup", "BoneBrothStew",
+    "ChickenSoup", "ChickenStew", "Sausage", "BloodSausage", "FishHeadStock", "FishHeadSoup", "FishHeadStew" }) do
+    Hearth.cooksOn(Hearth.STOVE, "TraditionalPreservationFishMeat.PotOf" .. pot, "TraditionalPreservationFishMeat.PotForged" .. pot)
+end
+
 -- Hours in the tub at most, and hours on the frame at a drying rate of 1. These set the recipes' times.
 F.PRESS_HOURS = 48
 F.DRY_HOURS = 288

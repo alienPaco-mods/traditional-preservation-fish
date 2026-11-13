@@ -1,5 +1,8 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.41
+Its pots on the hob are TP Core's stove food (`Hearth.cooksOn`): fat, potted meat, stocks, soups, stews and poached sausage, in a pot or a forged pot, so the Stone Hearth sets its pot in the hole for them; the pudding pans stay oven food. Firebox reads Stone Hearth in its texts. Needs this TP Core (the Stone Hearth hub, step ii).
+
 ## 0.4.40
 TP Core's Hearth keeps the copper's state under its own key (`tpHearth.copper`, the Stone Hearth hub's step i). Needs this TP Core. Put Fat in the Copper reads it with `Hearth.copperState` (`TPFMFatCopper`); `test_fat_ui.lua` loads Core's `CopperUI` and builds the new state. Nothing changes in game.
 
