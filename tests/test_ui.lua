@@ -90,6 +90,8 @@ end
 local PACKED, PRESSED = "TraditionalPreservationFishMeat.SaltPackedFish", "TraditionalPreservationFishMeat.SaltPressedFish"
 local GUTTED, HALF = "TraditionalPreservationFishMeat.GuttedFish", "TraditionalPreservationFishMeat.FishHalf"
 local TUB, FRAME = "traditionalpreservationfishmeat_01_0", "traditionalpreservationfishmeat_01_7"
+-- TP Core's Smokehouse, its door's tile facing S.
+local SHED = "traditionalpreservationcore_01_33"
 local function green(slot, item) return ISItemSlot.defaultVerifyItem({}, slot, item) end
 
 check("a frame is green for pressed fish", green(station(FRAME), fish(PRESSED, 0.5)))
@@ -103,8 +105,13 @@ check("not for raw fish", not green(station(FRAME), fish("Base.Walleye", 0.5)))
 check("not for a fillet", not green(station(FRAME), fish("Base.FishFillet", 0.5)))
 check("a frame in a room isn't, for gutted fish", not green(station(FRAME, nil, false, true), fish(GUTTED, 0.5)))
 check("but is for salted fish", green(station(FRAME, nil, false, true), fish(PRESSED, 0.5)))
-check("nor is the Smokehouse, even in the open", not green(station("traditionalpreservationfishmeat_02_449"), fish(GUTTED, 0.5))
-    and green(station("traditionalpreservationfishmeat_02_449"), fish(PRESSED, 0.5)))
+check("nor is the Smokehouse, even in the open", not green(station(SHED), fish(GUTTED, 0.5))
+    and green(station(SHED), fish(PRESSED, 0.5)))
+check("another mod's item in the Smokehouse is left to that mod and vanilla", green(station(SHED), fish("TraditionalPreservationDairy.Cheese", 0.5)))
+vanillaVerdict = false
+check("which may refuse it", not green(station(SHED), fish("TraditionalPreservationDairy.Cheese", 0.5)))
+vanillaVerdict = true
+check("on this mod's own frame it is refused", not green(station(FRAME), fish("TraditionalPreservationDairy.Cheese", 0.5)))
 check("not for gutted fish on a salted stack", not green(station(FRAME, { fish(PRESSED, 0.5) }), fish(GUTTED, 0.5)))
 check("not for salted fish on a gutted stack", not green(station(FRAME, { fish(GUTTED, 0.5) }), fish(PRESSED, 0.5)))
 check("gutted fish and halves share a stack", green(station(FRAME, { fish(GUTTED, 0.5) }), fish(HALF, 0.5)))
@@ -142,8 +149,8 @@ check("the long cure starts with it", vanillaStarts == 1)
 halos = {}
 check("Salt Cured pork is refused on a frame", not green(station(FRAME), fish(CURED, 0.5, 4)))
 check("and a leg", not green(station(FRAME), fish(CURED, 2.3, 6)))
-check("but hangs in the Smokehouse", green(station("traditionalpreservationfishmeat_02_449"), fish(CURED, 0.5, 4))
-    and green(station("traditionalpreservationfishmeat_02_449"), fish(CURED, 2.3, 6)))
+check("but hangs in the Smokehouse", green(station(SHED), fish(CURED, 0.5, 4))
+    and green(station(SHED), fish(CURED, 2.3, 6)))
 check("a half over the limit is refused", not green(station(FRAME), fish(HALF, 3)))
 local MEDIUM, LARGE = "traditionalpreservationfishmeat_02_0", "traditionalpreservationfishmeat_02_3"
 check("a medium beam takes a fish too heavy for a frame", green(station(MEDIUM), fish(PRESSED, 12)))

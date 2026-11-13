@@ -259,14 +259,13 @@ check("eight stacks fill the frame", T.frameRefusal(T.HANGERS[6], 7, 0, 0.1) == 
 check("a full frame is 20 weight", T.STACK_WEIGHT * T.MAX_STACKS == 20)
 check("every station finds its hanger, either way round", T.hangerFor(7) == T.HANGERS[6] and T.hangerFor(409) == T.HANGERS[408] and T.hangerFor(410) == T.HANGERS[410])
 check("a tub has none", T.hangerFor(0) == nil and T.hangerFor(5) == nil)
-check("both tiles of the Smokehouse find it, either way round", T.hangerFor(856) == T.HANGERS[856] and T.hangerFor(857) == T.HANGERS[856]
-    and T.hangerFor(858) == T.HANGERS[856] and T.hangerFor(859) == T.HANGERS[856] and T.HANGERS[856].closed)
+check("the Smokehouse (TP Core's) has its own hanger, closed", T.CHAMBER_HANGER.closed and T.hangerFor(856) == nil)
 check("gutted fish hang in the open or under an open roof", T.coldRefusal("Open") == nil and T.coldRefusal("Covered") == nil)
 check("not in a room, a basement or the Smokehouse", T.coldRefusal("Sheltered") == "IGUI_TraditionalPreservationFishMeat_NoColdIndoors"
     and T.coldRefusal("Basement") == "IGUI_TraditionalPreservationFishMeat_NoColdIndoors")
-check("the Smokehouse takes 6 stacks of 15", T.frameRefusal(T.HANGERS[856], 5, 0, 15) == nil
-    and T.frameRefusal(T.HANGERS[856], 0, 0, 15.1) == "IGUI_TraditionalPreservationFishMeat_TooHeavy"
-    and T.frameRefusal(T.HANGERS[856], 6, 0, 1) == "IGUI_TraditionalPreservationFishMeat_FrameFull")
+check("the Smokehouse takes 6 stacks of 15", T.frameRefusal(T.CHAMBER_HANGER, 5, 0, 15) == nil
+    and T.frameRefusal(T.CHAMBER_HANGER, 0, 0, 15.1) == "IGUI_TraditionalPreservationFishMeat_TooHeavy"
+    and T.frameRefusal(T.CHAMBER_HANGER, 6, 0, 1) == "IGUI_TraditionalPreservationFishMeat_FrameFull")
 IsoFlagType = IsoFlagType or {}
 -- A tiny map: squares by "x,y", each with the sprites standing on it.
 local grid = {}
@@ -296,13 +295,14 @@ local outside, inside = gridSquare(0, 0), gridSquare(10, 10)
 inside.inRoom = true
 check("the big beams go up outdoors or under an open roof", T.notInRoom(building(outside)))
 check("not in a room", not T.notInRoom(building(inside)))
--- The Smokehouse facing S, its door's tile at 20,20: nothing goes up on 20,21, and its door needs that tile free.
-gridSquare(20, 20, { T.spriteName(857) })
+-- TP Core's Smokehouse facing S, its door's tile at 20,20: nothing goes up on 20,21, and its door needs that tile free.
+local CHAMBER_DOOR = require("TraditionalPreservationCore/Tiles").CHAMBERS[2]
+gridSquare(20, 20, { CHAMBER_DOOR })
 check("nothing is built in front of the Smokehouse's door", not T.notInRoom(building(gridSquare(20, 21))))
 check("beside it is fine", T.notInRoom(building(gridSquare(21, 20))))
 gridSquare(30, 31, { "a crate" })
-check("the Smokehouse's door needs its front free", not T.notInRoom(building(gridSquare(30, 30), T.spriteName(857)))
-    and T.notInRoom(building(gridSquare(31, 30), T.spriteName(857))))
+check("the Smokehouse's door needs its front free", not T.notInRoom(building(gridSquare(30, 30), CHAMBER_DOOR))
+    and T.notInRoom(building(gridSquare(31, 30), CHAMBER_DOOR)))
 check("the Hanging Beam goes up in a room too, but not in front of a door", T.doorFree(building(inside)) and T.doorFree(building(outside))
     and not T.doorFree(building(gridSquare(20, 21))))
 for name, rule in pairs({ Medium = "doorFree", Large = "notInRoom" }) do
@@ -312,8 +312,8 @@ end
 do
     local Tiles = require "TraditionalPreservationFishMeat/Tiles"
     local medium, large = T.spriteName(408), T.spriteName(410)
-    check("only the Gantry and the Smokehouse are kept out of rooms", not Tiles.OUTDOOR[medium] and Tiles.OUTDOOR[large]
-        and Tiles.OUTDOOR[T.spriteName(856)] and Tiles.DOOR_KEPT[medium] and Tiles.DOOR_KEPT[large])
+    check("only the Gantry is kept out of rooms (the Smokehouse is TP Core's)", not Tiles.OUTDOOR[medium] and Tiles.OUTDOOR[large]
+        and Tiles.DOOR_KEPT[medium] and Tiles.DOOR_KEPT[large])
 end
 check("the frame isn't", not io.open("42/media/scripts/entities/entity_Drying_Frame.txt"):read("*a"):find("OnIsValid", 1, true))
 check("sprites below the first sheet's end are on it", T.spriteName(407) == "traditionalpreservationfishmeat_01_407")
@@ -341,7 +341,7 @@ check("a Gantry stack takes 6 pieces, however light", T.frameRefusal(T.HANGERS[4
     and T.frameRefusal(T.HANGERS[410], 0, 3, 0.5, 6) == FULL)
 check("the Drying Frame and the Smokehouse keep 25", T.frameRefusal(T.HANGERS[6], 0, 0, 0.05, 24) == nil
     and T.frameRefusal(T.HANGERS[6], 0, 0, 0.05, 25) == FULL
-    and T.frameRefusal(T.HANGERS[856], 0, 0, 0.5, 24) == nil and T.frameRefusal(T.HANGERS[856], 0, 0, 0.5, 25) == FULL)
+    and T.frameRefusal(T.CHAMBER_HANGER, 0, 0, 0.5, 24) == nil and T.frameRefusal(T.CHAMBER_HANGER, 0, 0, 0.5, 25) == FULL)
 
 -- Drying
 local DRY_TIME = T.DRY_HOURS * 3600

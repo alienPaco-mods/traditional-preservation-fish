@@ -7,6 +7,7 @@ local UI = require "TraditionalPreservationCore/UI"
 local StationInfo = require "TraditionalPreservationCore/StationInfo"
 local Hearth = require "TraditionalPreservationCore/Hearth"
 local Weather = require "TraditionalPreservationCore/Weather"
+local Smokehouse = require "TraditionalPreservationCore/Smokehouse"
 local F = TraditionalPreservationFishMeat
 
 TraditionalPreservationFishMeatInfo = TraditionalPreservationFishMeatInfo or {}
@@ -158,7 +159,7 @@ end
 -- The joined Firebox's fire, for a Smokehouse; nil for any other station.
 local function fireOf(found)
     if not (found.hanger and found.hanger.closed) then return nil end
-    local firebox = F.joinedFirebox(found.station)
+    local firebox = Smokehouse.joinedFirebox(found.station)
     if not firebox then return "none" end
     if Hearth.isBanked(firebox) then return "banked" end
     return Hearth.isBurning(firebox) and "stoked" or "out"
@@ -167,7 +168,7 @@ end
 -- The block in the station's own window (Core's StationInfo), for the mod's stations only: looked up by sprite
 -- first, so any other crafting window costs one table lookup.
 function Info.forEntity(entity)
-    if not instanceof(entity, "IsoObject") or not F.stationIndex(entity) then return nil end
+    if not instanceof(entity, "IsoObject") or not F.isStation(entity) then return nil end
     local found = TraditionalPreservationFishMeatWorld and TraditionalPreservationFishMeatWorld.inspect(entity)
     return found and Info.rows(found, F.getLedger(), getGameTime():getWorldAgeHours(), fireOf(found)) or nil
 end

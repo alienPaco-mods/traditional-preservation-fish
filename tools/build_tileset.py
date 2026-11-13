@@ -56,48 +56,11 @@ FRAME_MEAT, MEDIUM_MEAT, LARGE_MEAT = 716, 796, 836
 # A stack that rotted shows one look a kind (salt fish, cold dried fish, meat) on the third sheet, numbered as the fish
 # (fish_index, the kind for the stage).
 FRAME_ROTTEN, MEDIUM_ROTTEN, LARGE_ROTTEN = 880, 928, 952
-# The Smokehouse chamber (5b-2), two tiles a face: back half, then the front half with the door (chamber_index).
-CHAMBER = 856
-CHAMBER_STACKS = 6
-CHAMBER_HALF = 0.46       # half the shed's width, and how far each end wall stands from its tile's middle, in tiles
-CHAMBER_OVERHANG = 0.06   # the roof past the walls
-CHAMBER_FRONT = 136       # px up to the roof's high edge, over the door
-CHAMBER_BACK = 108        # and its low edge at the back
-CHAMBER_SILL = 7          # the stone sill under the planks
-CHAMBER_DOOR = 112        # the door's top
-CHAMBER_DOOR_HALF = 0.17
-CHAMBER_PLANK = 0.11      # a plank's width, in tiles
-CHAMBER_WOOD = (112, 78, 50)
-CHAMBER_ROOF = (90, 64, 44)
-CHAMBER_STONE = (120, 112, 100)
-CHAMBER_DARK = (24, 18, 14)
-# Where a joined Firebox's flue enters the chamber (5b-2b), on the long side the camera sees: one overlay per flue
-# kind, face and part (chamber_entry_index). TP Core's Firebox pipe ends at its tile's edge this high (its TOP + CAP +
-# FLUE_RISE) and its trench at ground level, both on the tile's middle; the colours are Core's clay pipe and daub.
-CHAMBER_ENTRY = 860
-FLUE_KINDS = ["Pipe", "Stones"]
-FLUE_Z = 56
-FLUE_R = 4.5
-FLUE_CLAY = (172, 96, 64)
-FLUE_DAUB = (150, 124, 98)
-TRENCH_W = 0.07
-# A ham hung by the door while finished stacks wait in the chamber (5c, user's idea): one overlay per face, on the
-# door's tile, on the door's end wall beside the door.
-CHAMBER_HAM = 868
-HAM_A = -0.37             # across the end wall, on the door's far side from the long wall in view: it overhangs the corner
-HAM_TOP = 98              # px up to the bone's knob; the nail is above it
-HAM_SCALE = 1.35          # its width against the first ham's
-HAM_STEP = 6.6            # px between its outline's steps down (the first ham's were 5)
-# Tones dark to light, taken from vanilla's Ham icon and pulled a little towards smoke: the glazed skin, and the
-# cut face's pale pinks with a lighter middle.
-HAM_SKIN_TONES = [(84, 42, 28), (108, 54, 32), (132, 70, 38), (158, 90, 46), (184, 112, 58)]
-HAM_CUT_TONES = [(170, 112, 114), (190, 134, 134), (204, 152, 150), (216, 172, 168), (226, 194, 190)]
-HAM_FAT = (212, 184, 150)  # a thin rim under the cut
-HAM_LINE = (52, 28, 20)    # the dark line round it
-HAM_CORD = (196, 176, 136)
-HAM_BONE = (232, 222, 196)
+# Tiles 856-869 held the Smokehouse chamber, its flue entries and the ham until it moved to TP Core (2026-11-13):
+# left empty, so no later tile number moves.
 # The filled tub holding meat (step 82): one overlay per kind and face, as TUB_FILLED is for fish (tub_meat_index).
 TUB_MEAT = 870
+HAM_BONE = (232, 222, 196)  # a leg's bone end in the tub, as the Smokehouse's ham had it
 TUB_MEAT_KINDS = ["meat", "pork", "leg"]
 # Raw cuts lying in the salt: the lean, its dark edge and the fat along one side.
 BURIED_CUTS = {"meat": ((148, 50, 46), (98, 30, 32), (224, 206, 182)),
@@ -304,16 +267,6 @@ def station_props(custom, group, facing, weight):
     return [("BlocksPlacement", ""), ("CustomName", custom), ("Facing", facing), ("GroupName", group), ("IsMoveAble", ""), ("PickUpWeight", weight), ("solidtrans", "")]
 
 
-def chamber_index(face_index, part):
-    """part 0 is the back tile, 1 the front one with the door."""
-    return CHAMBER + face_index * 2 + part
-
-
-def chamber_entry_index(kind, face_index, part):
-    """chamberEntry / F.entrySprite in TraditionalPreservationFishMeatSmokehouse.lua number them the same way."""
-    return CHAMBER_ENTRY + (FLUE_KINDS.index(kind) * len(FACES) + face_index) * 2 + part
-
-
 def fish_index(face_index, slot, stage, first=FISH, slots=len(SLOTS)):
     """refreshFrame in TraditionalPreservationFishMeatWorld.lua numbers them the same way, from the generated Tiles.lua."""
     return first + (stage * slots + slot) * len(FACES) + face_index
@@ -325,19 +278,6 @@ TILE_PROPS[PALLET] = [("BlocksPlacement", ""), ("CanScrap", ""), ("container", "
                       ("Material", "Wood"), ("Material2", "Nails"), ("PickUpWeight", "50"), ("ScrapSize", "Small")]
 for level in range(len(PALLET_LEVELS)):
     TILE_PROPS[PALLET_STACK + level] = []
-# A two-tile station names each tile's place in the grid ("x,y", as vanilla's Drying Rack and Loom): facing S the
-# back tile is 0,0 and the door's 0,1; facing E 0,0 and 1,0.
-for face_index, face in enumerate(FACES):
-    for part in range(2):
-        grid = f"0,{part}" if face == "S" else f"{part},0"
-        TILE_PROPS[chamber_index(face_index, part)] = station_props("Chamber", "Smokehouse", face, "200") + [
-            ("ForceSingleItem", ""), ("SpriteGridPos", grid)]
-for kind in FLUE_KINDS:
-    for face_index, face in enumerate(FACES):
-        for part in range(2):
-            TILE_PROPS[chamber_entry_index(kind, face_index, part)] = [("Facing", face)]
-for face_index, face in enumerate(FACES):
-    TILE_PROPS[CHAMBER_HAM + face_index] = [("Facing", face)]
 for face_index, face in enumerate(FACES):
     TILE_PROPS[TUB + face_index] = station_props("Tub", "Salting", face, "100")
     TILE_PROPS[FRAME + face_index] = station_props("Frame", "Drying", face, "100")
@@ -1273,258 +1213,6 @@ def paint_pallet_stack(icons, layers):
     return pzart.hard_edges(shrink(tile))
 
 
-# --- The Smokehouse chamber ----------------------------------------------------------------------------------
-# A plank hut two tiles long under one roof slope, high over the door on the front end. Drawn in the shed's own coordinates: a across
-# it (+a the visible long side), b along it (+b the door's end); the front tile's middle is b = 0, the back tile's
-# b = -1. Each tile paints only its half, so the two meet on screen.
-
-def chamber_world(face, a, b):
-    """World x, y of a shed point: facing S the door looks south (+y), facing E east (+x)."""
-    return (a, b) if face == "S" else (b, a)
-
-
-def chamber_px(face, part, a, b, z):
-    """A shed point on the tile of that part (0 back, 1 front), supersampled."""
-    x, y = chamber_world(face, a, b + (1 - part))
-    sx, sy = project(x, y, z)
-    return (sx * SS, sy * SS)
-
-
-def chamber_planks(draw, rng, quad, start, stop, width, colour, light, clip=None):
-    """Planks from start to stop along a wall or roof; quad(u0, u1) gives each one's polygon, each a tone of its own
-    with a dark seam between. clip (u0, u1) paints only that stretch: the planks are laid from start all the same,
-    so a run over both tiles matches where they meet."""
-    low, high = clip or (start, stop)
-    u = start
-    while u < stop - 1e-6:
-        u1 = min(u + width * rng.uniform(0.85, 1.15), stop)
-        tone = rng.uniform(0.86, 1.1)
-        if max(u, low) < min(u1, high):
-            draw.polygon(quad(max(u, low), min(u1, high)), fill=tint(colour, light * tone))
-        if low < u1 < min(stop, high) - 1e-6:
-            draw.polygon(quad(u1 - 0.006, u1 + 0.006), fill=tint(BOARD_EDGE, light * 0.8))
-        u = u1
-
-
-def paint_chamber(face, part):
-    rng = random.Random(200 + 2 * FACES.index(face) + part)
-    layer = new_layer()
-    draw = ImageDraw.Draw(layer)
-    h, o = CHAMBER_HALF, CHAMBER_OVERHANG
-    # This tile's stretch of the shed along b, and its walls' lights by the way the world face looks.
-    b0, b1 = (-1 - h, -0.5 + JOIN) if part == 0 else (-0.5, h)
-    door_light, side_light = (1.0, 0.72) if face == "S" else (0.72, 1.0)
-    back, front = -1 - h - o, h + o
-
-    def px(a, b, z):
-        return chamber_px(face, part, a, b, z)
-
-    def roof_z(b):
-        """One slope, high over the door's end and falling to the back."""
-        return CHAMBER_BACK + (CHAMBER_FRONT - CHAMBER_BACK) * (b - back) / (front - back)
-
-    # The visible long side, its top following the roof, then the stone sill and two battens along it.
-    side = lambda u0, u1: [px(h, u0, 0), px(h, u1, 0), px(h, u1, roof_z(u1) - 2), px(h, u0, roof_z(u0) - 2)]
-    chamber_planks(draw, random.Random(210 + FACES.index(face)), side, -1 - h, h, CHAMBER_PLANK, CHAMBER_WOOD, side_light, (b0, b1))
-    draw.polygon([px(h, b0, 0), px(h, b1, 0), px(h, b1, CHAMBER_SILL), px(h, b0, CHAMBER_SILL)], fill=tint(CHAMBER_STONE, side_light * 0.8))
-    for z in (CHAMBER_SILL + 4, CHAMBER_BACK - 12):
-        draw.polygon([px(h + 0.004, b0, z), px(h + 0.004, b1, z), px(h + 0.004, b1, z + 4), px(h + 0.004, b0, z + 4)],
-                     fill=tint(CHAMBER_WOOD, side_light * 0.78))
-
-    if part == 1:
-        # The door's end: planks up to the high eave, the smoke slot under it with two slats, a sill and the door.
-        top = roof_z(h) - 2
-        end = lambda u0, u1: [px(u0, h, 0), px(u1, h, 0), px(u1, h, top), px(u0, h, top)]
-        chamber_planks(draw, random.Random(220 + FACES.index(face)), end, -h, h, CHAMBER_PLANK, CHAMBER_WOOD, door_light)
-        slot_low, slot_high = top - 14, top - 3
-        draw.polygon([px(-h + 0.05, h, slot_low), px(h - 0.05, h, slot_low), px(h - 0.05, h, slot_high), px(-h + 0.05, h, slot_high)],
-                     fill=tint(CHAMBER_DARK, 1))
-        for z in (slot_low + 3, slot_low + 7):
-            draw.polygon([px(-h + 0.05, h + 0.004, z), px(h - 0.05, h + 0.004, z), px(h - 0.05, h + 0.004, z + 2), px(-h + 0.05, h + 0.004, z + 2)],
-                         fill=tint(CHAMBER_WOOD, door_light * 0.7))
-        draw.polygon([px(-h, h, 0), px(h, h, 0), px(h, h, CHAMBER_SILL), px(-h, h, CHAMBER_SILL)], fill=tint(CHAMBER_STONE, door_light * 0.8))
-        # The door: darker boards in a frame, two ledges and a brace, strap hinges on its left and a wooden latch.
-        d = CHAMBER_DOOR_HALF
-        draw.polygon([px(-d - 0.03, h + 0.003, CHAMBER_SILL), px(d + 0.03, h + 0.003, CHAMBER_SILL),
-                      px(d + 0.03, h + 0.003, CHAMBER_DOOR + 4), px(-d - 0.03, h + 0.003, CHAMBER_DOOR + 4)], fill=tint(BOARD_EDGE, door_light))
-        door = lambda u0, u1: [px(u0, h + 0.006, CHAMBER_SILL + 1), px(u1, h + 0.006, CHAMBER_SILL + 1),
-                               px(u1, h + 0.006, CHAMBER_DOOR), px(u0, h + 0.006, CHAMBER_DOOR)]
-        chamber_planks(draw, random.Random(230 + FACES.index(face)), door, -d, d, CHAMBER_PLANK * 0.8, CHAMBER_WOOD, door_light * 0.82)
-        for z0 in (CHAMBER_SILL + 12, CHAMBER_DOOR - 16):
-            draw.polygon([px(-d, h + 0.008, z0), px(d, h + 0.008, z0), px(d, h + 0.008, z0 + 6), px(-d, h + 0.008, z0 + 6)],
-                         fill=tint(CHAMBER_WOOD, door_light * 0.68))
-        draw.polygon([px(-d, h + 0.008, CHAMBER_SILL + 18), px(-d + 0.05, h + 0.008, CHAMBER_SILL + 18),
-                      px(d, h + 0.008, CHAMBER_DOOR - 16), px(d - 0.05, h + 0.008, CHAMBER_DOOR - 16)], fill=tint(CHAMBER_WOOD, door_light * 0.72))
-        for z0 in (CHAMBER_SILL + 13, CHAMBER_DOOR - 15):
-            draw.polygon([px(-d - 0.02, h + 0.01, z0), px(-d + 0.13, h + 0.01, z0 + 1), px(-d + 0.13, h + 0.01, z0 + 3),
-                          px(-d - 0.02, h + 0.01, z0 + 4)], fill=tint(IRON, 1.0))
-        latch = CHAMBER_DOOR * 0.55
-        draw.polygon([px(d - 0.06, h + 0.01, latch), px(d + 0.02, h + 0.01, latch), px(d + 0.02, h + 0.01, latch + 3),
-                      px(d - 0.06, h + 0.01, latch + 3)], fill=tint(CHAMBER_WOOD, door_light * 0.6))
-
-    # The roof: boards running down the slope, laid across the shed, over the walls and past them; a fascia board
-    # on the high front edge and along the visible side.
-    low, high = b0 - (o if part == 0 else 0), b1 + (o if part == 1 else 0)
-    if part == 1:
-        high = front
-    roof = lambda u0, u1: [px(u0, low, roof_z(low)), px(u1, low, roof_z(low)), px(u1, high, roof_z(high)), px(u0, high, roof_z(high))]
-    chamber_planks(draw, random.Random(240 + FACES.index(face) + 4 * part), roof, -h - o, h + o, CHAMBER_PLANK, CHAMBER_ROOF, 1.0)
-    draw.polygon([px(h + o, low, roof_z(low)), px(h + o, high, roof_z(high)), px(h + o, high, roof_z(high) - 5), px(h + o, low, roof_z(low) - 5)],
-                 fill=tint(BOARD_EDGE, side_light * 0.9))
-    if part == 1:
-        draw.polygon([px(-h - o, front, roof_z(front)), px(h + o, front, roof_z(front)), px(h + o, front, roof_z(front) - 5),
-                      px(-h - o, front, roof_z(front) - 5)], fill=tint(BOARD_EDGE, door_light * 0.9))
-
-    layer = pzart.darken_down(layer, FOOT[1] - 60, FOOT[1] + 30, FRAME_FOOT_SHADE, SS)
-    return pzart.hard_edges(weather(shrink(layer), 250 + 2 * FACES.index(face) + part, WOOD_WEATHER, streaks=True).convert("RGBA"))
-
-
-def paint_chamber_entry(kind, face, part):
-    """Where the flue enters the visible long side, at this tile's middle: a clay pipe's last stub through a collar
-    of clay on the planks, or the stone-roofed trench running in under the sill through a dark gap."""
-    layer = new_layer()
-    draw = ImageDraw.Draw(layer)
-    h, mid = CHAMBER_HALF, part - 1
-    light = 0.72 if face == "S" else 1.0
-
-    def px(a, b, z):
-        return chamber_px(face, part, a, b, z)
-
-    def wall(b0, b1, z0, z1):
-        return [px(h, mid + b0, z0), px(h, mid + b1, z0), px(h, mid + b1, z1), px(h, mid + b0, z1)]
-
-    if kind == "Pipe":
-        draw.polygon(wall(-0.075, 0.075, FLUE_Z - 8, FLUE_Z + 9), fill=tint(FLUE_DAUB, light * 0.95))
-        draw.polygon(wall(-0.06, 0.06, FLUE_Z - 6, FLUE_Z + 7), fill=tint(FLUE_DAUB, light * 1.08))
-        steps = 8
-        for i in range(steps + 1):
-            a = h + (0.5 - h) * i / steps
-            x, y = px(a, mid, FLUE_Z)
-            r = FLUE_R + (0.8 if i == 0 else 0)
-            draw.ellipse([x - r * SS, y - r * 0.85 * SS, x + r * SS, y + r * 0.85 * SS], fill=tint(FLUE_CLAY, 0.78))
-            draw.ellipse([x - (r - 1.6) * SS, y - (r - 0.6) * 0.85 * SS, x + (r - 2.6) * SS, y + (r - 2.4) * 0.85 * SS],
-                         fill=tint(FLUE_CLAY, 1.16))
-    else:
-        w = TRENCH_W
-        draw.polygon(wall(-w - 0.03, w + 0.03, 0, CHAMBER_SILL + 2), fill=tint(FLUE_DAUB, light * 0.9))
-        draw.polygon(wall(-w + 0.01, w - 0.01, 0, 3), fill=tint(CHAMBER_DARK, 1))
-        draw.polygon(wall(-w - 0.02, w + 0.02, 3, CHAMBER_SILL + 1), fill=tint(CHAMBER_STONE, light * 1.05))
-
-        def ground(a, across, z):
-            return px(a, mid + across, z)
-
-        a0, a1 = h, 0.5
-        draw.polygon([ground(a0, -w - 0.03, 0), ground(a1, -w - 0.03, 0), ground(a1, w + 0.03, 0), ground(a0, w + 0.03, 0)],
-                     fill=tint(FLUE_DAUB, 0.7))
-        draw.polygon([ground(a0, -w - 0.02, 2.2), ground(a1, -w - 0.02, 2.2), ground(a1, w + 0.02, 2.2), ground(a0, w + 0.02, 2.2)],
-                     fill=tint(FLUE_DAUB, 0.95))
-        draw.polygon([ground(a0 + 0.004, -w, 2.8), ground(a1, -w, 3.0), ground(a1, w, 3.0), ground(a0 + 0.004, w, 2.8)],
-                     fill=tint(CHAMBER_STONE, 1.1))
-    return pzart.hard_edges(shrink(layer).convert("RGBA"))
-
-
-def ham_tone(tones, level):
-    """One of a short run of tones, dark to light, for a level from 0 to 1: vanilla's food art is a few flat tones laid
-    in small patches, never a smooth blend."""
-    return tones[max(0, min(len(tones) - 1, int(level * len(tones))))]
-
-
-def paint_chamber_ham(face):
-    """A smoked ham on a cord from a nail on the door's end wall, on the side away from the long wall the camera sees:
-    the shank up, the round of it at the bottom, the bone's knob at the top, and low on its face a slice taken off,
-    which gives it depth. It hangs a little past the shed's corner. Painted as vanilla's Ham icon is: a few tones in
-    small patches, lit from the upper left, a pale mottled cut with a lighter middle, and a dark line round it."""
-    h, a = CHAMBER_HALF, HAM_A
-    light = 1.0 if face == "S" else 0.78
-
-    def px(da, z, out=0.012):
-        return chamber_px(face, 1, a + da, h + out, z)
-
-    # The outline down the ham, from the shank to the round bottom, rounded between its steps.
-    steps = [0.02, 0.026, 0.042, 0.07, 0.092, 0.102, 0.1, 0.088, 0.06, 0.028]
-    fine = 6
-    zs, ws = [], []
-    for i in range((len(steps) - 1) * fine + 1):
-        low, part = min(i // fine, len(steps) - 2), 0
-        part = i / fine - low
-        ease = (1 - math.cos(part * math.pi)) / 2
-        zs.append(HAM_TOP - 2 - HAM_STEP * min(i / fine, 8.5))
-        ws.append((steps[low] + (steps[low + 1] - steps[low]) * ease) * HAM_SCALE)
-    widest = max(ws)
-    cut_z, cut_w, centre = HAM_TOP - 2 - HAM_STEP * 6.2, widest * 0.72, widest * 0.14
-
-    def mask(points):
-        layer = Image.new("L", (TILE_W * SS, TILE_H * SS), 0)
-        ImageDraw.Draw(layer).polygon(points, fill=255)
-        return layer.resize((TILE_W, TILE_H), Image.LANCZOS).point(lambda v: 255 if v >= 128 else 0)
-
-    def oval(scale, lift=0.0):
-        return [px(centre + cut_w * scale * math.cos(t / 16 * math.pi),
-                   cut_z + lift + HAM_STEP * 1.7 * scale * math.sin(t / 16 * math.pi), 0.014) for t in range(32)]
-
-    body = mask([px(-w, z) for z, w in zip(zs, ws)] + [px(w, z) for z, w in reversed(list(zip(zs, ws)))])
-    cut, lip = mask(oval(1.0)), mask(oval(1.0, 2.0))
-    box = body.getbbox()
-    rng = random.Random(260 + FACES.index(face))
-    patches = Image.blend(pzart.soft_noise(rng, (TILE_W, TILE_H), 3, 3), pzart.soft_noise(rng, (TILE_W, TILE_H), 1, 2), 0.45)
-    cut_box = cut.getbbox()
-    cut_mid = ((cut_box[0] + cut_box[2]) / 2, (cut_box[1] + cut_box[3]) / 2)
-
-    tile = Image.new("RGBA", (TILE_W, TILE_H), (0, 0, 0, 0))
-    out = tile.load()
-    body_px, cut_px, lip_px, noise = body.load(), cut.load(), lip.load(), patches.load()
-    for y in range(box[1], box[3]):
-        row = [x for x in range(box[0], box[2]) if body_px[x, y]]
-        if not row:
-            continue
-        left, right = row[0], row[-1]
-        for x in row:
-            across = (x - left) / max(right - left, 1)             # 0 the lit edge, 1 the shaded one
-            down = (y - box[1]) / (box[3] - box[1])
-            speck = noise[x, y] / 255 - 0.5
-            if cut_px[x, y]:
-                near = math.hypot((x - cut_mid[0]) / max(cut_box[2] - cut_box[0], 1), (y - cut_mid[1]) / max(cut_box[3] - cut_box[1], 1))
-                colour = ham_tone(HAM_CUT_TONES, 0.95 - near * 1.5 + speck * 0.45)
-            elif lip_px[x, y]:
-                colour = HAM_SKIN_TONES[0]                          # the skin standing proud over the cut
-            else:
-                colour = ham_tone(HAM_SKIN_TONES, 0.82 - across * 0.62 - down * 0.12 + speck * 0.5)
-            out[x, y] = tuple(tint(colour, light))[:3] + (255,)
-    # The dark line round it, as vanilla's icons have, and a thin rim of fat under the cut.
-    for y in range(box[1], box[3]):
-        for x in range(box[0], box[2]):
-            if not body_px[x, y]:
-                continue
-            edge = any(not (0 <= nx < TILE_W and 0 <= ny < TILE_H) or not body_px[nx, ny] for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)))
-            if edge:
-                out[x, y] = tuple(tint(HAM_LINE, light))[:3] + (255,)
-            elif cut_px[x, y] and not cut_px[x, y + 1] and body_px[x, y + 1]:
-                out[x, y] = tuple(tint(HAM_FAT, light))[:3] + (255,)
-
-    over = new_layer()
-    draw = ImageDraw.Draw(over)
-    nail = HAM_TOP + 9
-    draw.line([px(0, nail), px(0, HAM_TOP)], fill=tint(HAM_CORD, light), width=SS)
-    draw.ellipse([px(0, nail)[0] - 1.2 * SS, px(0, nail)[1] - 1.2 * SS, px(0, nail)[0] + 1.2 * SS, px(0, nail)[1] + 1.2 * SS],
-                 fill=tint(IRON, 1.0))
-    knob = px(0, HAM_TOP)
-    draw.ellipse([knob[0] - 2.2 * SS, knob[1] - 1.7 * SS, knob[0] + 2.2 * SS, knob[1] + 1.7 * SS], fill=tint(HAM_BONE, light))
-    tile.alpha_composite(pzart.hard_edges(shrink(over).convert("RGBA")))
-    return tile
-
-
-def chamber_icon(tiles, face_index=0):
-    """Both halves of the chamber as they stand, the back one drawn first, for the build menu."""
-    face = FACES[face_index]
-    dx, dy = chamber_world(face, 0, -1)
-    sx, sy = round((dx - dy) * pzart.DIAMOND_HALF_W), round((dx + dy) * pzart.DIAMOND_HALF_H)
-    canvas = Image.new("RGBA", (TILE_W + abs(sx), TILE_H + abs(sy)), (0, 0, 0, 0))
-    ox, oy = max(0, -sx), max(0, -sy)
-    canvas.alpha_composite(tiles[chamber_index(face_index, 0)], (ox + sx, oy + sy))
-    canvas.alpha_composite(tiles[chamber_index(face_index, 1)], (ox, oy))
-    return canvas
-
-
 def build_tiles(game=GAME):
     icons = read_icons(game)
     tiles = {}
@@ -1563,12 +1251,6 @@ def build_tiles(game=GAME):
                 for kind in range(len(ROTTEN_KINDS)):
                     tiles[fish_index(index, slot, kind, rotten_first, len(hooks))] = paint_hook_fish_tile(
                         icons, face, slot, ROTTEN_STAGE + kind, point, size, scale, mask)
-    for face_index, face in enumerate(FACES):
-        for part in range(2):
-            tiles[chamber_index(face_index, part)] = paint_chamber(face, part)
-            for kind in FLUE_KINDS:
-                tiles[chamber_entry_index(kind, face_index, part)] = paint_chamber_entry(kind, face, part)
-        tiles[CHAMBER_HAM + face_index] = paint_chamber_ham(face)
     tiles[PALLET] = pzart.extract_sprites(game / "media/texturepacks/Tiles2x.pack", {PALLET_SPRITE})[PALLET_SPRITE]
     for level, layers in enumerate(PALLET_LEVELS):
         tiles[PALLET_STACK + level] = paint_pallet_stack(icons, layers)
@@ -1576,11 +1258,10 @@ def build_tiles(game=GAME):
 
 
 def lua_tiles():
-    chamber = [tile_name(chamber_index(face, part)) for face in range(len(FACES)) for part in range(2)]
-    stations = [tile_name(base + face) for base in (TUB, FRAME, MEDIUM_BEAM, LARGE_BEAM) for face in range(len(FACES))] + chamber
-    beams = [tile_name(base + face) for base in (MEDIUM_BEAM, LARGE_BEAM) for face in range(len(FACES))] + chamber
-    # The Gantry and the Smokehouse stay out of rooms; the Hanging Beam may go indoors since 0.4.15 (a cellar's beam).
-    outdoor = [tile_name(LARGE_BEAM + face) for face in range(len(FACES))] + chamber
+    stations = [tile_name(base + face) for base in (TUB, FRAME, MEDIUM_BEAM, LARGE_BEAM) for face in range(len(FACES))]
+    beams = [tile_name(base + face) for base in (MEDIUM_BEAM, LARGE_BEAM) for face in range(len(FACES))]
+    # The Gantry stays out of rooms (the Smokehouse is TP Core's); the Hanging Beam may go indoors since 0.4.15 (a cellar's beam).
+    outdoor = [tile_name(LARGE_BEAM + face) for face in range(len(FACES))]
     return {
         "SHEETS": [{"prefix": tileset + "_", "tiles": COLUMNS * rows} for tileset, rows in zip(TILESETS, SHEET_ROWS)],
         "FIRST_SHEET_SIZE": FIRST_SHEET_SIZE,
@@ -1602,14 +1283,7 @@ def lua_tiles():
                        "stacks": MEDIUM_HOOKS},
             "large": {"base": LARGE_BEAM, "fishSprite": LARGE_FISH, "meatSprite": LARGE_MEAT, "rottenSprite": LARGE_ROTTEN,
                       "stacks": LARGE_HOOKS},
-            # Closed: nothing hangs in sight. Its facings are two tiles apart, so it lists both firsts.
-            "chamber": {"base": CHAMBER, "bases": [chamber_index(face, 0) for face in range(len(FACES))], "stacks": CHAMBER_STACKS,
-                        "closed": True},
         },
-        # Where a joined Firebox's flue enters the chamber: Pipe then Stones, each face, each part.
-        "CHAMBER_ENTRY": CHAMBER_ENTRY,
-        # The ham by the door while finished stacks wait inside: one per face, on the door's tile.
-        "CHAMBER_HAM": CHAMBER_HAM,
         "PALLET": tile_name(PALLET),
         "PALLET_STACKS": [tile_name(PALLET_STACK + level) for level in range(len(PALLET_LEVELS))],
         "DRYING_STAGES": FISH_STAGES,
@@ -1646,7 +1320,6 @@ def main():
     pallet = tiles[PALLET].copy()
     pallet.alpha_composite(tiles[PALLET_STACK + len(PALLET_LEVELS) - 1])
     pzart.write_build_icon(pallet, media / "textures" / "Item_StockfishPallet.png")
-    pzart.write_build_icon(chamber_icon(tiles), media / "textures" / "Item_SmokehouseChamber.png")
     # The mod list shows the large beam, which is `icon` in mod.info.
     # Its posts run off the bottom, so the fish stay big enough to read.
     pzart.write_mod_icon(icon, media.parent / "icon.png", keep=MOD_ICON_KEEP)

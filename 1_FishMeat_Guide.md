@@ -361,6 +361,8 @@ Stockfish is unsalted fish dried by frost and wind. It needs no salt and no tub,
 
 A plank shed two tiles long under one sloping roof, the door on the high end with a smoke slot under the eave. On its own it's a dry room for salt fish and the place where meat **dry cures**; with a **Firebox** joined to it, it **hot smokes** on a stoked fire and **cold smokes** on a banked one.
 
+> *Margin note:* the shed, its Firebox and the flue now come with *TP Core* (its guide, chapter 6), so other TP mods can smoke in it too. Everything below about fish and meat is unchanged.
+
 | | |
 |---|---|
 | Build | Carpentry 3: **14 planks, 20 nails**, hammer kept (Build menu, Furniture) |
@@ -1241,7 +1243,6 @@ Laid out as the game's planting seasons: the months a process works, its best an
 | `TPFM.kit("poultry")` | Spawns what hot smoked poultry takes: a whole Chicken and Turkey, every chicken and turkey cut, Rabbit Meat, a Steak (to see the mixed-stack refusal), 2 Salt and a Kitchen Knife |
 | `TPFM.kit("potted")` | Spawns what Potted Meat takes: 2 Pots, 2 Lard, Salt, four red meat cuts, a Chicken leg, Turkey Legs, Turkey Wings and Rabbit Meat, and the three clay vessels |
 | `TPFM.kit("stock")` | Spawns what every stock takes: a Fish Head, 2 Animal Bones, a Large Animal Bone, 6 Small Animal Bones, 2 Chicken Feet, a hen's and a turkey's head, 5 Pots to fill with water and 4 Bowls. |
-| `TPFM.kit("flue")` | Spawns both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel. With Core's `TPC.kit("firebox")` you can build and join a Firebox |
 
 **Looking things over**
 
@@ -1253,7 +1254,6 @@ Laid out as the game's planting seasons: the months a process works, its best an
 | `TPFM.keep(days)` | Ages those crocks by this many days at their place |
 | `TPFM.animals()` | Each live animal within 6 tiles: its weight and the blood it would give; each carcass: the blood left in it. The game's own animal window shows no weight |
 | `TPFM.blood(hours)` | Each container of blood you carry: litres, fresh or cured, its age and the hours left at 20 C before it spoils, and where it is. With hours, ages it that much first (`TPFM.blood(30)` spoils fresh blood) |
-| `TPFM.smokehouse()` | Each Smokehouse tile within 3 tiles: its facing, back or door tile, and each Firebox beside it with its flue and why it can't join (or "may join", "joined here") |
 | `TPFM.smoke()` | The joined Firebox's fire record (stoked, banked, the run now going) and each stack's heaviest piece, hot hours and smoke against Cold Smoked's need |
 | `TPFM.stoke(hours)` | Adds stoked hours to the run now going in those joined Fireboxes (stoke it first) |
 | `TPFM.bank(hours)` | Adds banked hours (default 6) to those joined Fireboxes: smoke for Cold Smoked, if today is 15 C or less |
@@ -1266,7 +1266,7 @@ The Salting Tub cures by its place's temperature on the weather's totals (0.4.35
 - **Salt fish:** `TPFM.fish("Walleye", 3, 4)` and `TPFM.give("salt", 10)` (each 4 weight walleye takes 28 salt), pack and cure, then hang the fish and `TPFM.age(288)`.
 - **Charque:** `TPFM.meat("all", 2, "corned")`, hang the beef, mutton and venison on a frame (it refuses the pork), `TPFM.age(120)`, take them down and rehydrate one.
 - **Potted Meat:** `TPFM.kit("potted")`, Put Meat in Lard or Tallow with the Steak, Add Meat to the Pot three times, cook it two hours, Pack Potted Meat into the Glazed Clay Jar, then eat a quarter.
-- **Hot smoking:** build a Smokehouse, `TPC.kit("firebox")` and `TPFM.kit("flue")`, build a Firebox by a long side with its door turned away, Connect the Firebox, hang `TPFM.meat("all", 2, "corned")` inside, light the Firebox, then `TPFM.stoke(8)`: Hot Smoked meat, and a ham by the door.
+- **Hot smoking:** build a Smokehouse (`TPC.kit("smokehouse")`), `TPC.kit("firebox")` and `TPC.kit("flue")`, build a Firebox by a long side with its door turned away, Connect the Firebox, hang `TPFM.meat("all", 2, "corned")` inside, light the Firebox, then `TPFM.stoke(8)`: Hot Smoked meat, and a ham by the door.
 - **Cold smoking:** in a cool month, the same Smokehouse and Firebox, hang `TPFM.fish("Walleye", 3, "cured")`, bank the Firebox, `TPFM.bank(50)`, then `TPFM.age(288)`: Cold Smoked Fish.
 - **Dry curing:** hang `TPFM.meat("all", 1, "country")` (Country Cured, with a leg) in the Smokehouse. `TPFM.age(1008)` with no fire: Beef, Mutton, Venison and Pork (Dry Cured) and a Country Ham. With `TPFM.addSmoke(130)` first (or `TPFM.bank(130)` on a day of 15 C or less): Beef, Mutton, Venison and Pork (Cold Smoked) and a Smoked Country Ham. Hang `TPFM.meat("all", 1, "corned")` (Corned) and `TPFM.age(520)`: it comes down Corned and rotten, as it would after three weeks in a 12 C shed (`TPFM.underSalt(hours)` adds the spoiling alone). `TPFM.smoke()` lists each stack's hours.
 - **Blood:** `TPFM.kit("blood")`, right-click the bucket, Cure Blood → Salt: *Animal Blood (Cured)*. Mix Black Pudding, bake an hour, Turn Out, Slice: six slices. Clean and Salt Casings, Stuff Blood Sausages, fill the Pot with 1.5 L of water, Put Blood Sausages in Water, boil half an hour, Take Out: six Blood Sausage (Boiled).

@@ -6,6 +6,7 @@ local F = TraditionalPreservationFishMeat
 local Weather = require "TraditionalPreservationCore/Weather"
 local FluidAgeing = require "TraditionalPreservationCore/FluidAgeing"
 local Season = require "TraditionalPreservationCore/Season"
+local Smokehouse = require "TraditionalPreservationCore/Smokehouse"
 TPFM = {}
 
 local function say(text) print("[TPFM] " .. text) end
@@ -34,7 +35,7 @@ function TPFM.help()
     say("TPFM.fish(name, n, weight, stage) spawn n fish, e.g. TPFM.fish(\"Walleye\", 2, 4); stage \"cured\", \"dried\", \"hotSmoked\", \"coldSmoked\" or \"stockfish\" (it may take weight's place); TPFM.fish() lists the names, \"all\" gives each")
     say("TPFM.meat(name, n, stage)  spawn n of a cut, e.g. TPFM.meat(\"Steak\", 2) or TPFM.meat(\"all\", 1, \"corned\"); stage \"corned\", \"country\", \"charque\", \"hotSmoked\" or \"dryCured\" (chicken, turkey and rabbit: corned and hotSmoked only); TPFM.meat() lists the names")
     say("TPFM.give(name, n, option) spawn n of: head, stock, salt, fat, fatPot (option \"burnt\" or \"raw\"), crock (full, four Steaks in Lard), blood (a Bucket of 4 L; option \"cured\" or \"spoiled\"), casings, saltedCasings, blackPudding, bloodSausage (boiled; option \"stale\"), smokedBloodSausage, freshSausage (raw; option \"seasoned\" or \"stale\"), smokedSausage (option \"seasoned\"). TPFM.give() lists them")
-    say("TPFM.kit(kind)             the things a test needs: \"potted\" (Potted Meat), \"stock\", \"poultry\" (hot smoked poultry), \"blood\" (black pudding, blood sausage, smoked blood sausage), \"sausage\" (Smoked Sausage) or \"flue\" (both flue kits and tools). TPFM.kit() lists the kinds")
+    say("TPFM.kit(kind)             the things a test needs: \"potted\" (Potted Meat), \"stock\", \"poultry\" (hot smoked poultry), \"blood\" (black pudding, blood sausage, smoked blood sausage) or \"sausage\" (Smoked Sausage); the Smokehouse's and the flue's are TP Core's (TPC.kit). TPFM.kit() lists the kinds")
     say("TPFM.animals()             live animals and carcasses within 6 tiles: weight, and the blood each gives (3.5 cl a kg)")
     say("TPFM.blood(hours)          the blood you carry: state, age, hours left at 20 C, place; with hours, ages it that much first")
     say("TPFM.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
@@ -42,7 +43,6 @@ function TPFM.help()
     say("TPFM.fatRows()             the fat each vanilla animal's butchering table gives now")
     say("TPFM.crocks()              each Crock of Potted Meat on you or within 4 tiles: place, keeping rate, days left")
     say("TPFM.keep(days)            age those crocks by this many days at their place's rate now")
-    say("TPFM.smokehouse()          each Smokehouse tile within 3 tiles: facing, part, the Fireboxes beside it and why each can't join")
     say("TPFM.smoke()               the joined Firebox's fire record and each stack's hot and smoke hours, Smokehouses within 3 tiles")
     say("TPFM.stoke(hours)          add stoked hours to the running session of those joined Fireboxes (stoke it first)")
     say("TPFM.bank(hours)           add banked hours (default 6) to those joined Fireboxes: smoke, but only on a day of 15 C or less")
@@ -500,9 +500,6 @@ local KITS = {
         "TraditionalPreservationFishMeat.SaltedCasings", "TraditionalPreservationFishMeat.SaltedCasings", "Base.Pot",
         "Base.KitchenKnife",
         give = { freshSausage = 6 }, giveOptions = { smokedSausage = "seasoned" } },
-    flue = { about = "both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel",
-        "Base.ClayPipeSegment", "Base.ClayPipeSegment", "Base.FlatStone", "Base.FlatStone", "Base.FlatStone", "Base.Clay",
-        "Base.Clay", "Base.Clay", "Base.MasonsTrowel", "Base.Shovel" },
 }
 
 function TPFM.kit(kind)
@@ -673,42 +670,15 @@ function TPFM.pallet()
     say("No Stockfish Pallet within 3 tiles on this floor.")
 end
 
-local PARTS = { [0] = "back", [1] = "door" }
-
-function TPFM.smokehouse()
-    local player, seen = getPlayer(), 0
-    local cell, x, y, z = getCell(), math.floor(player:getX()), math.floor(player:getY()), player:getZ()
-    for dx = -3, 3 do
-        for dy = -3, 3 do
-            local tile, face, part = F.chamberOn(cell:getGridSquare(x + dx, y + dy, z))
-            if tile then
-                seen = seen + 1
-                local lines = {}
-                for _, found in ipairs(F.fireboxesBy(tile)) do
-                    if found.tile == tile then
-                        local flue, side = F.flueOf(found.firebox)
-                        table.insert(lines, string.format("Firebox at %d,%d: flue %s %s, %s", found.firebox:getX(), found.firebox:getY(),
-                            tostring(flue), tostring(side), F.joinedChamber(found.firebox) == tile and "joined here"
-                            or (F.connectRefusalFor(found) or "may join")))
-                    end
-                end
-                say(string.format("%d,%d facing %s, %s tile, entry art %s; %s", tile:getX(), tile:getY(), face == 0 and "S" or "E",
-                    PARTS[part], tostring(F.chamberEntry(tile)), #lines > 0 and table.concat(lines, "; ") or "no Firebox beside it"))
-            end
-        end
-    end
-    if seen == 0 then say("No Smokehouse within 3 tiles on this floor.") end
-end
-
 -- The chamber tiles holding slots within 3 tiles, each with its joined Firebox (or nil).
 local function smokehouses()
     local player, found = getPlayer(), {}
     local cell, x, y, z = getCell(), math.floor(player:getX()), math.floor(player:getY()), player:getZ()
     for dx = -3, 3 do
         for dy = -3, 3 do
-            local tile = F.chamberOn(cell:getGridSquare(x + dx, y + dy, z))
+            local tile = Smokehouse.chamberOn(cell:getGridSquare(x + dx, y + dy, z))
             if tile and tile:getComponent(ComponentType.DryingCraftLogic) then
-                table.insert(found, { tile = tile, firebox = F.joinedFirebox(tile) })
+                table.insert(found, { tile = tile, firebox = Smokehouse.joinedFirebox(tile) })
             end
         end
     end

@@ -6,8 +6,9 @@ if isClient() then return end
 TraditionalPreservationFishMeatWorld = TraditionalPreservationFishMeatWorld or {}
 local Station = require "TraditionalPreservationCore/Station"
 local Weather = require "TraditionalPreservationCore/Weather"
-local Hearth = require "TraditionalPreservationCore/Hearth"
+local Smokehouse = require "TraditionalPreservationCore/Smokehouse"
 local Tiles = require "TraditionalPreservationFishMeat/Tiles"
+local CoreTiles = require "TraditionalPreservationCore/Tiles"
 local F = TraditionalPreservationFishMeat
 
 local FACE_COUNT = Tiles.FACE_COUNT
@@ -81,32 +82,39 @@ end
 
 -- place is the station's: indoors (and inside the Smokehouse) is sheltered, a roof with no room round it covered.
 -- In the Smokehouse each stack also counts the joined Firebox's fire (F.smokeStep); a done cook is noted for its
--- OnUpdate to finish, and every stack's shed for OnCreate's Cold Smoked swap (F.smokeStations).
+-- OnUpdate to finish, and every stack's shed for OnCreate's Cold Smoked swap (F.smokeStations). Another mod's stacks
+-- in the shed are its own: only counted, as they take room (others).
+local function readBatch(station, craftData, modData, logic, place, smoking, fire, ledger)
+    -- Out of the rain: a room, a loft, a basement and the Smokehouse (Enclosed, marked inShed below).
+    modData.sheltered = place ~= "Open" and place ~= "Covered"
+    modData.covered = place == "Covered"
+    modData.basement = place == "Basement"
+    -- A loft, like a basement, goes by its own temperature.
+    modData.loft = place == "Loft"
+    if modData.stackId then F.stackStations[modData.stackId] = station end
+    if smoking then
+        F.smokeStep(modData, fire, ledger)
+        modData.inShed = true
+        if modData.stackId then F.smokeStations[modData.stackId] = station end
+        if F.hotDone(modData) then F.hotStations[modData.stackId] = station end
+    end
+    return { progress = logic:getProgress(craftData), style = modData.style or F.STYLE_SALT, rotten = F.stackRotten(modData) }
+end
+
 local function readBatches(station, entry, logic, uiLogic, place)
-    local batches = {}
+    local batches, others = {}, 0
     local smoking = entry.hanger and entry.hanger.closed
-    local firebox = smoking and F.joinedFirebox(station)
-    local fire = firebox and Hearth.stateOf(firebox:getModData())
+    local fire = smoking and Smokehouse.fireOf(station)
     local ledger = smoking and F.getLedger()
     for craftData, _ in pairs(uiLogic:getItemsInProgress()) do
         local modData = craftData:getModData()
-        -- Out of the rain: a room, a loft, a basement and the Smokehouse (Enclosed, marked inShed below).
-        modData.sheltered = place ~= "Open" and place ~= "Covered"
-        modData.covered = place == "Covered"
-        modData.basement = place == "Basement"
-        -- A loft, like a basement, goes by its own temperature.
-        modData.loft = place == "Loft"
-        if modData.stackId then F.stackStations[modData.stackId] = station end
-        if smoking then
-            F.smokeStep(modData, fire, ledger)
-            modData.inShed = true
-            if modData.stackId then F.smokeStations[modData.stackId] = station end
-            if F.hotDone(modData) then F.hotStations[modData.stackId] = station end
+        if smoking and not F.ownsStack(modData) then
+            others = others + 1
+        else
+            table.insert(batches, readBatch(station, craftData, modData, logic, place, smoking, fire, ledger))
         end
-        table.insert(batches, { progress = logic:getProgress(craftData), style = modData.style or F.STYLE_SALT,
-            rotten = F.stackRotten(modData) })
     end
-    return batches
+    return batches, others
 end
 
 local function showSprites(station, entry, signature, sprites)
@@ -143,32 +151,7 @@ local function refreshFrame(frame, entry, faceIndex, _, waitingStyle, batches, f
     showSprites(frame, entry, table.concat(states, ","), sprites)
 end
 
--- Whether either tile of the shed holds finished stacks not yet taken out (the slots are on one of them).
-local function hasFinished(station)
-    for _, found in ipairs(F.chamberTiles(station)) do
-        local resources = found[1]:getComponent(ComponentType.Resources)
-        local logic = found[1]:getComponent(ComponentType.DryingCraftLogic)
-        if resources and logic and Station.countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output) > 0 then
-            return true
-        end
-    end
-    return false
-end
-
--- The Smokehouse chamber is closed: nothing hangs in sight. Each of its tiles shows where a joined Firebox's flue
--- enters it, master or not (the other tile has no slots), and the door's tile a ham while finished stacks wait.
-local function showEntry(station, entry)
-    local sprites = {}
-    local face, part = F.chamberTile(F.stationIndex(station))
-    local flue = F.chamberEntry(station)
-    local ham = F.hamSprite(face, part, part == 1 and hasFinished(station))
-    if flue then table.insert(sprites, flue) end
-    if ham then table.insert(sprites, ham) end
-    showSprites(station, entry, table.concat(sprites, ","), sprites)
-end
-
 local function refresh(station, entry)
-    if entry.hanger and entry.hanger.closed then showEntry(station, entry) end
     local resources = station:getComponent(ComponentType.Resources)
     local logic = station:getComponent(entry.logicType)
     local sprite = station:getSprite()
@@ -179,31 +162,35 @@ local function refresh(station, entry)
     local waiting, _, waitingStyles, waitingItems = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
     local _, finishedStacks, finishedStyles, _, finishedRotten = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output,
         entry.hanger and getGameTime():getWorldAgeHours())
-    local batches = readBatches(station, entry, logic, uiLogic, entry.place or Weather.placeOf(station))
-    entry.busyStacks = finishedStacks + #batches
+    local batches, others = readBatches(station, entry, logic, uiLogic, entry.place or Weather.placeOf(station))
+    entry.busyStacks = finishedStacks + #batches + others
     entry.show(station, entry, entry.faceIndex, waiting, waitingStyles[1], batches, finishedStyles, waitingItems, finishedRotten)
 end
 
+-- TP Core's Smokehouse is tracked here too, for this mod's stacks in it: Core draws its look and sets its recipe tag.
+-- Inside the chamber's walls and roof it is always Enclosed (TP Core's shed in the outside air), wherever it stands.
 local function newEntry(station)
+    if Smokehouse.isChamber(station) then
+        return { hanger = F.CHAMBER_HANGER, faceIndex = 0, logicType = ComponentType.DryingCraftLogic,
+            show = function() end, place = "Enclosed" }
+    end
     local index = F.stationIndex(station)
     if not index then return nil end
 
     local isFrame = index >= FRAME_SPRITE
-    local hanger = F.hangerFor(index)
-    local closed = hanger and hanger.closed
-    local logic = closed and station:getComponent(ComponentType.DryingCraftLogic)
-    if logic and logic:getRecipeTagQuery() ~= F.SMOKEHOUSE_RECIPES then logic:setRecipeTagQuery(F.SMOKEHOUSE_RECIPES) end
-    -- Inside the chamber's walls and roof it is always Enclosed (TP Core's shed in the outside air), wherever it stands.
     return {
-        hanger = hanger,
+        hanger = F.hangerFor(index),
         faceIndex = index % FACE_COUNT,
         logicType = isFrame and ComponentType.DryingCraftLogic or ComponentType.CraftLogic,
-        show = closed and function() end or isFrame and refreshFrame or refreshTub,
-        place = closed and "Enclosed" or nil,
+        show = isFrame and refreshFrame or refreshTub,
     }
 end
 
-local tracker = Station.tracker({ sprites = Tiles.STATIONS, entry = newEntry, refresh = refresh })
+local sprites = {}
+for _, name in ipairs(Tiles.STATIONS) do table.insert(sprites, name) end
+for _, name in ipairs(CoreTiles.CHAMBERS) do table.insert(sprites, name) end
+
+local tracker = Station.tracker({ sprites = sprites, entry = newEntry, refresh = refresh })
 
 TraditionalPreservationFishMeatWorld.track = tracker.track
 
@@ -221,12 +208,10 @@ end
 
 -- What a station holds now, for its Info window: its hanger (nil for a tub) and place, the items waiting in its
 -- input slots, the finished ones and their stacks, and the running batches, furthest along first, each with its
--- recipe data and progress. Either tile of a Smokehouse answers for the one with the slots. Nil for anything else,
--- or before there is a player.
+-- recipe data and progress. Either tile of a Smokehouse answers for the one with the slots, and lists this mod's
+-- stacks only. Nil for anything else, or before there is a player.
 function TraditionalPreservationFishMeatWorld.inspect(station)
-    for _, found in ipairs(F.chamberTiles(station)) do
-        if found[1]:getComponent(ComponentType.DryingCraftLogic) then station = found[1] end
-    end
+    if Smokehouse.isChamber(station) then station = Smokehouse.slotTile(station) end
     local entry = tracker.track(station)
     if not entry then return nil end
     local resources = station:getComponent(ComponentType.Resources)
@@ -237,8 +222,11 @@ function TraditionalPreservationFishMeatWorld.inspect(station)
     local _, _, _, waiting = countItems(resources, logic:getInputsGroupName(), ResourceIO.Input)
     local finished, finishedStacks = countItems(resources, logic:getOutputsGroupName(), ResourceIO.Output)
     local batches = {}
+    local closed = entry.hanger and entry.hanger.closed
     for craftData, _ in pairs(uiLogic:getItemsInProgress()) do
-        table.insert(batches, { data = craftData, progress = logic:getProgress(craftData) })
+        if not closed or F.ownsStack(craftData:getModData()) then
+            table.insert(batches, { data = craftData, progress = logic:getProgress(craftData) })
+        end
     end
     table.sort(batches, function(a, b) return a.progress > b.progress end)
     return { station = station, hanger = entry.hanger, place = entry.place or Weather.placeOf(station),

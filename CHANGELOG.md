@@ -1,5 +1,12 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.39
+The Smokehouse is TP Core's (user, 2026-11-13: before Dairy, so its smoked cheeses share it). Needs this TP Core. Old saves are ignored: a Smokehouse built before this is gone on load, build a new one. In-game step 125 of `TESTING_GUIDE.md` (INGAME_PASS 124), passed.
+- **Moved to TP Core:** the chamber entity, its art and build icon, Connect / Disconnect the Firebox (menu and action, was `TPFMFlue`), the flue kits, the door, the flue's entry and the ham by the door, the recipe tag, the fire's two counters (`Smokehouse.fireStep`) and their texts. Hot and cold smoking, dry curing, sausage and what comes out stay here and work as before; `F.smokeStep` adds the fire's warmth to Core's counters.
+- **Only its own stacks:** a stack this mod hangs records it (`F.OWNER`, through Core's `startCounters`); the World steps, shows and finishes only those, and Smokehouse Info lists only those. Another mod's stacks count against the shed's 6. In the shed's slots this mod judges only its own items (Core's `UI.slotRules` `owns`).
+- Tiles 856-869 left empty, so no other tile moves. Firebox Info's note on smoking is in `...SmokehouseUI.lua`.
+- Console: `TPFM.smokehouse()` and `TPFM.kit("flue")` are now `TPC.smokehouse()` and `TPC.kit("flue")`; `TPC.kit("smokehouse")` is new. `TPFM.smoke()`, `stoke`, `bank`, `addSmoke` stay.
+
 ## 0.4.38
 Smoked Sausage, kielbasa style (user, 2026-11-13; ROADMAP). In-game step 124 of `TESTING_GUIDE.md` (INGAME_PASS 123), passed. Needs this TP Core (`Season`).
 - **Stuff Sausages**: two raw Pork or Pork Chop, a third piece of Pork, Pork Chop, Beef, Steak or Venison, a whole Pork Fat or half a Lard (12 uses), a Salt use and a Salted Casings: **6 Fresh Sausage**, uncooked, 0.25, 525 kcal (user: a sixth of what goes in, about 3,150 kcal a batch), hunger 30, fresh 2 / rotten 4 as vanilla's sausage.

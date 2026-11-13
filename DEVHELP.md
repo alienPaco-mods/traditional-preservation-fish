@@ -32,8 +32,6 @@ These console commands load only when the game runs in **debug mode** (launch op
 | `TPFM.crocks()` | Each Crock of Potted Meat on you or in containers within 4 tiles on your floor: its place (Fridge, Freezer, Basement, Sheltered, Open), keeping rate (x1 = a basement's 60 days), age, days until stale and rotten there, and whether it has been opened. |
 | `TPFM.keep(days)` | Ages those crocks by this many days at their place's rate now (default 10). |
 | `TPFM.kit("stock")` | Spawns what every stock takes: a Fish Head, 2 Animal Bones, a Large Animal Bone, 6 Small Animal Bones, 2 Chicken Feet, a hen's and a turkey's head, 5 Pots to fill with water and 4 Bowls. |
-| `TPFM.kit("flue")` | Spawns both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay) with a Mason's Trowel and a Shovel. |
-| `TPFM.smokehouse()` | Each Smokehouse chamber tile within 3 tiles on your floor: facing, back or door tile, the entry overlay it shows, and each Firebox beside it with its flue and why it can't join (or `may join`, `joined here`). |
 | `TPFM.smoke()` | Each Smokehouse within 3 tiles: its joined Firebox's fire record (mode, stoked and banked hours, the session now running and its hours) and each stack's hot hours against its need, smoke hours against its need (`F.smokeHours`), dried hours, whether its cook is done, and for meat its dry-curing need, whether it has a leg and how far under-salting has spoiled it. |
 | `TPFM.addSmoke(hours)` | Adds hours of smoke (default 60) straight to every stack in the Smokehouses within 3 tiles, whatever the weather or the fire. `TPFM.bank` only gives smoke on a day of 15 C or less, and says so when it is warmer. |
 | `TPFM.underSalt(hours)` | Adds hours of a 10 C shed (default 168) for Corned meat hanging in a Smokehouse, a room or under a roof; it rots after 672. |
@@ -59,6 +57,6 @@ The Salting Tub cures by its place's temperature (0.4.35, full speed from 2 C), 
 
 **Typical check of the copper:** `TPFM.give("fat", 6)`, a lit Hearth, Put Fat in the Copper (Pork Fat), wait for it to steam and an hour more, Fill from Copper into a pot, Strain Lard three times.
 
-**Typical check of hot smoking:** a Smokehouse with a Firebox joined (`TPC.kit("firebox")`, `TPFM.kit("flue")`), `TPFM.meat("all", 2, "corned")` and `TPFM.fish("Walleye", 3, "cured")`, hang one stack of each, light the Firebox, `TPFM.smoke()` (a session, hot 0 of 6-8 and 4), `TPFM.stoke(8)`: within a second both come out Hot Smoked and a ham hangs by the door. For a broken run: stoke 2 h, bank it and wait over an hour: hot back to 0, Smoke 2.0 h.
+**Typical check of hot smoking:** a Smokehouse with a Firebox joined (`TPC.kit("smokehouse")`, `TPC.kit("firebox")`, `TPC.kit("flue")`), `TPFM.meat("all", 2, "corned")` and `TPFM.fish("Walleye", 3, "cured")`, hang one stack of each, light the Firebox, `TPFM.smoke()` (a session, hot 0 of 6-8 and 4), `TPFM.stoke(8)`: within a second both come out Hot Smoked and a ham hangs by the door. For a broken run: stoke 2 h, bank it and wait over an hour: hot back to 0, Smoke 2.0 h.
 
 **Typical check of heads:** `TPFM.fish("Walleye", 1, 4)` and `TPFM.fish("Bluegill", 1, 0.9)`, then Gut Fish on both. Only the walleye gives a head.

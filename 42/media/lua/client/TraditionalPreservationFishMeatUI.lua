@@ -7,6 +7,7 @@ require "Entity/ISUI/Controls/ISItemSlot"
 local UI = require "TraditionalPreservationCore/UI"
 local Transfer = require "TraditionalPreservationCore/Transfer"
 local Weather = require "TraditionalPreservationCore/Weather"
+local Smokehouse = require "TraditionalPreservationCore/Smokehouse"
 local Tiles = require "TraditionalPreservationFishMeat/Tiles"
 local F = TraditionalPreservationFishMeat
 
@@ -55,7 +56,7 @@ local function refusal(slot, item, queued)
     end
     local mixedMeat = stored:size() > 0 and F.mixedMeat(stored:get(0), item)
     if mixedMeat then return mixedMeat end
-    local hanger = F.hangerFor(spriteIndex(entity))
+    local hanger = F.hangerOf(entity)
     local sausageRefused = F.sausageRefusal(hanger, item)
     if sausageRefused then return sausageRefused end
     local porkRefused = F.meatRefusal(hanger, hanger.closed and "Enclosed" or Weather.placeOf(entity), item)
@@ -70,10 +71,10 @@ end
 
 -- A tub or a drying station, with whether it's a tub. Asking about one starts tracking it.
 local function station(entity)
-    local index = spriteIndex(entity)
-    if not index or not TraditionalPreservationFishMeatWorld then return nil end
+    if not F.isStation(entity) or not TraditionalPreservationFishMeatWorld then return nil end
 
-    local isTub = index < FIRST_FRAME_SPRITE
+    local index = spriteIndex(entity)
+    local isTub = index ~= nil and index < FIRST_FRAME_SPRITE
     local component = entity:getComponent(isTub and ComponentType.CraftLogic or ComponentType.DryingCraftLogic)
     if not component then return nil end
     TraditionalPreservationFishMeatWorld.track(entity)
@@ -85,6 +86,8 @@ UI.slotRules{
     refusal = refusal,
     -- The short cure refuses a Leg of Pork, on the drop and again at Craft if the recipe changed after loading.
     recipeRefusal = function(slot, item) return F.recipeRefusal(slot.recipe, item) end,
+    -- In TP Core's Smokehouse, only this mod's own items (another mod's cheese is its own to judge).
+    owns = function(entity, item) return not Smokehouse.isChamber(entity) or F.ownsItem(item) end,
     -- What hangs there now, so the count of busy stacks is current.
     added = function(entity) TraditionalPreservationFishMeatWorld.refresh(entity) end,
 }
@@ -258,8 +261,8 @@ UI.onProgressSlot(function(slot, name)
     end
 end)
 
--- The Gantry and the Smokehouse stand in the open or under an open roof, not in a room; they and the Hanging Beam
--- keep out of a door's front.
+-- The Gantry stands in the open or under an open roof, not in a room (TP Core's Smokehouse keeps its own rules); it
+-- and the Hanging Beam keep out of a door's front.
 UI.notInRooms(Tiles.OUTDOOR)
 UI.keepDoorsFree(Tiles.DOOR_KEPT)
 

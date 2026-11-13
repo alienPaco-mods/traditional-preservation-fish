@@ -102,7 +102,7 @@ local cured = Info.rows({ place = "Sheltered", waiting = {}, finished = 4, finis
 check("cured pieces wait in the tub", hasNote(cured, "Cured and waiting to be taken: 4"))
 
 -- The Smokehouse: Corned meat with a stoked run on it, and its smoke.
-local shed = F.hangerFor(F.spriteIndex("traditionalpreservationfishmeat_02_448"))
+local shed = F.CHAMBER_HANGER
 local cool = { temperature = 8, seasonTemperature = 6, dryCureRate = 0.7, dryCureStokedRate = 1, dryCureBankedRate = 0.9, saltSpoiling = false }
 local Hearth = require "TraditionalPreservationCore/Hearth"
 local smoking = Info.rows({ hanger = shed, place = "Enclosed", waiting = {}, finished = 0, finishedStacks = 0,

@@ -50,7 +50,7 @@ Each press of Craft hangs one stack, which keeps its spot until collected. Hover
 [*][b]Drying Frame:[/b] Carpentry 2. 6 long sticks, 3 nails, 4 twine, hammer kept. 8 stacks of 2.5 weight. It can stand anywhere, a room or a basement too.
 [*][b]Hanging Beam:[/b] Carpentry 4. 6 planks, 6 nails, 1 large hook, hammer kept. 4 stacks of 15. Anywhere, a room or a basement too.
 [*][b]Gantry:[/b] Carpentry 6. 2 logs, 2 planks, 8 nails, 2 large hooks, hammer kept. 2 stacks of 50. Open air or under an open roof.
-[*][b]Smokehouse:[/b] Carpentry 3. 14 planks, 20 nails, hammer kept. 6 stacks of 15. Two tiles; open air or under an open roof. Salt fish and meat only.
+[*][b]Smokehouse[/b] (TP Core's): Carpentry 3. 14 planks, 20 nails, hammer kept. 6 stacks of 15. Two tiles; open air or under an open roof. Salt fish, meat and sausage.
 [/list]
 
 [h2]Salt Dried fish[/h2]

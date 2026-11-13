@@ -108,8 +108,8 @@ local PRESSED, GUTTED = "TraditionalPreservationFishMeat.SaltPressedFish", "Trad
 check("the map loader knows the tub, the frame and both beams", loaders.traditionalpreservationfishmeat_01_0
     and loaders.traditionalpreservationfishmeat_01_7 and loaders.traditionalpreservationfishmeat_02_0 and loaders.traditionalpreservationfishmeat_02_3)
 check("and nothing else", loaders.traditionalpreservationfishmeat_01_8 == nil)
-check("and both tiles of the Smokehouse, either way round", loaders.traditionalpreservationfishmeat_02_448
-    and loaders.traditionalpreservationfishmeat_02_449 and loaders.traditionalpreservationfishmeat_02_450 and loaders.traditionalpreservationfishmeat_02_451)
+check("and both tiles of TP Core's Smokehouse, either way round, for this mod's stacks in it", loaders.traditionalpreservationcore_01_32
+    and loaders.traditionalpreservationcore_01_33 and loaders.traditionalpreservationcore_01_34 and loaders.traditionalpreservationcore_01_35)
 
 -- Frames: a finished salt stack, a gutted stack halfway, and pressed fish waiting.
 local running = recipeData(0.5, T.STYLE_GUTTED)
@@ -178,21 +178,22 @@ check("a mixed stack whose Corned share rotted keeps drying, and its look", not 
 mixed.modData.allUnder = true
 check("all Corned, it is lost", T.stackRotten(mixed.modData))
 
--- The Smokehouse: Enclosed wherever it stands (out of the rain, by the day's air), and nothing hangs in sight.
+-- TP Core's Smokehouse: Enclosed wherever it stands (out of the rain, by the day's air). Core draws its look; this
+-- mod steps only its own stacks, and counts another mod's as taking room.
+local SHED = "traditionalpreservationcore_01_33"
 local smoked = recipeData(0.5, T.STYLE_MEAT)
-local smokehouse = station("traditionalpreservationfishmeat_02_449", 6, true, { fish(T.CURED_MEAT) }, { smoked }, {})
-smokehouse.sprites = { "old" }
+smoked.modData.smokeOwner = T.OWNER
+local cheese = recipeData(0.2)
+cheese.modData.smokeOwner = "TraditionalPreservationDairy"
+local smokehouse = station(SHED, 6, true, { fish(T.CURED_MEAT) }, { smoked, cheese }, {})
+smokehouse.sprites = { "core's" }
 W.track(smokehouse)
 W.refresh(smokehouse)
 check("a Smokehouse in the open is out of the rain inside, and marked as the shed", smoked.modData.sheltered == true
     and smoked.modData.covered == false and smoked.modData.inShed == true and smoked.modData.loft == false)
-check("and shows no hanging stacks", #smokehouse.sprites == 0)
-check("it counts its busy stacks", W.busyStacks(smokehouse) == 1)
-check("one built before its own recipe tag gets it", smokehouse:getComponent("DryingCraftLogic").tag == "Smokehouse")
-local done = station("traditionalpreservationfishmeat_02_449", 8, true, {}, {}, { fish(T.HOT_MEAT) })
-W.track(done)
-W.refresh(done)
-check("a finished stack waiting hangs a ham by the door (tile 868)", table.concat(done.sprites, " ") == "traditionalpreservationfishmeat_02_460")
+check("another mod's stack in it is left alone", cheese.modData.sheltered == nil and cheese.modData.inShed == nil)
+check("and the look is Core's to draw", smokehouse.sprites[1] == "core's" and smokehouse.clears == 0)
+check("it counts every busy stack, another mod's too", W.busyStacks(smokehouse) == 2)
 check("a frame keeps the frame's", rack:getComponent("DryingCraftLogic").tag == "DryingFrame")
 
 -- What the Info window is told about a station.
@@ -201,11 +202,12 @@ check("a look at the frame: its hanger, place and contents", seen.hanger == T.HA
     and #seen.waiting == 1 and seen.finished == 1 and seen.finishedStacks == 1)
 check("and its running batch with its progress", #seen.batches == 1 and seen.batches[1].data == running and seen.batches[1].progress == 0.5)
 check("a Smokehouse is Enclosed to the window too", W.inspect(smokehouse).place == "Enclosed" and W.inspect(smokehouse).hanger.closed)
+check("and the window lists this mod's stacks only", #W.inspect(smokehouse).batches == 1 and W.inspect(smokehouse).batches[1].data == smoked)
 -- A stack hung before step J was last marked Sheltered with inShed: the next look marks it the same, so it keeps
 -- reading the same totals.
 local oldStack = recipeData(0.3, T.STYLE_MEAT)
-oldStack.modData.sheltered, oldStack.modData.inShed = true, true
-local oldShed = station("traditionalpreservationfishmeat_02_449", 6, true, {}, { oldStack }, {})
+oldStack.modData.sheltered, oldStack.modData.inShed, oldStack.modData.smokeOwner = true, true, T.OWNER
+local oldShed = station(SHED, 6, true, {}, { oldStack }, {})
 W.track(oldShed)
 W.refresh(oldShed)
 check("an old Smokehouse stack keeps its marks", oldStack.modData.sheltered == true and oldStack.modData.inShed == true

@@ -8,6 +8,7 @@ local Tiles = require "TraditionalPreservationFishMeat/Tiles"
 local Doors = require "TraditionalPreservationCore/Doors"
 local Hearth = require "TraditionalPreservationCore/Hearth"
 local Station = require "TraditionalPreservationCore/Station"
+local Smokehouse = require "TraditionalPreservationCore/Smokehouse"
 local Uses = require "TraditionalPreservationCore/Uses"
 
 F.MOD_DATA_KEY = "TraditionalPreservationFishMeat"
@@ -37,7 +38,7 @@ F.STACK_WEIGHT = 2.5
 F.MAX_STACKS = Tiles.HANGERS.frame.stacks
 -- Every station that hangs fish, by its first sprite: the first hanging fish sprite and its stacks
 -- (from Tiles.lua), and the weight of each stack.
--- The Smokehouse chamber is closed (nothing hangs in sight) and its facings are two tiles apart, so it lists both.
+-- The Smokehouse chamber is TP Core's (Smokehouse.lua): closed, nothing hangs in sight; F.CHAMBER_HANGER below.
 local STACK_WEIGHTS = { frame = F.STACK_WEIGHT, medium = 15, large = 50, chamber = 15 }
 -- And the most pieces in each stack, fish or meat alike (0.4.20): the Beam and the Gantry are for bigger fish, not
 -- more of them. 25 is the slot every station is built with.
@@ -48,6 +49,7 @@ for name, hanger in pairs(Tiles.HANGERS) do
         stacks = hanger.stacks, stackWeight = STACK_WEIGHTS[name], stackPieces = STACK_PIECES[name], closed = hanger.closed }
     for _, base in ipairs(hanger.bases or { hanger.base }) do F.HANGERS[base] = entry end
 end
+F.CHAMBER_HANGER = { stacks = Smokehouse.STACKS, stackWeight = STACK_WEIGHTS.chamber, stackPieces = STACK_PIECES.chamber, closed = true }
 
 -- Vanilla's rules for cutting a fish: over this weight, into two fillets of this share of its
 -- weight (more in spawning season, when part goes to roe), each with half its food.
@@ -1180,9 +1182,9 @@ function F.stationIndex(object)
     return name and STATION_INDEX[name]
 end
 
--- The Gantry and the Smokehouse stand in the open or under an open roof, not in a room, unlike the frame and (since
--- 0.4.15) the Hanging Beam; and not in front of a door (TP Core's Doors: the Hearth's mouth, the Firebox's door, the
--- Smokehouse's), with the Smokehouse's own door's front free. The Hanging Beam only minds the doors (F.doorFree).
+-- The Gantry stands in the open or under an open roof, not in a room, unlike the frame and (since 0.4.15) the Hanging
+-- Beam, as TP Core's Smokehouse does; and not in front of a door (TP Core's Doors: the Hearth's mouth, the Firebox's
+-- door, the Smokehouse's). The Hanging Beam only minds the doors (F.doorFree).
 function F.doorFree(params)
     local name = params.tileInfo and params.tileInfo:getSpriteName()
     return Doors.fits(params.square, name)
@@ -1193,9 +1195,26 @@ function F.notInRoom(params)
     return not params.square:isInARoom() and Doors.fits(params.square, name)
 end
 
--- The hanger a station's sprite belongs to, whichever way it faces (and either tile of the chamber), or nil for a tub.
+-- The hanger a station's sprite belongs to, whichever way it faces, or nil for a tub.
 function F.hangerFor(spriteIndex)
     return F.HANGERS[spriteIndex - spriteIndex % 2]
+end
+
+-- The hanger of a station: one of this mod's, or either tile of TP Core's Smokehouse; nil for a tub or anything else.
+function F.hangerOf(object)
+    local index = F.stationIndex(object)
+    if index then return F.hangerFor(index) end
+    if Smokehouse.isChamber(object) then return F.CHAMBER_HANGER end
+end
+
+-- Whether an object is one of the stations this mod works: its own, or the Smokehouse.
+function F.isStation(object)
+    return F.stationIndex(object) ~= nil or Smokehouse.isChamber(object)
+end
+
+-- Whether an item is this mod's to judge in the Smokehouse's slots: anything of its own module.
+function F.ownsItem(item)
+    return string.find(item:getFullType(), "^TraditionalPreservationFishMeat%.") ~= nil
 end
 
 -- Why a fish can't join the stack waiting on a frame, as a translation key, or nil if it can.
@@ -1217,10 +1236,6 @@ function F.coldRefusal(place)
     if place ~= "Open" and place ~= "Covered" then return "IGUI_TraditionalPreservationFishMeat_NoColdIndoors" end
     return nil
 end
-
--- The recipe tag the Smokehouse lists: its own, without cold drying. A shed keeps the tag it was built with in the
--- save, so one from before the tag gets it when it is first seen.
-F.SMOKEHOUSE_RECIPES = "Smokehouse"
 
 -- A random hanging look for a new stack, kept in its modData so it doesn't change.
 function F.pickStyle(styles)

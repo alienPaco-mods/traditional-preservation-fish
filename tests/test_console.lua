@@ -113,10 +113,10 @@ local before = #player.given
 run("meat", "all", 2)
 check("meat gives each cut", #player.given == before + 2 * #F.MEAT_CUTS and player.given[before + 1] == "Base.Beef")
 before = #player.given
-run("kit", "flue")
-check("kit gives the flue kits", #player.given == before + 10 and player.given[before + 1] == "Base.ClayPipeSegment")
-check("kit with no kind lists them", run("kit"):find("TPFM.kit(\"potted\")", 1, true) ~= nil and #player.given == before + 10)
+check("kit with no kind lists them", run("kit"):find("TPFM.kit(\"potted\")", 1, true) ~= nil and #player.given == before)
+check("the flue kit is TP Core's now", run("kit"):find("TPFM.kit(\"flue\")", 1, true) == nil)
 function getCell() return { getGridSquare = function() return nil end } end
 check("pallet says when there is none near", run("pallet"):find("No Stockfish Pallet", 1, true) ~= nil)
+check("smoke says when no Smokehouse is near", run("smoke"):find("No Smokehouse", 1, true) ~= nil)
 
 H.done()
