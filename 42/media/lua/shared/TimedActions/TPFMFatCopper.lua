@@ -22,7 +22,7 @@ end
 
 function TPFMFatCopper:isValid()
     return self.hearth:getSquare() ~= nil and #piecesHere(self) > 0
-        and F.copperFatRoom(Hearth.stateOf(self.hearth:getModData()), self.raw) > 0
+        and F.copperFatRoom(Hearth.copperState(self.hearth:getModData()), self.raw) > 0
 end
 
 function TPFMFatCopper:waitToStart()

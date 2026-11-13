@@ -20,11 +20,12 @@ AnimalPartsDefinitions = { animals = {} }
 
 local Hearth = require "TraditionalPreservationCore/Hearth"
 require "TraditionalPreservationFishMeatFatUI"
+require "TraditionalPreservationCore/CopperUI"
 local F = TraditionalPreservationFishMeat
 local onFillMenu = H.handlers.OnFillWorldObjectContextMenu[1]
 
 local function hearth(copper)
-    local modData = { [Hearth.KEY] = copper or {} }
+    local modData = { [Hearth.KEY] = { [Hearth.COPPER] = copper or {} } }
     local square = { getX = function() return 5 end, getY = function() return 5 end, getZ = function() return 0 end }
     return {
         class = "IsoFireplace",

@@ -1,5 +1,8 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.40
+TP Core's Hearth keeps the copper's state under its own key (`tpHearth.copper`, the Stone Hearth hub's step i). Needs this TP Core. Put Fat in the Copper reads it with `Hearth.copperState` (`TPFMFatCopper`); `test_fat_ui.lua` loads Core's `CopperUI` and builds the new state. Nothing changes in game.
+
 ## 0.4.39
 The Smokehouse is TP Core's (user, 2026-11-13: before Dairy, so its smoked cheeses share it). Needs this TP Core. Old saves are ignored: a Smokehouse built before this is gone on load, build a new one. In-game step 125 of `TESTING_GUIDE.md` (INGAME_PASS 124), passed.
 - **Moved to TP Core:** the chamber entity, its art and build icon, Connect / Disconnect the Firebox (menu and action, was `TPFMFlue`), the flue kits, the door, the flue's entry and the ham by the door, the recipe tag, the fire's two counters (`Smokehouse.fireStep`) and their texts. Hot and cold smoking, dry curing, sausage and what comes out stay here and work as before; `F.smokeStep` adds the fire's warmth to Core's counters.
