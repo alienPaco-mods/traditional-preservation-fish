@@ -12,6 +12,8 @@ local FluidAgeing = require "TraditionalPreservationCore/FluidAgeing"
 local Weather = require "TraditionalPreservationCore/Weather"
 local OnHeat = require "TraditionalPreservationCore/OnHeat"
 local Charge = require "TraditionalPreservationCore/Charge"
+local Hearth = require "TraditionalPreservationCore/Hearth"
+local Season = require "TraditionalPreservationCore/Season"
 
 TraditionalPreservationFishMeat = TraditionalPreservationFishMeat or {}
 local F = TraditionalPreservationFishMeat
@@ -175,7 +177,7 @@ OnHeat.watch("TraditionalPreservationFishMeat.BloodSausage", F.BLOOD_SAUSAGE_FRY
 end)
 
 -- Smoked Blood Sausage (user, 2026-11-13): boiled links, never fried, hung alone in the Smokehouse
--- (HangBloodSausageToSmoke) take SMOKED_SAUSAGE_HOURS of cold smoke, whatever the stack: the Smokehouse's cold
+-- (Hang Sausage to Smoke, one recipe with Smoked Sausage's since 0.4.38) take SMOKED_SAUSAGE_HOURS of cold smoke, whatever the stack: the Smokehouse's cold
 -- counter (F.smokeStep), so fire hours count only on cool days and a stoked run is smoke at once (never a cook), as
 -- Thuringian Rotwurst or smoked kaszanka are smoked after the kettle. Each link keeps its Boiled clock while it
 -- hangs (vanilla's day a day, by the Food Spoilage setting). One smoked before it went stale comes down Smoked Blood
@@ -191,25 +193,31 @@ function F.wasFried(item)
     return heat ~= nil and heat.done == true
 end
 
--- OnTest for HangBloodSausageToSmoke: a link fried after boiling stays out.
-function F.canSmokeBloodSausage(item)
-    if item:getFullType() ~= F.BLOOD_SAUSAGE then return true end
-    return not F.wasFried(item)
+-- OnTest for HangSausageToSmoke: blood sausage boiled and never fried after; Fresh Sausage raw.
+function F.canSmokeSausage(item)
+    if item:getFullType() == F.BLOOD_SAUSAGE then return item:isCooked() and not F.wasFried(item) end
+    if item:getFullType() == F.FRESH_SAUSAGE then return not item:isCooked() end
+    return true
 end
 
 local function spoilSpeed()
     return F.POTTED_KEEP and F.POTTED_KEEP.speed() or 1
 end
 
--- Sets a new stack's counters from its links (an ArrayList): the Smokehouse's, with no cook and a fixed need, and
--- the hour its freshest link goes stale.
-function F.startSausageSmoke(modData, links, now, speed)
+-- Sets a new stack's counters from its links (an ArrayList): the Smokehouse's, and the hour its freshest link goes
+-- stale. Blood sausage takes no cook and a fixed smoke; Smoked Sausage ("pork", TraditionalPreservationFishMeatSausage.lua)
+-- a fixed hot run. modData.sausage is true for blood (as stacks hung since 0.4.37 have it) or "pork".
+function F.startSausageSmoke(modData, links, now, speed, kind)
     -- Recipe data is pooled with its ModData (ENGINE_NOTES): a stack mustn't inherit an old one's counters.
     local keys = {}
     for key in pairs(modData) do table.insert(keys, key) end
     for _, key in ipairs(keys) do modData[key] = nil end
     F.startSmoke(modData, links, false)
-    modData.sausage, modData.noHot = true, true
+    if kind == "pork" then
+        modData.sausage, modData.hotNeed = "pork", F.SAUSAGE_HOT_HOURS
+    else
+        modData.sausage, modData.noHot = true, true
+    end
     modData.smokeNeed = F.SMOKED_SAUSAGE_HOURS
     modData.stackId = now
     local daysLeft = 0
@@ -220,33 +228,50 @@ function F.startSausageSmoke(modData, links, now, speed)
     modData.staleAt = now + daysLeft * 24 / speed
 end
 
--- The crafting window's time is the smoke's, as if the fire burnt on a cool day throughout.
+-- The crafting window's time is the longer of the two: blood sausage's smoke, as if the fire burnt on a cool day
+-- throughout (Smoked Sausage's hot run is a quarter of it).
 Events.OnInitGlobalModData.Add(function()
-    Weather.setRecipeHours("TraditionalPreservationFishMeat.HangBloodSausageToSmoke", F.SMOKED_SAUSAGE_HOURS,
+    Weather.setRecipeHours("TraditionalPreservationFishMeat.HangSausageToSmoke", F.SMOKED_SAUSAGE_HOURS,
         "TraditionalPreservationFishMeat")
 end)
 
+-- The stack's kind is its links' (one kind to a stack, F.hangKind): Fresh Sausage takes the hot run.
+function F.sausageKind(links)
+    return links:size() > 0 and links:get(0):getFullType() == F.FRESH_SAUSAGE and "pork" or nil
+end
+
 function F.onSausageSmokeStart(craftRecipeData)
-    F.startSausageSmoke(craftRecipeData:getModData(), craftRecipeData:getAllInputItemsWithFlag("ItemCount"),
-        getGameTime():getWorldAgeHours(), spoilSpeed())
+    local links = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
+    F.startSausageSmoke(craftRecipeData:getModData(), links, getGameTime():getWorldAgeHours(), spoilSpeed(),
+        F.sausageKind(links))
+end
+
+-- A sausage stack's smoke so far and its need: the cold counter for blood sausage, the hot run for Smoked Sausage
+-- (a broken run starts it again, F.smokeStep).
+function F.sausageSmoke(modData)
+    if modData.sausage == "pork" then return modData.hot or 0, modData.hotNeed or F.SAUSAGE_HOT_HOURS end
+    return modData.cold or 0, F.coldNeed(modData)
 end
 
 -- Notes the hour the smoke was done. A catch-up after time away adds many hours at once, so the hour is placed
 -- within the stretch since the last look by the share of the smoke still needed then.
 function F.sausageSmokeStep(modData, now)
-    local cold, need = modData.cold or 0, F.coldNeed(modData)
-    if not modData.smokedAt and cold >= need then
+    local smoke, need = F.sausageSmoke(modData)
+    if not modData.smokedAt and smoke >= need then
         local before, at = modData.seenCold or 0, modData.seenAt or modData.stackId or now
-        local share = cold > before and (need - before) / (cold - before) or 1
+        -- A hot run that broke off since started again from nothing.
+        if before > smoke then before = 0 end
+        local share = smoke > before and (need - before) / (smoke - before) or 1
         modData.smokedAt = at + (now - at) * math.max(0, math.min(share, 1))
     end
-    modData.seenCold, modData.seenAt = cold, now
+    modData.seenCold, modData.seenAt = smoke, now
 end
 
 -- The stack's bar, 0 to 1: its smoke so far, full once smoked or once every link went stale. It waits just short of
 -- the end until the World has seen its shed since the load, so OnCreate can swap the outputs.
 function F.sausageProgress(modData, now)
-    local progress = math.min((modData.cold or 0) / F.coldNeed(modData), 1)
+    local smoke, need = F.sausageSmoke(modData)
+    local progress = modData.smokedAt and 1 or math.min(smoke / need, 1)
     if modData.staleAt and now >= modData.staleAt then progress = 1 end
     if progress >= 1 and not F.smokeStations[modData.stackId] then progress = F.SHED_WAIT end
     return progress
@@ -274,27 +299,35 @@ local function keepShare(from, to)
 end
 
 -- What one hung link comes down as, now: smoked if the smoke was done before it went stale, its age that share of
--- the smoked keeping plus the days since; otherwise the Boiled link it was, aged by the days it hung.
+-- the smoked keeping plus the days since; otherwise the link it was (Boiled, or a raw Fresh Sausage), aged by the
+-- days it hung. Either keeps its seasoning (TP Core's Season).
 function F.smokedLink(link, modData, now, speed)
     local hung, smokedAt = modData.stackId or now, modData.smokedAt
+    local pork = modData.sausage == "pork"
     local ageThen = link:getAge() + ((smokedAt or now) - hung) / 24 * speed
     local out
-    if smokedAt and ageThen < link:getOffAge() then
-        out = instanceItem(F.SMOKED_BLOOD_SAUSAGE)
+    local smoked = smokedAt and ageThen < link:getOffAge()
+    if smoked then
+        out = instanceItem(pork and F.SMOKED_SAUSAGE or F.SMOKED_BLOOD_SAUSAGE)
         out:setAge(ageThen / link:getOffAge() * out:getOffAge() + (now - smokedAt) / 24 * speed)
     else
         out = instanceItem(link:getFullType())
         out:setAge(link:getAge() + (now - hung) / 24 * speed)
     end
-    out:setCooked(true)
+    -- A raw link that went off first comes down raw.
+    out:setCooked(smoked or not pork)
     keepShare(link, out)
+    Season.carry(link, out)
     return out
 end
 
 function F.onCreateSmokedSausage(craftRecipeData)
     local modData = craftRecipeData:getModData()
     local station = modData.stackId and F.smokeStations[modData.stackId]
-    if modData.stackId then F.smokeStations[modData.stackId], F.stackStations[modData.stackId] = nil, nil end
+    if modData.stackId then
+        F.smokeStations[modData.stackId], F.stackStations[modData.stackId] = nil, nil
+        F.hotStations[modData.stackId] = nil
+    end
     if not station then
         -- Never seen by the World (it waits for that): at least the script's links are cooked.
         local created = craftRecipeData:getAllCreatedItems()
@@ -305,17 +338,24 @@ function F.onCreateSmokedSausage(craftRecipeData)
     F.swapOutputs(craftRecipeData, station, function(link) return F.smokedLink(link, modData, now, speed) end)
 end
 
--- What a blood sausage stack's popup and the station's info say: its bar, the smoke against the need, what the
--- fire is doing for it (a key: Smoking, TooWarm or NoFire), and the days its freshest link has left before it goes
--- stale (nil once smoked).
+-- What a sausage stack's popup and the station's info say: its bar, the smoke against the need, what the fire is
+-- doing for it (a key: Smoking, TooWarm or NoFire for blood; Cooking, Banked or NoFire for Smoked Sausage, whose
+-- hot run ignores the weather), and the days its freshest link has left before it goes stale (nil once smoked).
 function F.sausageStatus(modData, ledger, now)
     local state = "NoFire"
-    if modData.burning and (ledger.temperature or 0) > F.COLD_SMOKE_MAX then
+    local smoke, need = F.sausageSmoke(modData)
+    if modData.sausage == "pork" then
+        if modData.burning == Hearth.STOKED then
+            state = "Cooking"
+        elseif modData.burning then
+            state = "Banked"
+        end
+    elseif modData.burning and (ledger.temperature or 0) > F.COLD_SMOKE_MAX then
         state = "TooWarm"
     elseif modData.burning then
         state = "Smoking"
     end
     local staleDays = not modData.smokedAt and modData.staleAt and math.max(0, (modData.staleAt - now) / 24) or nil
-    return { progress = F.sausageProgress(modData, now), cold = modData.cold or 0, need = F.coldNeed(modData),
+    return { progress = F.sausageProgress(modData, now), cold = smoke, need = need, hot = modData.sausage == "pork",
         state = state, staleDays = staleDays }
 end

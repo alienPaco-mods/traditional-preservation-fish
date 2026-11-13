@@ -5,6 +5,7 @@ if not isDebugEnabled() then return end
 local F = TraditionalPreservationFishMeat
 local Weather = require "TraditionalPreservationCore/Weather"
 local FluidAgeing = require "TraditionalPreservationCore/FluidAgeing"
+local Season = require "TraditionalPreservationCore/Season"
 TPFM = {}
 
 local function say(text) print("[TPFM] " .. text) end
@@ -32,8 +33,8 @@ function TPFM.help()
     say("TPFM.food()                the cured fish and meat you carry: hunger, unhappiness, boredom, thirst, age against its days, ageing")
     say("TPFM.fish(name, n, weight, stage) spawn n fish, e.g. TPFM.fish(\"Walleye\", 2, 4); stage \"cured\", \"dried\", \"hotSmoked\", \"coldSmoked\" or \"stockfish\" (it may take weight's place); TPFM.fish() lists the names, \"all\" gives each")
     say("TPFM.meat(name, n, stage)  spawn n of a cut, e.g. TPFM.meat(\"Steak\", 2) or TPFM.meat(\"all\", 1, \"corned\"); stage \"corned\", \"country\", \"charque\", \"hotSmoked\" or \"dryCured\" (chicken, turkey and rabbit: corned and hotSmoked only); TPFM.meat() lists the names")
-    say("TPFM.give(name, n, option) spawn n of: head, stock, salt, fat, fatPot (option \"burnt\" or \"raw\"), crock (full, four Steaks in Lard), blood (a Bucket of 4 L; option \"cured\" or \"spoiled\"), casings, saltedCasings, blackPudding, bloodSausage (boiled; option \"stale\"), smokedBloodSausage. TPFM.give() lists them")
-    say("TPFM.kit(kind)             the things a test needs: \"potted\" (Potted Meat), \"stock\", \"poultry\" (hot smoked poultry), \"blood\" (black pudding, blood sausage, smoked blood sausage) or \"flue\" (both flue kits and tools). TPFM.kit() lists the kinds")
+    say("TPFM.give(name, n, option) spawn n of: head, stock, salt, fat, fatPot (option \"burnt\" or \"raw\"), crock (full, four Steaks in Lard), blood (a Bucket of 4 L; option \"cured\" or \"spoiled\"), casings, saltedCasings, blackPudding, bloodSausage (boiled; option \"stale\"), smokedBloodSausage, freshSausage (raw; option \"seasoned\" or \"stale\"), smokedSausage (option \"seasoned\"). TPFM.give() lists them")
+    say("TPFM.kit(kind)             the things a test needs: \"potted\" (Potted Meat), \"stock\", \"poultry\" (hot smoked poultry), \"blood\" (black pudding, blood sausage, smoked blood sausage), \"sausage\" (Smoked Sausage) or \"flue\" (both flue kits and tools). TPFM.kit() lists the kinds")
     say("TPFM.animals()             live animals and carcasses within 6 tiles: weight, and the blood each gives (3.5 cl a kg)")
     say("TPFM.blood(hours)          the blood you carry: state, age, hours left at 20 C, place; with hours, ages it that much first")
     say("TPFM.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
@@ -447,7 +448,24 @@ end
 GIVES.smokedBloodSausage = function(count)
     for _, item in ipairs(give("TraditionalPreservationFishMeat.SmokedBloodSausage", count)) do item:setCooked(true) end
 end
-local GIVE_NAMES = "head, stock, boneBroth, chickenStock, soups (one of each stock's soup and stew), salt, fat (one of each raw fat), fatPot (option \"burnt\" or \"raw\"), crock, blood (a Bucket of 4 L; option \"cured\" or \"spoiled\"), casings, saltedCasings, blackPudding, bloodSausage (boiled; option \"stale\": 0.1 days from stale), smokedBloodSausage"
+-- Raw links (the Smokehouse takes only raw ones); "seasoned" with garlic, pepper and oregano (as TP Core's Season
+-- menu puts them in, nothing taken), "stale" a tenth of a day from going off.
+local function seasoned()
+    return { bonus = 3 * F.SEASONING_UNHAPPY, boredom = 3 * F.SEASONING_BOREDOM, spices = { "Base.Garlic", "Base.Pepper", "Base.Oregano" } }
+end
+GIVES.freshSausage = function(count, state)
+    for _, item in ipairs(give(F.FRESH_SAUSAGE, count)) do
+        if state == "seasoned" then Season.apply(item, seasoned()) end
+        if state == "stale" then item:setAge(item:getOffAge() - 0.1) end
+    end
+end
+GIVES.smokedSausage = function(count, state)
+    for _, item in ipairs(give(F.SMOKED_SAUSAGE, count)) do
+        item:setCooked(true)
+        if state == "seasoned" then Season.apply(item, seasoned()) end
+    end
+end
+local GIVE_NAMES = "head, stock, boneBroth, chickenStock, soups (one of each stock's soup and stew), salt, fat (one of each raw fat), fatPot (option \"burnt\" or \"raw\"), crock, blood (a Bucket of 4 L; option \"cured\" or \"spoiled\"), casings, saltedCasings, blackPudding, bloodSausage (boiled; option \"stale\": 0.1 days from stale), smokedBloodSausage, freshSausage (raw; option \"seasoned\" or \"stale\"), smokedSausage (option \"seasoned\")"
 
 function TPFM.give(name, count, option)
     if not GIVES[name] then return say("Things: " .. GIVE_NAMES) end
@@ -476,6 +494,12 @@ local KITS = {
         "TraditionalPreservationFishMeat.PorkFat", "Base.Salt", "Base.Salt", "Base.Salt", "Base.Salt", "Base.Vinegar2",
         "TraditionalPreservationFishMeat.RawCasings", "TraditionalPreservationFishMeat.SaltedCasings", "Base.KitchenKnife",
         give = { blood = 1, bloodSausage = 6, smokedBloodSausage = 1 } },
+    sausage = { about = "2 Pork, a Pork Chop, Beef, Venison, Pork Fat, Lard, 2 Salt, Garlic, Onion, Pepper, Oregano, Thyme, Sage (to season links), 2 Salted Casings, a Pot and a Kitchen Knife, for Smoked Sausage (fill the Pot with 1.5 L of water); 6 raw Fresh Sausages for the Smokehouse and a seasoned Smoked Sausage",
+        "Base.Pork", "Base.Pork", "Base.PorkChop", "Base.Beef", "Base.Venison", "TraditionalPreservationFishMeat.PorkFat",
+        "Base.Lard", "Base.Salt", "Base.Salt", "Base.Garlic", "Base.Onion", "Base.Pepper", "Base.Oregano", "Base.Thyme", "Base.Sage",
+        "TraditionalPreservationFishMeat.SaltedCasings", "TraditionalPreservationFishMeat.SaltedCasings", "Base.Pot",
+        "Base.KitchenKnife",
+        give = { freshSausage = 6 }, giveOptions = { smokedSausage = "seasoned" } },
     flue = { about = "both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel",
         "Base.ClayPipeSegment", "Base.ClayPipeSegment", "Base.FlatStone", "Base.FlatStone", "Base.FlatStone", "Base.Clay",
         "Base.Clay", "Base.Clay", "Base.MasonsTrowel", "Base.Shovel" },
@@ -490,6 +514,7 @@ function TPFM.kit(kind)
     for _, fullType in ipairs(kit) do give(fullType) end
     for fullType, count in pairs(kit.counts or {}) do give(fullType, count) end
     for name, count in pairs(kit.give or {}) do GIVES[name](count) end
+    for name, option in pairs(kit.giveOptions or {}) do GIVES[name](1, option) end
     say("Gave " .. kit.about .. ".")
 end
 
@@ -709,7 +734,8 @@ function TPFM.smoke()
                 F.hotStations[modData.stackId] and ", cook done" or ""))
             if modData.sausage then
                 local now = getGameTime():getWorldAgeHours()
-                say(string.format("    blood sausage: %s, the freshest link stale in %.1f h", modData.smokedAt
+                say(string.format("    %s: %s, the freshest link stale in %.1f h",
+                    modData.sausage == "pork" and "fresh sausage (hot run)" or "blood sausage", modData.smokedAt
                     and string.format("smoked %.1f h ago", now - modData.smokedAt) or "not smoked yet",
                     (modData.staleAt or now) - now))
             end

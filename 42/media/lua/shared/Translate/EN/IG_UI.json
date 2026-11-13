@@ -192,5 +192,16 @@
   "IGUI_TraditionalPreservationFishMeat_SausageNoFire": "no fire in a joined Firebox",
   "IGUI_TraditionalPreservationFishMeat_SausageStaleIn": "goes stale in %1 d unless smoked by then (it comes down Boiled)",
   "IGUI_TraditionalPreservationFishMeat_SausageFried": "Only a boiled link takes the smoke: this one was fried",
-  "IGUI_TraditionalPreservationFishMeat_SausageSmokehouse": "Blood sausage hangs only in the Smokehouse, to smoke"
+  "IGUI_TraditionalPreservationFishMeat_SausageSmokehouse": "Blood sausage hangs only in the Smokehouse, to smoke",
+  "IGUI_TraditionalPreservationFishMeat_FreshSausageFried": "Fresh Sausage (Fried)",
+  "IGUI_TraditionalPreservationFishMeat_FreshSausageBoiled": "Fresh Sausage (Boiled)",
+  "IGUI_TraditionalPreservationFishMeat_MethodSmokedSausage": "Hot smoking (sausage)",
+  "IGUI_TraditionalPreservationFishMeat_InfoSmokedSausage": "Smoked sausage",
+  "IGUI_TraditionalPreservationFishMeat_SausageCooking": "a stoked fire is cooking it in the smoke",
+  "IGUI_TraditionalPreservationFishMeat_SausageBanked": "banked: too low to cook it, and a broken run starts again",
+  "IGUI_TraditionalPreservationFishMeat_FreshSausageStaleIn": "goes off in %1 d unless cooked through by then (it comes down raw)",
+  "IGUI_TraditionalPreservationFishMeat_FreshSausageSmokehouse": "Fresh sausage hangs only in the Smokehouse, to hot smoke",
+  "IGUI_TraditionalPreservationFishMeat_FreshSausageCooked": "Only a raw link takes the hot smoke: this one is cooked",
+  "IGUI_TraditionalPreservationFishMeat_Ends_SmokedSausage": "Smoked Sausage: Fresh Sausage, raw, the Firebox stoked 6 hours in a row",
+  "IGUI_TraditionalPreservationFishMeat_Ends_SmokedBloodSausage": "Smoked Blood Sausage: Blood Sausage, boiled, 24 hours of smoke on cool days"
 }

@@ -108,8 +108,16 @@
   "TraditionalPreservationFishMeat.TakeOutBloodSausages": "Take Out Blood Sausages",
   "SliceBloodSausage": "Slice Blood Sausage",
   "TraditionalPreservationFishMeat.SliceBloodSausage": "Slice Blood Sausage",
-  "HangBloodSausageToSmoke": "Hang Blood Sausage to Smoke",
-  "TraditionalPreservationFishMeat.HangBloodSausageToSmoke": "Hang Blood Sausage to Smoke",
   "SliceSmokedBloodSausage": "Slice Smoked Blood Sausage",
-  "TraditionalPreservationFishMeat.SliceSmokedBloodSausage": "Slice Smoked Blood Sausage"
+  "TraditionalPreservationFishMeat.SliceSmokedBloodSausage": "Slice Smoked Blood Sausage",
+  "StuffSausages": "Stuff Sausages",
+  "TraditionalPreservationFishMeat.StuffSausages": "Stuff Sausages",
+  "PutSausagesInWater": "Put Sausages in Water",
+  "TraditionalPreservationFishMeat.PutSausagesInWater": "Put Sausages in Water",
+  "TakeOutSausages": "Take Out Sausages",
+  "TraditionalPreservationFishMeat.TakeOutSausages": "Take Out Sausages",
+  "HangSausageToSmoke": "Hang Sausage to Smoke",
+  "TraditionalPreservationFishMeat.HangSausageToSmoke": "Hang Sausage to Smoke",
+  "SliceSmokedSausage": "Slice Smoked Sausage",
+  "TraditionalPreservationFishMeat.SliceSmokedSausage": "Slice Smoked Sausage"
 }

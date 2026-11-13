@@ -18,9 +18,10 @@ local PLACES = { Open = true, Covered = true, Sheltered = true, Loft = true, Bas
 -- A running batch's kind, by its recipe's short name.
 local KINDS = { HangFishToDry = "salt", HangFishToColdDry = "cold", HangMeatToDry = "meat",
     PressSaltedFish = "fishCure", PressSaltedMeat = "corn", [F.LONG_CURE_RECIPE] = "long",
-    HangBloodSausageToSmoke = "sausage" }
+    HangSausageToSmoke = "sausage" }
 local KIND_NAMES = { salt = KEY .. "InfoSalt", cold = KEY .. "InfoCold", meat = KEY .. "InfoCharque",
-    fishCure = KEY .. "InfoCure", corn = KEY .. "InfoCorn", long = KEY .. "InfoLongCure", sausage = KEY .. "InfoSausage" }
+    fishCure = KEY .. "InfoCure", corn = KEY .. "InfoCorn", long = KEY .. "InfoLongCure", sausage = KEY .. "InfoSausage",
+    freshSausage = KEY .. "InfoSmokedSausage" }
 local GOOD_COLOUR, SLOW_COLOUR = { 0.35, 0.6, 0.3 }, { 0.75, 0.55, 0.2 }
 
 local function weightOf(items)
@@ -29,14 +30,18 @@ local function weightOf(items)
     return weight
 end
 
--- A stack of blood sausage (F.sausageStatus): smoke only, no drying or spoiling of its own.
+-- A stack of blood sausage or Fresh Sausage (F.sausageStatus): smoke only (a hot run for Fresh Sausage), no drying or
+-- spoiling of its own.
 function Info.sausageBatch(modData, ledger, now)
     local status = F.sausageStatus(modData, ledger, now)
-    local row = { name = KIND_NAMES.sausage, progress = status.progress, notes = {}, slow = status.state ~= "Smoking" }
+    local good = status.hot and "Cooking" or "Smoking"
+    local row = { name = status.hot and KIND_NAMES.freshSausage or KIND_NAMES.sausage, progress = status.progress,
+        notes = {}, slow = status.state ~= good }
     row.value = UI.say(KEY .. "InfoShare", UI.percent(status.progress), getText(KEY .. "Sausage" .. status.state))
-    table.insert(row.notes, UI.say(KEY .. "ColdSmokeNeed", string.format("%.1f", status.cold), string.format("%.0f", status.need)))
+    table.insert(row.notes, UI.say(status.hot and KEY .. "HotSmokeHours" or KEY .. "ColdSmokeNeed",
+        string.format("%.1f", status.cold), string.format("%.0f", status.need)))
     if status.staleDays then
-        table.insert(row.notes, UI.say(KEY .. "SausageStaleIn", string.format("%.1f", status.staleDays)))
+        table.insert(row.notes, UI.say(KEY .. (status.hot and "FreshSausageStaleIn" or "SausageStaleIn"), string.format("%.1f", status.staleDays)))
     end
     return row
 end

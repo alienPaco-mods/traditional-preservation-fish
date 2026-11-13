@@ -77,6 +77,16 @@ BLOOD_MODELS = {"BloodSausageRawModel": ("SausageRaw", False), "BloodSausageMode
                 "BloodSausageSliceModel": ("Salami", True), "BlackPuddingModel": ("Bread", True),
                 "SmokedBloodSausageModel": ("SausageCooked", False), "SmokedBloodSausageSliceModel": ("Salami", True),
                 "BlackPuddingSlicesModel": ("CheeseSandwich_PeanutButterSandwich_BreadSlices", True)}
+# Smoked Sausage (0.4.38): a fresh link pink with white fat flecks (coarse ground), fried a warm brown; smoked a
+# redder brown than the blood sausage's, the slices flecked with fat.
+FRESH_PORK = ((200, 112, 106), 0.6)
+COOKED_PORK = ((150, 88, 56), 0.75)
+SMOKED_PORK = ((98, 40, 22), 0.9)
+SAUSAGE_ICONS = {"FreshSausage": ("Item_Sausage", FRESH_PORK, True), "FreshSausage_Cooked": ("Item_Sausage", COOKED_PORK, False),
+                 "SmokedSausage": ("Item_Sausage", SMOKED_PORK, False),
+                 "SmokedSausageSlice": ("Item_SalamiSlices", SMOKED_PORK, True)}
+SAUSAGE_MODELS = {"FreshSausageModel": ("SausageRaw", FRESH_PORK, True), "SmokedSausageModel": ("SausageCooked", SMOKED_PORK, False),
+                  "SmokedSausageSliceModel": ("Salami", SMOKED_PORK, True)}
 FLECK = (214, 202, 176)
 OUTLINE_BELOW = 70  # pixels with no channel above this are the icon's outline and stay as they are
 # Vanilla's icons are spread over these packs.
@@ -180,7 +190,8 @@ def main():
     game = Path(sys.argv[1]) if len(sys.argv) > 1 else GAME
     folder = Path(__file__).resolve().parent.parent / "42" / "media" / "textures"
     wanted = ({source for source, _, _, _ in FATS.values()} | set(POTS.values()) | set(CUTS.values())
-              | set(CROCKS.values()) | {source for source, _, _ in BLOOD_ICONS.values()})
+              | set(CROCKS.values()) | {source for source, _, _ in BLOOD_ICONS.values()}
+              | {source for source, _, _ in SAUSAGE_ICONS.values()})
     icons = read_icons(game, wanted)
     for name, (source, colour, amount, mirrored) in FATS.items():
         icon = ImageOps.mirror(icons[source]) if mirrored else icons[source]
@@ -217,6 +228,12 @@ def main():
     for name, (source, flecked) in BLOOD_MODELS.items():
         colour = RAW_BLOOD if name == "BloodSausageRawModel" else SMOKED_BLOOD if name.startswith("Smoked") else COOKED_BLOOD
         texture = pull(Image.open(game / f"media/textures/WorldItems/{source}.png"), *colour)
+        (flecks(texture, 0.05) if flecked else texture).save(folder / f"{name}.png")
+    for name, (source, (colour, amount), flecked) in SAUSAGE_ICONS.items():
+        icon = pull(icons[source], colour, amount)
+        (flecks(icon) if flecked else icon).save(folder / f"Item_{name}.png")
+    for name, (source, (colour, amount), flecked) in SAUSAGE_MODELS.items():
+        texture = pull(Image.open(game / f"media/textures/WorldItems/{source}.png"), colour, amount)
         (flecks(texture, 0.05) if flecked else texture).save(folder / f"{name}.png")
 
 

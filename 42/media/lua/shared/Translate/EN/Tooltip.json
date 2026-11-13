@@ -99,8 +99,12 @@
   "Tooltip_TraditionalPreservationFishMeat_BlackPudding": "Baked blood, oats and fat. Slice it to eat or cook with it.",
   "Tooltip_TraditionalPreservationFishMeat_RawBloodSausage": "Stuffed, not yet cooked: poach six in a pot of water and they keep a week. Fried as it is, it keeps only a day or two.",
   "Tooltip_TraditionalPreservationFishMeat_PotOfBloodSausage": "Six blood sausages in water: half an hour at the boil, then take them out.",
-  "Tooltip_TraditionalPreservationFishMeat_BloodSausage": "Poached blood sausage: eat it as it is, fry it, slice it, put it in a dish, or hang it in the Smokehouse to smoke. Keeps a week.",
+  "Tooltip_TraditionalPreservationFishMeat_BloodSausage": "Poached blood sausage: eat it as it is, season it, fry it, slice it, put it in a dish, or hang it in the Smokehouse to smoke. Keeps a week.",
   "Tooltip_TraditionalPreservationFishMeat_Filler": "Filler: a quarter of a bag of Oats or Rice (12 uses), or 12 grains of Barley, Rye or Wheat.",
-  "Tooltip_craft_hangBloodSausageToSmoke": "Boiled blood sausage, never fried, alone in its stack: 24 hours of the Firebox's smoke on cool days (15 C or less outside), banked or stoked. The links keep their week while they hang; smoked in time they come down Smoked Blood Sausage, which keeps three weeks. One that went stale first comes down as it went up.",
-  "Tooltip_TraditionalPreservationFishMeat_SmokedBloodSausage": "Boiled, then cold smoked: eat it cold, fry it, slice it, or put it in a dish. Keeps three weeks."
+  "Tooltip_TraditionalPreservationFishMeat_SmokedBloodSausage": "Boiled, then cold smoked: eat it cold, fry it, slice it, or put it in a dish. Keeps three weeks.",
+  "Tooltip_TraditionalPreservationFishMeat_FreshSausage": "Pork, a little beef or venison, back fat and salt in a casing, not yet cooked. Season it, fry it, poach six in a pot, or hang it raw in the Smokehouse to hot smoke. Keeps two days.",
+  "Tooltip_TraditionalPreservationFishMeat_PotOfSausage": "Six fresh sausages in water: half an hour at the boil, then take them out.",
+  "Tooltip_TraditionalPreservationFishMeat_SmokedSausage": "Hot smoked until cooked through: eat it cold, fry it, slice it, or put it in a dish. Keeps two weeks.",
+  "Tooltip_craft_stuffSausages": "Two pieces of pork, a third of pork, beef or venison, pork fat or half a block of lard, and salt. Season the links afterwards (right-click a link: Season) with garlic, onion, pepper, oregano, thyme or sage.",
+  "Tooltip_craft_hangSausageToSmoke": "Takes Blood Sausage or Fresh Sausage, one kind to a stack. Blood sausage, boiled and never fried: 24 hours of the Firebox's smoke on cool days (15 C or less outside), banked or stoked; the links keep their boiled week while they wait. Fresh sausage, raw: 6 hours of a stoked Firebox in a row cook it through in the smoke, whatever the weather; a banked fire or a broken run doesn't, and raw links keep only two days."
 }

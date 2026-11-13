@@ -26,5 +26,8 @@
   "TraditionalPreservationFishMeat.BloodSausage": "Blood Sausage",
   "TraditionalPreservationFishMeat.BloodSausageSlice": "Blood Sausage",
   "TraditionalPreservationFishMeat.SmokedBloodSausage": "Blood Sausage",
-  "TraditionalPreservationFishMeat.SmokedBloodSausageSlice": "Blood Sausage"
+  "TraditionalPreservationFishMeat.SmokedBloodSausageSlice": "Blood Sausage",
+  "TraditionalPreservationFishMeat.FreshSausage": "Sausage",
+  "TraditionalPreservationFishMeat.SmokedSausage": "Smoked Sausage",
+  "TraditionalPreservationFishMeat.SmokedSausageSlice": "Smoked Sausage"
 }

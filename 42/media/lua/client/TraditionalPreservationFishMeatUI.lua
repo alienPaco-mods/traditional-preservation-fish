@@ -164,21 +164,26 @@ local function drawStackTooltip(slot, tooltip, kind)
     end)
 end
 
--- A stack of blood sausage: the smoke against its need, what the fire is doing for it, and how long its links keep
--- before they come down stale (F.sausageStatus).
+-- A stack of blood sausage or Fresh Sausage: the smoke (a hot run for Fresh Sausage) against its need, what the fire is
+-- doing for it, and how long its links keep before they come down stale (F.sausageStatus).
 local function drawSausageTooltip(slot, tooltip)
     local modData = slot.craftRecipeData:getModData()
     local status = F.sausageStatus(modData, F.getLedger(), getGameTime():getWorldAgeHours())
     local key = "IGUI_TraditionalPreservationFishMeat_"
     UI.drawTooltip(tooltip, function(layout)
-        UI.addLine(layout, key .. "Method", getText(key .. "MethodSausage"))
+        UI.addLine(layout, key .. "Method", getText(key .. (status.hot and "MethodSmokedSausage" or "MethodSausage")))
         UI.addLine(layout, key .. "Progress", UI.percent(status.progress))
-        UI.addLine(layout, key .. "ColdSmoke", getText(key .. "ColdSmokeNeed", string.format("%.1f", status.cold),
-            string.format("%.0f", status.need)))
+        if status.hot then
+            UI.addLine(layout, key .. "HotSmoke", getText(key .. "HotSmokeHours", string.format("%.1f", status.cold),
+                string.format("%.0f", status.need)))
+        else
+            UI.addLine(layout, key .. "ColdSmoke", getText(key .. "ColdSmokeNeed", string.format("%.1f", status.cold),
+                string.format("%.0f", status.need)))
+        end
         UI.addLine(layout, key .. "Fire", getText(key .. "Sausage" .. status.state),
-            status.state ~= "Smoking" and UI.SLOW_COLOUR or nil)
+            status.state ~= (status.hot and "Cooking" or "Smoking") and UI.SLOW_COLOUR or nil)
         if status.staleDays then
-            UI.addLine(layout, key .. "Spoilage", UI.say(key .. "SausageStaleIn", string.format("%.1f", status.staleDays)),
+            UI.addLine(layout, key .. "Spoilage", UI.say(key .. (status.hot and "FreshSausageStaleIn" or "SausageStaleIn"), string.format("%.1f", status.staleDays)),
                 status.staleDays < 1 and UI.WARNING_COLOUR or nil)
         end
     end)
@@ -205,7 +210,7 @@ UI.progressTooltips({
     HangFishToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "salt") end,
     HangFishToColdDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "cold") end,
     HangMeatToDry = function(slot, tooltip) drawStackTooltip(slot, tooltip, "meat") end,
-    HangBloodSausageToSmoke = drawSausageTooltip,
+    HangSausageToSmoke = drawSausageTooltip,
 })
 
 -- The window's Output slot shows the script's one output whatever the stack will be: its popup lists every end
@@ -213,13 +218,14 @@ UI.progressTooltips({
 local OUTCOMES = {
     HangMeatToDry = { "Charque", "DryCured", "CountryHam", "HotSmokedMeat", "SmokedDryCured" },
     HangFishToDry = { "SaltDried", "HotSmokedFish", "ColdSmokedFish" },
+    HangSausageToSmoke = { "SmokedSausage", "SmokedBloodSausage" },
 }
 local function drawOutcomes(tooltip, name)
     local lines = {}
     for _, key in ipairs(OUTCOMES[name]) do table.insert(lines, getText("IGUI_TraditionalPreservationFishMeat_Ends_" .. key)) end
     UI.drawListTooltip(tooltip, getText("IGUI_TraditionalPreservationFishMeat_ComesOutAs"), lines)
 end
-UI.outputTooltips({ HangMeatToDry = drawOutcomes, HangFishToDry = drawOutcomes })
+UI.outputTooltips({ HangMeatToDry = drawOutcomes, HangFishToDry = drawOutcomes, HangSausageToSmoke = drawOutcomes })
 
 -- A badge in the bottom left corner, as the inventory marks frozen food: a little salt tells salt stacks from cold
 -- ones at a glance, and while a stoked run is cooking a stack (F.cookShare) it shows what the stack is turning

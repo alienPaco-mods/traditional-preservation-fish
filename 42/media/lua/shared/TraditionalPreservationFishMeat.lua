@@ -1085,7 +1085,7 @@ end
 function F.fishRefusal(isTub, fullType)
     if isTub and fullType ~= F.PACKED_FISH and fullType ~= F.PACKED_MEAT then return "IGUI_TraditionalPreservationFishMeat_NeedsPacked" end
     if not isTub and fullType ~= "TraditionalPreservationFishMeat.SaltPressedFish" and not F.COLD_FISH[fullType] and fullType ~= F.CURED_MEAT
-            and fullType ~= "TraditionalPreservationFishMeat.BloodSausage" then
+            and fullType ~= "TraditionalPreservationFishMeat.BloodSausage" and fullType ~= "TraditionalPreservationFishMeat.FreshSausage" then
         return "IGUI_TraditionalPreservationFishMeat_NeedsPressed"
     end
     if fullType == F.PACKED_MEAT or fullType == F.CURED_MEAT then
@@ -1094,8 +1094,10 @@ function F.fishRefusal(isTub, fullType)
     return nil
 end
 
--- Blood sausage hangs in the Smokehouse only, boiled and never fried (Smoked Blood Sausage).
+-- Blood sausage hangs in the Smokehouse only, boiled and never fried (Smoked Blood Sausage); Fresh Sausage there
+-- only too, raw (F.freshSausageRefusal, Smoked Sausage).
 function F.sausageRefusal(hanger, item)
+    if item:getFullType() == "TraditionalPreservationFishMeat.FreshSausage" then return F.freshSausageRefusal(hanger, item) end
     if item:getFullType() ~= "TraditionalPreservationFishMeat.BloodSausage" then return nil end
     if not hanger.closed then return "IGUI_TraditionalPreservationFishMeat_SausageSmokehouse" end
     if F.wasFried(item) then return "IGUI_TraditionalPreservationFishMeat_SausageFried" end
@@ -1131,11 +1133,13 @@ function F.recipeRefusal(recipeName, item)
     return nil
 end
 
--- What hangs in a stack: "salt" fish, "cold" fish, "meat" or "sausage" (Smoked Blood Sausage). One stack is one kind.
+-- What hangs in a stack: "salt" fish, "cold" fish, "meat", "sausage" (Smoked Blood Sausage) or "freshSausage"
+-- (Smoked Sausage). One stack is one kind.
 function F.hangKind(fullType)
     if F.COLD_FISH[fullType] then return "cold" end
     if fullType == F.CURED_MEAT then return "meat" end
     if fullType == "TraditionalPreservationFishMeat.BloodSausage" then return "sausage" end
+    if fullType == "TraditionalPreservationFishMeat.FreshSausage" then return "freshSausage" end
     return "salt"
 end
 

@@ -104,5 +104,10 @@
   "TraditionalPreservationFishMeat.BloodSausage": "Blood Sausage (Boiled)",
   "TraditionalPreservationFishMeat.BloodSausageSlice": "Blood Sausage Slice",
   "TraditionalPreservationFishMeat.SmokedBloodSausage": "Smoked Blood Sausage",
-  "TraditionalPreservationFishMeat.SmokedBloodSausageSlice": "Smoked Blood Sausage Slice"
+  "TraditionalPreservationFishMeat.SmokedBloodSausageSlice": "Smoked Blood Sausage Slice",
+  "TraditionalPreservationFishMeat.FreshSausage": "Fresh Sausage",
+  "TraditionalPreservationFishMeat.PotOfSausage": "Pot of Sausages",
+  "TraditionalPreservationFishMeat.PotForgedSausage": "Pot of Sausages",
+  "TraditionalPreservationFishMeat.SmokedSausage": "Smoked Sausage",
+  "TraditionalPreservationFishMeat.SmokedSausageSlice": "Smoked Sausage Slice"
 }

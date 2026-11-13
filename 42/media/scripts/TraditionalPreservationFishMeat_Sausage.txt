@@ -1,0 +1,303 @@
+module TraditionalPreservationFishMeat
+{
+    imports
+    {
+        Base,
+    }
+
+    /* Smoked Sausage (TraditionalPreservationFishMeatSausage.lua; user, 2026-11-13), kielbasa style: coarse pork,
+       some beef or venison if you like, back fat and salt in a Salted Casings, six links. Seasoning goes in afterwards,
+       a link at a time (TP Core's Season menu; TraditionalPreservationFishMeatSausage.lua). Fresh links
+       fry in place or poach in a pot and keep as vanilla's sausage; hung raw in the Smokehouse they take a hot run
+       (SAUSAGE_HOT_HOURS stoked in a row), cooking through in the smoke, and keep two weeks. A link is a sixth of
+       what goes in (user): two Pork 600 kcal, a third piece about 300-440, Pork Fat 2,170 or half a Lard 2,050, about
+       3,150 kcal a batch, 525 a link, hunger 30; macros on real kielbasa's share (14 g protein, 27 g fat, 2 g
+       carbohydrate a 100 g). */
+
+    item FreshSausage
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.25,
+        Icon = FreshSausage,
+        DangerousUncooked = true,
+        IsCookable = true,
+        MinutesToCook = 30,
+        MinutesToBurn = 60,
+        CookingSound = FryingFood,
+        BadInMicrowave = true,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -30.0,
+        Calories = 525.0,
+        Carbohydrates = 3.4,
+        Lipids = 46.2,
+        Proteins = 23.9,
+        FoodType = Sausage,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Stir fry:15;Sandwich:15;Burger:15;Rice:15;Pasta:15,
+        EvolvedRecipeName = Sausage,
+        StaticModel = FreshSausage,
+        WorldStaticModel = FreshSausage,
+        OnCooked = TraditionalPreservationFishMeat.onCookedFreshSausage,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_FreshSausage,
+    }
+
+    craftRecipe StuffSausages
+    {
+        timedAction = MixingBowl,
+        time = 120,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        xpAward = Cooking:5,
+        Tooltip = Tooltip_craft_stuffSausages,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.SaltedCasings] mode:destroy,
+            item 2 [Base.Pork;Base.PorkChop] flags[IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 1 [Base.Pork;Base.PorkChop;Base.Beef;Base.Steak;Base.Venison] flags[IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 12 [TraditionalPreservationFishMeat.PorkFat;Base.Lard],
+            item 1 tags[base:salt],
+        }
+        outputs
+        {
+            item 6 TraditionalPreservationFishMeat.FreshSausage,
+        }
+    }
+
+    /* Poached fresh: six links half an hour at the boil, as the blood sausage's pot. They come out the same links,
+       cooked (Fresh Sausage (Boiled)), keeping the raw link's days. */
+    item PotOfSausage
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.5,
+        Icon = PotFull,
+        CantEat = true,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 30,
+        MinutesToBurn = 90,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -1.0,
+        FoodType = NoExplicit,
+        CookingSound = TPBoiling,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PotOfSausage,
+    }
+
+    item PotForgedSausage
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 3.5,
+        Icon = Pot_Forged_Soup,
+        CantEat = true,
+        IsCookable = true,
+        DangerousUncooked = true,
+        BadInMicrowave = true,
+        MinutesToCook = 30,
+        MinutesToBurn = 90,
+        DaysFresh = 2,
+        DaysTotallyRotten = 4,
+        HungerChange = -1.0,
+        FoodType = NoExplicit,
+        CookingSound = TPBoiling,
+        StaticModel = CookingPotSoup_Ground,
+        WorldStaticModel = CookingPotSoup_Ground,
+        Tags = base:hasmetal,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_PotOfSausage,
+    }
+
+    craftRecipe PutSausagesInWater
+    {
+        timedAction = MixingBowl,
+        time = 40,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationFishMeat.onCreateSausagePot,
+        inputs
+        {
+            item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition] mappers[potType],
+            -fluid 1.5 categories[Water] mode:mixture,
+            item 6 [TraditionalPreservationFishMeat.FreshSausage] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            TraditionalPreservationFishMeat.PotOfSausage = Base.Pot,
+            TraditionalPreservationFishMeat.PotForgedSausage = Base.PotForged,
+        }
+    }
+
+    craftRecipe TakeOutSausages
+    {
+        timedAction = Making,
+        time = 40,
+        Tags = InHandCraft;CanBeDoneFromFloor;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationFishMeat.onCreateBoiledSausages,
+        inputs
+        {
+            item 1 [TraditionalPreservationFishMeat.PotOfSausage;TraditionalPreservationFishMeat.PotForgedSausage] mappers[potType] flags[InheritCondition;InheritFoodAge;IsCookedFoodItem;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 6 TraditionalPreservationFishMeat.FreshSausage,
+            item 1 mapper:potType,
+        }
+        itemMapper potType
+        {
+            Base.Pot = TraditionalPreservationFishMeat.PotOfSausage,
+            Base.PotForged = TraditionalPreservationFishMeat.PotForgedSausage,
+        }
+    }
+
+    /* One Smokehouse recipe for both sausages (user, 2026-11-13), each kind alone in its stack (F.hangKind). Boiled
+       Blood Sausage, never fried, takes SMOKED_SAUSAGE_HOURS of cold smoke on cool days; raw Fresh Sausage a hot run,
+       SAUSAGE_HOT_HOURS stoked in a row (the Smokehouse's hot counter; a broken run starts again). OnTest keeps out a
+       raw blood link, a fried one and a cooked fresh one; OnStart picks the kind from the links. time is overwritten
+       from the longer, SMOKED_SAUSAGE_HOURS; OnUpdate sets the progress, OnCreate swaps in the smoked links (or the
+       ones that went off first). */
+    craftRecipe HangSausageToSmoke
+    {
+        Tooltip = Tooltip_craft_hangSausageToSmoke,
+        time = 86400,
+        Tags = Smokehouse,
+        category = Cooking,
+        OnTest = TraditionalPreservationFishMeat.canSmokeSausage,
+        OnStart = TraditionalPreservationFishMeat.onSausageSmokeStart,
+        OnUpdate = TraditionalPreservationFishMeat.onSausageSmokeUpdate,
+        OnCreate = TraditionalPreservationFishMeat.onCreateSmokedSausage,
+        inputs
+        {
+            item variable[1:25] [TraditionalPreservationFishMeat.BloodSausage;TraditionalPreservationFishMeat.FreshSausage] flags[ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item variable[1:25] TraditionalPreservationFishMeat.SmokedSausage,
+        }
+    }
+
+    /* Hot smoked and a little dried (0.25 to 0.22), the fresh link's food: two weeks, a month to rotten. */
+    item SmokedSausage
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.22,
+        Icon = SmokedSausage,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Stir fry:15;Sandwich:15;Burger:15;Rice:15;Pasta:15,
+        FoodType = Sausage,
+        IsCookable = true,
+        MinutesToCook = 20,
+        MinutesToBurn = 50,
+        CookingSound = FryingFood,
+        DaysFresh = 14,
+        DaysTotallyRotten = 30,
+        HungerChange = -30.0,
+        Calories = 525.0,
+        Carbohydrates = 3.4,
+        Lipids = 46.2,
+        Proteins = 23.9,
+        StaticModel = SmokedSausage,
+        WorldStaticModel = SmokedSausage,
+        EvolvedRecipeName = Smoked Sausage,
+        Tooltip = Tooltip_TraditionalPreservationFishMeat_SmokedSausage,
+    }
+
+    /* A smoked link sliced: 4 rounds of a quarter link each, keeping as the link does. */
+    item SmokedSausageSlice
+    {
+        DisplayCategory = Food,
+        ItemType = base:food,
+        Weight = 0.055,
+        Icon = SmokedSausageSlice,
+        EvolvedRecipe = Pizza:15;Soup:15;Stew:15;Stir fry:15;Sandwich:15;Burger:15;Rice:15;Pasta:15;Salad:15,
+        FoodType = Sausage,
+        IsCookable = true,
+        MinutesToCook = 10,
+        MinutesToBurn = 30,
+        CookingSound = FryingFood,
+        DaysFresh = 14,
+        DaysTotallyRotten = 30,
+        HungerChange = -7.5,
+        Calories = 131.25,
+        Carbohydrates = 0.85,
+        Lipids = 11.55,
+        Proteins = 5.975,
+        StaticModel = SmokedSausageSlice_Hand,
+        WorldStaticModel = SmokedSausageSlice,
+        EvolvedRecipeName = Smoked Sausage,
+    }
+
+    craftRecipe SliceSmokedSausage
+    {
+        timedAction = SliceMeat_Surface,
+        time = 30,
+        Tags = AnySurfaceCraft;Cooking,
+        category = Cooking,
+        OnCreate = TraditionalPreservationFishMeat.onCreateSausageSlices,
+        inputs
+        {
+            item 1 tags[base:sharpknife;base:meatcleaver] mode:keep flags[IsNotDull;SharpnessCheck],
+            item 1 [TraditionalPreservationFishMeat.SmokedSausage] flags[InheritFoodAge;ItemCount] mode:destroy,
+        }
+        outputs
+        {
+            item 4 TraditionalPreservationFishMeat.SmokedSausageSlice,
+        }
+    }
+
+    /* Ground and hand models: vanilla's meshes, our textures (tools/build_meat_icons.py). */
+    model FreshSausage
+    {
+        mesh = WorldItems/Sausage,
+        texture = FreshSausageModel,
+        scale = 0.4,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0274 0.0221 -0.0206,
+            rotate = 178.7112 67.2918 -88.6029,
+            scale = 0.75,
+        }
+    }
+
+    model SmokedSausage
+    {
+        mesh = WorldItems/Sausage,
+        texture = SmokedSausageModel,
+        scale = 0.4,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0274 0.0221 -0.0206,
+            rotate = 178.7112 67.2918 -88.6029,
+            scale = 0.75,
+        }
+    }
+
+    model SmokedSausageSlice
+    {
+        mesh = WorldItems/SalamiSlice,
+        texture = SmokedSausageSliceModel,
+        scale = 0.4,
+    }
+
+    model SmokedSausageSlice_Hand
+    {
+        mesh = WorldItems/SalamiSlice_Hand,
+        texture = SmokedSausageSliceModel,
+        scale = 0.4,
+        attachment Bip01_Prop2
+        {
+            offset = -0.0147 0.045 -0.0093,
+            rotate = 72.3247 -25.2001 -28.9395,
+            scale = 0.3686,
+        }
+    }
+}
