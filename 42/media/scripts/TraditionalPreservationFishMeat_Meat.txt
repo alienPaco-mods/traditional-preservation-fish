@@ -994,7 +994,7 @@ module TraditionalPreservationFishMeat
 
     /* A crock of Potted Meat: a vanilla Clay Jar, Glazed Clay Jar or Clay Pot (in ModData tpfmVessel, given back
        with the last bite). Its food values are its portions, a cut each with its share of the fat; eaten from with
-       vanilla's Eat, it is relabelled with the portions left. Keeping is the basement's for now (phase 4c keeps it
+       vanilla's Eat, it keeps its plain name and weighs less. Keeping is the basement's for now (phase 4c keeps it
        by place). IconsForTexture and WorldStaticModelsByIndex are POTTED_VESSELS' indices: clay, glazed. */
     item CrockOfPottedMeat
     {
@@ -1030,7 +1030,7 @@ module TraditionalPreservationFishMeat
         {
             item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition;IsEmpty] mappers[potType],
             item 1 [Base.Lard;TraditionalPreservationFishMeat.Tallow] flags[ItemCount] mode:destroy,
-            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop;Base.Chicken;Base.ChickenWings;Base.ChickenFillet;Base.TurkeyLegs;Base.TurkeyWings;Base.TurkeyFillet;Base.Rabbitmeat] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
             item 1 tags[base:salt],
         }
         outputs
@@ -1057,7 +1057,7 @@ module TraditionalPreservationFishMeat
         {
             item 1 [Base.Pot;Base.PotForged] mode:destroy flags[InheritCondition] mappers[potType],
             -fluid 0.5 [MeltedLard;MeltedTallow],
-            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop;Base.Chicken;Base.ChickenWings;Base.ChickenFillet;Base.TurkeyLegs;Base.TurkeyWings;Base.TurkeyFillet;Base.Rabbitmeat] flags[InheritFoodAge;IsUncookedFoodItem;ItemCount] mode:destroy,
             item 1 tags[base:salt],
         }
         outputs
@@ -1082,7 +1082,7 @@ module TraditionalPreservationFishMeat
         inputs
         {
             item 1 [TraditionalPreservationFishMeat.PotOfMeatInFat;TraditionalPreservationFishMeat.PotForgedMeatInFat] mode:destroy flags[InheritCondition] mappers[sameItem],
-            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop] flags[IsUncookedFoodItem;ItemCount] mode:destroy,
+            item 1 [Base.Beef;Base.Steak;Base.MuttonChop;Base.Venison;Base.Pork;Base.PorkChop;Base.Chicken;Base.ChickenWings;Base.ChickenFillet;Base.TurkeyLegs;Base.TurkeyWings;Base.TurkeyFillet;Base.Rabbitmeat] flags[IsUncookedFoodItem;ItemCount] mode:destroy,
         }
         outputs
         {

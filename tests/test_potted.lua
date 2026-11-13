@@ -125,6 +125,28 @@ local more = newFood(POT, {})
 F.onAddPottedCut(craft({ scraps, steak() }, { more }))
 check("and a second cut gets none", near(more.calories, 220 + 409.5 + 220))
 
+-- Chicken, turkey and rabbit pot as red meat does, in any mix; the script's three cut lists name them all
+for _, cut in ipairs(F.POTTED_GAME) do check(cut .. " goes into a pot", F.POTTED_CUTS[cut] == true) end
+local birds = newFood(POT, {})
+F.onPutMeatInFat(craft({ newFood("Base.Chicken", { hunger = -0.33, calories = 230, lipids = 9, proteins = 38, weight = 0.3 }),
+    lard(), salt }, { birds }))
+local mixed = newFood(POT, {})
+F.onAddPottedCut(craft({ birds, newFood("Base.Rabbitmeat", { hunger = -0.3, calories = 969, carbs = 20, lipids = 20,
+    proteins = 185, weight = 0.3 }) }, { mixed }))
+check("a chicken leg and a rabbit share a pot", mixed.modData.tpfmPotted.portions == 2
+    and near(mixed.calories, 230 + 969 + 2 * 4095 / 4) and near(mixed.carbs, 20))
+local script = io.open("42/media/scripts/TraditionalPreservationFishMeat_Meat.txt"):read("*a")
+script = script:sub((script:find("item PotOfMeatInFat", 1, true)))
+local lists = 0
+for list in script:gmatch("item 1 %[(Base%.Beef;[^%]]*)%]") do
+    lists = lists + 1
+    local named = {}
+    for cut in list:gmatch("[^;]+") do named[cut] = true end
+    for cut in pairs(F.POTTED_CUTS) do check("a recipe's cut list names " .. cut, named[cut]) end
+    for cut in pairs(named) do check("a recipe's cut list is a potted cut: " .. cut, F.POTTED_CUTS[cut]) end
+end
+check("three recipes take the cuts", lists == 3)
+
 -- Packing
 check("a burnt pot can't be packed", not F.canPackPotted(newFood(POT, { burnt = true })))
 check("a pot with no batch can't be packed", not F.canPackPotted(newFood(POT, {})))
@@ -136,7 +158,7 @@ check("the crock holds four portions", near(F.crockPortions(crock), 4))
 check("its food is the pot's", near(crock.calories, pot.calories) and near(crock.base, crock.hunger))
 check("it starts fresh", crock.age == 0)
 check("it remembers the glazed jar and looks it", crock.modData.tpfmVessel == "Base.ClayJarGlazed" and crock.modelIndex == 1)
-check("it is named with its portions", crock.name == "Crock of Potted Meat (4 portions)" and crock.customName)
+check("it keeps its plain name", crock.name == "Crock of Potted Meat" and crock.customName == false)
 check("it weighs the jar and the meat", near(crock.weight, 0.3 + batch.weight) and crock.customWeight)
 check("packing gives Cooking XP for each cut", xp == 4 * F.POTTED_XP)
 
@@ -147,10 +169,10 @@ function container:DoRemoveItem(item) self.items[item] = nil end
 function container:AddItem(fullType) self.added = fullType return fullType end
 crock.container = container
 ISEatFoodAction.complete({ item = crock, share = 0.25 })
-check("a quarter eaten leaves three portions", near(F.crockPortions(crock), 3, 1e-4) and crock.name == "Crock of Potted Meat (3 portions)")
+check("a quarter eaten leaves three portions", near(F.crockPortions(crock), 3, 1e-4) and crock.name == "Crock of Potted Meat")
 check("and it weighs less", near(crock.weight, 0.3 + 3 * batch.weight / 4, 1e-4))
 ISEatFoodAction.complete({ item = crock, share = 2 / 3 })
-check("one portion reads singular", crock.name == "Crock of Potted Meat (1 portion)")
+check("one portion left, still its plain name", near(F.crockPortions(crock), 1, 1e-4) and crock.name == "Crock of Potted Meat")
 ISEatFoodAction.serverStop({ item = crock, share = 1 })
 check("the last bite gives the glazed jar back", not container:contains(crock) and container.added == "Base.ClayJarGlazed")
 
@@ -162,7 +184,7 @@ setmetatable(shelf, { __index = container })
 bare.container = shelf
 ISEatFoodAction.complete({ item = bare, share = 0.25 })
 check("a bare crock eaten by a quarter keeps the rest", shelf:contains(bare) and near(F.crockPortions(bare), 0.75, 1e-4)
-    and bare.name == "Crock of Potted Meat (0.8 portions)")
+    and bare.name == "Crock of Potted Meat")
 check("it weighs its plain jar and what is left", near(bare.weight, 0.3 + 0.75 * 0.7, 1e-4))
 ISEatFoodAction.complete({ item = bare, share = 1 })
 check("eaten out, it gives the plain Clay Jar back", not shelf:contains(bare) and shelf.added == "Base.ClayJar")

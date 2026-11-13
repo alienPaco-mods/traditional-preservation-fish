@@ -1,5 +1,10 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.33
+- **Potted chicken, turkey and rabbit** (user, 2026-11-13; ROADMAP section 7): vanilla's Chicken (leg), Chicken Wings, Chicken Fillet, Turkey Legs, Turkey Wings, Turkey Fillet and Rabbit Meat go into Put Meat in Lard or Tallow, Put Meat in the Melted Fat and Add Meat to the Pot, in any mix with red meat (`F.POTTED_GAME`). Their food is vanilla's, so a rabbit portion is about 2,000 calories with its fat. One Crock of Potted Meat for all of them; the cut count, cooking time and keeping are unchanged. Poultry and rabbit still go nowhere else (no salting, charque or dry curing). A whole bird is cut first with vanilla's Cut Chicken or Cut Turkey.
+- **The crock's name stays plain** (user, 2026-11-13): no more "(3 portions)". It eats like any food and weighs less as it empties (`Portions.weigh`, TP Core); a crock from an older build loses its suffix the next time it is eaten from. The first portion taken still costs a third of its keeping.
+- `TPFM.meat` lists and gives the new cuts (raw only; a stage skips them). `TPFM.kit("potted")` adds a second Pot and Lard, a Chicken leg, Turkey Legs, Turkey Wings and Rabbit Meat. Tests in `test_potted.lua`. In-game step 114 of `TESTING_GUIDE.md`.
+
 ## 0.4.32
 - **Stocks become soups or stews** (user, 2026-11-13). A stock's first ingredient makes it a soup or a stew, as in a real kitchen: right-click offers both (vanilla's Soup and Stew templates, so soup takes greens, roe and ramen, stew red meat), with 6 ingredients free. *Fish Head Soup with Carrots*, *Bone Broth Stew with Beef*, *Chicken Soup*. Soup cooks 50 minutes, stew 70. Divide Food into Bowls gives Soup Bowls for a stock or soup, Stew Bowls for a stew. Fish Head Stock was a stew from the start; a pot of it that already holds ingredients stays as it is.
 - **Meat stocks** (user, 2026-11-13; ROADMAP section 7), built like Fish Head Stock: a Pot or Forged Pot with 1.5 L of water and the parts.

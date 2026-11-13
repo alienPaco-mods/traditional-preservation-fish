@@ -30,7 +30,7 @@ function TPFM.help()
     say("TPFM.mature(days)          age the stockfish and dry cured meat you carry by this many days, to test maturing and ageing")
     say("TPFM.food()                the cured fish and meat you carry: hunger, unhappiness, boredom, thirst, age against its days, ageing")
     say("TPFM.fish(name, n, weight, stage) spawn n fish, e.g. TPFM.fish(\"Walleye\", 2, 4); stage \"cured\", \"dried\", \"hotSmoked\", \"coldSmoked\" or \"stockfish\" (it may take weight's place); TPFM.fish() lists the names, \"all\" gives each")
-    say("TPFM.meat(name, n, stage)  spawn n of a cut, e.g. TPFM.meat(\"Steak\", 2) or TPFM.meat(\"all\", 1, \"corned\"); stage \"corned\", \"country\", \"charque\", \"hotSmoked\" or \"dryCured\"; TPFM.meat() lists the names")
+    say("TPFM.meat(name, n, stage)  spawn n of a cut, e.g. TPFM.meat(\"Steak\", 2) or TPFM.meat(\"all\", 1, \"corned\"); stage \"corned\", \"country\", \"charque\", \"hotSmoked\" or \"dryCured\" (red meat only; chicken, turkey and rabbit come raw); TPFM.meat() lists the names")
     say("TPFM.give(name, n, option) spawn n of: head, stock, salt, fat, fatPot (option \"burnt\" or \"raw\"), crock (full, four Steaks in Lard). TPFM.give() lists them")
     say("TPFM.kit(kind)             the things a test needs: \"potted\" (Potted Meat) or \"flue\" (both flue kits and tools). TPFM.kit() lists the kinds")
     say("TPFM.pallet()              the Stockfish Pallet near you: its place, ripening speed, stack and fish")
@@ -369,15 +369,28 @@ local MEAT_SPAWNS = {
     end,
 }
 
+-- The red meat cuts, then the poultry and rabbit that only go into Potted Meat (no stages: they never cure).
+local function meatNames()
+    local names, pottedOnly = {}, {}
+    for _, cut in ipairs(F.MEAT_CUTS) do table.insert(names, cut) end
+    for _, cut in ipairs(F.POTTED_GAME or {}) do
+        table.insert(names, cut)
+        pottedOnly[cut] = true
+    end
+    return names, pottedOnly
+end
+
 function TPFM.meat(name, count, stage)
-    local types = name and named(F.MEAT_CUTS, name)
+    local MEAT_NAMES, POTTED_ONLY = meatNames()
+    local types = name and named(MEAT_NAMES, name)
     if not types or stage and not MEAT_SPAWNS[stage] then
-        return listNames("Meat", F.MEAT_CUTS, "\"corned\", \"country\", \"charque\", \"hotSmoked\", \"dryCured\"")
+        return listNames("Meat", MEAT_NAMES, "\"corned\", \"country\", \"charque\", \"hotSmoked\", \"dryCured\" (red meat only)")
     end
     local inventory = getPlayer():getInventory()
     for _, cut in ipairs(types) do
         for _ = 1, count or 1 do
-            if stage then MEAT_SPAWNS[stage](inventory, cut) else inventory:AddItem(cut) end
+            if not stage then inventory:AddItem(cut)
+            elseif not POTTED_ONLY[cut] then MEAT_SPAWNS[stage](inventory, cut) end
         end
     end
     say(string.format("Gave %d %s%s.", count or 1, name == "all" and "of each cut" or name, stage and (", " .. stage) or ""))
@@ -417,8 +430,9 @@ end
 
 -- What a test of kind needs.
 local KITS = {
-    potted = { about = "a Pot, Lard, Salt, a Steak, Beef, Pork Chop and Pork, and a Clay Jar, Glazed Clay Jar and Clay Pot, for Potted Meat",
-        "Base.Pot", "Base.Lard", "Base.Salt", "Base.Steak", "Base.Beef", "Base.PorkChop", "Base.Pork", "Base.ClayJar",
+    potted = { about = "2 Pots, 2 Lard, Salt, a Steak, Beef, Pork Chop and Pork, a Chicken leg, Turkey Legs, Turkey Wings and Rabbit Meat, and a Clay Jar, Glazed Clay Jar and Clay Pot, for Potted Meat",
+        "Base.Pot", "Base.Pot", "Base.Lard", "Base.Lard", "Base.Salt", "Base.Steak", "Base.Beef", "Base.PorkChop",
+        "Base.Pork", "Base.Chicken", "Base.TurkeyLegs", "Base.TurkeyWings", "Base.Rabbitmeat", "Base.ClayJar",
         "Base.ClayJarGlazed", "Base.ClayPot" },
     stock = { about = "what every stock takes: a Fish Head, 2 Animal Bones, a Large Animal Bone, 6 Small Animal Bones, 2 Chicken Feet, a hen's and a turkey's head, 5 Pots (fill them with 1.5 L of water) and 4 Bowls",
         "TraditionalPreservationFishMeat.FishHead",

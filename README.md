@@ -98,9 +98,9 @@ A plank shed two tiles long under one roof slope, the door on the high end. Insi
 ### Potted Meat
 
 1. **Put Meat in Lard or Tallow** (an empty Pot or Forged Pot, a block of Lard or Tallow, one cut, 1 Salt) or **Put Meat in the Melted Fat** (a pot holding 0.5 L of Lard (Melted) or Tallow, one block's worth): a **Pot of Meat in Fat**.
-2. **Add Meat to the Pot**: up to four cuts in all (Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop), uncooked only.
+2. **Add Meat to the Pot**: up to four cuts in all (Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop, and vanilla's chicken and turkey legs, wings and fillets and Rabbit Meat, in any mix), uncooked only. Poultry and rabbit go nowhere else: no salting, charque or dry curing.
 3. Cook it on any stove or fire: 120 minutes, burns at 240.
-4. **Pack Potted Meat** into an empty Clay Jar, Glazed Clay Jar or Clay Pot: the pot back and a **Crock of Potted Meat**, one portion a cut (its food plus a quarter block of fat, about 1,000 calories), eaten by the portion ("(3 portions)"), the vessel back with the last bite. Cooking XP 3 a cut.
+4. **Pack Potted Meat** into an empty Clay Jar, Glazed Clay Jar or Clay Pot: the pot back and a **Crock of Potted Meat**, one portion a cut (its food plus a quarter block of fat, about 1,000 calories), eaten like any food (its name stays plain; it weighs less as it empties), the vessel back with the last bite. Cooking XP 3 a cut.
 
 The crock **keeps by place**: about 120 / 180 days in a powered fridge or at 4 C and colder, about 110 / 165 in a winter basement and 64 / 96 in a summer one (5 to 13 C, a month behind the season), in a room by the season's mean temperature (a July pantry about 17 / 25 at the season's 23 C peak, 14 / 21 at 25 C and over; 18 / 27 at 22 C while the grid is on), stopped in a powered freezer. The first portion taken costs a third of the days it had left, once. A part-used Lard gives only what is left of it.
 

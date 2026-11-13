@@ -12,10 +12,16 @@ local Portions = require "TraditionalPreservationCore/Portions"
 local Recipes = require "TraditionalPreservationCore/Recipes"
 
 -- Pork joins the Salting Tub's cuts here: kept under fat and out of the sun, its own fat doesn't go rancid.
+-- Chicken, turkey and rabbit too (user, 2026-11-13): kept alive and eaten fresh, they were rarely salted or dried,
+-- but potted under fat (potted rabbit and chicken, rillettes de lapin, Gascon confit). A whole bird is cut first
+-- (vanilla's Cut Chicken and Cut Turkey). Their food is vanilla's, rabbit's 969 calories too; mixed pots are fine.
+F.POTTED_GAME = { "Base.Chicken", "Base.ChickenWings", "Base.ChickenFillet", "Base.TurkeyLegs", "Base.TurkeyWings",
+    "Base.TurkeyFillet", "Base.Rabbitmeat" }
 F.POTTED_CUTS = {
     ["Base.Beef"] = true, ["Base.Steak"] = true, ["Base.MuttonChop"] = true, ["Base.Venison"] = true,
     ["Base.Pork"] = true, ["Base.PorkChop"] = true,
 }
+for _, cut in ipairs(F.POTTED_GAME) do F.POTTED_CUTS[cut] = true end
 F.POTTED_FATS = { ["Base.Lard"] = true, ["TraditionalPreservationFishMeat.Tallow"] = true }
 F.MEAT_FAT_POTS = {
     ["TraditionalPreservationFishMeat.PotOfMeatInFat"] = true,
@@ -137,11 +143,13 @@ function F.crockPortions(crock)
     return crock:getHungChange() / portion.hunger
 end
 
--- "Crock of Potted Meat (3 portions)", and the weight of the vessel and what is left in it.
+-- The crock's plain name (user, 2026-11-13: it eats like any food, so no portion count; a crock from an older
+-- build loses its "(3 portions)"), and the weight of the vessel and what is left in it.
 function F.labelCrock(crock)
     local data = crock:getModData()
-    Portions.label(crock, getItemNameFromFullType(F.CROCK), F.crockPortions(crock), data.tpfmVessel or "Base.ClayJar",
-        data.tpfmPortionWeight or 0)
+    crock:setName(getItemNameFromFullType(F.CROCK))
+    crock:setCustomName(false)
+    Portions.weigh(crock, F.crockPortions(crock), data.tpfmVessel or "Base.ClayJar", data.tpfmPortionWeight or 0)
 end
 
 -- A new crock: the pot's batch in the vessel (a full type).
@@ -188,7 +196,7 @@ function F.adoptCrock(crock)
     data.tpfmPortionWeight = math.max(crock:getActualWeight() - (empty and empty:getActualWeight() or 0), 0)
 end
 
--- After any eat: an emptied crock goes back to its container as its jar or pot; one with meat left is relabelled.
+-- After any eat: an emptied crock goes back to its container as its jar or pot; one with meat left is weighed again.
 -- Returns the empty vessel, if any.
 function F.afterCrockUse(crock, container)
     return Portions.used(crock, container, function() return F.crockPortions(crock) >= F.POTTED_EMPTY end,
@@ -299,7 +307,7 @@ function F.openCrock(crock)
 end
 
 -- Eaten through vanilla's eat action (TP Core's Portions, the one wrap of it, which Dairy's jar uses too): the crock's
--- keeping is brought up to now first; a first portion taken opens it; then it is relabelled or gives its vessel back.
+-- keeping is brought up to now first; a first portion taken opens it; then it is weighed again or gives its vessel back.
 Portions.onEat(F.CROCK, function(crock)
     F.adoptCrock(crock)
     local before = F.crockPortions(crock)

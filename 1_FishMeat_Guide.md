@@ -45,7 +45,7 @@ Fish and meat share one workshop. The same **Salting Tub** cures both, the same 
 | **Hot smoke** | Hot Smoked fish | Hot Smoked meat; pork becomes **Ham** | Any | 1 to 2 weeks, ready to eat |
 | **Cold smoke** | Cold Smoked fish | **Suho Meso**, **Mutton Ham**, **Jerked Venison**, smoked pork, **Smoked Country Ham** | Cool months | 4 to 6 months, ready to eat (a ham 6 to 12) |
 | **Dry cure in cool air** | - | **Bresaola**, Dry Cured Mutton, Venison and Pork, **Country Ham** | Cool months | The same, with no fire |
-| **Under fat** | - | **Potted Meat** (any red meat, pork too) | Any | Weeks to months, by where you keep it |
+| **Under fat** | - | **Potted Meat** (any red meat, pork, chicken, turkey, rabbit) | Any | Weeks to months, by where you keep it |
 
 ---
 
@@ -94,7 +94,7 @@ Every road on one page. *Start* is when to begin it in Kentucky's weather; *Yiel
 | **Hot Smoked meat**; pork becomes **Ham** | Any month | Corned, 1 to 2 days | Smokehouse, Firebox stoked | 6 to 7½ hours of fire | 70% weight, all the food | 7 / 14 (Ham 5 / 10) | As it is |
 | **Dry cured cuts**: Bresaola, Suho Meso and their kin | **October to April** | Country Cured, 10 days | Smokehouse, any station under a roof, or a Frame or Beam in a room or basement | 3 to 12 weeks | 50% weight, 90% food | 120 / 180 | As it is |
 | **Country Ham** (a Leg of Pork) | **October to March** | Country Cured, 21 days | The same | 6 weeks to 5 months | 50% weight, 90% food | **180 / 365** | As it is |
-| **Potted Meat** (any cut, pork too) | Any month; whenever you butcher | None | A pot, a fire, a clay jar | 2 hours | The meat and its fat | 17 to 120, by where it's kept | As it is |
+| **Potted Meat** (any cut, pork, poultry and rabbit too) | Any month; whenever you butcher | None | A pot, a fire, a clay jar | 2 hours | The meat and its fat | 17 to 120, by where it's kept | As it is |
 | **Lard, Tallow** | Whenever you butcher | None | A pot, or the Hearth's copper | 1 hour | 2 pieces of fat a block | Don't spoil | For cooking and potting |
 
 **What each road costs**
@@ -633,14 +633,14 @@ Raw fat left in a cold copper goes **rancid** when its oldest piece would have r
 
 ## 13. Potted Meat
 
-Potted Meat is the road for any season and any red meat, pork too: cuts cooked slowly in Lard or Tallow with salt, then packed into a clay jar under their own fat. No station: a pot, a fire and a jar.
+Potted Meat is the road for any season and any red meat, pork too, and the one road for chicken, turkey and rabbit: cuts cooked slowly in Lard or Tallow with salt, then packed into a clay jar under their own fat. No station: a pot, a fire and a jar.
 
 1. **Put Meat in Lard or Tallow** (right-click the meat or the fat): an empty **Pot** or Forged Pot, a block of **Lard** or **Tallow**, one cut and **1 Salt**. You get a **Pot of Meat in Fat**.
    Or, straight from rendering: **Put Meat in the Melted Fat** takes the pot of half a litre of **Lard (Melted)** or **Tallow (Melted)** that Pour Off leaves, one cut and Salt. Half a litre is one block.
-2. **Add Meat to the Pot**, up to **four cuts** in all: a block of fat covers four. **Beef**, **Steak**, **Mutton Chop**, **Venison**, **Pork** and **Pork Chop** all go in.
+2. **Add Meat to the Pot**, up to **four cuts** in all: a block of fat covers four. **Beef**, **Steak**, **Mutton Chop**, **Venison**, **Pork** and **Pork Chop** all go in. So do **chicken** (legs, wings, fillets), **turkey** (legs, wings, fillets) and **Rabbit Meat**, in any mix. Cut a whole bird first (the game's Cut Chicken or Cut Turkey).
 3. Cook it on any stove or fire for about **two hours**. It burns if you leave it four, and then only **Scrape Out Burnt Fat** gets the pot back. Once it's cooked, no more meat goes in.
 4. **Pack Potted Meat** into an empty **Clay Jar**, **Glazed Clay Jar** or **Clay Pot**: the pot comes back, and you have a **Crock of Potted Meat**, one portion for each cut.
-5. Eat from it like any food: Eat Quarter, Half or All take portions, and the name counts down ("Crock of Potted Meat (3 portions)"). The **jar or pot comes back** with the last bite.
+5. Eat from it like any food: Eat Quarter, Half or All, and it gets lighter as it empties. The **jar or pot comes back** with the last bite.
 
 | | Pot of Meat in Fat | Crock of Potted Meat |
 |---|---|---|
@@ -650,6 +650,8 @@ Potted Meat is the road for any season and any red meat, pork too: cuts cooked s
 | Eat it? | No: cook it, then pack it | Yes |
 
 **A portion** is the cut's own food plus a quarter of the fat, about 1,000 calories of it. A full crock of four is around **5,000 calories**: few foods carry more. Fewer than four cuts leave the rest of the block behind in the pot, so cook four at a time when you can.
+
+> *Margin note:* chickens, turkeys and rabbits were kept alive and eaten fresh, so a farm rarely salted or dried them. When it had too many, they went under fat: English potted rabbit and chicken, French *rillettes de lapin*, the Gascon confit of duck and goose. The game's Rabbit Meat carries nearly four times a chicken leg's calories, and a portion of it about 2,000 with its fat.
 
 **Where you keep it.** The crock keeps by the temperature it sits in, and it remembers: one left a month in a basement has aged a basement's month when you next look.
 
@@ -1109,9 +1111,9 @@ Laid out as the game's planting seasons: the months a process works, its best an
 | Command | What it does |
 |---|---|
 | `TPFM.fish(name, n, weight, stage)` | Spawns `n` fish, at that weight if given (food scaled to match), e.g. `TPFM.fish("Walleye", 2, 4)`. A stage gives it further along: `"cured"` (Salt Cured, ready to hang), `"dried"` (Salt Dried), `"hotSmoked"`, `"coldSmoked"` (each as its station gives a cured fish, nothing spoiled) or `"stockfish"` (young, fresh off the frame), and may take the weight's place: `TPFM.fish("Walleye", 3, "cured")`. `TPFM.fish()` lists the names; `"all"` gives one of each |
-| `TPFM.meat(name, n, stage)` | Spawns `n` of a cut, e.g. `TPFM.meat("Steak", 2)`; `"all"` gives each of Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop and Leg of Pork. A stage gives it further along: `"corned"` (*Steak (Corned)*; no leg), `"country"` (Country Cured), `"charque"` (a Corned cut dried on a frame; no pork), `"hotSmoked"` (a Corned cut from a stoked Smokehouse; pork comes out as the game's Ham, no leg) or `"dryCured"` (dry cured, smoked and young, to age and slice). `TPFM.meat()` lists the names |
+| `TPFM.meat(name, n, stage)` | Spawns `n` of a cut, e.g. `TPFM.meat("Steak", 2)`; `"all"` gives each of Beef, Steak, Mutton Chop, Venison, Pork, Pork Chop and Leg of Pork, then the potting cuts Chicken, ChickenWings, ChickenFillet, TurkeyLegs, TurkeyWings, TurkeyFillet and Rabbitmeat (raw only: a stage skips them). A stage gives it further along: `"corned"` (*Steak (Corned)*; no leg), `"country"` (Country Cured), `"charque"` (a Corned cut dried on a frame; no pork), `"hotSmoked"` (a Corned cut from a stoked Smokehouse; pork comes out as the game's Ham, no leg) or `"dryCured"` (dry cured, smoked and young, to age and slice). `TPFM.meat()` lists the names |
 | `TPFM.give(name, n, option)` | Spawns `n` of: `"head"` (Fish Head), `"stock"` (Pot of Fish Head Stock), `"boneBroth"`, `"chickenStock"`, `"soups"` (one of each stock's soup and stew), `"salt"` (vanilla shaker), `"fat"` (one each of Pork Fat, Beef Suet and Mutton Fat), `"fatPot"` (a Pot of Pork Fat, cooked; option `"burnt"` or `"raw"`), `"crock"` (a full Crock of Potted Meat: four Steaks in Lard in a Glazed Clay Jar). Default food values. `TPFM.give()` lists them |
-| `TPFM.kit("potted")` | Spawns what Potted Meat takes: a Pot, Lard, Salt, four cuts and the three clay vessels |
+| `TPFM.kit("potted")` | Spawns what Potted Meat takes: 2 Pots, 2 Lard, Salt, four red meat cuts, a Chicken leg, Turkey Legs, Turkey Wings and Rabbit Meat, and the three clay vessels |
 | `TPFM.kit("stock")` | Spawns what every stock takes: a Fish Head, 2 Animal Bones, a Large Animal Bone, 6 Small Animal Bones, 2 Chicken Feet, a hen's and a turkey's head, 5 Pots to fill with water and 4 Bowls. |
 | `TPFM.kit("flue")` | Spawns both flue kits (2 Clay Pipe Segments, 3 Flat Stones, 3 Clay), a Mason's Trowel and a Shovel. With Core's `TPC.kit("firebox")` you can build and join a Firebox |
 
