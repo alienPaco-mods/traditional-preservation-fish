@@ -1,7 +1,7 @@
 module Base
 {
-    /* Fat in the copper of TP Core's Hearth (TraditionalPreservationFishMeatFat.lua). Raw fat is a fluid only so
-       the copper can hold it: it stays there, a piece is 0.25 L, and no container is ever filled with it. Kept
+    /* Fat in the cauldron of TP Core's Hearth (TraditionalPreservationFishMeatFat.lua). Raw fat is a fluid only so
+       the cauldron can hold it: it stays there, a piece is 0.25 L, and no container is ever filled with it. Kept
        steaming for an hour it melts. */
     fluid RawPorkFat
     {
@@ -23,7 +23,7 @@ module Base
         }
     }
 
-    /* Melted fat with its cracklings still in it, ladled out of the copper into any container. Strain Lard and
+    /* Melted fat with its cracklings still in it, ladled out of the cauldron into any container. Strain Lard and
        Strain Tallow take 0.5 L for a block, so a litre is worth two of vanilla's Lard. */
     fluid MeltedLard
     {
@@ -79,7 +79,7 @@ module Base
         }
     }
 
-    /* Raw fat left in the copper until it would have rotted. It stays in the copper too: only Empty the Copper
+    /* Raw fat left in the cauldron until it would have rotted. It stays in the cauldron too: only Empty the Cauldron
        takes it. */
     fluid RancidFat
     {

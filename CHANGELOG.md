@@ -1,5 +1,8 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.44
+Refactor with TP Core's copper-to-cauldron rename (2026-11-14): the action is `TPFMFatCauldron` (was `TPFMFatCopper`), the menu key `FatInCauldron`, and `F.putFatInCauldron`, `F.CAULDRON_FATS`, `F.cauldronFatRoom`; comments and tests say cauldron. Nothing changes in game; tests and golden results unchanged.
+
 ## 0.4.43
 Docs pass after TP Core's Stone Hearth hub (user, 2026-11-14): the guide, README, DEVHELP and Workshop text say Stone Hearth and Forged Cauldron (Firebox, Hearth and copper gone), the Smokehouse's flat roof and low clay pipe, and that the hole stays lidded and the cauldron fits while it smokes. DEVHELP's cold smoke limit corrected to 15 C (`F.COLD_SMOKE_MAX`). Console help and outputs (`TPFM.smoke`, `stoke`, `bank`) say Stone Hearth.
 

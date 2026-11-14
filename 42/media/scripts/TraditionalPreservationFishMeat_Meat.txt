@@ -283,7 +283,7 @@ module TraditionalPreservationFishMeat
 
     /* A cooked pot's fat has melted: pouring it off gives the pot back holding 0.5 L of Lard (Melted) or
        Tallow (onPourOffLard, onPourOffTallow fill it), for Strain Lard or Strain Tallow, a bigger container or
-       the Hearth's copper. IsCookedFoodItem lets burnt food through, so canPourOff refuses a burnt pot. */
+       the Hearth's cauldron. IsCookedFoodItem lets burnt food through, so canPourOff refuses a burnt pot. */
     craftRecipe PourOffLard
     {
         timedAction = MixingBowl,
@@ -330,7 +330,7 @@ module TraditionalPreservationFishMeat
         }
     }
 
-    /* Melted fat from the Hearth's copper (TraditionalPreservationFishMeat_fluids.txt), in whatever it was ladled
+    /* Melted fat from the Hearth's cauldron (TraditionalPreservationFishMeat_fluids.txt), in whatever it was ladled
        into: half a litre strains to a block and its cracklings, as a pot's two pieces do. It goes through a cloth or
        a Strainer (a Cheese Cloth, Dish Towel, clean Rag or Sheet), which is kept, as the container is. */
     craftRecipe StrainLard
@@ -1088,7 +1088,7 @@ module TraditionalPreservationFishMeat
         }
     }
 
-    /* A pot of Lard (Melted) or Tallow from Pour Off (or ladled from the copper): its 0.5 L is a block. */
+    /* A pot of Lard (Melted) or Tallow from Pour Off (or ladled from the cauldron): its 0.5 L is a block. */
     craftRecipe PutMeatInMeltedFat
     {
         timedAction = MixingBowl,

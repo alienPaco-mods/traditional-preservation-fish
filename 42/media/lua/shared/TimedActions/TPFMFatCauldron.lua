@@ -1,9 +1,9 @@
--- Traditional Preservation (Fish & Meat): Put Fat in the Copper, putting pieces of raw fat from the inventory into
--- a Hearth's copper (TP Core's), as many as fit.
+-- Traditional Preservation (Fish & Meat): Put Fat in the Cauldron, putting pieces of raw fat from the inventory into
+-- a Hearth's cauldron (TP Core's), as many as fit.
 require "TimedActions/ISBaseTimedAction"
 require "TraditionalPreservationFishMeatFat"
 
-TPFMFatCopper = ISBaseTimedAction:derive("TPFMFatCopper")
+TPFMFatCauldron = ISBaseTimedAction:derive("TPFMFatCauldron")
 
 local F = TraditionalPreservationFishMeat
 local Hearth = require "TraditionalPreservationCore/Hearth"
@@ -20,27 +20,27 @@ local function piecesHere(self)
     return here
 end
 
-function TPFMFatCopper:isValid()
+function TPFMFatCauldron:isValid()
     return self.hearth:getSquare() ~= nil and #piecesHere(self) > 0
-        and F.copperFatRoom(Hearth.copperState(self.hearth:getModData()), self.raw) > 0
+        and F.cauldronFatRoom(Hearth.cauldronState(self.hearth:getModData()), self.raw) > 0
 end
 
-function TPFMFatCopper:waitToStart()
+function TPFMFatCauldron:waitToStart()
     self.character:faceThisObject(self.hearth)
     return self.character:shouldBeTurning()
 end
 
-function TPFMFatCopper:start()
+function TPFMFatCauldron:start()
     self:setActionAnim("Loot")
 end
 
-function TPFMFatCopper:complete()
-    -- Brought up to the minute first, so the fat mixes with the copper as it is now.
-    local copper = Hearth.copperOf(self.hearth)
+function TPFMFatCauldron:complete()
+    -- Brought up to the minute first, so the fat mixes with the cauldron as it is now.
+    local cauldron = Hearth.cauldronOf(self.hearth)
     local now = getGameTime():getWorldAgeHours()
     local pieces, hoursLeft = piecesHere(self), {}
     for index, item in ipairs(pieces) do hoursLeft[index] = F.fatHoursLeft(item) end
-    local count = F.putFatInCopper(copper, self.raw, hoursLeft, now)
+    local count = F.putFatInCauldron(cauldron, self.raw, hoursLeft, now)
     for index = 1, count do
         pieces[index]:getContainer():Remove(pieces[index])
     end
@@ -48,15 +48,15 @@ function TPFMFatCopper:complete()
     return count > 0
 end
 
-function TPFMFatCopper:perform()
+function TPFMFatCauldron:perform()
     ISBaseTimedAction.perform(self)
 end
 
-function TPFMFatCopper:getDuration()
+function TPFMFatCauldron:getDuration()
     return Action.duration(self.character, TICKS_A_PIECE * #self.pieces)
 end
 
-function TPFMFatCopper:new(character, hearth, raw, pieces)
+function TPFMFatCauldron:new(character, hearth, raw, pieces)
     local o = ISBaseTimedAction.new(self, character)
     o.hearth = hearth
     o.raw = raw

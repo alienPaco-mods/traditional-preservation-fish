@@ -126,10 +126,10 @@ end
 for tooltip in script:gmatch("Tooltip = (Tooltip_[%w_]+)") do
     check(tooltip .. " is translated", getText(tooltip) ~= tooltip)
 end
--- Fat in the Hearth's copper
+-- Fat in the Hearth's cauldron
 local Hearth = require "TraditionalPreservationCore/Hearth"
 local fluids = io.open("42/media/scripts/TraditionalPreservationFishMeat_fluids.txt"):read("*a")
-for _, fat in ipairs(F.COPPER_FATS) do
+for _, fat in ipairs(F.CAULDRON_FATS) do
     for _, name in ipairs({ fat.raw, fat.melted }) do
         check(name .. " is a fluid with a name", fluids:find("\n    fluid " .. name .. "\n", 1, true) ~= nil
             and H.texts["Fluid_Name_" .. name] ~= nil)
@@ -140,30 +140,30 @@ for _, fat in ipairs(F.COPPER_FATS) do
     end
 end
 check("Fat (Rancid) is a fluid with a name", fluids:find("\n    fluid RancidFat\n", 1, true) ~= nil and H.texts.Fluid_Name_RancidFat ~= nil)
-local copper = {}
-check("an empty copper has room for 240 pieces", F.copperFatRoom(copper, "RawPorkFat") == 240)
-check("six pieces of pork fat go in as a litre and a half", F.putFatInCopper(copper, "RawPorkFat", { 96, 30, 96, 96, 96, 96 }, 10) == 6
-    and copper.ml == 1500 and copper.fluid == "RawPorkFat" and copper.tempC == Hearth.ROOM_C)
-check("the oldest piece sets when it goes rancid", copper.offAt == 40)
-check("raw fat can't be ladled out", not Hearth.poursOut(copper))
-check("suet doesn't go in with pork fat", F.copperFatRoom(copper, "RawSuet") == 0 and F.putFatInCopper(copper, "RawSuet", { 96 }, 10) == 0)
-check("more pork fat does, and a rotten piece makes it rancid at once", F.putFatInCopper(copper, "RawPorkFat", { -5 }, 12) == 1
-    and copper.ml == 1750 and copper.offAt == 12)
-copper.offAt, copper.last = 40, 12
-copper.fireUntil = 100
-Hearth.advance(copper, 12 + Hearth.hoursToHot(copper) + 0.9, 20)
-check("not yet melted short of the hour", copper.fluid == "RawPorkFat")
-Hearth.advance(copper, 15, 20)
-check("an hour steaming melts it to Lard (Melted), which ladles out and keeps", copper.fluid == "MeltedLard" and Hearth.poursOut(copper)
-    and copper.offAt == nil)
-check("seven pieces are three blocks and a half", copper.ml / 500 == 3.5)
-check("melted fat takes no raw", F.copperFatRoom(copper, "RawPorkFat") == 0)
+local cauldron = {}
+check("an empty cauldron has room for 240 pieces", F.cauldronFatRoom(cauldron, "RawPorkFat") == 240)
+check("six pieces of pork fat go in as a litre and a half", F.putFatInCauldron(cauldron, "RawPorkFat", { 96, 30, 96, 96, 96, 96 }, 10) == 6
+    and cauldron.ml == 1500 and cauldron.fluid == "RawPorkFat" and cauldron.tempC == Hearth.ROOM_C)
+check("the oldest piece sets when it goes rancid", cauldron.offAt == 40)
+check("raw fat can't be ladled out", not Hearth.poursOut(cauldron))
+check("suet doesn't go in with pork fat", F.cauldronFatRoom(cauldron, "RawSuet") == 0 and F.putFatInCauldron(cauldron, "RawSuet", { 96 }, 10) == 0)
+check("more pork fat does, and a rotten piece makes it rancid at once", F.putFatInCauldron(cauldron, "RawPorkFat", { -5 }, 12) == 1
+    and cauldron.ml == 1750 and cauldron.offAt == 12)
+cauldron.offAt, cauldron.last = 40, 12
+cauldron.fireUntil = 100
+Hearth.advance(cauldron, 12 + Hearth.hoursToHot(cauldron) + 0.9, 20)
+check("not yet melted short of the hour", cauldron.fluid == "RawPorkFat")
+Hearth.advance(cauldron, 15, 20)
+check("an hour steaming melts it to Lard (Melted), which ladles out and keeps", cauldron.fluid == "MeltedLard" and Hearth.poursOut(cauldron)
+    and cauldron.offAt == nil)
+check("seven pieces are three blocks and a half", cauldron.ml / 500 == 3.5)
+check("melted fat takes no raw", F.cauldronFatRoom(cauldron, "RawPorkFat") == 0)
 local suet = {}
-F.putFatInCopper(suet, "RawSuet", { 50, 50 }, 0)
+F.putFatInCauldron(suet, "RawSuet", { 50, 50 }, 0)
 Hearth.advance(suet, 51, 20)
-check("suet left cold goes rancid, and stays in the copper", suet.fluid == "RancidFat" and not Hearth.poursOut(suet))
-local tight = { ml = Hearth.COPPER_ML - 600, fluid = "RawSuet", tempC = 20, last = 0 }
-check("a nearly full copper takes only the pieces that fit", F.putFatInCopper(tight, "RawSuet", { 9, 9, 9, 9 }, 0) == 2)
+check("suet left cold goes rancid, and stays in the cauldron", suet.fluid == "RancidFat" and not Hearth.poursOut(suet))
+local tight = { ml = Hearth.CAULDRON_ML - 600, fluid = "RawSuet", tempC = 20, last = 0 }
+check("a nearly full cauldron takes only the pieces that fit", F.putFatInCauldron(tight, "RawSuet", { 9, 9, 9, 9 }, 0) == 2)
 check("a piece's hours left come from its age", F.fatHoursLeft({ getOffAgeMax = function() return 4 end, getAge = function() return 1.5 end }) == 60)
 for recipe, fat in pairs({ StrainLard = { "MeltedLard", "Base.Lard" }, StrainTallow = { "MeltedTallow", "TraditionalPreservationFishMeat.Tallow" } }) do
     local text = block("craftRecipe", recipe)
@@ -180,7 +180,7 @@ local function poured(onCreate)
     return pot
 end
 local potOfLard, potOfTallow = poured(F.onPourOffLard), poured(F.onPourOffTallow)
-check("a pot poured off holds half a litre of Lard (Melted), hot: one block's worth, as two pieces are in the copper",
+check("a pot poured off holds half a litre of Lard (Melted), hot: one block's worth, as two pieces are in the cauldron",
     potOfLard.fluids.MeltedLard == 0.5 and potOfLard.heat > 1.4 and F.POT_FAT_ML == 2 * F.FAT_PIECE_ML)
 check("a pot of suet pours off as Tallow (Melted)", potOfTallow.fluids.MeltedTallow == 0.5 and potOfTallow.fluids.MeltedLard == nil)
 check("a litre of melted fat is worth two blocks", tonumber(fluids:match("fluid MeltedLard.-Calories = ([%d%.]+)")) == 2 * lard

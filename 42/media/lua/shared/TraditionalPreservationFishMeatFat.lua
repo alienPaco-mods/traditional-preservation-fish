@@ -2,7 +2,7 @@
 -- cattle and sheep get a fat row in vanilla's butchering parts tables, and the recipes in
 -- TraditionalPreservationFishMeat_Meat.txt render it. Raw fat is an item; over heat it becomes a fluid, Lard (Melted)
 -- or Tallow (Melted), and that is strained to a block and its Cracklings. Two pieces cook in a pot (which can burn)
--- and are poured off as a pot of melted fat; TP Core's Hearth melts many pieces at once in its copper.
+-- and are poured off as a pot of melted fat; TP Core's Hearth melts many pieces at once in its cauldron.
 require "Definitions/animal/AnimalPartsDefinitions"
 local Hearth = require "TraditionalPreservationCore/Hearth"
 
@@ -38,15 +38,15 @@ F.FAT_POTS = {
     ["TraditionalPreservationFishMeat.PotForgedSuet"] = true,
 }
 
--- Fat in the Hearth's copper. The copper holds fluids, so a piece of raw fat goes in as FAT_PIECE_ML of its raw
+-- Fat in the Hearth's cauldron. The cauldron holds fluids, so a piece of raw fat goes in as FAT_PIECE_ML of its raw
 -- fluid (never rename a fluid once the mod is out: saves hold the names). Kept steaming for FAT_RENDER_HOURS it
 -- melts (Hearth.turnsHot), and 0.5 L of the melted fat strains to a block and its Cracklings (Strain Lard, Strain
--- Tallow), so two pieces make a block here as they do in a pot. Raw fat stays in the copper (Hearth.staysIn) and
+-- Tallow), so two pieces make a block here as they do in a pot. Raw fat stays in the cauldron (Hearth.staysIn) and
 -- goes rancid there when its oldest piece would have rotted (Hearth.goesOff); melted fat keeps, as Lard does.
 F.FAT_PIECE_ML = 250
 F.FAT_RENDER_HOURS = 1
 F.RANCID_FAT = "RancidFat"
-F.COPPER_FATS = {
+F.CAULDRON_FATS = {
     {
         raw = "RawPorkFat", melted = "MeltedLard", name = "PorkFat",
         items = { ["TraditionalPreservationFishMeat.PorkFat"] = true },
@@ -56,25 +56,25 @@ F.COPPER_FATS = {
         items = { ["TraditionalPreservationFishMeat.BeefSuet"] = true, ["TraditionalPreservationFishMeat.MuttonFat"] = true },
     },
 }
-for _, fat in ipairs(F.COPPER_FATS) do
+for _, fat in ipairs(F.CAULDRON_FATS) do
     Hearth.turnsHot(fat.raw, fat.melted, F.FAT_RENDER_HOURS)
     Hearth.goesOff(fat.raw, F.RANCID_FAT)
     Hearth.staysIn(fat.raw)
 end
 Hearth.staysIn(F.RANCID_FAT)
 
--- How many pieces of a raw fat the copper has room for now: none if it holds anything else.
-function F.copperFatRoom(copper, raw)
-    return math.floor(Hearth.copperRoom(copper, raw, Hearth.COPPER_ML) / F.FAT_PIECE_ML)
+-- How many pieces of a raw fat the cauldron has room for now: none if it holds anything else.
+function F.cauldronFatRoom(cauldron, raw)
+    return math.floor(Hearth.cauldronRoom(cauldron, raw, Hearth.CAULDRON_ML) / F.FAT_PIECE_ML)
 end
 
--- Puts pieces of raw fat in the copper, as many as fit. hoursLeft has, for each piece, the hours until it would
+-- Puts pieces of raw fat in the cauldron, as many as fit. hoursLeft has, for each piece, the hours until it would
 -- have rotted. Returns how many went in.
-function F.putFatInCopper(copper, raw, hoursLeft, now)
-    local count = math.min(#hoursLeft, F.copperFatRoom(copper, raw))
+function F.putFatInCauldron(cauldron, raw, hoursLeft, now)
+    local count = math.min(#hoursLeft, F.cauldronFatRoom(cauldron, raw))
     if count <= 0 then return 0 end
-    Hearth.pourInto(copper, raw, count * F.FAT_PIECE_ML, Hearth.ROOM_C, now)
-    for index = 1, count do Hearth.offBy(copper, now + math.max(hoursLeft[index], 0)) end
+    Hearth.pourInto(cauldron, raw, count * F.FAT_PIECE_ML, Hearth.ROOM_C, now)
+    for index = 1, count do Hearth.offBy(cauldron, now + math.max(hoursLeft[index], 0)) end
     return count
 end
 
@@ -134,11 +134,11 @@ local function fillWith(craftRecipeData, fluid)
 end
 
 function F.onPourOffLard(craftRecipeData)
-    fillWith(craftRecipeData, F.COPPER_FATS[1].melted)
+    fillWith(craftRecipeData, F.CAULDRON_FATS[1].melted)
 end
 
 function F.onPourOffTallow(craftRecipeData)
-    fillWith(craftRecipeData, F.COPPER_FATS[2].melted)
+    fillWith(craftRecipeData, F.CAULDRON_FATS[2].melted)
 end
 
 -- OnTest of Scrape Out Burnt Fat: only a burnt pot, of fat or of Potted Meat's meat in fat.
