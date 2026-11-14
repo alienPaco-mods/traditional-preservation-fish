@@ -31,6 +31,7 @@ module TraditionalPreservationFishMeat
         }
         component SpriteConfig
         {
+            OnIsValid = TraditionalPreservationCore.doorFits,
             isThumpable = false,
             face S
             {

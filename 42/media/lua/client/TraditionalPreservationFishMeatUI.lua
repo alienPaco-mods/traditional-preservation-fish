@@ -265,6 +265,10 @@ end)
 -- and the Hanging Beam keep out of a door's front.
 UI.notInRooms(Tiles.OUTDOOR)
 UI.keepDoorsFree(Tiles.DOOR_KEPT)
+-- Nor the frame, the tub or the pallet, at any fill.
+UI.keepDoorsFree(Tiles.STATIONS)
+UI.keepDoorsFree({ Tiles.PALLET })
+UI.keepDoorsFree(Tiles.PALLET_STACKS)
 
 -- Fish names and the stockfish's ripeness follow the days: the player's own things every hour, and any
 -- container as soon as the inventory windows show it. Names from before the bracket names update the same way.

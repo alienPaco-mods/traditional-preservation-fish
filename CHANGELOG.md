@@ -1,5 +1,8 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.45
+**No station in front of a door** (user's pick, 2026-11-14, after TP Core's in-game step 146b): the Drying Frame, the Salting Tub and the Stockfish Pallet (at any fill) can't be built or put down on the tile in front of a door any more (the Stone Hearth's mouth, a Smokehouse's door; TP Core's `Doors`), as the Hanging Beam and the Gantry already couldn't. Their build recipes ask `TraditionalPreservationCore.doorFits`; `UI.keepDoorsFree(Tiles.STATIONS)` and the pallet's sprites for putting down. test_curing. In-game step 147 of TP Core's `TESTING_GUIDE.md` passed (INGAME_PASS 146).
+
 ## 0.4.44
 Refactor with TP Core's copper-to-cauldron rename (2026-11-14): the action is `TPFMFatCauldron` (was `TPFMFatCopper`), the menu key `FatInCauldron`, and `F.putFatInCauldron`, `F.CAULDRON_FATS`, `F.cauldronFatRoom`; comments and tests say cauldron. Nothing changes in game; tests and golden results unchanged.
 

@@ -315,7 +315,10 @@ do
     check("only the Gantry is kept out of rooms (the Smokehouse is TP Core's)", not Tiles.OUTDOOR[medium] and Tiles.OUTDOOR[large]
         and Tiles.DOOR_KEPT[medium] and Tiles.DOOR_KEPT[large])
 end
-check("the frame isn't", not io.open("42/media/scripts/entities/entity_Drying_Frame.txt"):read("*a"):find("OnIsValid", 1, true))
+for _, file in ipairs({ "Drying_Frame", "Salting_Tub", "Stockfish_Pallet" }) do
+    check(file .. ": the frame, tub and pallet only mind the doors",
+        io.open("42/media/scripts/entities/entity_" .. file .. ".txt"):read("*a"):find("OnIsValid = TraditionalPreservationCore.doorFits,", 1, true) ~= nil)
+end
 check("sprites below the first sheet's end are on it", T.spriteName(407) == "traditionalpreservationfishmeat_01_407")
 check("the rest are on the second", T.spriteName(408) == "traditionalpreservationfishmeat_02_0" and T.spriteName(711) == "traditionalpreservationfishmeat_02_303")
 for _, index in ipairs({ 0, 7, 407, 408, 411, 711 }) do

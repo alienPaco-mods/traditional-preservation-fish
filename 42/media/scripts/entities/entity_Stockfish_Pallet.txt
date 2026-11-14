@@ -13,6 +13,7 @@ module TraditionalPreservationFishMeat
         }
         component SpriteConfig
         {
+            OnIsValid = TraditionalPreservationCore.doorFits,
             face S
             {
                 layer
