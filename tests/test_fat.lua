@@ -151,16 +151,16 @@ check("more pork fat does, and a rotten piece makes it rancid at once", F.putFat
     and cauldron.ml == 1750 and cauldron.offAt == 12)
 cauldron.offAt, cauldron.last = 40, 12
 cauldron.fireUntil = 100
-Hearth.advance(cauldron, 12 + Hearth.hoursToHot(cauldron) + 0.9, 20)
+Hearth.advance(cauldron, 12 + Hearth.hoursToHot(cauldron, cauldron.banked) + 0.9, 20, cauldron)
 check("not yet melted short of the hour", cauldron.fluid == "RawPorkFat")
-Hearth.advance(cauldron, 15, 20)
+Hearth.advance(cauldron, 15, 20, cauldron)
 check("an hour steaming melts it to Lard (Melted), which ladles out and keeps", cauldron.fluid == "MeltedLard" and Hearth.poursOut(cauldron)
     and cauldron.offAt == nil)
 check("seven pieces are three blocks and a half", cauldron.ml / 500 == 3.5)
 check("melted fat takes no raw", F.cauldronFatRoom(cauldron, "RawPorkFat") == 0)
 local suet = {}
 F.putFatInCauldron(suet, "RawSuet", { 50, 50 }, 0)
-Hearth.advance(suet, 51, 20)
+Hearth.advance(suet, 51, 20, suet)
 check("suet left cold goes rancid, and stays in the cauldron", suet.fluid == "RancidFat" and not Hearth.poursOut(suet))
 local tight = { ml = Hearth.CAULDRON_ML - 600, fluid = "RawSuet", tempC = 20, last = 0 }
 check("a nearly full cauldron takes only the pieces that fit", F.putFatInCauldron(tight, "RawSuet", { 9, 9, 9, 9 }, 0) == 2)
