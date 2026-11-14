@@ -1,5 +1,8 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.43
+Docs pass after TP Core's Stone Hearth hub (user, 2026-11-14): the guide, README, DEVHELP and Workshop text say Stone Hearth and Forged Cauldron (Firebox, Hearth and copper gone), the Smokehouse's flat roof and low clay pipe, and that the hole stays lidded and the cauldron fits while it smokes. DEVHELP's cold smoke limit corrected to 15 C (`F.COLD_SMOKE_MAX`). Console help and outputs (`TPFM.smoke`, `stoke`, `bank`) say Stone Hearth.
+
 ## 0.4.42
 TP Core's Hearth kettle is the Forged Cauldron: texts say Cauldron (Put Fat in the Cauldron, the fat's notes, the fat tooltips). A Stone Hearth joined to the Smokehouse can have the Cauldron fitted too (TP Core's two slots); the shed's smoke note shows on a fitted one (reads `info.state`). Needs this TP Core. In-game step 128 of `TESTING_GUIDE.md` (INGAME_PASS 127), passed.
 

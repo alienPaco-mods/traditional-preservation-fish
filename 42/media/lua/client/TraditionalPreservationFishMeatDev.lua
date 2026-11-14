@@ -43,9 +43,9 @@ function TPFM.help()
     say("TPFM.fatRows()             the fat each vanilla animal's butchering table gives now")
     say("TPFM.crocks()              each Crock of Potted Meat on you or within 4 tiles: place, keeping rate, days left")
     say("TPFM.keep(days)            age those crocks by this many days at their place's rate now")
-    say("TPFM.smoke()               the joined Firebox's fire record and each stack's hot and smoke hours, Smokehouses within 3 tiles")
-    say("TPFM.stoke(hours)          add stoked hours to the running session of those joined Fireboxes (stoke it first)")
-    say("TPFM.bank(hours)           add banked hours (default 6) to those joined Fireboxes: smoke, but only on a day of 15 C or less")
+    say("TPFM.smoke()               the joined Stone Hearth's fire record and each stack's hot and smoke hours, Smokehouses within 3 tiles")
+    say("TPFM.stoke(hours)          add stoked hours to the running session of those joined Stone Hearths (stoke it first)")
+    say("TPFM.bank(hours)           add banked hours (default 6) to those joined Stone Hearths: smoke, but only on a day of 15 C or less")
     say("TPFM.addSmoke(hours)       add hours of smoke (default 60) straight to the stacks in those Smokehouses, whatever the weather")
     say("The Salting Tub runs on the game clock, so TPFM.age doesn't speed up curing.")
 end
@@ -693,7 +693,7 @@ function TPFM.smoke()
         say(string.format("Smokehouse at %d,%d: %s", shed.tile:getX(), shed.tile:getY(), fire and string.format(
             "fire %s, stoked %.1f h, banked %.1f h, session %s (%.1f h)", tostring(fire.fireMode), fire.stokedHours or 0,
             fire.bankedHours or 0, fire.session and string.format("%.2f", fire.session) or "none", Hearth.sessionHours(fire))
-            or "no Firebox joined"))
+            or "no Stone Hearth joined"))
         local logic = shed.tile:getComponent(ComponentType.DryingCraftLogic)
         local items = CraftLogicUILogic.new(getPlayer(), shed.tile, logic):getItemsInProgress()
         for craftData, _ in pairs(items) do
@@ -726,7 +726,7 @@ function TPFM.stoke(hours)
             fire.stokedHours = (fire.stokedHours or 0) + (hours or 1)
             say(string.format("Session now %.1f h", Hearth.sessionHours(fire)))
         else
-            say("No stoked session running: join a Firebox and stoke it first.")
+            say("No stoked session running: join a Stone Hearth and stoke it first.")
         end
     end
 end
@@ -745,7 +745,7 @@ function TPFM.bank(hours)
                     outdoors, F.COLD_SMOKE_MAX))
             end
         else
-            say("No Firebox joined to this Smokehouse.")
+            say("No Stone Hearth joined to this Smokehouse.")
         end
     end
 end

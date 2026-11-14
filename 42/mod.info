@@ -1,7 +1,7 @@
 name=Traditional Preservation (Fish & Meat)
 id=TraditionalPreservationFishMeat
 author=alienPaco
-modversion=0.4.42
+modversion=0.4.43
 versionMin=42.22
 require=\TraditionalPreservationCore
 loadModAfter=\TraditionalPreservationCore
