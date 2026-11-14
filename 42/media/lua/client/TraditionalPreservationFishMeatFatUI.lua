@@ -4,7 +4,7 @@ require "TraditionalPreservationFishMeatFat"
 require "TimedActions/TPFMFatCauldron"
 local UI = require "TraditionalPreservationCore/UI"
 local Hearth = require "TraditionalPreservationCore/Hearth"
-local HearthUI = require "TraditionalPreservationCore/HearthUI"
+local CauldronUI = require "TraditionalPreservationCore/CauldronUI"
 local F = TraditionalPreservationFishMeat
 
 local function onFatInCauldron(playerObj, hearth, raw, pieces)
@@ -13,7 +13,7 @@ local function onFatInCauldron(playerObj, hearth, raw, pieces)
     ISTimedActionQueue.add(TPFMFatCauldron:new(playerObj, hearth, raw, pieces))
 end
 
-HearthUI.addMenu(function(menu, playerObj, hearth, cauldron)
+CauldronUI.addMenu(function(menu, playerObj, hearth, cauldron)
     local carried = {}
     for _, fat in ipairs(F.CAULDRON_FATS) do
         local pieces = UI.findItems(playerObj, function(item) return fat.items[item:getFullType()] and not item:isRotten() end)
@@ -38,8 +38,8 @@ HearthUI.addMenu(function(menu, playerObj, hearth, cauldron)
     end
 end)
 
-HearthUI.addNotes(function(info, notes)
-    local cauldron = info.cauldron
+CauldronUI.addNotes(function(info, notes)
+    local cauldron = info.part
     if (cauldron.ml or 0) <= 0 then return end
     if cauldron.fluid == F.RANCID_FAT then
         table.insert(notes, getText("IGUI_TraditionalPreservationFishMeat_FatRancid"))

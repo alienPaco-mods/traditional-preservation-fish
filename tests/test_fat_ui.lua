@@ -1,4 +1,4 @@
--- Checks Put Fat in the Cauldron on the Hearth's menu with stand-ins for the engine. Run from the mod folder:
+-- Checks Put Fat in the Cauldron on the Hearth's menu, and the mod's Hearth Info notes, with stand-ins for the engine. Run from the mod folder:
 -- luajit tests/test_fat_ui.lua
 local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
 local check = H.check
@@ -19,6 +19,7 @@ local ui = H.installMenus()
 AnimalPartsDefinitions = { animals = {} }
 
 local Hearth = require "TraditionalPreservationCore/Hearth"
+local HearthUI = require "TraditionalPreservationCore/HearthUI"
 require "TraditionalPreservationFishMeatFatUI"
 require "TraditionalPreservationCore/CauldronUI"
 local F = TraditionalPreservationFishMeat
@@ -80,6 +81,17 @@ rows = open(hearth({ ml = 500, fluid = "MeltedLard", tempC = 90 })).subOption.op
 check("melted fat takes no raw", rows[1].notAvailable == true and rows[2].notAvailable == true)
 rows = open(hearth({ ml = 500, fluid = "Water", tempC = 20 })).subOption.options
 check("nor does water", rows[1].notAvailable == true)
+
+-- Hearth Info's notes: the fat in the cauldron, and the smoke note on a Stone Hearth joined to the Smokehouse
+local Smokehouse = require "TraditionalPreservationCore/Smokehouse"
+require "TraditionalPreservationFishMeatSmokehouseUI"
+local notes = HearthUI.notes({ spec = Hearth.attachment(Hearth.CAULDRON), part = { ml = 500, fluid = "MeltedLard", tempC = 90 }, lit = true })
+check("melted fat in the cauldron gets its note", table.concat(notes, "|"):find(getText("IGUI_TraditionalPreservationFishMeat_FatMelted"), 1, true) ~= nil)
+local smokes = getText("IGUI_TraditionalPreservationFishMeat_FlueSmokes")
+notes = HearthUI.notes({ firebox = true, lit = true, joinedSpec = { id = Smokehouse.ID }, joined = { kind = "Pipe" } })
+check("a Stone Hearth joined to the Smokehouse says what its fire does to the stacks", notes[#notes] == smokes)
+notes = HearthUI.notes({ firebox = true, lit = true })
+check("one joined to nothing doesn't", notes[#notes] ~= smokes)
 
 check("no text would make the game's formatter warn" .. (H.textWarnings[1] and " (" .. table.concat(H.textWarnings, "; ") .. ")" or ""),
     #H.textWarnings == 0)

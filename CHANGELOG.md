@@ -1,5 +1,8 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.46
+**Bug fixed: Firebox Info's smoke note never showed** (user's yes, 2026-11-14, found in TP Core's HearthUI tidy): *Stoked for 4 to 8 hours in a row, it hot smokes the salt stacks in the shed...* read the fire's old `flue` field, gone since the flue became a Hearth connection; it now shows on any Stone Hearth joined to the Smokehouse. Also, with TP Core's tidy: *Put Fat in the Cauldron* and the fat notes come through `CauldronUI.addMenu` / `addNotes` and read the cauldron as `info.part`. test_fat_ui: the fat note and the smoke note, joined and not. In-game step 148 of TP Core's `TESTING_GUIDE.md` passed (INGAME_PASS 147).
+
 ## 0.4.45
 **No station in front of a door** (user's pick, 2026-11-14, after TP Core's in-game step 146b): the Drying Frame, the Salting Tub and the Stockfish Pallet (at any fill) can't be built or put down on the tile in front of a door any more (the Stone Hearth's mouth, a Smokehouse's door; TP Core's `Doors`), as the Hanging Beam and the Gantry already couldn't. Their build recipes ask `TraditionalPreservationCore.doorFits`; `UI.keepDoorsFree(Tiles.STATIONS)` and the pallet's sprites for putting down. test_curing. In-game step 147 of TP Core's `TESTING_GUIDE.md` passed (INGAME_PASS 146).
 
