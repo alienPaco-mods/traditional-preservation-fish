@@ -1,5 +1,11 @@
 # Changelog: Traditional Preservation (Fish & Meat)
 
+## 0.4.48
+**Bug fixed: raw fat in the cauldron and vanilla's Food Spoilage** (user, 2026-11-14): a piece's days left were counted as real days, but its age runs at the game's Food Spoilage speed, so on Very Slow fat went rancid in the cauldron 2.5 times sooner than on the shelf, and on Very Fast later. `F.fatHoursLeft` divides by TP Core's `FluidAgeing.foodRotSpeed`; Normal changes nothing. test_fat. In-game step 150 of TP Core's `TESTING_GUIDE.md` passed (INGAME_PASS 149).
+
+## 0.4.47
+Refactor with TP Core's Weather.lua tidy (2026-11-14): the Potted Meat ledger is totalled by `Weather.advance` (`F.recordPotted` was a copy of its loop; same keys, `pottedOpen` and the rest); the main ledger asks `Weather.seasonTemperature` and `Weather.seasonHumidity` (was `Weather.season`); a crock with no place goes by `Weather.DEFAULT_PLACE`. **Names:** the crock's curve is `F.POTTED_AGE_CURVE` (was `POTTED_KEEPING`), its spec `F.POTTED_AGEING` (was `POTTED_KEEP`, three letters from the curve), the rate `ageRate` (was `keepRate`: higher means it ages faster), the ledger's kinds `POTTED_LEDGER_KINDS`; vanilla's Food Spoilage setting is TP Core's `FluidAgeing.foodRotSpeed` for Potted Meat and blood (blood borrowed Potted Meat's, behind a load-order guard; its local `spoilSpeed` is gone). Nothing changes in game; tests and golden results unchanged.
+
 ## 0.4.46
 **Bug fixed: Firebox Info's smoke note never showed** (user's yes, 2026-11-14, found in TP Core's HearthUI tidy): *Stoked for 4 to 8 hours in a row, it hot smokes the salt stacks in the shed...* read the fire's old `flue` field, gone since the flue became a Hearth connection; it now shows on any Stone Hearth joined to the Smokehouse. Also, with TP Core's tidy: *Put Fat in the Cauldron* and the fat notes come through `CauldronUI.addMenu` / `addNotes` and read the cauldron as `info.part`. test_fat_ui: the fat note and the smoke note, joined and not. In-game step 148 of TP Core's `TESTING_GUIDE.md` passed (INGAME_PASS 147).
 

@@ -255,7 +255,7 @@ check("off, a crock gets no clock", F.keepCrock(plain, 240, "Sheltered", ledger)
 F.openCrock(plain)
 check("and no opening loss", plain.age == 4)
 SandboxVars = { FoodRotSpeed = 1, TraditionalPreservationFishMeat = {} }
-check("vanilla's Very Fast food spoilage speeds it up", near(F.POTTED_KEEP.speed(), 1.7))
+check("vanilla's Very Fast food spoilage speeds it up", near(F.POTTED_AGEING.speed(), 1.7))
 SandboxVars = nil
 
 check("text checks", #H.textWarnings == 0)

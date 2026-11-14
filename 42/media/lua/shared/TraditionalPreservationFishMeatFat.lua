@@ -5,6 +5,7 @@
 -- and are poured off as a pot of melted fat; TP Core's Hearth melts many pieces at once in its cauldron.
 require "Definitions/animal/AnimalPartsDefinitions"
 local Hearth = require "TraditionalPreservationCore/Hearth"
+local FluidAgeing = require "TraditionalPreservationCore/FluidAgeing"
 
 TraditionalPreservationFishMeat = TraditionalPreservationFishMeat or {}
 local F = TraditionalPreservationFishMeat
@@ -78,9 +79,10 @@ function F.putFatInCauldron(cauldron, raw, hoursLeft, now)
     return count
 end
 
--- Hours until a piece of raw fat is rotten.
+-- Hours until a piece of raw fat is rotten. Its age runs at vanilla's Food Spoilage speed, so the days it has left
+-- are that many days only at Normal (user, 2026-11-14: Very Slow fat went rancid in the cauldron 2.5 times early).
 function F.fatHoursLeft(item)
-    return (item:getOffAgeMax() - item:getAge()) * 24
+    return (item:getOffAgeMax() - item:getAge()) * 24 / FluidAgeing.foodRotSpeed()
 end
 
 local function withoutRow(parts, item)

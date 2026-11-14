@@ -164,7 +164,12 @@ Hearth.advance(suet, 51, 20, suet)
 check("suet left cold goes rancid, and stays in the cauldron", suet.fluid == "RancidFat" and not Hearth.poursOut(suet))
 local tight = { ml = Hearth.CAULDRON_ML - 600, fluid = "RawSuet", tempC = 20, last = 0 }
 check("a nearly full cauldron takes only the pieces that fit", F.putFatInCauldron(tight, "RawSuet", { 9, 9, 9, 9 }, 0) == 2)
-check("a piece's hours left come from its age", F.fatHoursLeft({ getOffAgeMax = function() return 4 end, getAge = function() return 1.5 end }) == 60)
+local fatPiece = { getOffAgeMax = function() return 4 end, getAge = function() return 1.5 end }
+check("a piece's hours left come from its age", F.fatHoursLeft(fatPiece) == 60)
+local sandbox = SandboxVars
+SandboxVars = { FoodRotSpeed = 5 }
+check("on Very Slow food spoilage its age runs slower, so it has 2.5 times the hours", F.fatHoursLeft(fatPiece) == 150)
+SandboxVars = sandbox
 for recipe, fat in pairs({ StrainLard = { "MeltedLard", "Base.Lard" }, StrainTallow = { "MeltedTallow", "TraditionalPreservationFishMeat.Tallow" } }) do
     local text = block("craftRecipe", recipe)
     check(recipe .. " takes half a litre from any container and gives a block and its cracklings",

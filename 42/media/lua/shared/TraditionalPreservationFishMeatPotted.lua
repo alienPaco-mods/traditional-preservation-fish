@@ -211,21 +211,18 @@ end
 -- when it is next seen: its age is base plus the record's hours. A powered freezer stops it. Vanilla ages it between
 -- looks at its own rate; each look puts that right.
 -- Frozen (realism pass, user 2026-11-13) it keeps as in a freezer: from 0.5 at 4 C down to nothing at -2 C.
-F.POTTED_KEEPING = { { -2, 0 }, { 4, 0.5 }, { 15, 1 }, { 25, 60 / 14 } }
+F.POTTED_AGE_CURVE = { { -2, 0 }, { 4, 0.5 }, { 15, 1 }, { 25, 60 / 14 } }
 -- The first portion taken lets air under the fat: a third of the keeping left goes, once.
 F.POTTED_OPENED_LOSS = 1 / 3
 F.POTTED_LEDGER_KEY = "TraditionalPreservationFishMeatPotted"
--- Vanilla's Food Spoilage sandbox steps (Food.getFoodRotSpeed: very fast to very slow).
-local ROT_SPEEDS = { 1.7, 1.4, 1, 0.7, 0.4 }
 
-local function keepRate(celsius)
-    return Weather.curve(F.POTTED_KEEPING, celsius)
+-- Days of age a day counts as at celsius (1 in the cellar, more when warm).
+local function ageRate(celsius)
+    return Weather.curve(F.POTTED_AGE_CURVE, celsius)
 end
-local POTTED_KINDS = { potted = keepRate }
-F.POTTED_KEEP = {
-    kind = "potted", rate = keepRate,
-    speed = function() return ROT_SPEEDS[SandboxVars and SandboxVars.FoodRotSpeed] or 1 end,
-}
+local POTTED_LEDGER_KINDS = { potted = ageRate }
+-- The crock's ageing (a FluidAgeing record's spec), on top of the place: vanilla's Food Spoilage setting.
+F.POTTED_AGEING = { kind = "potted", rate = ageRate, speed = FluidAgeing.foodRotSpeed }
 
 -- The sandbox's "Potted Meat keeps by place"; off, a crock keeps its script days anywhere, as plain food.
 function F.pottedByPlace()
@@ -234,7 +231,7 @@ function F.pottedByPlace()
 end
 
 function F.newPottedLedger(now)
-    return Weather.newLedger(now, POTTED_KINDS)
+    return Weather.newLedger(now, POTTED_LEDGER_KINDS)
 end
 
 function F.pottedLedger()
@@ -246,27 +243,16 @@ function F.pottedTemperature(ledger, place)
     return Weather.placeTemperature(ledger, place)
 end
 
--- Adds a stretch of weather to the potted ledger (every ten minutes), as Weather.advance does but with
--- F.pottedTemperature.
+-- Adds a stretch of weather to the potted ledger (every ten minutes): its totals are the "potted" kind's.
 function F.recordPotted(now, temperature)
-    local ledger = F.pottedLedger()
-    local hours = now - ledger.lastHour
-    if hours <= 0 then return end
-    ledger.lastHour = now
-    Weather.season(ledger, "seasonTemperature", temperature, hours)
-    ledger.temperature = temperature
-    for _, place in ipairs(Weather.PLACES) do
-        local rate = keepRate(F.pottedTemperature(ledger, place))
-        ledger["potted" .. place .. "Rate"] = rate
-        ledger["potted" .. place] = (ledger["potted" .. place] or 0) + rate * hours
-    end
+    Weather.advance(F.pottedLedger(), now, temperature, POTTED_LEDGER_KINDS)
 end
 
 -- How fast a crock keeps at a place now: FluidAgeing's place names (Fridge, Freezer, or a Weather place).
 function F.pottedRate(place, ledger)
     if place == FluidAgeing.FREEZER then return 0 end
-    if place == FluidAgeing.FRIDGE then return keepRate(FluidAgeing.FRIDGE_C) end
-    return keepRate(F.pottedTemperature(ledger or F.pottedLedger(), place or "Sheltered"))
+    if place == FluidAgeing.FRIDGE then return ageRate(FluidAgeing.FRIDGE_C) end
+    return ageRate(F.pottedTemperature(ledger or F.pottedLedger(), place or Weather.DEFAULT_PLACE))
 end
 
 -- Brings a crock's age up to now at the place it was seen in last, and counts from where it is now (place, or
@@ -279,11 +265,11 @@ function F.keepCrock(crock, now, place, ledger)
     local keep = data.tpfmKeep
     place = place or FluidAgeing.placeOfItem(crock) or (keep and keep.record.place) or "Sheltered"
     if not keep then
-        keep = { base = crock:getAge(), record = FluidAgeing.newRecord(F.POTTED_KEEP, ledger, now, place) }
+        keep = { base = crock:getAge(), record = FluidAgeing.newRecord(F.POTTED_AGEING, ledger, now, place) }
         data.tpfmKeep = keep
         return keep
     end
-    FluidAgeing.advance(keep.record, F.POTTED_KEEP, ledger, now, place)
+    FluidAgeing.advance(keep.record, F.POTTED_AGEING, ledger, now, place)
     crock:setAge(keep.base + keep.record.age / 24)
     return keep
 end

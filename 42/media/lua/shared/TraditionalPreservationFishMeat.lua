@@ -619,8 +619,8 @@ function F.advance(ledger, now, weather)
     if ledger.coldWetness > 0 and weather.temperature > 0 then ledger.coldWet = ledger.coldWet + hours end
     if weather.temperature > F.HEAT_ABOVE then ledger.heat = ledger.heat + hours end
 
-    Weather.season(ledger, "seasonTemperature", weather.temperature, hours)
-    Weather.season(ledger, "seasonHumidity", weather.humidity, hours)
+    Weather.seasonTemperature(ledger, weather.temperature, hours)
+    Weather.seasonHumidity(ledger, weather.humidity, hours)
     local warmth = ledger.seasonTemperature - F.RAW_SPOIL_ABOVE
     ledger.rawSpoiling = warmth > 0
     if ledger.rawSpoiling then

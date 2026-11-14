@@ -603,7 +603,7 @@ function TPFM.crocks()
         F.keepCrock(crock)
         local keep = crock:getModData().tpfmKeep
         local place = keep and keep.record.place or "?"
-        local rate = F.pottedRate(place, ledger) * F.POTTED_KEEP.speed()
+        local rate = F.pottedRate(place, ledger) * F.POTTED_AGEING.speed()
         local age = crock:getAge()
         local function left(limit)
             if age >= limit then return "past" end
@@ -621,7 +621,7 @@ function TPFM.keep(days)
     for _, crock in ipairs(crocks) do
         local keep = F.keepCrock(crock)
         if keep then
-            keep.record.age = keep.record.age + days * 24 * F.pottedRate(keep.record.place, ledger) * F.POTTED_KEEP.speed()
+            keep.record.age = keep.record.age + days * 24 * F.pottedRate(keep.record.place, ledger) * F.POTTED_AGEING.speed()
             crock:setAge(keep.base + keep.record.age / 24)
         end
     end

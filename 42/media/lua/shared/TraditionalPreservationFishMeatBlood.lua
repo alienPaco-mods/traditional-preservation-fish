@@ -86,7 +86,7 @@ F.BLOOD_SPEC = FluidAgeing.register({
     states = F.BLOOD_STATES,
     getLedger = function() return F.bloodLedger() end,
     -- Vanilla's Food Spoilage setting, as Potted Meat's.
-    speed = function() return F.POTTED_KEEP and F.POTTED_KEEP.speed() or 1 end,
+    speed = FluidAgeing.foodRotSpeed,
 })
 
 -- Every blood a recipe can use: fresh or treated, never spoiled.
@@ -200,10 +200,6 @@ function F.canSmokeSausage(item)
     return true
 end
 
-local function spoilSpeed()
-    return F.POTTED_KEEP and F.POTTED_KEEP.speed() or 1
-end
-
 -- Sets a new stack's counters from its links (an ArrayList): the Smokehouse's, and the hour its freshest link goes
 -- stale. Blood sausage takes no cook and a fixed smoke; Smoked Sausage ("pork", TraditionalPreservationFishMeatSausage.lua)
 -- a fixed hot run. modData.sausage is true for blood (as stacks hung since 0.4.37 have it) or "pork".
@@ -242,7 +238,7 @@ end
 
 function F.onSausageSmokeStart(craftRecipeData)
     local links = craftRecipeData:getAllInputItemsWithFlag("ItemCount")
-    F.startSausageSmoke(craftRecipeData:getModData(), links, getGameTime():getWorldAgeHours(), spoilSpeed(),
+    F.startSausageSmoke(craftRecipeData:getModData(), links, getGameTime():getWorldAgeHours(), FluidAgeing.foodRotSpeed(),
         F.sausageKind(links))
 end
 
@@ -334,7 +330,7 @@ function F.onCreateSmokedSausage(craftRecipeData)
         for i = 0, created:size() - 1 do created:get(i):setCooked(true) end
         return
     end
-    local now, speed = getGameTime():getWorldAgeHours(), spoilSpeed()
+    local now, speed = getGameTime():getWorldAgeHours(), FluidAgeing.foodRotSpeed()
     F.swapOutputs(craftRecipeData, station, function(link) return F.smokedLink(link, modData, now, speed) end)
 end
 
